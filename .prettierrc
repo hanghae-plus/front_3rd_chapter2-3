@@ -1,9 +1,12 @@
 {
-  "semi": false,
   "printWidth": 120,
   "tabWidth": 2,
-  "singleQuote": false,
-  "quoteProps": "consistent",
   "trailingComma": "all",
-  "singleAttributePerLine": false
+
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^(@emotion|@/styles|@/assets)(.*)$", "^@/(.*)$", "^[./]"],
+
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderGroupNamespaceSpecifiers": true,
+  "importOrderCaseInsensitive": true
 }
