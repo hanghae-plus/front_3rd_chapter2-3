@@ -2,9 +2,6 @@ import {
   Button,
   Card,
   Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
   Input,
   Select,
   Table,
@@ -15,6 +12,7 @@ import {
   TableRow,
   Textarea,
 } from "@/shared/ui";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -562,11 +560,11 @@ const PostsManager = () => {
       </Card.Content>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
+      <Dialog.Container open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <Dialog.Content>
+          <Dialog.Header>
             <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
+          </Dialog.Header>
           <div className="space-y-4">
             <Input
               placeholder="제목"
@@ -587,15 +585,15 @@ const PostsManager = () => {
             />
             <Button onClick={addPost}>게시물 추가</Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </Dialog.Content>
+      </Dialog.Container>
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
+      <Dialog.Container open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>게시물 수정</Dialog.Title>
+          </Dialog.Header>
           <div className="space-y-4">
             <Input
               placeholder="제목"
@@ -610,15 +608,15 @@ const PostsManager = () => {
             />
             <Button onClick={updatePost}>게시물 업데이트</Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </Dialog.Content>
+      </Dialog.Container>
 
       {/* 댓글 추가 대화상자 */}
-      <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
+      <Dialog.Container open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
+        <Dialog.Content>
+          <Dialog.Header>
             <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
+          </Dialog.Header>
           <div className="space-y-4">
             <Textarea
               placeholder="댓글 내용"
@@ -627,15 +625,15 @@ const PostsManager = () => {
             />
             <Button onClick={addComment}>댓글 추가</Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </Dialog.Content>
+      </Dialog.Container>
 
       {/* 댓글 수정 대화상자 */}
-      <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
+      <Dialog.Container open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>댓글 수정</Dialog.Title>
+          </Dialog.Header>
           <div className="space-y-4">
             <Textarea
               placeholder="댓글 내용"
@@ -644,28 +642,28 @@ const PostsManager = () => {
             />
             <Button onClick={updateComment}>댓글 업데이트</Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </Dialog.Content>
+      </Dialog.Container>
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
+      <Dialog.Container open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
+        <Dialog.Content className="max-w-3xl">
+          <Dialog.Header>
             <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
+          </Dialog.Header>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
             {renderComments(selectedPost?.id)}
           </div>
-        </DialogContent>
-      </Dialog>
+        </Dialog.Content>
+      </Dialog.Container>
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
-          <DialogHeader>
+      <Dialog.Container open={showUserModal} onOpenChange={setShowUserModal}>
+        <Dialog.Content>
+          <Dialog.Header>
             <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
+          </Dialog.Header>
           <div className="space-y-4">
             <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
             <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
@@ -691,8 +689,8 @@ const PostsManager = () => {
               </p>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </Dialog.Content>
+      </Dialog.Container>
     </Card.Container>
   );
 };

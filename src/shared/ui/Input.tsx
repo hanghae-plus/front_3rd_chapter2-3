@@ -1,9 +1,9 @@
 import { mixinClasses } from "@/shared/lib/utils";
 import { forwardRef } from "react";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   className?: string;
-}
+};
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
   return (

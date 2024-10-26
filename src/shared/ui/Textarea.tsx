@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 import { mixinClasses } from "../lib/utils";
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   className?: string;
-}
+};
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
   return (

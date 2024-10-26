@@ -5,9 +5,9 @@ import { mixinClasses } from "../lib/utils";
 
 // Select Trigger ======================================================
 
-interface SelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type SelectTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string;
-}
+};
 
 const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
@@ -26,10 +26,10 @@ SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 // Select Content ======================================================
 
-interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement> {
+type SelectContentProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
   position?: "popper";
-}
+};
 
 const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(
   ({ className, children, position = "popper", ...props }, ref) => (
@@ -52,10 +52,10 @@ SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 // Select Item ======================================================
 
-interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
+type SelectItemProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
   value: string;
-}
+};
 
 const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
