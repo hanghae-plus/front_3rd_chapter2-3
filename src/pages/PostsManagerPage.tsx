@@ -1,17 +1,4 @@
-import {
-  Button,
-  Card,
-  Dialog,
-  Input,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Textarea,
-} from "@/shared/ui";
+import { Button, Card, Dialog, Input, Select, Table, Textarea } from "@/shared/ui";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -333,21 +320,21 @@ const PostsManager = () => {
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">ID</TableHead>
-          <TableHead>제목</TableHead>
-          <TableHead className="w-[150px]">작성자</TableHead>
-          <TableHead className="w-[150px]">반응</TableHead>
-          <TableHead className="w-[150px]">작업</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <Table.Container>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head className="w-[50px]">ID</Table.Head>
+          <Table.Head>제목</Table.Head>
+          <Table.Head className="w-[150px]">작성자</Table.Head>
+          <Table.Head className="w-[150px]">반응</Table.Head>
+          <Table.Head className="w-[150px]">작업</Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {posts.map((post) => (
-          <TableRow key={post.id}>
-            <TableCell>{post.id}</TableCell>
-            <TableCell>
+          <Table.Row key={post.id}>
+            <Table.Cell>{post.id}</Table.Cell>
+            <Table.Cell>
               <div className="space-y-1">
                 <div>{highlightText(post.title, searchQuery)}</div>
 
@@ -370,22 +357,22 @@ const PostsManager = () => {
                   ))}
                 </div>
               </div>
-            </TableCell>
-            <TableCell>
+            </Table.Cell>
+            <Table.Cell>
               <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>
-            </TableCell>
-            <TableCell>
+            </Table.Cell>
+            <Table.Cell>
               <div className="flex items-center gap-2">
                 <ThumbsUp className="w-4 h-4" />
                 <span>{post.reactions?.likes || 0}</span>
                 <ThumbsDown className="w-4 h-4" />
                 <span>{post.reactions?.dislikes || 0}</span>
               </div>
-            </TableCell>
-            <TableCell>
+            </Table.Cell>
+            <Table.Cell>
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
@@ -404,11 +391,11 @@ const PostsManager = () => {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-            </TableCell>
-          </TableRow>
+            </Table.Cell>
+          </Table.Row>
         ))}
-      </TableBody>
-    </Table>
+      </Table.Body>
+    </Table.Container>
   );
 
   // 댓글 렌더링
