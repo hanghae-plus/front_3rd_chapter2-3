@@ -1,0 +1,13 @@
+# Version control
+**/.github
+
+# Node.js dependencies
+**/node_modules
+
+# IDE settings
+**/.vscode
+
+# Markdown files
+**/*.md
+
+.gitignore
