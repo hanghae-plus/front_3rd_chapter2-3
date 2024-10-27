@@ -27,6 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
   Textarea,
+  HighlightText,
 } from "../shared/ui";
 import {
   deleteExistingPost,
@@ -306,19 +307,19 @@ const PostsManager = () => {
   }, [location.search]);
 
   // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null;
-    if (!highlight.trim()) {
-      return <span>{text}</span>;
-    }
-    const regex = new RegExp(`(${highlight})`, "gi");
-    const parts = text.split(regex);
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    );
-  };
+  // const highlightText = (text: string, highlight: string) => {
+  //   if (!text) return null;
+  //   if (!highlight.trim()) {
+  //     return <span>{text}</span>;
+  //   }
+  //   const regex = new RegExp(`(${highlight})`, "gi");
+  //   const parts = text.split(regex);
+  //   return (
+  //     <span>
+  //       {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
+  //     </span>
+  //   );
+  // };
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
@@ -338,7 +339,7 @@ const PostsManager = () => {
             <TableCell>{post.id}</TableCell>
             <TableCell>
               <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
+                <div>{HighlightText(post.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
                   {post.tags?.map((tag) => (
@@ -421,7 +422,7 @@ const PostsManager = () => {
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
             <div className="flex items-center space-x-2 overflow-hidden">
               <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+              <span className="truncate">{HighlightText(comment.body, searchQuery)}</span>
             </div>
             <div className="flex items-center space-x-1">
               <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
@@ -644,10 +645,10 @@ const PostsManager = () => {
         {selectedPost && (
           <DialogContent className="max-w-3xl">
             <DialogHeader>
-              <DialogTitle>{highlightText(selectedPost.title, searchQuery)}</DialogTitle>
+              <DialogTitle>{HighlightText(selectedPost.title, searchQuery)}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <p>{highlightText(selectedPost.body, searchQuery)}</p>
+              <p>{HighlightText(selectedPost.body, searchQuery)}</p>
               {renderComments(selectedPost.id)}
             </div>
           </DialogContent>

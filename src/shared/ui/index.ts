@@ -6,3 +6,4 @@ export * from "./Textarea";
 export * from "./Input";
 export * from "./Table";
 export * from "./SelectBox";
+export * from "./HighlightText";
