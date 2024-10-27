@@ -1,19 +1,6 @@
 import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Loader,
-  SearchInput,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../shared/ui"
+import { Button, Card, CardContent, CardHeader, CardTitle, Loader, SearchInput } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
 import { usePostParams } from "../features/post/model/usePostParams"
 import { fetchUsersApi } from "../entities/user/api"
@@ -25,6 +12,9 @@ import { useUserContext } from "../shared/model/UserContext"
 import { usePostsContext } from "../shared/model/PostContext"
 import { PostTable } from "../features/post/ui/PostTable"
 import { Pagination } from "../features/post/ui/Pagination"
+import { SelectTag } from "../features/product-filter/ui/SelectTag"
+import { SelectSortStandard } from "../features/product-sort/ui/SelectSortStandard"
+import { SelectSortOrder } from "../features/product-sort/ui/SelectSortOrder"
 
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
@@ -124,46 +114,15 @@ const PostsManager = () => {
               onKeyPress={(e) => e.key === "Enter" && searchPosts()}
             />
 
-            <Select
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value)
-                handleGetPostsByTag(value)
-                updateURL()
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="태그 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
-                  <SelectItem key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 기준" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">없음</SelectItem>
-                <SelectItem value="id">ID</SelectItem>
-                <SelectItem value="title">제목</SelectItem>
-                <SelectItem value="reactions">반응</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 순서" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">오름차순</SelectItem>
-                <SelectItem value="desc">내림차순</SelectItem>
-              </SelectContent>
-            </Select>
+            <SelectTag
+              selectedTag={selectedTag}
+              setSelectedTag={setSelectedTag}
+              handleGetPostsByTag={handleGetPostsByTag}
+              updateURL={updateURL}
+              tags={tags}
+            />
+            <SelectSortStandard sortBy={sortBy} setSortBy={setSortBy} />
+            <SelectSortOrder sortOrder={sortOrder} setSortOrder={setSortOrder} />
           </div>
 
           {/* 게시물 테이블 */}
