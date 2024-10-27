@@ -5,6 +5,3 @@ export { Textarea } from "./Textarea/Textarea"
 export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem } from "./Select/Select"
 export { Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle } from "./Dialog/Dialog"
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "./Table/Table"
-
-
-
