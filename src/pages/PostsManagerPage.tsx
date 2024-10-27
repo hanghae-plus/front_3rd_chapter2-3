@@ -10,7 +10,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -25,6 +24,7 @@ import {
   Textarea,
 } from "../shared/ui"
 import { Button } from "../shared/ui/button/ui/Button"
+import { Input } from "../shared/ui/input/ui/Input.tsx"
 
 const PostsManager = () => {
   const navigate = useNavigate()
