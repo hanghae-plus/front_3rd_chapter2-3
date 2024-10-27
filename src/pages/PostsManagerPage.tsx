@@ -25,6 +25,8 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
+import PostSearchHeader from "../widgets/ui/posts/PostSearchHeader"
+import { Post } from "../entities/posts/model/types"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -32,7 +34,7 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
@@ -470,7 +472,7 @@ const PostsManager = () => {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
+      {/* <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
           <Button onClick={() => setShowAddDialog(true)}>
@@ -478,7 +480,9 @@ const PostsManager = () => {
             게시물 추가
           </Button>
         </CardTitle>
-      </CardHeader>
+      </CardHeader> */}
+      <PostSearchHeader handleDialog={() => setShowAddDialog(true)} />
+
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
