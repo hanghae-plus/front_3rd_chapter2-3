@@ -12,9 +12,9 @@ import { useUserContext } from "../shared/model/UserContext"
 import { usePostsContext } from "../shared/model/PostContext"
 import { PostTable } from "../features/post/ui/PostTable"
 import { Pagination } from "../features/post/ui/Pagination"
-import { SelectTag } from "../features/product-filter/ui/SelectTag"
-import { SelectSortStandard } from "../features/product-sort/ui/SelectSortStandard"
-import { SelectSortOrder } from "../features/product-sort/ui/SelectSortOrder"
+import { SelectTag } from "../features/post-filter/ui/SelectTag"
+import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
+import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
