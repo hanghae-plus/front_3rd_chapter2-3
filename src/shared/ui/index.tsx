@@ -10,6 +10,8 @@ export {
   DialogTitle,
 } from "./dialog/Dialog"
 export { Input } from "./input/Input"
+export { SearchInput } from "./input/SearchInput"
+export { Loader } from "./loader/Loader"
 export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem } from "./select/Select"
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "./table/Table"
 export { Textarea } from "./textarea/Textarea"

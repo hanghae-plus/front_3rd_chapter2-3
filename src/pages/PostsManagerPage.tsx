@@ -6,6 +6,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Loader,
+  SearchInput,
   Select,
   SelectContent,
   SelectItem,
@@ -23,7 +25,6 @@ import { useUserContext } from "../shared/model/UserContext"
 import { usePostsContext } from "../shared/model/PostContext"
 import { PostTable } from "../features/post/ui/PostTable"
 import { Pagination } from "../features/post/ui/Pagination"
-import { SearchInput } from "../shared/ui/search/SearchInput"
 
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
@@ -167,7 +168,7 @@ const PostsManager = () => {
 
           {/* 게시물 테이블 */}
           {loading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
+            <Loader />
           ) : (
             <PostTable
               searchQuery={searchQuery}
