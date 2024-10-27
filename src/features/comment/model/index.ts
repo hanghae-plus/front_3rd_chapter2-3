@@ -39,7 +39,6 @@ export const useComments = () => {
     if (!targetComment) return
 
     const newLike = targetComment.likes + 1
-    console.log("newLike", newLike)
 
     likeCommentApi(commentId, newLike).then((data) =>
       setComments((prev) => ({
