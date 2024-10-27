@@ -2,7 +2,7 @@ import { forwardRef, InputHTMLAttributes } from "react";
 
 interface TextareaProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
-  rows: number;
+  rows?: number;
 }
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
   return (
