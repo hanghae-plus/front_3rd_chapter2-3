@@ -27,8 +27,8 @@ import {
 } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
 import { createPostApi, fetchPostsApi, updatePostApi } from "../entities/post/api"
-import { usePosts } from "../entities/post/model"
 import { useComments } from "../features/comment/model"
+import { usePosts } from "../features/post/model"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -36,7 +36,6 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
@@ -54,7 +53,7 @@ const PostsManager = () => {
   const [selectedUser, setSelectedUser] = useState(null)
 
   const { tags, getTags } = useTags()
-  const { posts, setPosts, deletePost } = usePosts()
+  const { posts, setPosts, total, setTotal, deletePost, getPostsByTag } = usePosts()
   const {
     comments,
     newComment,
@@ -133,30 +132,13 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
+  const handleGetPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
       fetchPosts()
       return
     }
     setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
+    getPostsByTag(tag)
     setLoading(false)
   }
 
@@ -208,7 +190,7 @@ const PostsManager = () => {
 
   useEffect(() => {
     if (selectedTag) {
-      fetchPostsByTag(selectedTag)
+      handleGetPostsByTag(selectedTag)
     } else {
       fetchPosts()
     }
@@ -399,7 +381,7 @@ const PostsManager = () => {
               value={selectedTag}
               onValueChange={(value) => {
                 setSelectedTag(value)
-                fetchPostsByTag(value)
+                handleGetPostsByTag(value)
                 updateURL()
               }}
             >
