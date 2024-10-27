@@ -31,6 +31,7 @@ import { usePosts } from "../features/post/model"
 import { usePostParams } from "../features/post/model/usePostParams"
 import { Post } from "../entities/post/model/types"
 import { User } from "../entities/user/model/types"
+import { highlightText } from "../shared/lib/highlightText"
 
 const PostsManager = () => {
   // 상태 관리
@@ -176,21 +177,6 @@ const PostsManager = () => {
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
