@@ -1,6 +1,12 @@
 import { useState } from "react"
-import { fetchCommentsApi, deleteCommentApi, likeCommentApi, createCommentApi, updateCommentApi } from "../api"
-import { Comment, NewComment } from "./types"
+import {
+  fetchCommentsApi,
+  deleteCommentApi,
+  likeCommentApi,
+  createCommentApi,
+  updateCommentApi,
+} from "../../../entities/comment/api"
+import { Comment, NewComment } from "../../../entities/comment/model/types"
 
 export const useComments = () => {
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
