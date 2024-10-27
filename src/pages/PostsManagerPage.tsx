@@ -2,17 +2,7 @@ import { useEffect, useState } from "react";
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import {
-  Post,
-  NewPost,
-  NewComment,
-  Comments,
-  Tag,
-  User,
-  PostResponse,
-  UserResponse,
-  SelectedUser,
-} from "../temp/types.ts";
+import { Post, NewPost, NewComment, Comments, Tag, User, SelectedUser } from "../temp/types.ts";
 
 import {
   Button,
@@ -38,6 +28,7 @@ import {
   DialogTitle,
   Textarea,
 } from "../shared/ui";
+import { deleteExistingPost, getPosts, getSearchPosts, postNewPost, putExistingPost } from "../entities/post/api";
 
 // post게시물, comment, user
 const PostsManager = () => {
@@ -85,21 +76,19 @@ const PostsManager = () => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const postsResponse = fetch(`/api/posts?limit=${limit}&skip=${skip}`);
-      const usersResponse = fetch("/api/users?limit=0&select=username,image");
+      const response = await getPosts(limit, skip);
 
-      const [postsData, usersData] = await Promise.all([
-        postsResponse.then((res) => res.json() as Promise<PostResponse>),
-        usersResponse.then((res) => res.json() as Promise<UserResponse>),
-      ]);
+      if (response) {
+        const { postsData, usersData } = response;
 
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }));
+        const postsWithUsers = postsData.posts.map((post: Post) => ({
+          ...post,
+          author: usersData.users.find((user: User) => user.id === post.userId),
+        }));
 
-      setPosts(postsWithUsers);
-      setTotal(postsData.total);
+        setPosts(postsWithUsers);
+        setTotal(postsData.total);
+      }
     } catch (error) {
       console.error("게시물 가져오기 오류:", error);
     } finally {
@@ -121,13 +110,13 @@ const PostsManager = () => {
   // // 게시물 검색
   const searchPosts = async () => {
     if (!searchQuery) {
-      fetchPosts();
+      await fetchPosts();
       return;
     }
     setLoading(true);
     try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`);
-      const data = await response.json();
+      const data = await getSearchPosts(searchQuery);
+
       setPosts(data.posts);
       setTotal(data.total);
     } catch (error) {
@@ -167,12 +156,7 @@ const PostsManager = () => {
   // 게시물 추가
   const addPost = async () => {
     try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      });
-      const data: { body: string; id: number; title: string; userId: number } = await response.json();
+      const data = await postNewPost(newPost);
 
       setPosts([data, ...posts]);
       setShowAddDialog(false);
@@ -185,15 +169,12 @@ const PostsManager = () => {
   // 게시물 업데이트
   const updatePost = async () => {
     try {
-      const response = await fetch(`/api/posts/${selectedPost?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      });
-      const data: Post = await response.json();
+      if (selectedPost) {
+        const data = await putExistingPost(selectedPost);
 
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)));
-      setShowEditDialog(false);
+        setPosts(posts.map((post) => (post.id === data.id ? data : post)));
+        setShowEditDialog(false);
+      }
     } catch (error) {
       console.error("게시물 업데이트 오류:", error);
     }
@@ -202,9 +183,8 @@ const PostsManager = () => {
   // 게시물 삭제
   const deletePost = async (id: number) => {
     try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      });
+      await deleteExistingPost(id);
+
       setPosts(posts.filter((post) => post?.id !== id));
     } catch (error) {
       console.error("게시물 삭제 오류:", error);
