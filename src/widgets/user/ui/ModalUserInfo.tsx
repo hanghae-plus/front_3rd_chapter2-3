@@ -1,47 +1,43 @@
+import { useSelectedUser } from "@/features/user/model/SelectedUserContext";
+import UserInfo from "@/features/user/ui/UserInfo";
+import { Post } from "@/pages/PostsManagerPage";
+import useToggle from "@/shared/lib/useToggle";
 import { Dialog } from "@/shared/ui";
 import { User } from "../api/types";
 
 type ModalUserInfoProps = {
-  selectedUser: User | null;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+  post: Post;
 };
 
 // Data Component
-const ModalUserInfo = ({ selectedUser, isOpen, onOpenChange }: ModalUserInfoProps) => {
-  if (!selectedUser) return null;
+const ModalUserInfo = ({ post }: ModalUserInfoProps) => {
+  const { handleSelectUser } = useSelectedUser();
+  const { isOpen, toggle } = useToggle();
+
+  const openUserModal = async (user: Pick<User, "id" | "username" | "image"> | undefined) => {
+    if (!user) return;
+    try {
+      const response = await fetch(`/api/users/${user.id}`);
+      const userData = await response.json();
+      handleSelectUser(userData);
+    } catch (error) {
+      console.error("사용자 정보 가져오기 오류:", error);
+    }
+  };
 
   return (
-    <Dialog.Container open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog.Container open={isOpen} onOpenChange={toggle}>
+      <Dialog.Trigger asChild>
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+          <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
+          <span>{post.author?.username}</span>
+        </div>
+      </Dialog.Trigger>
       <Dialog.Content>
         <Dialog.Header>
           <Dialog.Title>사용자 정보</Dialog.Title>
         </Dialog.Header>
-        <div className="space-y-4">
-          <img src={selectedUser.image} alt={selectedUser.username} className="w-24 h-24 rounded-full mx-auto" />
-          <h3 className="text-xl font-semibold text-center">{selectedUser.username}</h3>
-          <div className="space-y-2">
-            <p>
-              <strong>이름:</strong> {selectedUser.firstName} {selectedUser.lastName}
-            </p>
-            <p>
-              <strong>나이:</strong> {selectedUser.age}
-            </p>
-            <p>
-              <strong>이메일:</strong> {selectedUser.email}
-            </p>
-            <p>
-              <strong>전화번호:</strong> {selectedUser.phone}
-            </p>
-            <p>
-              <strong>주소:</strong> {selectedUser.address?.address}, {selectedUser.address?.city},{" "}
-              {selectedUser.address?.state}
-            </p>
-            <p>
-              <strong>직장:</strong> {selectedUser.company?.name} - {selectedUser.company?.title}
-            </p>
-          </div>
-        </div>
+        <UserInfo />
       </Dialog.Content>
     </Dialog.Container>
   );

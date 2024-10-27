@@ -1,8 +1,11 @@
 import { Post } from "@/pages/PostsManagerPage";
 import { highlightText } from "@/shared/lib/utils";
 import { Button, Table } from "@/shared/ui";
-import { User } from "@/widgets/user/api/types";
-import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import ModalUserInfo from "@/widgets/user/ui/ModalUserInfo";
+import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
+import ModalEditPost from "./ModalEditPost";
+import ModalPostDetail from "./ModalPostDetail";
 
 type TablePostsProps = {
   posts: Post[];
@@ -10,11 +13,10 @@ type TablePostsProps = {
   selectedTag: string;
   setSelectedTag: (tag: string) => void;
   updateURL: () => void;
-  openUserModal: (user: Pick<User, "id" | "username" | "image"> | undefined) => void;
-  openPostDetail: (post: Post) => void;
-  setSelectedPost: (post: Post) => void;
-  setShowEditDialog: (show: boolean) => void;
   deletePost: (postId: number) => void;
+  setPosts: Dispatch<SetStateAction<Post[]>>;
+  fetchComments: (postId: number) => Promise<void>;
+  renderComments: (postId: number) => React.ReactNode;
 };
 
 const TablePosts = ({
@@ -23,11 +25,10 @@ const TablePosts = ({
   selectedTag,
   setSelectedTag,
   updateURL,
-  openUserModal,
-  openPostDetail,
-  setSelectedPost,
-  setShowEditDialog,
   deletePost,
+  setPosts,
+  fetchComments,
+  renderComments,
 }: TablePostsProps) => {
   return (
     <Table.Container>
@@ -68,10 +69,7 @@ const TablePosts = ({
               </div>
             </Table.Cell>
             <Table.Cell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
+              <ModalUserInfo post={post} />
             </Table.Cell>
             <Table.Cell>
               <div className="flex items-center gap-2">
@@ -83,19 +81,15 @@ const TablePosts = ({
             </Table.Cell>
             <Table.Cell>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post);
-                    setShowEditDialog(true);
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
+                {/* 게시물 상세 보기 대화상자 */}
+                <ModalPostDetail
+                  fetchComments={fetchComments}
+                  searchQuery={searchQuery}
+                  renderComments={renderComments}
+                  post={post}
+                />
+
+                <ModalEditPost setPosts={setPosts} />
                 <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>

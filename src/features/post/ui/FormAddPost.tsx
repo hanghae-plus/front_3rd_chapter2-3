@@ -1,9 +1,16 @@
-import { NewPost } from "@/pages/PostsManagerPage";
+import { NewPost, Post } from "@/pages/PostsManagerPage";
 import { Button, Input, Textarea } from "@/shared/ui";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-const FormAddPost = () => {
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 });
+type FormAddPostProps = {
+  setPosts: Dispatch<SetStateAction<Post[]>>;
+  close: () => void;
+};
+
+const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
+
+const FormAddPost = ({ setPosts, close }: FormAddPostProps) => {
+  const [newPost, setNewPost] = useState(initialNewPost);
 
   // 게시물 추가
   const addPost = async () => {
@@ -13,10 +20,10 @@ const FormAddPost = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPost),
       });
-      const data = await response.json();
-      // setPosts([data, ...posts]);
+      const data = (await response.json()) as Post;
+      setPosts((prev) => [data, ...prev]);
+      setNewPost(initialNewPost);
       close();
-      setNewPost({ title: "", body: "", userId: 1 });
     } catch (error) {
       console.error("게시물 추가 오류:", error);
     }

@@ -1,47 +1,29 @@
+import FormEditPost from "@/features/post/ui/FormEditPost";
 import { Post } from "@/pages/PostsManagerPage";
-import { Button, Dialog, Input, Textarea } from "@/shared/ui";
+import useToggle from "@/shared/lib/useToggle";
+import { Button, Dialog } from "@/shared/ui";
+import { Edit2 } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
 type ModalEditPostProps = {
-  showEditDialog: boolean;
-  setShowEditDialog: (open: boolean) => void;
-  selectedPost: Post | null;
-  updatePost: () => void;
-  onChangePost: (key: keyof Post, value: string) => void;
+  setPosts: Dispatch<SetStateAction<Post[]>>;
 };
 
-const ModalEditPost = ({
-  showEditDialog,
-  setShowEditDialog,
-  selectedPost,
-  updatePost,
-  onChangePost,
-}: ModalEditPostProps) => {
+const ModalEditPost = ({ setPosts }: ModalEditPostProps) => {
+  const { isOpen, toggle, close } = useToggle();
+
   return (
-    <Dialog.Container open={showEditDialog} onOpenChange={setShowEditDialog}>
+    <Dialog.Container open={isOpen} onOpenChange={toggle}>
+      <Dialog.Trigger asChild>
+        <Button variant="ghost" size="sm">
+          <Edit2 className="w-4 h-4" />
+        </Button>
+      </Dialog.Trigger>
       <Dialog.Content>
         <Dialog.Header>
           <Dialog.Title>게시물 수정</Dialog.Title>
         </Dialog.Header>
-        <div className="space-y-4">
-          <Input
-            placeholder="제목"
-            value={selectedPost?.title || ""}
-            onChange={(e) => {
-              if (!selectedPost) return;
-              onChangePost("title", e.target.value);
-            }}
-          />
-          <Textarea
-            rows={15}
-            placeholder="내용"
-            value={selectedPost?.body || ""}
-            onChange={(e) => {
-              if (!selectedPost) return;
-              onChangePost("body", e.target.value);
-            }}
-          />
-          <Button onClick={updatePost}>게시물 업데이트</Button>
-        </div>
+        <FormEditPost setPosts={setPosts} close={close} />
       </Dialog.Content>
     </Dialog.Container>
   );

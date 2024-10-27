@@ -1,31 +1,29 @@
+import FormEditComment from "@/features/comment/ui/FormEditComment";
 import { Comment } from "@/pages/PostsManagerPage";
-import { Button, Dialog, Textarea } from "@/shared/ui";
+import useToggle from "@/shared/lib/useToggle";
+import { Button, Dialog } from "@/shared/ui";
+import { Edit2 } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
 type ModalEditCommentProps = {
-  showEditCommentDialog: boolean;
-  setShowEditCommentDialog: (open: boolean) => void;
-  selectedComment: Comment | null;
-  updateComment: () => void;
-  onChangeComment: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  setComments: Dispatch<SetStateAction<{ [key: number]: Comment[] }>>;
+  comment: Comment | null;
 };
 
-const ModalEditComment = ({
-  showEditCommentDialog,
-  setShowEditCommentDialog,
-  selectedComment,
-  updateComment,
-  onChangeComment,
-}: ModalEditCommentProps) => {
+const ModalEditComment = ({ setComments, comment }: ModalEditCommentProps) => {
+  const { toggle, isOpen, close } = useToggle();
   return (
-    <Dialog.Container open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
+    <Dialog.Container open={isOpen} onOpenChange={toggle}>
+      <Dialog.Trigger asChild>
+        <Button variant="ghost" size="sm">
+          <Edit2 className="w-3 h-3" />
+        </Button>
+      </Dialog.Trigger>
       <Dialog.Content>
         <Dialog.Header>
           <Dialog.Title>댓글 수정</Dialog.Title>
         </Dialog.Header>
-        <div className="space-y-4">
-          <Textarea placeholder="댓글 내용" value={selectedComment?.body || ""} onChange={onChangeComment} />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
-        </div>
+        <FormEditComment setComments={setComments} close={close} comment={comment} />
       </Dialog.Content>
     </Dialog.Container>
   );
