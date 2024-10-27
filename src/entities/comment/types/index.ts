@@ -9,6 +9,12 @@ export interface Comment {
     fullName: string
   }
 }
+export interface CommentDTO {
+  comments: Comment[]
+  limit: number
+  skip: number
+  total: number
+}
 
 export interface NewComment {
   body: string

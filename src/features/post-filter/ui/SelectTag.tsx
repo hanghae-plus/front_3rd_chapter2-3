@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { Tag } from "../../../entities/tag/model/types"
+import { Tag } from "../../../entities/tag/types"
 
 interface Props {
   selectedTag: string

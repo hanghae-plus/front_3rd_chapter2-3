@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { createPostApi, deletePostApi, fetchPostsApi, updatePostApi } from "../../../entities/post/api"
 import { fetchUsersApi } from "../../../entities/user/api"
-import { Post } from "../../../entities/post/model/types"
+import { Post } from "../../../entities/post/types"
 import { User } from "../../../entities/user/model/types"
 import { fetchPostsByTagApi, searchPostsApi } from "../api"
 

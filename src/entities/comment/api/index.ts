@@ -1,11 +1,4 @@
-import { Comment, NewComment } from "../model/types"
-
-interface CommentDTO {
-  comments: Comment[]
-  limit: number
-  skip: number
-  total: number
-}
+import { Comment, CommentDTO, NewComment } from "../types"
 
 // 댓글 가져오기
 export const fetchCommentsApi = async (postId: number) => {
