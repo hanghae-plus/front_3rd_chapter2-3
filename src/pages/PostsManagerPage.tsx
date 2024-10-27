@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
+import { Plus, Search } from "lucide-react"
 import {
   Button,
   Card,
@@ -12,22 +12,17 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
 } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
 import { usePostParams } from "../features/post/model/usePostParams"
-import { highlightText } from "../shared/lib/highlightText"
 import { fetchUsersApi } from "../entities/user/api"
 import { PostDetailModal } from "../features/post/ui/PostDetailModal"
 import { UserModal } from "../widgets/user/ui/UserModal"
-import { PostTableHead } from "../widgets/post/ui/PostTableHead"
 import { PostAddModal } from "../features/post/ui/PostAddModal"
 import { PostEditModal } from "../features/post/ui/PostEditModal"
 import { useUserContext } from "../shared/model/UserContext"
 import { usePostsContext } from "../shared/model/PostContext"
+import { PostTable } from "../features/post/ui/PostTable"
 
 const PostsManager = () => {
   // 상태 관리
@@ -35,18 +30,12 @@ const PostsManager = () => {
 
   const { tags, getTags } = useTags()
   const {
-    posts,
     setShowAddDialog,
-    setSelectedPost,
-    setShowEditDialog,
     total,
 
-    deletePost,
     getPostsByTag,
     getSearchedPosts,
     getPosts,
-
-    openPostDetail,
   } = usePostsContext()
   const {
     skip,
@@ -64,7 +53,7 @@ const PostsManager = () => {
 
     updateURL,
   } = usePostParams()
-  const { selectedUser, openUserModal } = useUserContext()
+  const { selectedUser } = useUserContext()
 
   // 게시물 가져오기
   const fetchPosts = async () => {
@@ -111,79 +100,6 @@ const PostsManager = () => {
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <Table>
-      <PostTableHead />
-
-      <TableBody>
-        {posts.map((post) => (
-          <TableRow key={post.id}>
-            <TableCell>{post.id}</TableCell>
-            <TableCell>
-              <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
-
-                <div className="flex flex-wrap gap-1">
-                  {post.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? "text-white bg-blue-500 hover:bg-blue-600"
-                          : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag)
-                        updateURL()
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post)
-                    setShowEditDialog(true)
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
@@ -195,6 +111,7 @@ const PostsManager = () => {
           </Button>
         </CardTitle>
       </CardHeader>
+
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
@@ -254,7 +171,16 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? (
+            <div className="flex justify-center p-4">로딩 중...</div>
+          ) : (
+            <PostTable
+              searchQuery={searchQuery}
+              selectedTag={selectedTag}
+              setSelectedTag={setSelectedTag}
+              updateURL={updateURL}
+            />
+          )}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
