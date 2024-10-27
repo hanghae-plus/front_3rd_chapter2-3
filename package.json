@@ -12,12 +12,12 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "eslint-plugin-fsd": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@feature-sliced/eslint-config": "^0.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-select": "^2.1.2",
     "@testing-library/jest-dom": "^6.6.2",
@@ -29,6 +29,8 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "eslint": "^9.13.0",
+    "eslint-plugin-boundaries": "^4.2.2",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",

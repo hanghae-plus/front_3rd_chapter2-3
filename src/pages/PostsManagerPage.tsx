@@ -1,6 +1,5 @@
 import { Comment, CommentResponse } from "@/entities/comment/model/types";
 import { Post, PostsResponse } from "@/entities/post/model/types";
-import { Tag } from "@/entities/tag/model/types";
 import { User } from "@/entities/user/model/types";
 import { SelectedCommentProvider } from "@/features/comment/model/SelectedCommentContext";
 import FilterOrder from "@/features/filter/ui/FilterOrder";
@@ -59,9 +58,6 @@ const PostsManager = () => {
   // loading
   const [loading, setLoading] = useState(false);
 
-  // tags
-  const [tags, setTags] = useState<Tag[]>([]);
-
   // comments
   const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
 
@@ -87,7 +83,6 @@ const PostsManager = () => {
       .then((response) => response.json())
       .then((data) => {
         postsData = data;
-
         return fetch("/api/users?limit=0&select=username,image");
       })
       .then((response) => response.json())
@@ -107,17 +102,6 @@ const PostsManager = () => {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-  //! 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags");
-      const data = await response.json();
-      setTags(data);
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error);
-    }
   };
 
   // 게시물 검색
@@ -226,10 +210,6 @@ const PostsManager = () => {
   };
 
   useEffect(() => {
-    fetchTags();
-  }, []);
-
-  useEffect(() => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag);
     } else {
@@ -302,7 +282,6 @@ const PostsManager = () => {
                     setSelectedTag={setSelectedTag}
                     fetchPostsByTag={fetchPostsByTag}
                     updateURL={updateURL}
-                    tags={tags}
                   />
                   <FilterSort sortBy={sortBy} setSortBy={setSortBy} />
                   <FilterOrder sortOrder={sortOrder} setSortOrder={setSortOrder} />

@@ -1,3 +1,4 @@
+import useFetchTags from "@/entities/tag/api/useFetchTags";
 import { Select } from "@/shared/ui/Select";
 
 type FilterTagsProps = {
@@ -5,13 +6,13 @@ type FilterTagsProps = {
   setSelectedTag: (selectedTag: string) => void;
   fetchPostsByTag: (selectedTag: string) => void;
   updateURL: () => void;
-  tags: {
-    url: string;
-    slug: string;
-  }[];
 };
 
-const FilterTags = ({ selectedTag, setSelectedTag, fetchPostsByTag, updateURL, tags }: FilterTagsProps) => {
+const FilterTags = ({ selectedTag, setSelectedTag, fetchPostsByTag, updateURL }: FilterTagsProps) => {
+  const { tags, isLoading } = useFetchTags();
+
+  if (isLoading) return <div>로딩중...</div>;
+
   return (
     <Select.Container
       value={selectedTag}
