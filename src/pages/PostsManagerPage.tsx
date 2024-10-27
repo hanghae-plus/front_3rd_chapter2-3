@@ -25,6 +25,7 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
+import { useTags } from "../entities/tag/model"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -44,7 +45,6 @@ const PostsManager = () => {
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [comments, setComments] = useState({})
   const [selectedComment, setSelectedComment] = useState(null)
@@ -54,6 +54,8 @@ const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
+
+  const { tags, getTags } = useTags()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -95,17 +97,6 @@ const PostsManager = () => {
       .finally(() => {
         setLoading(false)
       })
-  }
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags")
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
   }
 
   // 게시물 검색
@@ -303,7 +294,7 @@ const PostsManager = () => {
   }
 
   useEffect(() => {
-    fetchTags()
+    getTags()
   }, [])
 
   useEffect(() => {
