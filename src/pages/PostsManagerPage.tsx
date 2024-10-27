@@ -27,17 +27,15 @@ import {
 import { useTags } from "../entities/tag/model"
 import { usePosts } from "../features/post/model"
 import { usePostParams } from "../features/post/model/usePostParams"
-import { Post } from "../entities/post/model/types"
 import { highlightText } from "../shared/lib/highlightText"
 import { fetchUsersApi } from "../entities/user/api"
+import { PostDetailModal } from "../features/post/ui/PostDetailModal"
 import { UserModalContents } from "../widgets/user/ui/UserModalContents"
-import { Comments } from "../features/comment/ui/Comments"
 import { useUserModal } from "../features/user/model/useUserModal"
 
 const PostsManager = () => {
   // 상태 관리
   const [loading, setLoading] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   const { tags, getTags } = useTags()
   const {
@@ -58,6 +56,10 @@ const PostsManager = () => {
     getPostsByTag,
     getSearchedPosts,
     getPosts,
+
+    showPostDetailDialog,
+    setShowPostDetailDialog,
+    openPostDetail,
   } = usePosts()
   const {
     skip,
@@ -109,12 +111,6 @@ const PostsManager = () => {
     setLoading(false)
   }
 
-  // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
-    setShowPostDetailDialog(true)
-  }
-
   useEffect(() => {
     getTags()
   }, [])
@@ -140,6 +136,7 @@ const PostsManager = () => {
           <TableHead className="w-[150px]">작업</TableHead>
         </TableRow>
       </TableHeader>
+
       <TableBody>
         {posts.map((post) => (
           <TableRow key={post.id}>
@@ -362,15 +359,7 @@ const PostsManager = () => {
 
       {/* 게시물 상세 보기 대화상자 */}
       <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {selectedPost && <Comments postId={selectedPost.id} searchQuery={searchQuery} />}
-          </div>
-        </DialogContent>
+        <PostDetailModal selectedPost={selectedPost!} searchQuery={searchQuery} />
       </Dialog>
 
       {/* 사용자 모달 */}

@@ -66,6 +66,13 @@ export const usePosts = () => {
     setTotal(postsData.total)
   }
 
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+
+  const openPostDetail = (post: Post) => {
+    setSelectedPost(post)
+    setShowPostDetailDialog(true)
+  }
+
   return {
     posts,
     showAddDialog,
@@ -84,5 +91,9 @@ export const usePosts = () => {
     getPostsByTag,
     getSearchedPosts,
     getPosts,
+
+    showPostDetailDialog,
+    setShowPostDetailDialog,
+    openPostDetail,
   }
 }
