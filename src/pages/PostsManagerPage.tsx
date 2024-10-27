@@ -28,7 +28,14 @@ import {
   DialogTitle,
   Textarea,
 } from "../shared/ui";
-import { deleteExistingPost, getPosts, getSearchPosts, postNewPost, putExistingPost } from "../entities/post/api";
+import {
+  deleteExistingPost,
+  getPosts,
+  getPostsByTag,
+  getSearchPosts,
+  postNewPost,
+  putExistingPost,
+} from "../entities/post/api";
 
 // post게시물, comment, user
 const PostsManager = () => {
@@ -128,25 +135,24 @@ const PostsManager = () => {
   // 태그별 게시물 가져오기
   const fetchPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
-      fetchPosts();
+      await fetchPosts();
       return;
     }
     setLoading(true);
     try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ]);
-      const postsData = await postsResponse.json();
-      const usersData = await usersResponse.json();
+      const data = await getPostsByTag(tag);
 
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }));
+      if (data) {
+        const { postsData, usersData } = data;
 
-      setPosts(postsWithUsers);
-      setTotal(postsData.total);
+        const postsWithUsers = postsData.posts.map((post: Post) => ({
+          ...post,
+          author: usersData.users.find((user: User) => user.id === post.userId),
+        }));
+
+        setPosts(postsWithUsers);
+        setTotal(postsData.total);
+      }
     } catch (error) {
       console.error("태그별 게시물 가져오기 오류:", error);
     }

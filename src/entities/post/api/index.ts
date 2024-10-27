@@ -19,6 +19,24 @@ export const getPosts = async (limit: number, skip: number) => {
   }
 };
 
+export const getPostsByTag = async (tag: string) => {
+  try {
+    const [postsResponse, usersResponse] = await Promise.all([
+      fetch(`/api/posts/tag/${tag}`),
+      fetch("/api/users?limit=0&select=username,image"),
+    ]);
+    const postsData = await postsResponse.json();
+    const usersData = await usersResponse.json();
+
+    return {
+      postsData: postsData,
+      usersData: usersData,
+    };
+  } catch (error) {
+    console.error("태그별 게시물 가져오기 오류:", error);
+  }
+};
+
 export const getSearchPosts = async (searchQuery: string) => {
   try {
     const response = await fetch(`/api/posts/search?q=${searchQuery}`);
