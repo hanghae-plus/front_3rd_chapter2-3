@@ -33,10 +33,18 @@ import {
   getPosts,
   getPostsByTag,
   getSearchPosts,
+  getTags,
   postNewPost,
   putExistingPost,
 } from "../entities/post/api";
 import { getUserInfo } from "../entities/user/api";
+import {
+  deleteExistingComment,
+  getComments,
+  patchLikeComment,
+  postNewComment,
+  putExistingComment,
+} from "../entities/comment/api";
 
 // post게시물, comment, user
 const PostsManager = () => {
@@ -83,35 +91,30 @@ const PostsManager = () => {
   // 게시물 가져오기
   const fetchPosts = async () => {
     setLoading(true);
-    try {
-      const response = await getPosts(limit, skip);
 
-      if (response) {
-        const { postsData, usersData } = response;
+    const response = await getPosts(limit, skip);
 
-        const postsWithUsers = postsData.posts.map((post: Post) => ({
-          ...post,
-          author: usersData.users.find((user: User) => user.id === post.userId),
-        }));
+    if (response) {
+      const { postsData, usersData } = response;
 
-        setPosts(postsWithUsers);
-        setTotal(postsData.total);
-      }
-    } catch (error) {
-      console.error("게시물 가져오기 오류:", error);
-    } finally {
-      setLoading(false);
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
+        ...post,
+        author: usersData.users.find((user: User) => user.id === post.userId),
+      }));
+
+      setPosts(postsWithUsers);
+      setTotal(postsData.total);
     }
+
+    setLoading(false);
   };
 
   // 태그 가져오기
   const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags");
-      const data: Tag[] = await response.json();
+    const data = await getTags();
+
+    if (data) {
       setTags(data);
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error);
     }
   };
 
@@ -121,16 +124,17 @@ const PostsManager = () => {
       await fetchPosts();
       return;
     }
-    setLoading(true);
-    try {
-      const data = await getSearchPosts(searchQuery);
 
+    setLoading(true);
+
+    const data = await getSearchPosts(searchQuery);
+
+    if (data) {
       setPosts(data.posts);
       setTotal(data.total);
-    } catch (error) {
-      console.error("게시물 검색 오류:", error);
+
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // 태그별 게시물 가져오기
@@ -139,132 +143,104 @@ const PostsManager = () => {
       await fetchPosts();
       return;
     }
+
     setLoading(true);
-    try {
-      const data = await getPostsByTag(tag);
 
-      if (data) {
-        const { postsData, usersData } = data;
+    const data = await getPostsByTag(tag);
 
-        const postsWithUsers = postsData.posts.map((post: Post) => ({
-          ...post,
-          author: usersData.users.find((user: User) => user.id === post.userId),
-        }));
+    if (data) {
+      const { postsData, usersData } = data;
 
-        setPosts(postsWithUsers);
-        setTotal(postsData.total);
-      }
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error);
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
+        ...post,
+        author: usersData.users.find((user: User) => user.id === post.userId),
+      }));
+
+      setPosts(postsWithUsers);
+      setTotal(postsData.total);
     }
+
     setLoading(false);
   };
 
   // 게시물 추가
   const addPost = async () => {
-    try {
-      const data = await postNewPost(newPost);
+    const data = await postNewPost(newPost);
 
+    if (data) {
       setPosts([data, ...posts]);
       setShowAddDialog(false);
       setNewPost({ title: "", body: "", userId: 1 });
-    } catch (error) {
-      console.error("게시물 추가 오류:", error);
     }
   };
 
   // 게시물 업데이트
   const updatePost = async () => {
-    try {
-      if (selectedPost) {
-        const data = await putExistingPost(selectedPost);
+    if (selectedPost) {
+      const data = await putExistingPost(selectedPost);
 
+      if (data) {
         setPosts(posts.map((post) => (post.id === data.id ? data : post)));
         setShowEditDialog(false);
       }
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error);
     }
   };
 
   // 게시물 삭제
   const deletePost = async (id: number) => {
-    try {
-      await deleteExistingPost(id);
+    await deleteExistingPost(id);
 
-      setPosts(posts.filter((post) => post?.id !== id));
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error);
-    }
+    setPosts(posts.filter((post) => post?.id !== id));
   };
 
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {
     if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`);
-      const data = await response.json();
-      console.log(data, "data");
+
+    const data = await getComments(postId);
+    console.log(data);
+    if (data) {
       setComments((prev) => ({ ...prev, [postId]: data.comments }));
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error);
     }
   };
 
   // 댓글 추가
   const addComment = async () => {
-    try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      });
+    const data = await postNewComment(newComment);
 
-      const data = await response.json();
-
+    if (data) {
       setComments((prev) => ({
         ...prev,
         [data.postId]: [...(prev[data?.postId] || []), data],
       }));
       setShowAddCommentDialog(false);
       setNewComment({ body: "", postId: null, userId: 1 });
-    } catch (error) {
-      console.error("댓글 추가 오류:", error);
     }
   };
 
   // 댓글 업데이트
   const updateComment = async () => {
-    try {
-      const response = await fetch(`/api/comments/${selectedComment?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment?.body }),
-      });
-      const data = await response.json();
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }));
-      setShowEditCommentDialog(false);
-    } catch (error) {
-      console.error("댓글 업데이트 오류:", error);
+    if (selectedComment) {
+      const data = await putExistingComment(selectedComment.id, selectedComment.body);
+
+      if (data) {
+        setComments((prev) => ({
+          ...prev,
+          [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
+        }));
+        setShowEditCommentDialog(false);
+      }
     }
   };
 
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      });
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment: Comments) => comment.id !== id),
-      }));
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error);
-    }
+    await deleteExistingComment(id);
+
+    setComments((prev) => ({
+      ...prev,
+      [postId]: prev[postId].filter((comment: Comments) => comment.id !== id),
+    }));
   };
 
   // 댓글 좋아요
@@ -276,19 +252,12 @@ const PostsManager = () => {
       return;
     }
 
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comment.likes + 1 }),
-      });
-      const data = await response.json();
+    const data = await patchLikeComment(id, comment.likes);
+    if (data) {
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment: Comments) => (comment.id === data.id ? data : comment)),
       }));
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error);
     }
   };
 

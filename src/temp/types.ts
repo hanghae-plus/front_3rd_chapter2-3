@@ -62,6 +62,10 @@ export interface UserResponse extends ResponseData {
   users: User[];
 }
 
+export interface CommentResponse extends ResponseData {
+  comments: Comments[];
+}
+
 export interface SelectedUser {
   address: {
     address: string;

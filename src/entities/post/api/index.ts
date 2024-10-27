@@ -1,13 +1,22 @@
-import { NewPost, Post, PostResponse, UserResponse } from "../../../temp/types.ts";
+import { NewPost, Post, PostResponse, Tag, UserResponse } from "../../../temp/types.ts";
 
-export const getPosts = async (limit: number, skip: number) => {
+export const getPosts = async (
+  limit: number,
+  skip: number,
+): Promise<
+  | {
+      postsData: PostResponse;
+      usersData: UserResponse;
+    }
+  | undefined
+> => {
   try {
     const postsResponse = fetch(`/api/posts?limit=${limit}&skip=${skip}`);
     const usersResponse = fetch("/api/users?limit=0&select=username,image");
 
     const [postsData, usersData] = await Promise.all([
-      postsResponse.then((res) => res.json() as Promise<PostResponse>),
-      usersResponse.then((res) => res.json() as Promise<UserResponse>),
+      postsResponse.then((res) => res.json()),
+      usersResponse.then((res) => res.json()),
     ]);
 
     return {
@@ -19,14 +28,22 @@ export const getPosts = async (limit: number, skip: number) => {
   }
 };
 
-export const getPostsByTag = async (tag: string) => {
+export const getPostsByTag = async (
+  tag: string,
+): Promise<
+  | {
+      postsData: PostResponse;
+      usersData: UserResponse;
+    }
+  | undefined
+> => {
   try {
     const [postsResponse, usersResponse] = await Promise.all([
       fetch(`/api/posts/tag/${tag}`),
       fetch("/api/users?limit=0&select=username,image"),
     ]);
-    const postsData = await postsResponse.json();
-    const usersData = await usersResponse.json();
+    const postsData = (await postsResponse.json()) as PostResponse;
+    const usersData = (await usersResponse.json()) as UserResponse;
 
     return {
       postsData: postsData,
@@ -37,7 +54,7 @@ export const getPostsByTag = async (tag: string) => {
   }
 };
 
-export const getSearchPosts = async (searchQuery: string) => {
+export const getSearchPosts = async (searchQuery: string): Promise<PostResponse | undefined> => {
   try {
     const response = await fetch(`/api/posts/search?q=${searchQuery}`);
 
@@ -47,7 +64,7 @@ export const getSearchPosts = async (searchQuery: string) => {
   }
 };
 
-export const postNewPost = async (newPost: NewPost) => {
+export const postNewPost = async (newPost: NewPost): Promise<Post | undefined> => {
   try {
     const response = await fetch("/api/posts/add", {
       method: "POST",
@@ -61,7 +78,7 @@ export const postNewPost = async (newPost: NewPost) => {
   }
 };
 
-export const putExistingPost = async (selectedPost: Post) => {
+export const putExistingPost = async (selectedPost: Post): Promise<Post | undefined> => {
   try {
     const response = await fetch(`/api/posts/${selectedPost.id}`, {
       method: "PUT",
@@ -82,5 +99,15 @@ export const deleteExistingPost = async (id: number) => {
     });
   } catch (error) {
     console.error("게시물 삭제 오류:", error);
+  }
+};
+
+export const getTags = async (): Promise<Tag[] | undefined> => {
+  try {
+    const response = await fetch("/api/posts/tags");
+
+    return await response.json();
+  } catch (error) {
+    console.error("태그 가져오기 오류:", error);
   }
 };
