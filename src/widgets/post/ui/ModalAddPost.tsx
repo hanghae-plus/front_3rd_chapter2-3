@@ -1,39 +1,28 @@
-import { NewPost } from "@/pages/PostsManagerPage";
-import { Button, Dialog, Input, Textarea } from "@/shared/ui";
+import FormAddPost from "@/features/post/ui/FormAddPost";
+import useToggle from "@/shared/lib/useToggle";
+import { Button, Dialog } from "@/shared/ui";
+import { Plus } from "lucide-react";
 
-type ModalAddPostProps = {
-  showAddDialog: boolean;
-  setShowAddDialog: (open: boolean) => void;
-  newPost: NewPost;
-  addPost: () => void;
-  onChangePost: (key: keyof NewPost, value: string | number) => void;
-};
+const ModalAddPost = () => {
+  const { isOpen, toggle } = useToggle();
 
-const ModalAddPost = ({ showAddDialog, setShowAddDialog, newPost, addPost, onChangePost }: ModalAddPostProps) => {
   return (
-    <Dialog.Container open={showAddDialog} onOpenChange={setShowAddDialog}>
-      <Dialog.Content>
-        <Dialog.Header>
-          <Dialog.Title>새 게시물 추가</Dialog.Title>
-        </Dialog.Header>
-        <div className="space-y-4">
-          <Input placeholder="제목" value={newPost.title} onChange={(e) => onChangePost("title", e.target.value)} />
-          <Textarea
-            rows={30}
-            placeholder="내용"
-            value={newPost.body}
-            onChange={(e) => onChangePost("body", e.target.value)}
-          />
-          <Input
-            type="number"
-            placeholder="사용자 ID"
-            value={newPost.userId}
-            onChange={(e) => onChangePost("userId", Number(e.target.value))}
-          />
-          <Button onClick={addPost}>게시물 추가</Button>
-        </div>
-      </Dialog.Content>
-    </Dialog.Container>
+    <>
+      <Dialog.Container open={isOpen} onOpenChange={toggle}>
+        <Dialog.Trigger asChild>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            게시물 추가
+          </Button>
+        </Dialog.Trigger>
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>새 게시물 추가</Dialog.Title>
+          </Dialog.Header>
+          <FormAddPost />
+        </Dialog.Content>
+      </Dialog.Container>
+    </>
   );
 };
 

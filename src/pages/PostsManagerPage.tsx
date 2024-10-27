@@ -1,13 +1,19 @@
+import FilterOrder from "@/features/filter/ui/FilterOrder";
+import FilterSort from "@/features/filter/ui/FilterSort";
+import FilterTags from "@/features/filter/ui/FilterTags";
+import SearchInput from "@/features/search/ui/SearchInput";
 import { highlightText } from "@/shared/lib/utils";
-import { Button, Card, Input, Select, Table } from "@/shared/ui";
+import { Button, Card } from "@/shared/ui";
+import Pagination from "@/shared/ui/Pagination";
 import { ModalAddComment } from "@/widgets/comment/ui/ModalAddComment";
 import ModalEditComment from "@/widgets/comment/ui/ModalEditComment";
 import ModalAddPost from "@/widgets/post/ui/ModalAddPost";
 import ModalEditPost from "@/widgets/post/ui/ModalEditPost";
 import ModalPostDetail from "@/widgets/post/ui/ModalPostDetail";
+import TablePosts from "@/widgets/post/ui/TablePosts";
 import { User } from "@/widgets/user/api/types";
 import ModalUserInfo from "@/widgets/user/ui/ModalUserInfo";
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -70,30 +76,45 @@ export type NewPost = {
 const PostsManager = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
 
   // 상태 관리
+  // post
   const [posts, setPosts] = useState<Post[]>([]);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 });
+
+  // pagination
   const [total, setTotal] = useState(0);
+
+  // filter
+  const queryParams = new URLSearchParams(location.search);
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"));
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"));
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "");
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "");
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc");
+  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "");
+  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "");
+
+  // dialog
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 });
-  const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState<{ url: string; slug: string }[]>([]);
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "");
-  const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
-  const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: 0, userId: 1 });
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false);
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false);
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
+
+  // loading
+  const [loading, setLoading] = useState(false);
+
+  // tags
+  const [tags, setTags] = useState<{ url: string; slug: string }[]>([]);
+
+  // comments
+  const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
+  const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: 0, userId: 1 });
+
+  // user
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   // URL 업데이트 함수
@@ -371,85 +392,6 @@ const PostsManager = () => {
     setSelectedTag(params.get("tag") || "");
   }, [location.search]);
 
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <Table.Container>
-      <Table.Header>
-        <Table.Row>
-          <Table.Head className="w-[50px]">ID</Table.Head>
-          <Table.Head>제목</Table.Head>
-          <Table.Head className="w-[150px]">작성자</Table.Head>
-          <Table.Head className="w-[150px]">반응</Table.Head>
-          <Table.Head className="w-[150px]">작업</Table.Head>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {posts.map((post) => (
-          <Table.Row key={post.id}>
-            <Table.Cell>{post.id}</Table.Cell>
-            <Table.Cell>
-              <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
-                <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? "text-white bg-blue-500 hover:bg-blue-600"
-                          : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag);
-                        updateURL();
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Table.Cell>
-            <Table.Cell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </Table.Cell>
-            <Table.Cell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
-            </Table.Cell>
-            <Table.Cell>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post);
-                    setShowEditDialog(true);
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Container>
-  );
-
   // 댓글 렌더링
   const renderComments = (postId: number) => (
     <div className="mt-2">
@@ -503,111 +445,47 @@ const PostsManager = () => {
       <Card.Header>
         <Card.Title className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
+          {/* 게시물 추가 대화상자 */}
+          <ModalAddPost />
         </Card.Title>
       </Card.Header>
       <Card.Content>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
           <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="게시물 검색..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && searchPosts()}
-                />
-              </div>
-            </div>
-            <Select.Container
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value);
-                fetchPostsByTag(value);
-                updateURL();
-              }}
-            >
-              <Select.Trigger className="w-[180px]">
-                <Select.Value placeholder="태그 선택" />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value="all">모든 태그</Select.Item>
-                {tags.map((tag) => (
-                  <Select.Item key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </Select.Item>
-                ))}
-              </Select.Content>
-            </Select.Container>
-            <Select.Container value={sortBy} onValueChange={setSortBy}>
-              <Select.Trigger className="w-[180px]">
-                <Select.Value placeholder="정렬 기준" />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value="none">없음</Select.Item>
-                <Select.Item value="id">ID</Select.Item>
-                <Select.Item value="title">제목</Select.Item>
-                <Select.Item value="reactions">반응</Select.Item>
-              </Select.Content>
-            </Select.Container>
-            <Select.Container value={sortOrder} onValueChange={setSortOrder}>
-              <Select.Trigger className="w-[180px]">
-                <Select.Value placeholder="정렬 순서" />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value="asc">오름차순</Select.Item>
-                <Select.Item value="desc">내림차순</Select.Item>
-              </Select.Content>
-            </Select.Container>
+            <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} searchPosts={searchPosts} />
+            <FilterTags
+              selectedTag={selectedTag}
+              setSelectedTag={setSelectedTag}
+              fetchPostsByTag={fetchPostsByTag}
+              updateURL={updateURL}
+              tags={tags}
+            />
+            <FilterSort sortBy={sortBy} setSortBy={setSortBy} />
+            <FilterOrder sortOrder={sortOrder} setSortOrder={setSortOrder} />
           </div>
-
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
-
+          {loading ? (
+            <div className="flex justify-center p-4">로딩 중...</div>
+          ) : (
+            // 게시물 테이블 렌더링
+            <TablePosts
+              posts={posts}
+              searchQuery={searchQuery}
+              selectedTag={selectedTag}
+              setSelectedTag={setSelectedTag}
+              updateURL={updateURL}
+              openUserModal={openUserModal}
+              openPostDetail={openPostDetail}
+              setSelectedPost={setSelectedPost}
+              setShowEditDialog={setShowEditDialog}
+              deletePost={deletePost}
+            />
+          )}
           {/* 페이지네이션 */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span>표시</span>
-              <Select.Container value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
-                <Select.Trigger className="w-[180px]">
-                  <Select.Value placeholder="10" />
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item value="10">10</Select.Item>
-                  <Select.Item value="20">20</Select.Item>
-                  <Select.Item value="30">30</Select.Item>
-                </Select.Content>
-              </Select.Container>
-              <span>항목</span>
-            </div>
-            <div className="flex gap-2">
-              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
-                이전
-              </Button>
-              <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
-                다음
-              </Button>
-            </div>
-          </div>
+          <Pagination size={limit} setSize={setLimit} page={skip} setPage={setSkip} total={total} />
         </div>
       </Card.Content>
-
-      {/* 게시물 추가 대화상자 */}
-      <ModalAddPost
-        showAddDialog={showAddDialog}
-        setShowAddDialog={setShowAddDialog}
-        newPost={newPost}
-        addPost={addPost}
-        onChangePost={(key, value) => {
-          setNewPost({ ...newPost, [key]: value });
-        }}
-      />
 
       {/* 게시물 수정 대화상자 */}
       <ModalEditPost
