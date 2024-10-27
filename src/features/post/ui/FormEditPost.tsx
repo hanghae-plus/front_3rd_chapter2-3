@@ -1,4 +1,4 @@
-import { Post } from "@/pages/PostsManagerPage";
+import { Post } from "@/entities/post/model/types";
 import { Button, Input, Textarea } from "@/shared/ui";
 import { Dispatch, SetStateAction } from "react";
 import { useSelectedPost } from "../model/SelectedPostContext";

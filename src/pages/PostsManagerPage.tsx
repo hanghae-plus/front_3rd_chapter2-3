@@ -1,3 +1,7 @@
+import { Comment, CommentResponse } from "@/entities/comment/model/types";
+import { Post, PostsResponse } from "@/entities/post/model/types";
+import { Tag } from "@/entities/tag/model/types";
+import { User } from "@/entities/user/model/types";
 import { SelectedCommentProvider } from "@/features/comment/model/SelectedCommentContext";
 import FilterOrder from "@/features/filter/ui/FilterOrder";
 import FilterSort from "@/features/filter/ui/FilterSort";
@@ -12,50 +16,9 @@ import { ModalAddComment } from "@/widgets/comment/ui/ModalAddComment";
 import ModalEditComment from "@/widgets/comment/ui/ModalEditComment";
 import ModalAddPost from "@/widgets/post/ui/ModalAddPost";
 import TablePosts from "@/widgets/post/ui/TablePosts";
-import { User } from "@/widgets/user/api/types";
 import { ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-export type Comment = {
-  body: string;
-  id: number;
-  likes: number;
-  postId: number;
-  user: {
-    id: number;
-    username: string;
-    fullName: string;
-  };
-};
-
-export type Post = {
-  id: number;
-  body: string;
-  title: string;
-  userId: number;
-  views: number;
-  reactions: {
-    likes: number;
-    dislikes: number;
-  };
-  tags: string[];
-  author?: Pick<User, "id" | "username" | "image">;
-};
-
-export type CommentResponse = {
-  comments: Comment[];
-  total: number;
-  skip: number;
-  limit: number;
-};
-
-export type PostsResponse = {
-  posts: Post[];
-  total: number;
-  skip: number;
-  limit: number;
-};
 
 export type UsersResponse = {
   users: User[];
@@ -97,7 +60,7 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false);
 
   // tags
-  const [tags, setTags] = useState<{ url: string; slug: string }[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   // comments
   const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
@@ -114,7 +77,7 @@ const PostsManager = () => {
     navigate(`?${params.toString()}`);
   };
 
-  // 게시물 가져오기
+  //! 게시물 가져오기
   const fetchPosts = () => {
     setLoading(true);
     let postsData: PostsResponse;
@@ -146,7 +109,7 @@ const PostsManager = () => {
       });
   };
 
-  // 태그 가져오기
+  //! 태그 가져오기
   const fetchTags = async () => {
     try {
       const response = await fetch("/api/posts/tags");
@@ -215,7 +178,7 @@ const PostsManager = () => {
     }
   };
 
-  // 댓글 가져오기
+  //! 댓글 가져오기
   const fetchComments = async (postId: number) => {
     if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {

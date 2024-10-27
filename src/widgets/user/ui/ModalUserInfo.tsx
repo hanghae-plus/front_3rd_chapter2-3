@@ -1,6 +1,6 @@
+import { Post } from "@/entities/post/model/types";
 import { useSelectedUser } from "@/features/user/model/SelectedUserContext";
 import UserInfo from "@/features/user/ui/UserInfo";
-import { Post } from "@/pages/PostsManagerPage";
 import useToggle from "@/shared/lib/useToggle";
 import { Dialog } from "@/shared/ui";
 import { User } from "../api/types";

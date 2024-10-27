@@ -1,6 +1,6 @@
+import { Post } from "@/entities/post/model/types";
 import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
 import PostDetail from "@/features/post/ui/PostDetail";
-import { Post } from "@/pages/PostsManagerPage";
 import useToggle from "@/shared/lib/useToggle";
 import { highlightText } from "@/shared/lib/utils";
 import { Button, Dialog } from "@/shared/ui";

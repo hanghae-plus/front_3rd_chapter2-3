@@ -1,5 +1,5 @@
+import { Post } from "@/entities/post/model/types";
 import FormAddPost from "@/features/post/ui/FormAddPost";
-import { Post } from "@/pages/PostsManagerPage";
 import useToggle from "@/shared/lib/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 import { Plus } from "lucide-react";

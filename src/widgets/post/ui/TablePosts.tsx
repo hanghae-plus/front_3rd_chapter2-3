@@ -1,4 +1,4 @@
-import { Post } from "@/pages/PostsManagerPage";
+import { Post } from "@/entities/post/model/types";
 import { highlightText } from "@/shared/lib/utils";
 import { Button, Table } from "@/shared/ui";
 import ModalUserInfo from "@/widgets/user/ui/ModalUserInfo";
