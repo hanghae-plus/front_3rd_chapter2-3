@@ -1,13 +1,17 @@
 import { highlightText } from "@/shared/lib/utils";
-import { Button, Card, Dialog, Input, Select, Table, Textarea } from "@/shared/ui";
+import { Button, Card, Input, Select, Table } from "@/shared/ui";
+import { ModalAddComment } from "@/widgets/comment/ui/ModalAddComment";
+import ModalEditComment from "@/widgets/comment/ui/ModalEditComment";
+import ModalAddPost from "@/widgets/post/ui/ModalAddPost";
+import ModalEditPost from "@/widgets/post/ui/ModalEditPost";
+import ModalPostDetail from "@/widgets/post/ui/ModalPostDetail";
 import { User } from "@/widgets/user/api/types";
 import ModalUserInfo from "@/widgets/user/ui/ModalUserInfo";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-type Comment = {
+export type Comment = {
   body: string;
   id: number;
   likes: number;
@@ -19,7 +23,7 @@ type Comment = {
   };
 };
 
-type Post = {
+export type Post = {
   id: number;
   body: string;
   title: string;
@@ -33,27 +37,33 @@ type Post = {
   author?: Pick<User, "id" | "username" | "image">;
 };
 
-type CommentResponse = {
+export type CommentResponse = {
   comments: Comment[];
   total: number;
   skip: number;
   limit: number;
 };
 
-type PostsResponse = {
+export type PostsResponse = {
   posts: Post[];
   total: number;
   skip: number;
   limit: number;
 };
 
-type UsersResponse = {
+export type UsersResponse = {
   users: User[];
 };
 
-type NewComment = {
+export type NewComment = {
   body: string;
   postId: number | null;
+  userId: number;
+};
+
+export type NewPost = {
+  title: string;
+  body: string;
   userId: number;
 };
 
@@ -85,8 +95,6 @@ const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-  console.log(selectedPost);
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -382,7 +390,6 @@ const PostsManager = () => {
             <Table.Cell>
               <div className="space-y-1">
                 <div>{highlightText(post.title, searchQuery)}</div>
-
                 <div className="flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
                     <span
@@ -592,112 +599,57 @@ const PostsManager = () => {
       </Card.Content>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog.Container open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <Dialog.Content>
-          <Dialog.Header>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </Dialog.Header>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-            />
-            <Button onClick={addPost}>게시물 추가</Button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Container>
+      <ModalAddPost
+        showAddDialog={showAddDialog}
+        setShowAddDialog={setShowAddDialog}
+        newPost={newPost}
+        addPost={addPost}
+        onChangePost={(key, value) => {
+          setNewPost({ ...newPost, [key]: value });
+        }}
+      />
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog.Container open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <Dialog.Content>
-          <Dialog.Header>
-            <Dialog.Title>게시물 수정</Dialog.Title>
-          </Dialog.Header>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ""}
-              onChange={(e) => {
-                if (!selectedPost) return;
-                setSelectedPost({ ...selectedPost, title: e.target.value });
-              }}
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ""}
-              onChange={(e) => {
-                if (!selectedPost) return;
-                setSelectedPost({ ...selectedPost, body: e.target.value });
-              }}
-            />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Container>
+      <ModalEditPost
+        showEditDialog={showEditDialog}
+        setShowEditDialog={setShowEditDialog}
+        selectedPost={selectedPost}
+        updatePost={updatePost}
+        onChangePost={(key, value) => {
+          if (!selectedPost) return;
+          setSelectedPost({ ...selectedPost, [key]: value });
+        }}
+      />
 
       {/* 댓글 추가 대화상자 */}
-      <Dialog.Container open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <Dialog.Content>
-          <Dialog.Header>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </Dialog.Header>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) => setNewComment((prev) => ({ ...prev, body: e.target.value }))}
-            />
-            <Button onClick={addComment}>댓글 추가</Button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Container>
+      <ModalAddComment
+        showAddCommentDialog={showAddCommentDialog}
+        setShowAddCommentDialog={setShowAddCommentDialog}
+        newComment={newComment}
+        addComment={addComment}
+        onChangeComment={(e) => setNewComment((prev) => ({ ...prev, body: e.target.value }))}
+      />
 
       {/* 댓글 수정 대화상자 */}
-      <Dialog.Container open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <Dialog.Content>
-          <Dialog.Header>
-            <Dialog.Title>댓글 수정</Dialog.Title>
-          </Dialog.Header>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) => {
-                if (!selectedComment) return;
-                setSelectedComment({ ...selectedComment, body: e.target.value });
-              }}
-            />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Container>
+      <ModalEditComment
+        showEditCommentDialog={showEditCommentDialog}
+        setShowEditCommentDialog={setShowEditCommentDialog}
+        selectedComment={selectedComment}
+        updateComment={updateComment}
+        onChangeComment={(e) => {
+          if (!selectedComment) return;
+          setSelectedComment({ ...selectedComment, body: e.target.value });
+        }}
+      />
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog.Container open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <Dialog.Content className="max-w-3xl">
-          <Dialog.Header>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </Dialog.Header>
-          <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id || 0)}
-          </div>
-        </Dialog.Content>
-      </Dialog.Container>
+      <ModalPostDetail
+        showPostDetailDialog={showPostDetailDialog}
+        setShowPostDetailDialog={setShowPostDetailDialog}
+        selectedPost={selectedPost}
+        searchQuery={searchQuery}
+        renderComments={renderComments}
+      />
 
       {/* 사용자 모달 */}
       <ModalUserInfo selectedUser={selectedUser} isOpen={showUserModal} onOpenChange={setShowUserModal} />

@@ -7,6 +7,7 @@ type ModalUserInfoProps = {
   onOpenChange: (open: boolean) => void;
 };
 
+// Data Component
 const ModalUserInfo = ({ selectedUser, isOpen, onOpenChange }: ModalUserInfoProps) => {
   if (!selectedUser) return null;
 
