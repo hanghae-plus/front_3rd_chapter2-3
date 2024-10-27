@@ -25,24 +25,41 @@ import {
   Textarea,
 } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
-import { createPostApi, fetchPostsApi, updatePostApi } from "../entities/post/api"
+import { fetchPostsApi } from "../entities/post/api"
 import { useComments } from "../features/comment/model"
 import { usePosts } from "../features/post/model"
 import { usePostParams } from "../features/post/model/usePostParams"
+import { Post } from "../entities/post/model/types"
+import { User } from "../entities/user/model/types"
 
 const PostsManager = () => {
   // 상태 관리
-  const [selectedPost, setSelectedPost] = useState(null)
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 
   const { tags, getTags } = useTags()
-  const { posts, setPosts, total, setTotal, deletePost, getPostsByTag } = usePosts()
+  const {
+    posts,
+    setPosts,
+    showAddDialog,
+    setShowAddDialog,
+    selectedPost,
+    setSelectedPost,
+    showEditDialog,
+    setShowEditDialog,
+    newPost,
+    setNewPost,
+    total,
+    setTotal,
+
+    addPost,
+    updatePost,
+    deletePost,
+    getPostsByTag,
+    getSearchedPosts,
+  } = usePosts()
   const {
     comments,
     newComment,
@@ -113,14 +130,7 @@ const PostsManager = () => {
       return
     }
     setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
+    getSearchedPosts(searchQuery)
     setLoading(false)
   }
 
@@ -135,38 +145,15 @@ const PostsManager = () => {
     setLoading(false)
   }
 
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const data = await createPostApi(newPost)
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
-  }
-
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const data = await updatePostApi(selectedPost)
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
-  }
-
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
+  const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     getComments(post.id)
     setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
+  const openUserModal = async (user: User) => {
     try {
       const response = await fetch(`/api/users/${user.id}`)
       const userData = await response.json()
@@ -286,7 +273,7 @@ const PostsManager = () => {
   )
 
   // 댓글 렌더링
-  const renderComments = (postId) => (
+  const renderComments = (postId: number) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
