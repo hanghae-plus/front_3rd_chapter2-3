@@ -36,6 +36,7 @@ import {
   postNewPost,
   putExistingPost,
 } from "../entities/post/api";
+import { getUserInfo } from "../entities/user/api";
 
 // post게시물, comment, user
 const PostsManager = () => {
@@ -301,11 +302,12 @@ const PostsManager = () => {
   // 사용자 모달 열기
   const openUserModal = async (user: User | undefined) => {
     try {
-      const response = await fetch(`/api/users/${user?.id}`);
-      const userData = await response.json();
+      if (user) {
+        const userData = await getUserInfo(user);
 
-      setSelectedUser(userData);
-      setShowUserModal(true);
+        setSelectedUser(userData);
+        setShowUserModal(true);
+      }
     } catch (error) {
       console.error("사용자 정보 가져오기 오류:", error);
     }
