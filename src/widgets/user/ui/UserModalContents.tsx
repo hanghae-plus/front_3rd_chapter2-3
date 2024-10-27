@@ -6,7 +6,7 @@ interface Props {
   selectedUser: UserInfo
 }
 
-export const UserModal = ({ selectedUser }: Props) => {
+export const UserModalContents = ({ selectedUser }: Props) => {
   return (
     <DialogContent>
       <DialogHeader>

@@ -28,18 +28,16 @@ import { useTags } from "../entities/tag/model"
 import { usePosts } from "../features/post/model"
 import { usePostParams } from "../features/post/model/usePostParams"
 import { Post } from "../entities/post/model/types"
-import { User, UserInfo } from "../entities/user/model/types"
 import { highlightText } from "../shared/lib/highlightText"
 import { fetchUsersApi } from "../entities/user/api"
-import { UserModal } from "../widgets/user/ui/UserModal"
+import { UserModalContents } from "../widgets/user/ui/UserModalContents"
 import { Comments } from "../features/comment/ui/Comments"
+import { useUserModal } from "../features/user/model/useUserModal"
 
 const PostsManager = () => {
   // 상태 관리
   const [loading, setLoading] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null)
 
   const { tags, getTags } = useTags()
   const {
@@ -77,6 +75,7 @@ const PostsManager = () => {
 
     updateURL,
   } = usePostParams()
+  const { showUserModal, setShowUserModal, selectedUser, openUserModal } = useUserModal()
 
   // 게시물 가져오기
   const fetchPosts = async () => {
@@ -114,18 +113,6 @@ const PostsManager = () => {
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     setShowPostDetailDialog(true)
-  }
-
-  // 사용자 모달 열기
-  const openUserModal = async (user: User) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
   }
 
   useEffect(() => {
@@ -388,7 +375,7 @@ const PostsManager = () => {
 
       {/* 사용자 모달 */}
       <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <UserModal selectedUser={selectedUser!} />
+        <UserModalContents selectedUser={selectedUser!} />
       </Dialog>
     </Card>
   )
