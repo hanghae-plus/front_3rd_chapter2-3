@@ -6,7 +6,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  Dialog,
   Input,
   Select,
   SelectContent,
@@ -19,16 +18,16 @@ import {
   TableRow,
 } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
-import { usePosts } from "../features/post/model"
 import { usePostParams } from "../features/post/model/usePostParams"
 import { highlightText } from "../shared/lib/highlightText"
 import { fetchUsersApi } from "../entities/user/api"
 import { PostDetailModal } from "../features/post/ui/PostDetailModal"
-import { UserModalContents } from "../widgets/user/ui/UserModalContents"
-import { useUserModal } from "../features/user/model/useUserModal"
+import { UserModal } from "../widgets/user/ui/UserModal"
 import { PostTableHead } from "../widgets/post/ui/PostTableHead"
-import { AddPostModal } from "../features/post/ui/AddPostModal"
-import { EditPostModal } from "../features/post/ui/EditPostModal"
+import { PostAddModal } from "../features/post/ui/PostAddModal"
+import { PostEditModal } from "../features/post/ui/PostEditModal"
+import { useUserContext } from "../shared/model/UserContext"
+import { usePostsContext } from "../shared/model/PostContext"
 
 const PostsManager = () => {
   // 상태 관리
@@ -37,27 +36,18 @@ const PostsManager = () => {
   const { tags, getTags } = useTags()
   const {
     posts,
-    showAddDialog,
     setShowAddDialog,
-    selectedPost,
     setSelectedPost,
-    showEditDialog,
     setShowEditDialog,
-    newPost,
-    setNewPost,
     total,
 
-    addPost,
-    updatePost,
     deletePost,
     getPostsByTag,
     getSearchedPosts,
     getPosts,
 
-    showPostDetailDialog,
-    setShowPostDetailDialog,
     openPostDetail,
-  } = usePosts()
+  } = usePostsContext()
   const {
     skip,
     setSkip,
@@ -74,14 +64,14 @@ const PostsManager = () => {
 
     updateURL,
   } = usePostParams()
-  const { showUserModal, setShowUserModal, selectedUser, openUserModal } = useUserModal()
+  const { selectedUser, openUserModal } = useUserContext()
 
   // 게시물 가져오기
   const fetchPosts = async () => {
     setLoading(true)
 
     const data = await fetchUsersApi()
-    await getPosts(limit, skip, data.users)
+    getPosts(limit, skip, data.users)
 
     setLoading(false)
   }
@@ -294,25 +284,11 @@ const PostsManager = () => {
         </div>
       </CardContent>
 
-      {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <AddPostModal newPost={newPost} setNewPost={setNewPost} addPost={addPost} />
-      </Dialog>
+      <PostAddModal />
+      <PostEditModal />
+      <PostDetailModal searchQuery={searchQuery} />
 
-      {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <EditPostModal selectedPost={selectedPost!} setSelectedPost={setSelectedPost} updatePost={updatePost} />
-      </Dialog>
-
-      {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <PostDetailModal selectedPost={selectedPost!} searchQuery={searchQuery} />
-      </Dialog>
-
-      {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <UserModalContents selectedUser={selectedUser!} />
-      </Dialog>
+      <UserModal selectedUser={selectedUser!} />
     </Card>
   )
 }

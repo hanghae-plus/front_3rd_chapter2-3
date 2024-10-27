@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { User, UserInfo } from "../../../entities/user/model/types"
 
-export const useUserModal = () => {
+export const useUser = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null)
 
