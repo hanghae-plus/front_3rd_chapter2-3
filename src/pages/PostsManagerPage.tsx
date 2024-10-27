@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -25,6 +21,7 @@ import {
 } from "../shared/ui"
 import { Button } from "../shared/ui/button/ui/Button"
 import { Input } from "../shared/ui/input/ui/Input.tsx"
+import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
 
 const PostsManager = () => {
   const navigate = useNavigate()
