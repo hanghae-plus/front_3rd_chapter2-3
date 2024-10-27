@@ -1,14 +1,12 @@
 import { Post } from "@/entities/post/model/types";
 import { Button, Input, Textarea } from "@/shared/ui";
-import { Dispatch, SetStateAction } from "react";
 import { useSelectedPost } from "../model/SelectedPostContext";
 
 type FormEditPostProps = {
-  setPosts: Dispatch<SetStateAction<Post[]>>;
   close: () => void;
 };
 
-const FormEditPost = ({ setPosts, close }: FormEditPostProps) => {
+const FormEditPost = ({ close }: FormEditPostProps) => {
   const { selectedPost, handleSelectPost } = useSelectedPost();
 
   // 게시물 업데이트
@@ -20,7 +18,7 @@ const FormEditPost = ({ setPosts, close }: FormEditPostProps) => {
         body: JSON.stringify(selectedPost),
       });
       const data = await response.json();
-      setPosts((prev) => prev.map((post) => (post.id === data.id ? data : post)));
+      //   setPosts((prev) => prev.map((post) => (post.id === data.id ? data : post)));
       close();
     } catch (error) {
       console.error("게시물 업데이트 오류:", error);

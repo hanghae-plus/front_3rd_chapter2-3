@@ -1,9 +1,9 @@
 import { Post } from "@/entities/post/model/types";
+import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
 import { Button, Table } from "@/shared/ui";
 import ModalUserInfo from "@/widgets/user/ui/ModalUserInfo";
 import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 import ModalEditPost from "./ModalEditPost";
 import ModalPostDetail from "./ModalPostDetail";
 
@@ -12,24 +12,21 @@ type TablePostsProps = {
   searchQuery: string;
   selectedTag: string;
   setSelectedTag: (tag: string) => void;
-  updateURL: () => void;
   deletePost: (postId: number) => void;
-  setPosts: Dispatch<SetStateAction<Post[]>>;
   fetchComments: (postId: number) => Promise<void>;
   renderComments: (postId: number) => React.ReactNode;
 };
 
 const TablePosts = ({
   posts,
-  searchQuery,
-  selectedTag,
-  setSelectedTag,
-  updateURL,
+
   deletePost,
-  setPosts,
   fetchComments,
   renderComments,
 }: TablePostsProps) => {
+  const { queries, handleUpdateQuery } = useNavigator();
+  const { search, tag: selectedTag } = queries;
+
   return (
     <Table.Container>
       <Table.Header>
@@ -47,19 +44,18 @@ const TablePosts = ({
             <Table.Cell>{post.id}</Table.Cell>
             <Table.Cell>
               <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
+                <div>{highlightText(post.title, search)}</div>
                 <div className="flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
+                        tag === selectedTag
                           ? "text-white bg-blue-500 hover:bg-blue-600"
                           : "text-blue-800 bg-blue-100 hover:bg-blue-200"
                       }`}
                       onClick={() => {
-                        setSelectedTag(tag);
-                        updateURL();
+                        handleUpdateQuery("tag", tag);
                       }}
                     >
                       {tag}
@@ -84,12 +80,12 @@ const TablePosts = ({
                 {/* 게시물 상세 보기 대화상자 */}
                 <ModalPostDetail
                   fetchComments={fetchComments}
-                  searchQuery={searchQuery}
+                  searchQuery={search}
                   renderComments={renderComments}
                   post={post}
                 />
 
-                <ModalEditPost setPosts={setPosts} />
+                <ModalEditPost />
                 <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>

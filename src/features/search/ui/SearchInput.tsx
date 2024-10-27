@@ -1,13 +1,15 @@
+import { useNavigator } from "@/shared/lib/useNavigator";
+import { usePostContext } from "@/shared/model/PostContext";
 import { Input } from "@/shared/ui";
 import { Search } from "lucide-react";
 
-type SearchInputProps = {
-  searchQuery: string;
-  setSearchQuery: (searchQuery: string) => void;
-  searchPosts: () => void;
-};
+const SearchInput = () => {
+  const { loading, refetch } = usePostContext();
+  const {
+    handleUpdateQuery,
+    queries: { search },
+  } = useNavigator();
 
-const SearchInput = ({ searchQuery, setSearchQuery, searchPosts }: SearchInputProps) => {
   return (
     <div className="flex-1">
       <div className="relative">
@@ -15,9 +17,10 @@ const SearchInput = ({ searchQuery, setSearchQuery, searchPosts }: SearchInputPr
         <Input
           placeholder="게시물 검색..."
           className="pl-8"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+          value={search}
+          onChange={(e) => handleUpdateQuery("search", e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && refetch()}
+          disabled={loading}
         />
       </div>
     </div>

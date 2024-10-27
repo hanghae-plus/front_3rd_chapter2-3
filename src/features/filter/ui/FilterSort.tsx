@@ -1,13 +1,13 @@
+import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";
 
-type FilterSortProps = {
-  sortBy: string;
-  setSortBy: (sortBy: string) => void;
-};
-
-const FilterSort = ({ sortBy, setSortBy }: FilterSortProps) => {
+const FilterSort = () => {
+  const {
+    handleUpdateQuery,
+    queries: { sortBy },
+  } = useNavigator();
   return (
-    <Select.Container value={sortBy} onValueChange={setSortBy}>
+    <Select.Container value={sortBy} onValueChange={(value) => handleUpdateQuery("sortBy", value)}>
       <Select.Trigger className="w-[180px]">
         <Select.Value placeholder="정렬 기준" />
       </Select.Trigger>

@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 
 type ModalAddCommentProps = {
   setComments: Dispatch<SetStateAction<{ [key: number]: Comment[] }>>;
+
   postId: number;
 };
 

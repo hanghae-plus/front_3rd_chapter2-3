@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-type UpdatableQueryKey = "skip" | "limit" | "search" | "sortBy" | "sortOrder" | "tag";
+export type UpdatableQueryKey = "skip" | "limit" | "search" | "sortBy" | "sortOrder" | "tag";
 
 export const useNavigator = () => {
   const navigate = useNavigate();
@@ -15,35 +15,41 @@ export const useNavigator = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc");
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "");
 
-  // const updateURL = useCallback(
-  //   (key: UpdatableQueryKey, value: string | number) => {
-  //     const params = new URLSearchParams();
-  //     switch (key) {
-  //       case "skip":
-  //         params.set("skip", value.toString());
-  //         break;
-  //       case "limit":
-  //         params.set("limit", value.toString());
-  //         break;
-  //       case "search":
-  //         params.set("search", value as string);
-  //         break;
-  //       case "sortBy":
-  //         params.set("sortBy", value as string);
-  //         break;
-  //       case "sortOrder":
-  //         params.set("sortOrder", value as string);
-  //         break;
-  //       case "tag":
-  //         params.set("tag", value as string);
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //     navigate(`?${params.toString()}`);
-  //   },
-  //   [navigate],
-  // );
+  const handleUpdateQuery = useCallback(
+    (key: UpdatableQueryKey, value: string | number) => {
+      const params = new URLSearchParams(queryParams);
+      switch (key) {
+        case "skip":
+          params.set("skip", value.toString());
+          setSkip(parseInt(value.toString()));
+          break;
+        case "limit":
+          params.set("limit", value.toString());
+          setLimit(parseInt(value.toString()));
+          break;
+        case "search":
+          params.set("search", value as string);
+          setSearchQuery(value as string);
+          break;
+        case "sortBy":
+          params.set("sortBy", value as string);
+          setSortBy(value as string);
+          break;
+        case "sortOrder":
+          params.set("sortOrder", value as string);
+          setSortOrder(value as string);
+          break;
+        case "tag":
+          params.set("tag", value as string);
+          setSelectedTag(value as string);
+          break;
+        default:
+          break;
+      }
+      navigate(`?${params.toString()}`);
+    },
+    [navigate, queryParams],
+  );
 
   const updateURL = () => {
     const params = new URLSearchParams();
@@ -56,7 +62,7 @@ export const useNavigator = () => {
     navigate(`?${params.toString()}`);
   };
 
-  const queries: Record<UpdatableQueryKey, string | number> = useMemo(
+  const queries = useMemo(
     () => ({
       skip,
       limit,
@@ -78,5 +84,5 @@ export const useNavigator = () => {
     setSelectedTag(params.get("tag") || "");
   }, [location.search]);
 
-  return { updateURL, queries };
+  return { updateURL, queries, handleUpdateQuery };
 };

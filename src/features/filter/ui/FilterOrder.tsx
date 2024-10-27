@@ -1,13 +1,13 @@
+import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";
 
-type FilterOrderProps = {
-  sortOrder: string;
-  setSortOrder: (sortOrder: string) => void;
-};
-
-const FilterOrder = ({ sortOrder, setSortOrder }: FilterOrderProps) => {
+const FilterOrder = () => {
+  const {
+    handleUpdateQuery,
+    queries: { sortOrder },
+  } = useNavigator();
   return (
-    <Select.Container value={sortOrder} onValueChange={setSortOrder}>
+    <Select.Container value={sortOrder} onValueChange={(value) => handleUpdateQuery("sortOrder", value)}>
       <Select.Trigger className="w-[180px]">
         <Select.Value placeholder="정렬 순서" />
       </Select.Trigger>

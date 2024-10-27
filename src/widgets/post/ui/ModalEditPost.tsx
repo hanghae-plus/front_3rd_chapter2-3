@@ -1,15 +1,9 @@
-import { Post } from "@/entities/post/model/types";
 import FormEditPost from "@/features/post/ui/FormEditPost";
 import useToggle from "@/shared/lib/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 import { Edit2 } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 
-type ModalEditPostProps = {
-  setPosts: Dispatch<SetStateAction<Post[]>>;
-};
-
-const ModalEditPost = ({ setPosts }: ModalEditPostProps) => {
+const ModalEditPost = () => {
   const { isOpen, toggle, close } = useToggle();
 
   return (
@@ -23,7 +17,7 @@ const ModalEditPost = ({ setPosts }: ModalEditPostProps) => {
         <Dialog.Header>
           <Dialog.Title>게시물 수정</Dialog.Title>
         </Dialog.Header>
-        <FormEditPost setPosts={setPosts} close={close} />
+        <FormEditPost close={close} />
       </Dialog.Content>
     </Dialog.Container>
   );

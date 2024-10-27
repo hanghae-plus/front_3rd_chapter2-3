@@ -1,15 +1,17 @@
-import { NewPost, Post } from "@/pages/PostsManagerPage";
+import { useFetchPosts } from "@/entities/post/api/hooks";
+import { Post } from "@/entities/post/model/types";
+import { NewPost } from "@/pages/PostsManagerPage";
 import { Button, Input, Textarea } from "@/shared/ui";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
 type FormAddPostProps = {
-  setPosts: Dispatch<SetStateAction<Post[]>>;
   close: () => void;
 };
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
-const FormAddPost = ({ setPosts, close }: FormAddPostProps) => {
+const FormAddPost = ({ close }: FormAddPostProps) => {
+  const { refetch } = useFetchPosts();
   const [newPost, setNewPost] = useState(initialNewPost);
 
   // 게시물 추가
@@ -21,7 +23,7 @@ const FormAddPost = ({ setPosts, close }: FormAddPostProps) => {
         body: JSON.stringify(newPost),
       });
       const data = (await response.json()) as Post;
-      setPosts((prev) => [data, ...prev]);
+      // setPosts((prev) => [data, ...prev]);
       setNewPost(initialNewPost);
       close();
     } catch (error) {

@@ -1,25 +1,19 @@
 import useFetchTags from "@/entities/tag/api/useFetchTags";
+import { useNavigator } from "@/shared/lib/useNavigator";
+import { usePostContext } from "@/shared/model/PostContext";
 import { Select } from "@/shared/ui/Select";
 
-type FilterTagsProps = {
-  selectedTag: string;
-  setSelectedTag: (selectedTag: string) => void;
-  fetchPostsByTag: (selectedTag: string) => void;
-  updateURL: () => void;
-};
-
-const FilterTags = ({ selectedTag, setSelectedTag, fetchPostsByTag, updateURL }: FilterTagsProps) => {
-  const { tags, isLoading } = useFetchTags();
-
-  if (isLoading) return <div>로딩중...</div>;
+const FilterTags = () => {
+  const { refetch } = usePostContext();
+  const { queries, handleUpdateQuery } = useNavigator();
+  const { tags } = useFetchTags();
 
   return (
     <Select.Container
-      value={selectedTag}
+      value={queries.tag}
       onValueChange={(value) => {
-        setSelectedTag(value);
-        fetchPostsByTag(value);
-        updateURL();
+        handleUpdateQuery("tag", value);
+        refetch();
       }}
     >
       <Select.Trigger className="w-[180px]">
