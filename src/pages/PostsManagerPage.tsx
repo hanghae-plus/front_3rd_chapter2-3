@@ -19,7 +19,7 @@ import { SelectSortOrder } from "../features/product-sort/ui/SelectSortOrder"
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
 
-  const { tags, getTags } = useTags()
+  const { tags } = useTags()
   const {
     setShowAddDialog,
     total,
