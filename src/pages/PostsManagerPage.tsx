@@ -79,10 +79,6 @@ const PostsManager = () => {
   }
 
   useEffect(() => {
-    getTags()
-  }, [])
-
-  useEffect(() => {
     if (selectedTag) {
       handleGetPostsByTag(selectedTag)
     } else {
