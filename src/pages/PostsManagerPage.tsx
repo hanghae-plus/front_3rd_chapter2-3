@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import {
@@ -6,11 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Table,
   TableBody,
   TableCell,
@@ -22,6 +17,7 @@ import { Button } from "../shared/ui/button/ui/Button"
 import { Input } from "../shared/ui/input/ui/Input.tsx"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
 import { Textarea } from "../shared/ui/textarea/ui/Textarea.tsx"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/ui"
 
 const PostsManager = () => {
   const navigate = useNavigate()
