@@ -1,6 +1,6 @@
-import { forwardRef } from "react"
+import { forwardRef, InputHTMLAttributes } from "react"
 
-interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
   type?: string
 }
