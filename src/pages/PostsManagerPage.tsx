@@ -39,6 +39,7 @@ import {
   Textarea,
 } from "../shared/ui";
 
+// post게시물, comment, user
 const PostsManager = () => {
   const navigate = useNavigate();
   const location = useLocation();
