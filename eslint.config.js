@@ -1,28 +1,38 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+import react from 'eslint-plugin-react';
+import typescriptPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
+import prettier from 'eslint-config-prettier';
 
-export default tseslint.config(
-  { ignores: ['dist'] },
+export default [
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      parser: typescriptParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
     plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      react,
+      '@typescript-eslint': typescriptPlugin,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'no-unused-vars': 'warn',
+      'no-console': 'warn',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
+      'no-multiple-empty-lines': ['warn', { max: 1, maxEOF: 0 }],
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
+      indent: ['error', 2],
+      'comma-dangle': ['error', 'always-multiline'],
     },
   },
-)
+  prettier,
+];
