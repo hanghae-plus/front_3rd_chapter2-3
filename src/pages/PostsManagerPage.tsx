@@ -25,25 +25,24 @@ import {
   Textarea,
 } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
-import { fetchPostsApi } from "../entities/post/api"
 import { useComments } from "../features/comment/model"
 import { usePosts } from "../features/post/model"
 import { usePostParams } from "../features/post/model/usePostParams"
 import { Post } from "../entities/post/model/types"
-import { User } from "../entities/user/model/types"
+import { User, UserInfo } from "../entities/user/model/types"
 import { highlightText } from "../shared/lib/highlightText"
+import { useUsers } from "../entities/user/model"
 
 const PostsManager = () => {
   // 상태 관리
   const [loading, setLoading] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null)
 
   const { tags, getTags } = useTags()
   const {
     posts,
-    setPosts,
     showAddDialog,
     setShowAddDialog,
     selectedPost,
@@ -53,13 +52,13 @@ const PostsManager = () => {
     newPost,
     setNewPost,
     total,
-    setTotal,
 
     addPost,
     updatePost,
     deletePost,
     getPostsByTag,
     getSearchedPosts,
+    getPosts,
   } = usePosts()
   const {
     comments,
@@ -94,34 +93,16 @@ const PostsManager = () => {
 
     updateURL,
   } = usePostParams()
+  const { users, getUsers } = useUsers()
 
   // 게시물 가져오기
   const fetchPosts = () => {
     setLoading(true)
-    let postsData
-    let usersData
 
-    fetchPostsApi(limit, skip)
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    getUsers()
+    getPosts(limit, skip, users)
+
+    setLoading(false)
   }
 
   // 게시물 검색
@@ -445,13 +426,13 @@ const PostsManager = () => {
             <Input
               placeholder="제목"
               value={selectedPost?.title || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
+              onChange={(e) => setSelectedPost({ ...selectedPost!, title: e.target.value })}
             />
             <Textarea
               rows={15}
               placeholder="내용"
               value={selectedPost?.body || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
+              onChange={(e) => setSelectedPost({ ...selectedPost!, body: e.target.value })}
             />
             <Button onClick={updatePost}>게시물 업데이트</Button>
           </div>
@@ -485,7 +466,10 @@ const PostsManager = () => {
             <Textarea
               placeholder="댓글 내용"
               value={selectedComment?.body || ""}
-              onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
+              onChange={(e) => {
+                console.log(selectedComment)
+                setSelectedComment({ ...selectedComment!, body: e.target.value })
+              }}
             />
             <Button onClick={updateComment}>댓글 업데이트</Button>
           </div>
@@ -500,7 +484,7 @@ const PostsManager = () => {
           </DialogHeader>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
+            {selectedPost && renderComments(selectedPost.id)}
           </div>
         </DialogContent>
       </Dialog>

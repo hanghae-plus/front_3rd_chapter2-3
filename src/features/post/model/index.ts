@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { createPostApi, deletePostApi, updatePostApi } from "../../../entities/post/api"
+import { createPostApi, deletePostApi, fetchPostsApi, updatePostApi } from "../../../entities/post/api"
 import { fetchUsersApi } from "../../../entities/user/api"
 import { Post } from "../../../entities/post/model/types"
 import { User } from "../../../entities/user/model/types"
@@ -55,9 +55,19 @@ export const usePosts = () => {
     setTotal(data.total)
   }
 
+  const getPosts = async (limit: number, skip: number, users: User[]) => {
+    const postsData = await fetchPostsApi(limit, skip)
+
+    const postsWithUsers = postsData.posts.map((post: Post) => ({
+      ...post,
+      author: users.find((user) => user.id === post.userId),
+    }))
+    setPosts(postsWithUsers)
+    setTotal(postsData.total)
+  }
+
   return {
     posts,
-    setPosts,
     showAddDialog,
     setShowAddDialog,
     selectedPost,
@@ -67,12 +77,12 @@ export const usePosts = () => {
     newPost,
     setNewPost,
     total,
-    setTotal,
 
     addPost,
     updatePost,
     deletePost,
     getPostsByTag,
     getSearchedPosts,
+    getPosts,
   }
 }
