@@ -1,3 +1,4 @@
+import { CommentProvider } from "@/shared/model/CommnentContext";
 import { PostProvider } from "@/shared/model/PostContext";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -48,7 +49,9 @@ const renderPostsManager = () => {
   return render(
     <MemoryRouter>
       <PostProvider>
-        <PostsManager />
+        <CommentProvider>
+          <PostsManager />
+        </CommentProvider>
       </PostProvider>
     </MemoryRouter>,
   );

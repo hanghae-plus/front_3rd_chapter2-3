@@ -22,10 +22,8 @@ const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
   // 댓글 업데이트
   const updateComment = async () => {
     if (!selectedComment) return;
-    console.log(selectedComment);
     try {
       const data = await postCommentApi.updateComment(selectedComment);
-      console.log(data);
       handleSetComments((prev) => ({
         ...prev,
         [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
