@@ -3,11 +3,11 @@ import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from
 import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "../shared/ui/button/ui/Button"
 import { Input } from "../shared/ui/input/ui/Input.tsx"
-import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
 import { Textarea } from "../shared/ui/textarea/ui/Textarea.tsx"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/ui"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/ui"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table/ui"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/ui"
+import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -322,6 +322,8 @@ const PostsManager = () => {
       </span>
     )
   }
+
+  console.log(posts, "posts")
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
