@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle, Loader, SearchInput } from "../shared/ui"
-import { useTags } from "../entities/tag/model"
 import { fetchUsersApi } from "../entities/user/api"
 import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
 import { UserModal } from "../features/user/ui/UserModal"
 import { PostAddModal } from "../features/post-add/ui/PostAddModal"
-import { useUserContext } from "../shared/model/UserContext"
 import { usePostsContext } from "../shared/model/PostContext"
 import { PostTable } from "../features/post-view/ui/PostTable"
 import { Pagination } from "../features/post-view/ui/Pagination"
@@ -19,7 +17,6 @@ import { usePostParamsContext } from "../shared/model/PostParamsContext"
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
 
-  const { tags } = useTags()
   const {
     setShowAddDialog,
     total,
@@ -34,15 +31,11 @@ const PostsManager = () => {
     searchQuery,
     setSearchQuery,
     sortBy,
-    setSortBy,
     sortOrder,
-    setSortOrder,
     selectedTag,
-    setSelectedTag,
 
     updateURL,
   } = usePostParamsContext()
-  const { selectedUser } = useUserContext()
 
   // 게시물 가져오기
   const fetchPosts = async () => {
@@ -73,7 +66,7 @@ const PostsManager = () => {
     }
 
     setLoading(true)
-    await getPostsByTag(tag)
+    await getPostsByTag(tag, limit, skip)
     setLoading(false)
   }
 
@@ -109,28 +102,13 @@ const PostsManager = () => {
               onKeyPress={(e) => e.key === "Enter" && searchPosts()}
             />
 
-            <SelectTag
-              selectedTag={selectedTag}
-              setSelectedTag={setSelectedTag}
-              handleGetPostsByTag={handleGetPostsByTag}
-              updateURL={updateURL}
-              tags={tags}
-            />
-            <SelectSortStandard sortBy={sortBy} setSortBy={setSortBy} />
-            <SelectSortOrder sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <SelectTag handleGetPostsByTag={handleGetPostsByTag} />
+            <SelectSortStandard />
+            <SelectSortOrder />
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? (
-            <Loader />
-          ) : (
-            <PostTable
-              searchQuery={searchQuery}
-              selectedTag={selectedTag}
-              setSelectedTag={setSelectedTag}
-              updateURL={updateURL}
-            />
-          )}
+          {loading ? <Loader /> : <PostTable />}
 
           <Pagination total={total} />
         </div>
@@ -138,9 +116,9 @@ const PostsManager = () => {
 
       <PostAddModal />
       <PostEditModal />
-      <PostDetailModal searchQuery={searchQuery} />
+      <PostDetailModal />
 
-      <UserModal selectedUser={selectedUser!} />
+      <UserModal />
     </Card>
   )
 }

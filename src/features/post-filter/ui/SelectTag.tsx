@@ -1,21 +1,22 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { Tag } from "../../../entities/tag/types"
+import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
+import { useTags } from "../../../entities/tag/model"
 
 interface Props {
-  selectedTag: string
-  setSelectedTag: (value: string) => void
   handleGetPostsByTag: (value: string) => void
-  updateURL: () => void
-  tags: Tag[]
 }
 
-export const SelectTag = ({ selectedTag, setSelectedTag, handleGetPostsByTag, updateURL, tags }: Props) => {
+export const SelectTag = ({ handleGetPostsByTag }: Props) => {
+  const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParamsContext()
+  const { tags } = useTags()
+
   return (
     <Select
       value={selectedTag}
       onValueChange={(value) => {
         setSelectedTag(value)
         handleGetPostsByTag(value)
+        setSkip(0)
         updateURL()
       }}
     >

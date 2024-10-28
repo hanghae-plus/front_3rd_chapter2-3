@@ -15,7 +15,7 @@ interface PostContextType {
 
   total: number
   deletePost: (postId: number) => void
-  getPostsByTag: (tag: string) => void
+  getPostsByTag: (tag: string, limit: number, skip: number) => void
   getSearchedPosts: (searchQuery: string) => void
   getPosts: (limit: number, skip: number, users: User[]) => void
 

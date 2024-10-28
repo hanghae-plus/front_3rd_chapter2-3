@@ -1,13 +1,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
-import { UserInfo } from "../../../entities/user/model/types"
 import { useUserContext } from "../../../shared/model/UserContext"
 
-interface Props {
-  selectedUser: UserInfo
-}
-
-export const UserModal = ({ selectedUser }: Props) => {
-  const { showUserModal, setShowUserModal } = useUserContext()
+export const UserModal = () => {
+  const { selectedUser, showUserModal, setShowUserModal } = useUserContext()
 
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>

@@ -2,13 +2,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Comments } from "../../comment/ui/Comments"
 import { usePostsContext } from "../../../shared/model/PostContext"
+import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
 
-interface Props {
-  searchQuery: string
-}
-
-export const PostDetailModal = ({ searchQuery }: Props) => {
+export const PostDetailModal = () => {
   const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePostsContext()
+  const { searchQuery } = usePostParamsContext()
 
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>

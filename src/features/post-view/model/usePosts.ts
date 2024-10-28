@@ -17,17 +17,18 @@ export const usePosts = () => {
     setPosts(posts.filter((post) => post.id !== postId))
   }
 
-  const getPostsByTag = async (tag: string) => {
+  const getPostsByTag = async (tag: string, limit: number, skip: number) => {
     const postsData = await fetchPostsByTagApi(tag)
     const usersData = await fetchUsersApi()
 
-    const postsWithUsers = postsData.posts.map((post: Post) => ({
+    const paginatedPosts = postsData.posts.slice(skip, skip + limit)
+    const postsWithUsers = paginatedPosts.map((post: Post) => ({
       ...post,
       author: usersData.users.find((user: User) => user.id === post.userId),
     }))
 
     setPosts(postsWithUsers)
-    setTotal(postsData.total)
+    setTotal(postsData.posts.length)
   }
 
   const getSearchedPosts = async (searchQuery: string) => {

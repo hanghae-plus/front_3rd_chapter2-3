@@ -1,11 +1,9 @@
+import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 
-interface Props {
-  sortBy: string
-  setSortBy: (value: string) => void
-}
+export const SelectSortStandard = () => {
+  const { sortBy, setSortBy } = usePostParamsContext()
 
-export const SelectSortStandard = ({ sortBy, setSortBy }: Props) => {
   return (
     <Select value={sortBy} onValueChange={setSortBy}>
       <SelectTrigger className="w-[180px]">

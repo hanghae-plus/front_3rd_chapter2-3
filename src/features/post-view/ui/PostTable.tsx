@@ -4,16 +4,11 @@ import { Button, Table, TableBody, TableCell, TableRow } from "../../../shared/u
 import { PostTableHead } from "../../../widgets/post/ui/PostTableHead"
 import { usePostsContext } from "../../../shared/model/PostContext"
 import { useUserContext } from "../../../shared/model/UserContext"
+import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
 
-interface Props {
-  searchQuery: string
-  selectedTag: string
-  setSelectedTag: (tag: string) => void
-  updateURL: () => void
-}
-
-export const PostTable = ({ searchQuery, selectedTag, setSelectedTag, updateURL }: Props) => {
+export const PostTable = () => {
   const { posts, openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePostsContext()
+  const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsContext()
   const { openUserModal } = useUserContext()
 
   return (
