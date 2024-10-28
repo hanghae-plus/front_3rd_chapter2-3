@@ -1,9 +1,9 @@
-import * as React from "react"
-import { forwardRef } from "react"
-import * as SelectPrimitive from "@radix-ui/react-select"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { Check, ChevronDown, X } from "lucide-react"
-import { cva, VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { forwardRef } from "react";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { Check, ChevronDown, X } from "lucide-react";
+import { cva, VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
@@ -29,70 +29,125 @@ const buttonVariants = cva(
       size: "default",
     },
   },
-)
+);
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-  className?: string
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  className?: string;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant, size, ...props }, ref) => {
-  return <button className={buttonVariants({ variant, size, className })} ref={ref} {...props} />
-})
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return <button className={buttonVariants({ variant, size, className })} ref={ref} {...props} />;
+  },
+);
 
-Button.displayName = "Button"
+Button.displayName = "Button";
 
 // 입력 컴포넌트
-export const Input = forwardRef(({ className, type, ...props }, ref) => {
-  return (
-    <input
-      type={type}
-      className={`flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      ref={ref}
-      {...props}
-    />
-  )
-})
-Input.displayName = "Input"
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string;
+}
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={`flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+Input.displayName = "Input";
 
 // 카드 컴포넌트
-export const Card = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props} />
-))
-Card.displayName = "Card"
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
 
-export const CardHeader = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
-))
-CardHeader.displayName = "CardHeader"
+export const Card = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
+    {...props}
+  />
+));
+Card.displayName = "Card";
 
-export const CardTitle = forwardRef(({ className, ...props }, ref) => (
-  <h3 ref={ref} className={`text-2xl font-semibold leading-none tracking-tight ${className}`} {...props} />
-))
-CardTitle.displayName = "CardTitle"
+// CardHeader Component
+interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
 
-export const CardContent = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
-))
-CardContent.displayName = "CardContent"
+export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
+  ),
+);
+CardHeader.displayName = "CardHeader";
 
-// 텍스트 영역 컴포넌트
-export const Textarea = forwardRef(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      className={`flex min-h-[150px] w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+// CardTitle Component
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  className?: string;
+}
+
+export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
+  ({ className, ...props }, ref) => (
+    <h3
       ref={ref}
+      className={`text-2xl font-semibold leading-none tracking-tight ${className}`}
       {...props}
     />
-  )
-})
-Textarea.displayName = "Textarea"
+  ),
+);
+CardTitle.displayName = "CardTitle";
+
+// CardContent Component
+interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
+  ),
+);
+CardContent.displayName = "CardContent";
+
+// 텍스트 영역 컴포넌트
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  className?: string;
+}
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={`flex min-h-[150px] w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+Textarea.displayName = "Textarea";
 
 // 선택 컴포넌트
-export const Select = SelectPrimitive.Root
-export const SelectGroup = SelectPrimitive.Group
-export const SelectValue = SelectPrimitive.Value
+export const Select = SelectPrimitive.Root;
+export const SelectGroup = SelectPrimitive.Group;
+export const SelectValue = SelectPrimitive.Value;
 
-export const SelectTrigger = forwardRef(({ className, children, ...props }, ref) => (
+interface SelectTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+  className?: string;
+  children: React.ReactNode;
+}
+export const SelectTrigger = forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  SelectTriggerProps
+>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={`flex h-10 items-center justify-between rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
@@ -101,10 +156,19 @@ export const SelectTrigger = forwardRef(({ className, children, ...props }, ref)
     {children}
     <ChevronDown className="h-4 w-4 opacity-50" />
   </SelectPrimitive.Trigger>
-))
-SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
+));
+SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-export const SelectContent = forwardRef(({ className, children, position = "popper", ...props }, ref) => (
+interface SelectContentProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const SelectContent = forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Content>,
+  SelectContentProps
+>(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
@@ -115,10 +179,18 @@ export const SelectContent = forwardRef(({ className, children, position = "popp
       <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
-))
-SelectContent.displayName = SelectPrimitive.Content.displayName
+));
+SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-export const SelectItem = forwardRef(({ className, children, ...props }, ref) => (
+interface SelectItemProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const SelectItem = forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Item>,
+  SelectItemProps
+>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
     className={`relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${className}`}
@@ -131,16 +203,25 @@ export const SelectItem = forwardRef(({ className, children, ...props }, ref) =>
     </span>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
-))
-SelectItem.displayName = SelectPrimitive.Item.displayName
+));
+SelectItem.displayName = SelectPrimitive.Item.displayName;
 
 // 대화상자 컴포넌트
-export const Dialog = DialogPrimitive.Root
-export const DialogTrigger = DialogPrimitive.Trigger
-export const DialogPortal = DialogPrimitive.Portal
-export const DialogOverlay = DialogPrimitive.Overlay
+export const Dialog = DialogPrimitive.Root;
+export const DialogTrigger = DialogPrimitive.Trigger;
+export const DialogPortal = DialogPrimitive.Portal;
+export const DialogOverlay = DialogPrimitive.Overlay;
 
-export const DialogContent = forwardRef(({ className, children, ...props }, ref) => (
+interface DialogContentProps
+  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const DialogContent = forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  DialogContentProps
+>(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
     <DialogPrimitive.Content
@@ -155,60 +236,111 @@ export const DialogContent = forwardRef(({ className, children, ...props }, ref)
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-))
-DialogContent.displayName = DialogPrimitive.Content.displayName
+));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-export const DialogHeader = ({ className, ...props }) => (
+interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+export const DialogHeader = ({ className, ...props }: DialogHeaderProps) => (
   <div className={`flex flex-col space-y-1.5 text-center sm:text-left ${className}`} {...props} />
-)
-DialogHeader.displayName = "DialogHeader"
+);
+DialogHeader.displayName = "DialogHeader";
 
-export const DialogTitle = forwardRef(({ className, ...props }, ref) => (
+interface DialogTitleProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
+  className?: string;
+}
+
+export const DialogTitle = forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Title>,
+  DialogTitleProps
+>(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
     className={`text-lg font-semibold leading-none tracking-tight ${className}`}
     {...props}
   />
-))
-DialogTitle.displayName = DialogPrimitive.Title.displayName
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
 // 테이블 컴포넌트
-export const Table = forwardRef(({ className, ...props }, ref) => (
+interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  className?: string;
+}
+export const Table = forwardRef<HTMLTableElement, TableProps>(({ className, ...props }, ref) => (
   <div className="w-full overflow-auto">
-    <table ref={ref} className={`table-fixed w-full caption-bottom text-sm ${className}`} {...props} />
+    <table
+      ref={ref}
+      className={`table-fixed w-full caption-bottom text-sm ${className}`}
+      {...props}
+    />
   </div>
-))
-Table.displayName = "Table"
+));
+Table.displayName = "Table";
 
-export const TableHeader = forwardRef(({ className, ...props }, ref) => (
-  <thead ref={ref} className={`[&_tr]:border-b ${className}`} {...props} />
-))
-TableHeader.displayName = "TableHeader"
+interface TableHeaderProps extends React.TableHTMLAttributes<HTMLTableSectionElement> {
+  className?: string;
+}
+export const TableHeader = forwardRef<HTMLTableSectionElement, TableHeaderProps>(
+  ({ className, ...props }, ref) => (
+    <thead ref={ref} className={`[&_tr]:border-b ${className}`} {...props} />
+  ),
+);
+TableHeader.displayName = "TableHeader";
 
-export const TableBody = forwardRef(({ className, ...props }, ref) => (
-  <tbody ref={ref} className={`[&_tr:last-child]:border-0 ${className}`} {...props} />
-))
-TableBody.displayName = "TableBody"
+interface TableBodyProps extends React.TableHTMLAttributes<HTMLTableSectionElement> {
+  className?: string;
+}
 
-export const TableRow = forwardRef(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={`border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted h-14 ${className}`}
-    {...props}
-  />
-))
-TableRow.displayName = "TableRow"
+export const TableBody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
+  ({ className, ...props }, ref) => (
+    <tbody ref={ref} className={`[&_tr:last-child]:border-0 ${className}`} {...props} />
+  ),
+);
+TableBody.displayName = "TableBody";
 
-export const TableHead = forwardRef(({ className, ...props }, ref) => (
-  <th
-    ref={ref}
-    className={`h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 ${className}`}
-    {...props}
-  />
-))
-TableHead.displayName = "TableHead"
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  className?: string;
+}
 
-export const TableCell = forwardRef(({ className, ...props }, ref) => (
-  <td ref={ref} className={`p-2 align-middle [&:has([role=checkbox])]:pr-0 ${className}`} {...props} />
-))
-TableCell.displayName = "TableCell"
+export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
+  ({ className, ...props }, ref) => (
+    <tr
+      ref={ref}
+      className={`border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted h-14 ${className}`}
+      {...props}
+    />
+  ),
+);
+TableRow.displayName = "TableRow";
+
+interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableHeaderCellElement> {
+  className?: string;
+}
+
+export const TableHead = forwardRef<HTMLTableHeaderCellElement, TableHeadProps>(
+  ({ className, ...props }, ref) => (
+    <th
+      ref={ref}
+      className={`h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 ${className}`}
+      {...props}
+    />
+  ),
+);
+TableHead.displayName = "TableHead";
+
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+  className?: string;
+}
+
+export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(
+  ({ className, ...props }, ref) => (
+    <td
+      ref={ref}
+      className={`p-2 align-middle [&:has([role=checkbox])]:pr-0 ${className}`}
+      {...props}
+    />
+  ),
+);
+TableCell.displayName = "TableCell";
