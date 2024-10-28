@@ -78,7 +78,6 @@ const PostsManager = () => {
   }
 
   useEffect(() => {
-    console.log(skip, limit)
     if (selectedTag) {
       handleGetPostsByTag(selectedTag)
     } else {

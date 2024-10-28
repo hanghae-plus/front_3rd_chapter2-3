@@ -17,8 +17,6 @@ export const createPostApi = async (newPost: NewPost) => {
 }
 
 export const fetchPostsApi = async (limit: number, skip: number) => {
-  console.log("fetchPostsApi", limit, skip)
-
   return fetch(`/api/posts?limit=${limit}&skip=${skip}`).then((response) => response.json())
 }
 
