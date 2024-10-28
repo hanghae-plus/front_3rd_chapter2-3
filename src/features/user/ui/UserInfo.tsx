@@ -1,4 +1,4 @@
-import { useSelectedUser } from "@/features/user/model/SelectedUserContext";
+import { useSelectedUser } from "@/entities/user/model/SelectedUserContext";
 
 const UserInfo = () => {
   const { selectedUser } = useSelectedUser();

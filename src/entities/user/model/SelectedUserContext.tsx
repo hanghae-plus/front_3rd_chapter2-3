@@ -1,4 +1,4 @@
-import { User } from "@/widgets/user/api/types";
+import { User } from "@/entities/user/model/types";
 import { createContext, useContext, useState } from "react";
 
 type SelectedUserContextType = {

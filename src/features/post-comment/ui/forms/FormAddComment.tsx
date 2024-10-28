@@ -1,7 +1,7 @@
 import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
 import { NewComment } from "@/features/post-comment/model/types";
 
-import { useCommentContext } from "@/shared/model/CommnentContext";
+import { useCommentContext } from "@/entities/comment/model/CommentContext";
 import { Button, Textarea } from "@/shared/ui";
 
 import { useEffect, useState } from "react";

@@ -1,5 +1,5 @@
-import { CommentProvider } from "@/shared/model/CommnentContext";
-import { PostProvider } from "@/shared/model/PostContext";
+import { CommentProvider } from "@/entities/comment/model/CommentContext";
+import { PostProvider } from "@/entities/post/model/PostContext";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -7,7 +7,7 @@ import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter } from "react-router-dom";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import PostsManager from "../pages/PostsManagerPage";
+import PostsManager from "../src/pages/post-manager/ui/PostsManagerPage";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
 
 // MSW 서버 설정

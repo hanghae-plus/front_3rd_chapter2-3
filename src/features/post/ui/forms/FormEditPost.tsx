@@ -1,8 +1,8 @@
 import { Post } from "@/entities/post/model/types";
 
-import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
+import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
 
-import { usePostContext } from "@/shared/model/PostContext";
+import { usePostContext } from "@/entities/post/model/PostContext";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 

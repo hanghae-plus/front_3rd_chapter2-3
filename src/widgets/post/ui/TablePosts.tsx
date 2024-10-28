@@ -3,20 +3,16 @@ import ModalEditPost from "@/features/post/ui/modals/ModalEditPost";
 import ModalPostDetail from "@/features/post/ui/modals/ModalPostDetail";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
 
+import { usePostContext } from "@/entities/post/model/PostContext";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
-import { usePostContext } from "@/shared/model/PostContext";
 import { Button, Table } from "@/shared/ui";
 import Pagination from "@/shared/ui/Pagination";
 
 import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 
-type TablePostsProps = {
-  renderComments: (postId: number) => React.ReactNode;
-};
-
-const TablePosts = ({ renderComments }: TablePostsProps) => {
+const TablePosts = () => {
   const { queries, handleUpdateQuery } = useNavigator();
   const { search, tag: selectedTag, limit, skip } = queries;
   const { loading, posts, total, setPosts } = usePostContext();
@@ -95,7 +91,7 @@ const TablePosts = ({ renderComments }: TablePostsProps) => {
                 <Table.Cell>
                   <div className="flex items-center gap-2">
                     {/* 게시물 상세 보기 대화상자 */}
-                    <ModalPostDetail renderComments={renderComments} post={post} />
+                    <ModalPostDetail post={post} />
 
                     <ModalEditPost />
                     <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>

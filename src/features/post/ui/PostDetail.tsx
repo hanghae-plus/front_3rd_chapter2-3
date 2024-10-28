@@ -1,19 +1,19 @@
-import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
+import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
+import Comments from "@/features/post-comment/ui/Comments";
 
 import { highlightText } from "@/shared/lib/utils";
 
 type PostDetailProps = {
   searchQuery: string;
-  renderComments: (postId: number) => React.ReactNode;
 };
 
-const PostDetail = ({ searchQuery, renderComments }: PostDetailProps) => {
+const PostDetail = ({ searchQuery }: PostDetailProps) => {
   const { selectedPost } = useSelectedPost();
 
   return (
     <div className="space-y-4">
       <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-      {renderComments(selectedPost?.id || 0)}
+      <Comments postId={selectedPost?.id || 0} />
     </div>
   );
 };

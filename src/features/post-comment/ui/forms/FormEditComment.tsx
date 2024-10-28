@@ -1,9 +1,9 @@
 import { Comment } from "@/entities/comment/model/types";
 
+import { useSelectedComment } from "@/entities/comment/model/SelectedCommentContext";
 import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
-import { useSelectedComment } from "@/features/post-comment/model/SelectedCommentContext";
 
-import { useCommentContext } from "@/shared/model/CommnentContext";
+import { useCommentContext } from "@/entities/comment/model/CommentContext";
 import { Button, Textarea } from "@/shared/ui";
 
 import { useEffect } from "react";

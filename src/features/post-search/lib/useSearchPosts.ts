@@ -1,5 +1,5 @@
 import { postApi } from "@/entities/post/api/postApi";
-import { usePostContext } from "@/shared/model/PostContext";
+import { usePostContext } from "@/entities/post/model/PostContext";
 import { searchPostApi } from "../api/searchPostApi";
 
 type UseSearchPostsProps = {

@@ -1,7 +1,7 @@
 import { Post } from "@/entities/post/model/types";
 import { User } from "@/entities/user/model/types";
 
-import { useSelectedUser } from "@/features/user/model/SelectedUserContext";
+import { useSelectedUser } from "@/entities/user/model/SelectedUserContext";
 import UserInfo from "@/features/user/ui/UserInfo";
 
 import useToggle from "@/shared/lib/useToggle";

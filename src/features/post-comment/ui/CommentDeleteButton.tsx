@@ -2,7 +2,7 @@ import { Comment } from "@/entities/comment/model/types";
 
 import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
 
-import { useCommentContext } from "@/shared/model/CommnentContext";
+import { useCommentContext } from "@/entities/comment/model/CommentContext";
 
 import { Button } from "@/shared/ui";
 

@@ -2,7 +2,7 @@ import { Post } from "@/entities/post/model/types";
 
 import { NewPost } from "@/features/post/model/types";
 
-import { usePostContext } from "@/shared/model/PostContext";
+import { usePostContext } from "@/entities/post/model/PostContext";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 

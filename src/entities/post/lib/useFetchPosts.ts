@@ -1,6 +1,6 @@
+import { usePostContext } from "@/entities/post/model/PostContext";
 import { userApi } from "@/entities/user/api/userApi";
 import { findById } from "@/shared/lib/array";
-import { usePostContext } from "@/shared/model/PostContext";
 import { postApi } from "../api/postApi";
 
 type UseFetchPostsProps = {

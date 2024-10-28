@@ -1,24 +1,22 @@
 import { CommentResponse } from "@/entities/comment/model/types";
 import { Post } from "@/entities/post/model/types";
 
-import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
+import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
 import PostDetail from "@/features/post/ui/PostDetail";
 
+import { useCommentContext } from "@/entities/comment/model/CommentContext";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import useToggle from "@/shared/lib/useToggle";
 import { highlightText } from "@/shared/lib/utils";
-import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Button, Dialog } from "@/shared/ui";
 
 import { MessageSquare } from "lucide-react";
-import React from "react";
 
 type ModalPostDetailProps = {
-  renderComments: (postId: number) => React.ReactNode;
   post: Post;
 };
 
-const ModalPostDetail = ({ renderComments, post }: ModalPostDetailProps) => {
+const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
   const { queries } = useNavigator();
   const { search: searchQuery } = queries;
   const { comments, handleSetComments } = useCommentContext();
@@ -53,7 +51,7 @@ const ModalPostDetail = ({ renderComments, post }: ModalPostDetailProps) => {
         <Dialog.Header>
           <Dialog.Title>{highlightText(selectedPost?.title, searchQuery)}</Dialog.Title>
         </Dialog.Header>
-        <PostDetail searchQuery={searchQuery} renderComments={renderComments} />
+        <PostDetail searchQuery={searchQuery} />
       </Dialog.Content>
     </Dialog.Container>
   );

@@ -1,4 +1,4 @@
-import { Post } from "@/pages/PostsManagerPage";
+import { Post } from "@/entities/post/model/types";
 import { createContext, useContext, useState } from "react";
 
 type SelectedPostContextType = {
