@@ -8,7 +8,7 @@ interface Props {
   posts: Post[]
 }
 
-const PostTable = ({ posts }: Props) => {
+const PostTable = ({ posts, searchQuery }: Props) => {
   return (
     <Table>
       <TableHeader>
