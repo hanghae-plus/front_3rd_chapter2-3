@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { Key, useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import {
@@ -25,94 +25,12 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-
-type Tag = {
-  slug: string
-  name: string
-  url: string
-}
-type TagName = Tag["name"]
-type UserAddressCoordinates = {
-  lat: number
-  lng: number
-}
-
-type UserAddress = {
-  address: string
-  city: string
-  state: string
-  stateCode: string
-  postalCode: string
-  coordinates: UserAddressCoordinates
-  country: string
-}
-
-type UserCompanyAddress = {
-  address: string
-  city: string
-  state: string
-  stateCode: string
-  postalCode: string
-  coordinates: UserAddressCoordinates
-  country: string
-}
-
-type UserCompany = {
-  department: string
-  name: string
-  title: string
-  address: UserCompanyAddress
-}
-
-type UserBank = {
-  cardExpire: string
-  cardNumber: string
-  cardType: string
-  currency: string
-  iban: string
-}
-
-type UserHair = {
-  color: string
-  type: string
-}
-
-type UserCrypto = {
-  coin: string
-  wallet: string
-  network: string
-}
-
-type User = {
-  id: number
-  firstName: string
-  lastName: string
-  maidenName: string
-  age: number
-  gender: "male" | "female" // 성별의 경우 문자열 리터럴 타입으로 제한
-  email: string
-  phone: string
-  username: string
-  password: string // 비밀번호는 일반적으로 외부에 노출되지 않도록 주의
-  birthDate: string // ISO 8601 형식의 날짜 문자열
-  image: string
-  bloodGroup: string
-  height: number // 단위는 cm일 가능성이 높음
-  weight: number // 단위는 kg일 가능성이 높음
-  eyeColor: string
-  hair: UserHair
-  ip: string
-  address: UserAddress
-  macAddress: string
-  university: string
-  bank: UserBank
-  company: UserCompany
-  ein: string
-  ssn: string // 미국 사회 보장 번호
-  userAgent: string // 사용자의 브라우저 정보
-  crypto: UserCrypto
-  role: string // 사용자 역할
-}
+import { User } from "../entities/user/model/type"
+import { Tag, TagName } from "../entities/tag/model/type"
+import { Post, PostId } from "../entities/post/model/type"
+import { Comment, CommentsMap } from "../entities/comment/model/type"
+import { PostsData } from "../features/post/model/type"
+import { UsersData } from "../features/user/model/type"
 
 const initialUser: User = {
   id: 0,
@@ -185,20 +103,6 @@ const initialUser: User = {
   role: "user", // 기본 역할을 설정
 }
 
-type Post = {
-  id: number
-  title: string
-  body: string
-  tags: TagName[]
-  author: User | null
-  reactions: {
-    likes: number
-    dislikes: number
-  }
-  views: number
-  userId: User["id"]
-}
-type PostId = Post["id"]
 const initialPost: Post = {
   id: 0,
   title: "",
@@ -212,31 +116,13 @@ const initialPost: Post = {
   views: 0,
   userId: 0,
 }
-type PostsData = {
-  posts: Post[]
-  total: number
-}
 
-type UsersData = {
-  users: User[]
-}
-type Comment = {
-  id: number
-  body: string
-  postId: PostId
-  likes: number
-  user: User
-}
 const initialComment: Comment = {
   id: 0,
   body: "",
   postId: 1,
   likes: 0,
   user: initialUser,
-}
-
-type CommentsMap = {
-  [postId: PostId]: Comment[]
 }
 
 const PostsManager = () => {
@@ -565,9 +451,8 @@ const PostsManager = () => {
       </span>
     )
   }
-
   // 게시물 테이블 렌더링
-  const renderPostTable = () => (
+  const PostTable = ({ posts }: { posts: Post[] }) => (
     <Table>
       <TableHeader>
         <TableRow>
@@ -580,77 +465,14 @@ const PostsManager = () => {
       </TableHeader>
       <TableBody>
         {posts.map((post: Post) => (
-          <TableRow key={post.id}>
-            <TableCell>{post.id}</TableCell>
-            <TableCell>
-              <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
-
-                <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag: TagName) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? "text-white bg-blue-500 hover:bg-blue-600"
-                          : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag)
-                        updateURL()
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div
-                className="flex items-center space-x-2 cursor-pointer"
-                onClick={() => post.author && openUserModal(post.author)}
-              >
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post)
-                    setShowEditDialog(true)
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
+          <PostTableRow key={post.id} post={post} />
         ))}
       </TableBody>
     </Table>
   )
 
   // 댓글 렌더링
-  const renderComments = (postId: PostId) => (
+  const CommentList = ({ postId }: { postId: PostId }) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
@@ -666,48 +488,172 @@ const PostsManager = () => {
         </Button>
       </div>
       <div className="space-y-1">
-        {comments[postId]?.map((comment) => (
-          <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-            <div className="flex items-center space-x-2 overflow-hidden">
-              <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
-                <ThumbsUp className="w-3 h-3" />
-                <span className="ml-1 text-xs">{comment.likes}</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedComment(comment)
-                  setShowEditCommentDialog(true)
-                }}
-              >
-                <Edit2 className="w-3 h-3" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
-                <Trash2 className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
+        {comments[postId]?.map((comment: Comment) => (
+          <CommentItem key={comment.id} comment={comment} postId={postId} />
         ))}
       </div>
     </div>
   )
+  const TagItem = ({ tag }: { key: Key; tag: Tag }) => <SelectItem value={tag.slug}>{tag.slug}</SelectItem>
+  const PostTag = ({ tag, selectedTag }: { key: Key; tag: TagName; selectedTag: TagName }) => (
+    <span
+      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
+        selectedTag === tag ? "text-white bg-blue-500 hover:bg-blue-600" : "text-blue-800 bg-blue-100 hover:bg-blue-200"
+      }`}
+      onClick={() => {
+        setSelectedTag(tag)
+        updateURL()
+      }}
+    >
+      {tag}
+    </span>
+  )
+  const PostAuthor = ({ author }: { author: Post["author"] }) => (
+    <div className="flex items-center space-x-2 cursor-pointer" onClick={() => author && openUserModal(author)}>
+      <img src={author?.image} alt={author?.username} className="w-8 h-8 rounded-full" />
+      <span>{author?.username}</span>
+    </div>
+  )
+  const PostReaction = ({ reactions }: { reactions: Post["reactions"] }) => (
+    <div className="flex items-center gap-2">
+      <ThumbsUp className="w-4 h-4" />
+      <span>{reactions?.likes || 0}</span>
+      <ThumbsDown className="w-4 h-4" />
+      <span>{reactions?.dislikes || 0}</span>
+    </div>
+  )
+  const PostTableRow = ({ post }: { key: Key; post: Post }) => (
+    <TableRow>
+      <TableCell>{post.id}</TableCell>
+      <TableCell>
+        <div className="space-y-1">
+          <div>{highlightText(post.title, searchQuery)}</div>
+
+          <div className="flex flex-wrap gap-1">
+            {post.tags.map((tag: TagName) => (
+              <PostTag key={tag} tag={tag} selectedTag={selectedTag} />
+            ))}
+          </div>
+        </div>
+      </TableCell>
+      <TableCell>
+        <PostAuthor author={post.author} />
+      </TableCell>
+      <TableCell>
+        <PostReaction reactions={post.reactions} />
+      </TableCell>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+            <MessageSquare className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSelectedPost(post)
+              setShowEditDialog(true)
+            }}
+          >
+            <Edit2 className="w-4 h-4" />
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  )
+
+  const CommentItem = ({ comment, postId }: { key: Key; comment: Comment; postId: PostId }) => (
+    <div className="flex items-center justify-between text-sm border-b pb-1">
+      <div className="flex items-center space-x-2 overflow-hidden">
+        <span className="font-medium truncate">{comment.user.username}:</span>
+        <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+      </div>
+      <div className="flex items-center space-x-1">
+        <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+          <ThumbsUp className="w-3 h-3" />
+          <span className="ml-1 text-xs">{comment.likes}</span>
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setSelectedComment(comment)
+            setShowEditCommentDialog(true)
+          }}
+        >
+          <Edit2 className="w-3 h-3" />
+        </Button>
+        <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+          <Trash2 className="w-3 h-3" />
+        </Button>
+      </div>
+    </div>
+  )
+  const PostHeader = () => (
+    <CardHeader>
+      <CardTitle className="flex items-center justify-between">
+        <span>게시물 관리자</span>
+        <Button onClick={() => setShowAddDialog(true)}>
+          <Plus className="w-4 h-4 mr-2" />
+          게시물 추가
+        </Button>
+      </CardTitle>
+    </CardHeader>
+  )
+  const UserDetail = ({ selectedUser }: { selectedUser: User }) => (
+    <div className="space-y-4">
+      <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
+      <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
+      <div className="space-y-2">
+        <p>
+          <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
+        </p>
+        <p>
+          <strong>나이:</strong> {selectedUser?.age}
+        </p>
+        <p>
+          <strong>이메일:</strong> {selectedUser?.email}
+        </p>
+        <p>
+          <strong>전화번호:</strong> {selectedUser?.phone}
+        </p>
+        <p>
+          <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
+          {selectedUser?.address?.state}
+        </p>
+        <p>
+          <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
+        </p>
+      </div>
+    </div>
+  )
+  const TagSelect = ({ tags, selectedTag }: { tags: Tag[]; selectedTag: TagName }) => (
+    <Select
+      value={selectedTag}
+      onValueChange={(value) => {
+        setSelectedTag(value)
+        fetchPostsByTag(value)
+        updateURL()
+      }}
+    >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="태그 선택" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">모든 태그</SelectItem>
+        {tags.map((tag) => (
+          <TagItem tag={tag} key={tag.url} />
+        ))}
+      </SelectContent>
+    </Select>
+  )
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
-        </CardTitle>
-      </CardHeader>
+      <PostHeader />
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
@@ -724,26 +670,7 @@ const PostsManager = () => {
                 />
               </div>
             </div>
-            <Select
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value)
-                fetchPostsByTag(value)
-                updateURL()
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="태그 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
-                  <SelectItem key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <TagSelect tags={tags} selectedTag={selectedTag} />
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="정렬 기준" />
@@ -767,7 +694,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable posts={posts} />}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
@@ -891,7 +818,7 @@ const PostsManager = () => {
           </DialogHeader>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
+            <CommentList postId={selectedPost?.id} />
           </div>
         </DialogContent>
       </Dialog>
@@ -902,31 +829,7 @@ const PostsManager = () => {
           <DialogHeader>
             <DialogTitle>사용자 정보</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
+          <UserDetail selectedUser={selectedUser} />
         </DialogContent>
       </Dialog>
     </Card>
