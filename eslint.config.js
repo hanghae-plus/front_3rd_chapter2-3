@@ -12,14 +12,14 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      "@feature-sliced",
-      "plugin:@conarti/feature-sliced/recommended",
+      // "@feature-sliced",
+      // "plugin:@conarti/feature-sliced/recommended",
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
-      parser: "@typescript-eslint/parser",
+      // parser: "@typescript-eslint/parser",
     },
     settings: {
       "import/resolver": {
