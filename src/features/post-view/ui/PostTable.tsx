@@ -2,9 +2,9 @@ import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, Table, TableBody, TableCell, TableRow } from "../../../shared/ui"
 import { PostTableHead } from "../../../widgets/post/ui/PostTableHead"
-import { usePostsContext } from "../../../shared/model/PostContext"
-import { useUserContext } from "../../../shared/model/UserContext"
-import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
+import { usePostsContext } from "../../../entities/post/model/PostContext"
+import { useUserContext } from "../../../entities/user/model/UserContext"
+import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
 
 export const PostTable = () => {
   const { posts, openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePostsContext()

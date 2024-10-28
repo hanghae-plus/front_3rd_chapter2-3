@@ -1,4 +1,4 @@
-import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
+import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 
 interface Props {

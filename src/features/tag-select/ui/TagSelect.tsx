@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
+import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
 import { useTags } from "../../../entities/tag/model"
 
 interface Props {

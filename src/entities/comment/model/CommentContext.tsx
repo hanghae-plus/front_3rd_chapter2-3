@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { Comment, NewComment } from "../../entities/comment/types"
-import { useComments } from "../../entities/comment/model/useComments"
+import { Comment, NewComment } from "../types"
+import { useComments } from "./useComments"
 
 interface CommentContextType {
   comments: Record<number, Comment[]>

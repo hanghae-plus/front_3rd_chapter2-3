@@ -1,4 +1,4 @@
-import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
+import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 
 export const SelectSortOrder = () => {

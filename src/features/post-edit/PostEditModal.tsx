@@ -1,18 +1,8 @@
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { usePostsContext } from "../../../entities/post/model/PostContext"
-import { updatePostApi } from "../../../entities/post/api"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
+import { usePostsContext } from "../../entities/post/model/PostContext"
 
 export const PostEditModal = () => {
-  const { posts, setPosts, showEditDialog, setShowEditDialog, selectedPost, setSelectedPost } = usePostsContext()
-
-  const updatePost = async () => {
-    if (!selectedPost) return
-
-    const data = await updatePostApi(selectedPost)
-
-    setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-    setShowEditDialog(false)
-  }
+  const { showEditDialog, setShowEditDialog, selectedPost, setSelectedPost, updatePost } = usePostsContext()
 
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
