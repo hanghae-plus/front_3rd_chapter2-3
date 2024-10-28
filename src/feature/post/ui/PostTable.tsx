@@ -77,7 +77,14 @@ export const PostTable = ({
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    console.log("click!", post);
+                    openPostDetail(post);
+                  }}
+                >
                   <MessageSquare className="w-4 h-4" />
                 </Button>
                 <Button
