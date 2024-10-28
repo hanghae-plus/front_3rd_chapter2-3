@@ -1,14 +1,13 @@
+import { usePostParamsContext } from "../../../shared/model/PostParamsContext"
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 
 interface Props {
-  limit: number
-  setLimit: (value: number) => void
-  skip: number
-  setSkip: (value: number) => void
   total: number
 }
 
-export const Pagination = ({ limit, setLimit, skip, setSkip, total }: Props) => {
+export const Pagination = ({ total }: Props) => {
+  const { limit, setLimit, skip, setSkip } = usePostParamsContext()
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">

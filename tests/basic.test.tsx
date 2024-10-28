@@ -10,6 +10,7 @@ import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
 import { UserContextProvider } from "../src/shared/model/UserContext"
 import { PostContextProvider } from "../src/shared/model/PostContext"
+import { PostParamsContextProvider } from "../src/shared/model/PostParamsContext"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -48,13 +49,15 @@ afterAll(() => server.close())
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
   return render(
-    <UserContextProvider>
-      <PostContextProvider>
-        <MemoryRouter>
-          <PostsManager />
-        </MemoryRouter>
-      </PostContextProvider>
-    </UserContextProvider>,
+    <MemoryRouter>
+      <UserContextProvider>
+        <PostContextProvider>
+          <PostParamsContextProvider>
+            <PostsManager />
+          </PostParamsContextProvider>
+        </PostContextProvider>
+      </UserContextProvider>
+    </MemoryRouter>,
   )
 }
 

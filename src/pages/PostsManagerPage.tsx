@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle, Loader, SearchInput } from "../shared/ui"
 import { useTags } from "../entities/tag/model"
-import { usePostParams } from "../features/post-view/model/usePostParams"
 import { fetchUsersApi } from "../entities/user/api"
 import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
 import { UserModal } from "../features/user/ui/UserModal"
@@ -15,6 +14,7 @@ import { SelectTag } from "../features/post-filter/ui/SelectTag"
 import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
 import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
+import { usePostParamsContext } from "../shared/model/PostParamsContext"
 
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
@@ -30,9 +30,7 @@ const PostsManager = () => {
   } = usePostsContext()
   const {
     skip,
-    setSkip,
     limit,
-    setLimit,
     searchQuery,
     setSearchQuery,
     sortBy,
@@ -43,7 +41,7 @@ const PostsManager = () => {
     setSelectedTag,
 
     updateURL,
-  } = usePostParams()
+  } = usePostParamsContext()
   const { selectedUser } = useUserContext()
 
   // 게시물 가져오기
@@ -73,12 +71,14 @@ const PostsManager = () => {
       fetchPosts()
       return
     }
+
     setLoading(true)
-    getPostsByTag(tag)
+    await getPostsByTag(tag)
     setLoading(false)
   }
 
   useEffect(() => {
+    console.log(skip, limit)
     if (selectedTag) {
       handleGetPostsByTag(selectedTag)
     } else {
@@ -133,7 +133,7 @@ const PostsManager = () => {
             />
           )}
 
-          <Pagination limit={limit} setLimit={setLimit} skip={skip} setSkip={setSkip} total={total} />
+          <Pagination total={total} />
         </div>
       </CardContent>
 

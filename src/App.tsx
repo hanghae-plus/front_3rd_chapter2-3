@@ -4,6 +4,7 @@ import Footer from "./widgets/layout/ui/Footer.tsx"
 import PostsManagerPage from "./pages/PostsManagerPage.tsx"
 import { UserContextProvider } from "./shared/model/UserContext.tsx"
 import { PostContextProvider } from "./shared/model/PostContext.tsx"
+import { PostParamsContextProvider } from "./shared/model/PostParamsContext.tsx"
 
 const App = () => {
   return (
@@ -11,11 +12,13 @@ const App = () => {
       <div className="flex flex-col min-h-screen">
         <UserContextProvider>
           <PostContextProvider>
-            <Header />
-            <main className="flex-grow container mx-auto px-4 py-8">
-              <PostsManagerPage />
-            </main>
-            <Footer />
+            <PostParamsContextProvider>
+              <Header />
+              <main className="flex-grow container mx-auto px-4 py-8">
+                <PostsManagerPage />
+              </main>
+              <Footer />
+            </PostParamsContextProvider>
           </PostContextProvider>
         </UserContextProvider>
       </div>
