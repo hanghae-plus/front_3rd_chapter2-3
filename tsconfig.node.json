@@ -21,12 +21,12 @@
 
     "baseUrl": "./",
     "paths": {
-      "@/app/*": ["app/*"],
-      "@/pages/*": ["pages/*"],
-      "@/widgets/*": ["widgets/*"],
-      "@/features/*": ["features/*"],
-      "@/entities/*": ["entities/*"],
-      "@/shared/*": ["shared/*"]
+      "@/app/*": ["src/app/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/widgets/*": ["src/widgets/*"],
+      "@/features/*": ["src/features/*"],
+      "@/entities/*": ["src/entities/*"],
+      "@/shared/*": ["src/shared/*"]
     }
   },
   "include": ["vite.config.ts"]
