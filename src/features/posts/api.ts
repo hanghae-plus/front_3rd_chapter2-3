@@ -1,5 +1,5 @@
 import { Post } from "../../entity/post/model";
-import { PaginatedResponse } from "../../types";
+import { NewPost, PaginatedResponse } from "../../types";
 import { User } from "../../entity/user/model";
 
 export const postsApi = {
@@ -83,4 +83,64 @@ export const postsApi = {
       throw error
     }
   },
+  addPost: async (newPost: NewPost): Promise<Post> => {
+    try {
+      const response = await fetch("/api/posts/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newPost),
+      })
+      
+      if (!response.ok) {
+        throw new Error("게시물 추가 실패")
+      }
+
+      const data: Post = await response.json()
+      return data
+    } catch (error) {
+      console.error("게시물 추가 오류:", error)
+      throw error
+    }
+  },
+  updatePost: async (post: Post): Promise<Post> => {
+    if (!post?.id) {
+      throw new Error("유효하지 않은 게시물입니다")
+    }
+
+    try {
+      const response = await fetch(`/api/posts/${post.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(post),
+      })
+
+      if (!response.ok) {
+        throw new Error("게시물 수정 실패")
+      }
+
+      const data: Post = await response.json()
+      return data
+    } catch (error) {
+      console.error("게시물 업데이트 오류:", error)
+      throw error
+    }
+  },
+  deletePost: async (id: number): Promise<void> => {
+    if (!id) {
+      throw new Error("유효하지 않은 게시물 ID입니다")
+    }
+
+    try {
+      const response = await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("게시물 삭제 실패")
+      }
+    } catch (error) {
+      console.error("게시물 삭제 오류:", error)
+      throw error
+    }
+  }
 }
