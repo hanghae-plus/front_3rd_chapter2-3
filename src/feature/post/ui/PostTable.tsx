@@ -9,11 +9,19 @@ import {
   TableRow,
 } from "../../../shared/ui";
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
-import { usePostTable } from "../model";
 
-export const PostTable = () => {
-  const { posts, searchQuery, selectedTag } = usePostTable();
-
+export const PostTable = ({
+  posts,
+  searchQuery,
+  selectedTag,
+  openUserModal,
+  setSelectedTag,
+  updateURL,
+  openPostDetail,
+  deletePost,
+  setSelectedPost,
+  setShowEditDialog,
+}) => {
   return (
     <Table>
       <TableHeader>
@@ -43,8 +51,8 @@ export const PostTable = () => {
                           : "text-blue-800 bg-blue-100 hover:bg-blue-200"
                       }`}
                       onClick={() => {
-                        // setSelectedTag(tag);
-                        // updateURL();
+                        setSelectedTag(tag);
+                        updateURL();
                       }}
                     >
                       {tag}
@@ -54,11 +62,7 @@ export const PostTable = () => {
               </div>
             </TableCell>
             <TableCell>
-              <div
-                className="flex items-center space-x-2 cursor-pointer"
-                // onClick={() =>
-                // {openUserModal(post.author)}
-              >
+              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>
@@ -80,8 +84,8 @@ export const PostTable = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    // setSelectedPost(post);
-                    // setShowEditDialog(true);
+                    setSelectedPost(post);
+                    setShowEditDialog(true);
                   }}
                 >
                   <Edit2 className="w-4 h-4" />
