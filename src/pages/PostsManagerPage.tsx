@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { Post, NewPost, NewComment, Comments, Tag, User, SelectedUser } from "../temp/types.ts";
+import { Post, NewPost, NewComment, Comments, Tag, User } from "../temp/types.ts";
 
 import {
   Button,
@@ -38,7 +38,6 @@ import {
   postNewPost,
   putExistingPost,
 } from "../entities/post/api";
-import { getUserInfo } from "../entities/user/api";
 import {
   deleteExistingComment,
   getComments,
@@ -46,6 +45,8 @@ import {
   postNewComment,
   putExistingComment,
 } from "../entities/comment/api";
+import { UserModal } from "../feature/user/ui";
+import { useUser } from "../feature/user/model";
 
 // post게시물, comment, user
 const PostsManager = () => {
@@ -68,14 +69,18 @@ const PostsManager = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>(queryParams.get("tag") || "");
+
+  //comment
   const [comments, setComments] = useState<Record<number, Comments[]>>([]);
   const [selectedComment, setSelectedComment] = useState<Comments>();
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 });
+
   const [showAddCommentDialog, setShowAddCommentDialog] = useState<boolean>(false);
   const [showEditCommentDialog, setShowEditCommentDialog] = useState<boolean>(false);
   const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false);
-  const [showUserModal, setShowUserModal] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<null | SelectedUser>(null);
+
+  //user
+  const { showUserModal, selectedUser, setShowUserModal, openUserModal } = useUser();
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -269,20 +274,6 @@ const PostsManager = () => {
     setShowPostDetailDialog(true);
   };
 
-  // 사용자 모달 열기
-  const openUserModal = async (user: User | undefined) => {
-    try {
-      if (user) {
-        const userData = await getUserInfo(user);
-
-        setSelectedUser(userData);
-        setShowUserModal(true);
-      }
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error);
-    }
-  };
-
   useEffect(() => {
     fetchTags();
   }, []);
@@ -305,21 +296,6 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc");
     setSelectedTag(params.get("tag") || "");
   }, [location.search]);
-
-  // 하이라이트 함수 추가
-  // const highlightText = (text: string, highlight: string) => {
-  //   if (!text) return null;
-  //   if (!highlight.trim()) {
-  //     return <span>{text}</span>;
-  //   }
-  //   const regex = new RegExp(`(${highlight})`, "gi");
-  //   const parts = text.split(regex);
-  //   return (
-  //     <span>
-  //       {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-  //     </span>
-  //   );
-  // };
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
@@ -656,38 +632,7 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <UserModal user={selectedUser} isOpen={showUserModal} onClose={() => setShowUserModal(false)} />
     </Card>
   );
 };
