@@ -1,29 +1,28 @@
 import { useEffect, useState } from "react"
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
+import { Edit2, MessageSquare, Plus, Search, Table, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import {
   Button,
+  Input,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  Input,
+  Textarea,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  Textarea,
 } from "../shared/ui"
 
 const PostsManager = () => {
@@ -413,7 +412,7 @@ const PostsManager = () => {
     department: string
     name: string
     title: string
-    address: Address // Company address를 Address 타입으로 재사용
+    address: Address
   }
 
   type Crypto = {
