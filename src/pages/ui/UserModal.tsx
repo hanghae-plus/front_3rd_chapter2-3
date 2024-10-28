@@ -1,7 +1,7 @@
 // 사용자 모달
 
 import React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
 import { User } from "../model/User"
 
 interface Props {

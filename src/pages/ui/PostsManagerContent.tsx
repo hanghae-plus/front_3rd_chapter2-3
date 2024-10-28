@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../shared/ui"
+} from "../../shared/ui"
 import { Post } from "../model/Post"
 import { User } from "../model/User"
 import HighlightText from "./HighlightText"

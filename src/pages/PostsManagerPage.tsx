@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Card } from "../../shared/ui"
+import { Card } from "../shared/ui"
 import PostsManagerHeader from "./ui/PostsManagerHeader"
 import { User } from "./model/User"
 import { Post } from "./model/Post"

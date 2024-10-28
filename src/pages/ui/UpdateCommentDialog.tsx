@@ -1,6 +1,6 @@
 // 댓글 수정 대화상자
 import React from "react"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../shared/ui"
 import { Comment, Comments } from "../model/Comment"
 
 interface Props {
