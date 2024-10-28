@@ -1,5 +1,5 @@
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import { useComments } from "../model"
+import { useComments } from "../model/useComments"
 import { Button, DialogHeader, Textarea } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { useEffect } from "react"
