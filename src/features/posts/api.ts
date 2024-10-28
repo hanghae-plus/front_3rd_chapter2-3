@@ -1,5 +1,7 @@
 import { Post } from "../../entity/post/model";
-import { NewPost, PaginatedResponse } from "../../types";
+import { NewPost } from "../../entity/post/model";
+import { PaginatedResponse } from "../../types/index";
+import { Tag } from "../../entity/tag/model";
 import { User } from "../../entity/user/model";
 
 export const postsApi = {
@@ -101,6 +103,11 @@ export const postsApi = {
       console.error("게시물 추가 오류:", error)
       throw error
     }
+  },
+  fetchTags: async (): Promise<Tag[]> => {
+    const response = await fetch("/api/posts/tags")
+    const data: Tag[] = await response.json()
+    return data
   },
   updatePost: async (post: Post): Promise<Post> => {
     if (!post?.id) {
