@@ -11,6 +11,6 @@ export interface Comment {
 
 export interface NewComment {
   body: string
-  postId: number | null
+  postId: number
   userId: number
 }

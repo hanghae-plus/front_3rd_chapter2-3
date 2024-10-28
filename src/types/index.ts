@@ -40,6 +40,11 @@ export interface Comment {
   user: User
 }
 
+export interface CommentsState {
+  [key: number]: Comment[]
+}
+
+
 export interface Tag {
   url: string
   slug: string
