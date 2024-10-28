@@ -1,8 +1,6 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, Button } from '../../../shared/ui'
 import { Post } from '../../../entity/post/model'
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
-import { User } from '../../../entity/user/model'
-
 interface PostTableProps {
   posts: Post[]
   searchQuery: string
