@@ -1,11 +1,18 @@
+type CommentUser = {
+  id: number
+  username: string
+  fullName: string
+}
+
 export type Comment = {
   id: number
   body: string
   postId: number
   likes: number
-  user: {
-    id: number
-    username: string
-    fullName: string
-  }
+  user: CommentUser
+}
+
+export type NewComment = Pick<Comment, "body"> & {
+  postId: Comment["postId"] | null
+  userId: number
 }

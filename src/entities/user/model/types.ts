@@ -15,56 +15,72 @@ export type User = {
   height: number
   weight: number
   eyeColor: string
-  hair: {
-    color: string
-    type: string
-  }
+  hair: Hair
   ip: string
-  address: {
-    address: string
-    city: string
-    state: string
-    stateCode: string
-    postalCode: string
-    coordinates: {
-      lat: number
-      lng: number
-    }
-    country: string
-  }
+  address: Address
   macAddress: string
   university: string
-  bank: {
-    cardExpire: string
-    cardNumber: string
-    cardType: string
-    currency: string
-    iban: string
-  }
-  company: {
-    department: string
-    name: string
-    title: string
-    address: {
-      address: string
-      city: string
-      state: string
-      stateCode: string
-      postalCode: string
-      coordinates: {
-        lat: number
-        lng: number
-      }
-      country: string
-    }
-  }
+  bank: Bank
+  company: Company
   ein: string
   ssn: string
   userAgent: string
-  crypto: {
-    coin: string
-    wallet: string
-    network: string
-  }
-  role: "admin" | "moderator" | "user"
+  crypto: Crypto
+  role: string
+}
+
+export type Hair = {
+  color: string
+  type: string
+}
+
+export type Address = {
+  address: string
+  city: string
+  state: string
+  stateCode: string
+  postalCode: string
+  coordinates: Coordinates
+  country: string
+}
+
+export type Coordinates = {
+  lat: number
+  lng: number
+}
+
+export type Bank = {
+  cardExpire: string
+  cardNumber: string
+  cardType: string
+  currency: string
+  iban: string
+}
+
+export type Company = {
+  department: string
+  name: string
+  title: string
+  address: Address2
+}
+
+export type Address2 = {
+  address: string
+  city: string
+  state: string
+  stateCode: string
+  postalCode: string
+  coordinates: Coordinates2
+  country: string
+}
+
+export type Coordinates2 = {
+  lat: number
+  lng: number
+}
+
+export type Crypto = {
+  coin: string
+  wallet: string
+  network: string
 }
