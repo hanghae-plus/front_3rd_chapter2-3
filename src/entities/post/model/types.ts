@@ -20,3 +20,9 @@ export type PostsResponse = {
   skip: number;
   limit: number;
 };
+
+export type NewPost = {
+  title: string;
+  body: string;
+  userId: number;
+};

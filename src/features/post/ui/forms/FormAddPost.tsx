@@ -1,8 +1,5 @@
-import { Post } from "@/entities/post/model/types";
-
-import { NewPost } from "@/features/post/model/types";
-
 import { usePostContext } from "@/entities/post/model/PostContext";
+import { NewPost } from "@/entities/post/model/types";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 
@@ -15,25 +12,13 @@ type FormAddPostProps = {
 const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = ({ close }: FormAddPostProps) => {
-  const { setPosts } = usePostContext();
   const [newPost, setNewPost] = useState(initialNewPost);
+  const { actions } = usePostContext();
 
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      });
-      const data = (await response.json()) as Post;
-      //FIXME: 실제로 추가하면 필드가 부족해서 오류가 남 / 테스트 자체는 통과함
-      setPosts((prev) => [data, ...prev]);
-      setNewPost(initialNewPost);
-      close();
-    } catch (error) {
-      console.error("게시물 추가 오류:", error);
-    }
+  const handleAddPost = async (newPost: NewPost) => {
+    await actions.addPost(newPost);
+    setNewPost(initialNewPost);
+    close();
   };
 
   const handleChangePost = (key: keyof NewPost, value: string | number) => {
@@ -55,7 +40,7 @@ const FormAddPost = ({ close }: FormAddPostProps) => {
         value={newPost.userId}
         onChange={(e) => handleChangePost("userId", Number(e.target.value))}
       />
-      <Button onClick={addPost}>게시물 추가</Button>
+      <Button onClick={() => handleAddPost(newPost)}>게시물 추가</Button>
     </div>
   );
 };

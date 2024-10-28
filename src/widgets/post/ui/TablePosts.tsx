@@ -1,4 +1,3 @@
-import { useFetchPosts } from "@/entities/post/lib/useFetchPosts";
 import ModalEditPost from "@/features/post/ui/modals/ModalEditPost";
 import ModalPostDetail from "@/features/post/ui/modals/ModalPostDetail";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
@@ -15,26 +14,15 @@ import { useEffect } from "react";
 const TablePosts = () => {
   const { queries, handleUpdateQuery } = useNavigator();
   const { search, tag: selectedTag, limit, skip } = queries;
-  const { loading, posts, total, setPosts } = usePostContext();
-  const { fetchPosts } = useFetchPosts();
+  const { loading, posts, total, actions } = usePostContext();
 
   // 게시물 삭제
-  const deletePost = async (id: number) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      });
-      setPosts(posts.filter((post) => post.id !== id));
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error);
-    }
-  };
 
   useEffect(() => {
     if (posts.length === 0) {
-      fetchPosts({ limit, skip });
+      actions.fetchPosts({ limit, skip });
     }
-  }, [limit, skip, fetchPosts, posts]);
+  }, [limit, skip, actions, posts]);
 
   return (
     <>
@@ -67,8 +55,9 @@ const TablePosts = () => {
                               ? "text-white bg-blue-500 hover:bg-blue-600"
                               : "text-blue-800 bg-blue-100 hover:bg-blue-200"
                           }`}
-                          onClick={() => {
+                          onClick={async () => {
                             handleUpdateQuery("tag", tag);
+                            await actions.fetchPostsByTag(tag);
                           }}
                         >
                           {tag}
@@ -94,7 +83,7 @@ const TablePosts = () => {
                     <ModalPostDetail post={post} />
 
                     <ModalEditPost post={post} />
-                    <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                    <Button variant="ghost" size="sm" onClick={async () => await actions.deletePost(post.id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -106,14 +95,14 @@ const TablePosts = () => {
       )}
       <Pagination
         size={limit}
-        setSize={(size) => {
+        setSize={async (size) => {
           handleUpdateQuery("limit", size.toString());
-          fetchPosts({ limit: size, skip });
+          await actions.fetchPosts({ limit: size, skip });
         }}
         page={skip}
-        setPage={(page) => {
+        setPage={async (page) => {
           handleUpdateQuery("skip", page.toString());
-          fetchPosts({ limit, skip: page });
+          await actions.fetchPosts({ limit, skip: page });
         }}
         total={total}
       />

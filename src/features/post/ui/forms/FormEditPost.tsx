@@ -2,8 +2,6 @@ import { usePostContext } from "@/entities/post/model/PostContext";
 import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
 import { Post } from "@/entities/post/model/types";
 
-import useUpdatePost from "@/features/post/lib/useUpdatePost";
-
 import { Button, Input, Textarea } from "@/shared/ui";
 
 type FormEditPostProps = {
@@ -12,18 +10,16 @@ type FormEditPostProps = {
 
 const FormEditPost = ({ close }: FormEditPostProps) => {
   const { selectedPost, handleSelectPost } = useSelectedPost();
-  const { setPosts } = usePostContext();
-  const { mutateAsync, loading } = useUpdatePost();
+  const { actions, loading } = usePostContext();
 
   const handleChangePost = (key: keyof Post, value: string | number) => {
     if (!selectedPost) return;
     handleSelectPost({ ...selectedPost, [key]: value });
   };
 
-  const updatePost = async (post: Post | null) => {
+  const handleUpdatePost = async (post: Post | null) => {
     if (!post) return;
-    const updatedPost = await mutateAsync(post);
-    setPosts((prev) => prev.map((post) => (post.id === updatedPost.id ? updatedPost : post)));
+    await actions.updatePost(post);
     close();
   };
 
@@ -44,7 +40,7 @@ const FormEditPost = ({ close }: FormEditPostProps) => {
           handleChangePost("body", e.target.value);
         }}
       />
-      <Button onClick={() => updatePost(selectedPost)} disabled={loading}>
+      <Button onClick={() => handleUpdatePost(selectedPost)} disabled={loading}>
         {loading ? "업데이트 중..." : "게시물 업데이트"}
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import { Post, PostsResponse } from "@/entities/post/model/types";
+import { NewPost, Post, PostsResponse } from "@/entities/post/model/types";
 
 type FetchPostsProps = {
   limit?: number;
@@ -23,9 +23,10 @@ const fetchPosts = async (props: FetchPostsProps): Promise<{ posts: Post[]; tota
   };
 };
 
-const addPost = async (newPost: Post) => {
+const addPost = async (newPost: NewPost) => {
   const response = await fetch("/api/posts", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newPost),
   });
   const data = await response.json();
@@ -35,13 +36,14 @@ const addPost = async (newPost: Post) => {
 const updatePost = async (updatedPost: Post) => {
   const response = await fetch(`/api/posts/${updatedPost.id}`, {
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedPost),
   });
   const data = await response.json();
   return data;
 };
 
-const deletePost = async (id: string) => {
+const deletePost = async (id: number) => {
   const response = await fetch(`/api/posts/${id}`, {
     method: "DELETE",
   });
@@ -49,9 +51,23 @@ const deletePost = async (id: string) => {
   return data;
 };
 
+const searchPosts = async (search: string) => {
+  const response = await fetch(`/api/posts/search?q=${search}`);
+  const data = await response.json();
+  return data as PostsResponse;
+};
+
+const fetchPostsByTag = async (tag: string) => {
+  const response = await fetch(`/api/posts/tag/${tag}`);
+  const data = await response.json();
+  return data as PostsResponse;
+};
+
 export const postApi = {
   getPosts: fetchPosts,
   addPost: addPost,
   updatePost: updatePost,
   deletePost: deletePost,
+  searchPosts: searchPosts,
+  fetchPostsByTag: fetchPostsByTag,
 };

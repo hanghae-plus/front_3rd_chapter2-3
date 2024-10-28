@@ -1,42 +1,14 @@
-import { Post } from "@/entities/post/model/types";
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo } from "react";
+import usePosts from "../lib/usePosts";
 
-interface PostContextState {
-  posts: Post[];
-  total: number;
-  loading: boolean;
-}
-
-interface PostContextActions {
-  setPosts: (posts: Post[] | ((prev: Post[]) => Post[])) => void;
-  setTotal: (total: number) => void;
-  setLoading: (loading: boolean) => void;
-}
-
-type PostContextValue = PostContextState & PostContextActions;
-
+type PostContextValue = ReturnType<typeof usePosts>;
 const PostContext = createContext<PostContextValue | null>(null);
 
 export const PostProvider = ({ children }: { children: React.ReactNode }) => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const values = usePosts();
+  const memoizedValues: PostContextValue = useMemo(() => values, [values]);
 
-  const value: PostContextValue = useMemo(
-    () => ({
-      // state
-      posts,
-      total,
-      loading,
-      // actions
-      setPosts,
-      setTotal,
-      setLoading,
-    }),
-    [posts, total, loading, setPosts, setTotal, setLoading],
-  );
-
-  return <PostContext.Provider value={value}>{children}</PostContext.Provider>;
+  return <PostContext.Provider value={memoizedValues}>{children}</PostContext.Provider>;
 };
 
 export const usePostContext = () => {

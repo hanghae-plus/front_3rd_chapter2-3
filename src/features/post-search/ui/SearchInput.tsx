@@ -1,4 +1,4 @@
-import { useSearchPosts } from "@/features/post-search/lib/useSearchPosts";
+import { usePostContext } from "@/entities/post/model/PostContext";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 
@@ -11,7 +11,8 @@ const SearchInput = () => {
     handleUpdateQuery,
     queries: { search, limit, skip },
   } = useNavigator();
-  const { searchPosts, loading } = useSearchPosts();
+
+  const { actions, loading } = usePostContext();
 
   return (
     <div className="flex-1">
@@ -22,7 +23,9 @@ const SearchInput = () => {
           className="pl-8"
           value={search}
           onChange={(e) => handleUpdateQuery("search", e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && searchPosts({ limit, skip, searchQuery: search })}
+          onKeyDown={async (e) =>
+            e.key === "Enter" && (await actions.searchPosts({ limit, skip, searchQuery: search }))
+          }
           disabled={loading}
         />
       </div>
