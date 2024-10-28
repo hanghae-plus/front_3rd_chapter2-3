@@ -51,7 +51,7 @@ const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
         <Dialog.Header>
           <Dialog.Title>{highlightText(selectedPost?.title, searchQuery)}</Dialog.Title>
         </Dialog.Header>
-        <PostDetail searchQuery={searchQuery} />
+        <PostDetail searchQuery={searchQuery} post={selectedPost} />
       </Dialog.Content>
     </Dialog.Container>
   );

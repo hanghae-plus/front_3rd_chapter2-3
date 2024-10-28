@@ -1,7 +1,8 @@
+import { postApi } from "@/entities/post/api/postApi";
 import { usePostContext } from "@/entities/post/model/PostContext";
 import { userApi } from "@/entities/user/api/userApi";
+
 import { findById } from "@/shared/lib/array";
-import { postApi } from "../api/postApi";
 
 type UseFetchPostsProps = {
   limit?: number;
@@ -19,11 +20,13 @@ export const useFetchPosts = () => {
     setLoading(true);
     try {
       const { posts, total } = await postApi.getPosts(props || {});
-      const users = await userApi.getUsers();
+      const users = await userApi.getUsers({ select: ["username", "image"] });
+
       const postsWithUsers = posts.map((post) => ({
         ...post,
         author: findById(users, post.userId),
       }));
+
       setPosts(postsWithUsers);
       setTotal(total);
     } catch (error) {

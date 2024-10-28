@@ -93,7 +93,7 @@ const TablePosts = () => {
                     {/* 게시물 상세 보기 대화상자 */}
                     <ModalPostDetail post={post} />
 
-                    <ModalEditPost />
+                    <ModalEditPost post={post} />
                     <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>

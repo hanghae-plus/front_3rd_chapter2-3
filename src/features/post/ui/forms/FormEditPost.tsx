@@ -1,8 +1,8 @@
+import { usePostContext } from "@/entities/post/model/PostContext";
+import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
 import { Post } from "@/entities/post/model/types";
 
-import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
-
-import { usePostContext } from "@/entities/post/model/PostContext";
+import useUpdatePost from "@/features/post/lib/useUpdatePost";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 
@@ -13,26 +13,18 @@ type FormEditPostProps = {
 const FormEditPost = ({ close }: FormEditPostProps) => {
   const { selectedPost, handleSelectPost } = useSelectedPost();
   const { setPosts } = usePostContext();
-
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      });
-      const data = await response.json();
-      setPosts((prev) => prev.map((post) => (post.id === data.id ? data : post)));
-      close();
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error);
-    }
-  };
+  const { mutateAsync, loading } = useUpdatePost();
 
   const handleChangePost = (key: keyof Post, value: string | number) => {
     if (!selectedPost) return;
     handleSelectPost({ ...selectedPost, [key]: value });
+  };
+
+  const updatePost = async (post: Post | null) => {
+    if (!post) return;
+    const updatedPost = await mutateAsync(post);
+    setPosts((prev) => prev.map((post) => (post.id === updatedPost.id ? updatedPost : post)));
+    close();
   };
 
   return (
@@ -41,7 +33,6 @@ const FormEditPost = ({ close }: FormEditPostProps) => {
         placeholder="제목"
         value={selectedPost?.title || ""}
         onChange={(e) => {
-          if (!selectedPost) return;
           handleChangePost("title", e.target.value);
         }}
       />
@@ -50,11 +41,12 @@ const FormEditPost = ({ close }: FormEditPostProps) => {
         placeholder="내용"
         value={selectedPost?.body || ""}
         onChange={(e) => {
-          if (!selectedPost) return;
           handleChangePost("body", e.target.value);
         }}
       />
-      <Button onClick={updatePost}>게시물 업데이트</Button>
+      <Button onClick={() => updatePost(selectedPost)} disabled={loading}>
+        {loading ? "업데이트 중..." : "게시물 업데이트"}
+      </Button>
     </div>
   );
 };

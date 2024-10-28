@@ -1,7 +1,10 @@
-import { useSelectedUser } from "@/entities/user/model/SelectedUserContext";
+import { User } from "@/entities/user/model/types";
 
-const UserInfo = () => {
-  const { selectedUser } = useSelectedUser();
+type UserInfoProps = {
+  selectedUser: User | null;
+};
+
+const UserInfo = ({ selectedUser }: UserInfoProps) => {
   if (!selectedUser) return null;
   return (
     <div className="space-y-4">

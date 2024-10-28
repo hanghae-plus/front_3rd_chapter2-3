@@ -13,7 +13,7 @@ type ModalUserInfoProps = {
 
 // Data Component
 const ModalUserInfo = ({ post }: ModalUserInfoProps) => {
-  const { handleSelectUser } = useSelectedUser();
+  const { handleSelectUser, selectedUser } = useSelectedUser();
   const { isOpen, toggle } = useToggle();
 
   const openUserModal = async (user: Pick<User, "id" | "username" | "image"> | undefined) => {
@@ -39,7 +39,7 @@ const ModalUserInfo = ({ post }: ModalUserInfoProps) => {
         <Dialog.Header>
           <Dialog.Title>사용자 정보</Dialog.Title>
         </Dialog.Header>
-        <UserInfo />
+        <UserInfo selectedUser={selectedUser} />
       </Dialog.Content>
     </Dialog.Container>
   );

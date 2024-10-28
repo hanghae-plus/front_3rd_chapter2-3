@@ -10,7 +10,7 @@ export const usePostsByTagQuery = () => {
     setLoading(true);
     try {
       const { posts, total } = await filterTagApi.getPostsByTag({ tag });
-      const users = await userApi.getUsers();
+      const users = await userApi.getUsers({ select: ["username", "image"] });
       const postsWithUsers = posts.map((post) => ({
         ...post,
         author: findById(users, post.userId),
