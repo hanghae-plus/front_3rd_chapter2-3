@@ -42,7 +42,7 @@ import {
 import { UserModal } from "../feature/user/ui";
 import { useUser } from "../feature/user/model";
 import { CommentSection } from "../feature/comment/ui/CommentSection.tsx";
-import { AddPostDialog, PostTable } from "../feature/post/ui";
+import { AddPostDialog, EditPostDialog, PostTable } from "../feature/post/ui";
 
 // post게시물, comment, user
 const PostsManager = () => {
@@ -423,29 +423,13 @@ const PostsManager = () => {
       />
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          {selectedPost && (
-            <div className="space-y-4">
-              <Input
-                placeholder="제목"
-                value={selectedPost.title || ""}
-                onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-              />
-              <Textarea
-                rows={15}
-                placeholder="내용"
-                value={selectedPost.body || ""}
-                onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-              />
-              <Button onClick={updatePost}>게시물 업데이트</Button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <EditPostDialog
+        isOpen={showEditDialog}
+        onClose={() => setShowEditDialog(false)}
+        selectedPost={selectedTag}
+        setSelectedTag={setSelectedTag}
+        updatePost={updatePost}
+      />
 
       {/* 댓글 추가 대화상자 */}
       <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
