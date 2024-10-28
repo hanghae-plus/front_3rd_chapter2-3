@@ -1,13 +1,10 @@
-import { Post } from "@/entities/post/model/types";
 import { userApi } from "@/entities/user/api/userApi";
 import { findById } from "@/shared/lib/array";
-import { useEffect, useState } from "react";
+import { usePostContext } from "@/shared/model/PostContext";
 import { filterTagApi } from "../api/filterTagApi";
 
-export const usePostsByTagQuery = (tag: string) => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+export const usePostsByTagQuery = () => {
+  const { setPosts, setTotal, setLoading } = usePostContext();
 
   const getPostsByTag = async (tag: string) => {
     setLoading(true);
@@ -27,9 +24,5 @@ export const usePostsByTagQuery = (tag: string) => {
     }
   };
 
-  useEffect(() => {
-    getPostsByTag(tag);
-  }, [tag, getPostsByTag]);
-
-  return { posts, total, loading, refetch: getPostsByTag };
+  return { getPostsByTag };
 };

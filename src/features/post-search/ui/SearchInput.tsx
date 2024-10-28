@@ -1,14 +1,14 @@
 import { useNavigator } from "@/shared/lib/useNavigator";
-import { usePostContext } from "@/shared/model/PostContext";
 import { Input } from "@/shared/ui";
 import { Search } from "lucide-react";
+import { useSearchPosts } from "../lib/useSearchPosts";
 
 const SearchInput = () => {
-  const { loading, refetch } = usePostContext();
   const {
     handleUpdateQuery,
-    queries: { search },
+    queries: { search, limit, skip },
   } = useNavigator();
+  const { searchPosts, loading } = useSearchPosts();
 
   return (
     <div className="flex-1">
@@ -19,7 +19,7 @@ const SearchInput = () => {
           className="pl-8"
           value={search}
           onChange={(e) => handleUpdateQuery("search", e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && refetch()}
+          onKeyDown={(e) => e.key === "Enter" && searchPosts({ limit, skip, searchQuery: search })}
           disabled={loading}
         />
       </div>

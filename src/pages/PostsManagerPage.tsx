@@ -1,5 +1,5 @@
 import { Comment, CommentResponse } from "@/entities/comment/model/types";
-import { useFetchPosts } from "@/entities/post/api/hooks";
+
 import { User } from "@/entities/user/model/types";
 import { SelectedCommentProvider } from "@/features/comment/model/SelectedCommentContext";
 import { SelectedPostProvider } from "@/features/post/model/SelectedPostContext";
@@ -7,7 +7,6 @@ import { SelectedUserProvider } from "@/features/user/model/SelectedUserContext"
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
 import { Button, Card } from "@/shared/ui";
-import Pagination from "@/shared/ui/Pagination";
 import { ModalAddComment } from "@/widgets/comment/ui/ModalAddComment";
 import ModalEditComment from "@/widgets/comment/ui/ModalEditComment";
 import ModalAddPost from "@/widgets/post/ui/ModalAddPost";
@@ -33,14 +32,13 @@ export type NewPost = {
 };
 
 const PostsManager = () => {
-  const { handleUpdateQuery, queries } = useNavigator();
-  const { search, limit, skip, tag } = queries;
-  const { posts, total, loading } = useFetchPosts(queries);
+  const { queries } = useNavigator();
+  const { search } = queries;
+
   // const { comments, loading } = useFetchComments({ postId: queries.id });
 
   // 상태 관리
   // filter
-  const [selectedTag, setSelectedTag] = useState(tag || "");
 
   // comments
   const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
@@ -153,27 +151,7 @@ const PostsManager = () => {
                 {/* 검색 및 필터 컨트롤 */}
                 <ProductSearchFilter />
                 {/* 게시물 테이블 */}
-                {loading ? (
-                  <div>로딩 중...</div>
-                ) : (
-                  <TablePosts
-                    posts={posts}
-                    searchQuery={search}
-                    selectedTag={selectedTag}
-                    setSelectedTag={setSelectedTag}
-                    fetchComments={fetchComments}
-                    renderComments={renderComments}
-                    deletePost={deletePost}
-                  />
-                )}
-                {/* 페이지네이션 */}
-                <Pagination
-                  size={limit}
-                  setSize={(size) => handleUpdateQuery("limit", size.toString())}
-                  page={skip}
-                  setPage={(page) => handleUpdateQuery("skip", page.toString())}
-                  total={total}
-                />
+                <TablePosts fetchComments={fetchComments} renderComments={renderComments} deletePost={deletePost} />
               </div>
             </Card.Content>
           </Card.Container>

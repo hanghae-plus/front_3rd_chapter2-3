@@ -1,6 +1,5 @@
 import { postApi } from "@/entities/post/api/postApi";
-import { Post } from "@/entities/post/model/types";
-import { useEffect, useState } from "react";
+import { usePostContext } from "@/shared/model/PostContext";
 import { searchPostApi } from "../api/searchPostApi";
 
 type UseSearchPostsProps = {
@@ -9,19 +8,17 @@ type UseSearchPostsProps = {
   skip: number;
 };
 
-export const useSearchPosts = ({ searchQuery, limit, skip }: UseSearchPostsProps) => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+export const useSearchPosts = () => {
+  const { setPosts, setTotal, setLoading, loading } = usePostContext();
 
-  const searchPosts = async () => {
+  const searchPosts = async ({ searchQuery, limit, skip }: UseSearchPostsProps) => {
     if (!searchQuery) {
       const { posts, total } = await postApi.getPosts({ limit, skip });
       setPosts(posts);
       setTotal(total);
       return;
     }
-    setIsLoading(true);
+    setLoading(true);
     try {
       const { posts, total } = await searchPostApi.getSearchPosts(searchQuery);
       setPosts(posts);
@@ -29,16 +26,8 @@ export const useSearchPosts = ({ searchQuery, limit, skip }: UseSearchPostsProps
     } catch (error) {
       console.error("게시물 검색 오류:", error);
     }
-    setIsLoading(false);
+    setLoading(false);
   };
 
-  const refetch = () => {
-    searchPosts();
-  };
-
-  useEffect(() => {
-    searchPosts();
-  }, []);
-
-  return { posts, total, isLoading, refetch };
+  return { searchPosts, loading };
 };

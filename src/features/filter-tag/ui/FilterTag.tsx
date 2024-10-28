@@ -1,18 +1,22 @@
 import useFetchTags from "@/entities/tag/api/useFetchTags";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";
+import { usePostsByTagQuery } from "../lib/usePostsByTagQuery";
 
 const FilterTag = () => {
-  // const { refetch } = usePostContext();
-  const { queries, handleUpdateQuery } = useNavigator();
+  const {
+    queries: { tag },
+    handleUpdateQuery,
+  } = useNavigator();
   const { tags } = useFetchTags();
+  const { getPostsByTag } = usePostsByTagQuery();
 
   return (
     <Select.Container
-      value={queries.tag}
+      value={tag}
       onValueChange={(value) => {
         handleUpdateQuery("tag", value);
-        // refetch();
+        getPostsByTag(value);
       }}
     >
       <Select.Trigger className="w-[180px]">

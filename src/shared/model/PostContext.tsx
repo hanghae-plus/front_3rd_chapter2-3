@@ -1,38 +1,48 @@
-import { useFetchPosts } from "@/entities/post/lib/useFetchPosts";
 import { Post } from "@/entities/post/model/types";
-import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigator } from "../lib/useNavigator";
+import { createContext, useContext, useMemo, useState } from "react";
 
-type PostContextType = ReturnType<typeof useFetchPosts> & {
-  handleSetPosts: (posts: Post[]) => void;
-};
+interface PostContextState {
+  posts: Post[];
+  total: number;
+  loading: boolean;
+}
 
-export const PostContext = createContext<PostContextType | null>(null);
+interface PostContextActions {
+  setPosts: (posts: Post[]) => void;
+  setTotal: (total: number) => void;
+  setLoading: (loading: boolean) => void;
+}
 
-type PostProviderProps = {
-  children: React.ReactNode;
-};
+interface PostContextValue extends PostContextState, PostContextActions {}
 
-export const PostProvider = ({ children }: PostProviderProps) => {
-  const { queries } = useNavigator();
-  const values = useFetchPosts(queries);
+const PostContext = createContext<PostContextValue | null>(null);
+
+export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const handleSetPosts = (posts: Post[]) => {
-    setPosts(posts);
-  };
+  const value = useMemo(
+    () => ({
+      // state
+      posts,
+      total,
+      loading,
+      // actions
+      setPosts,
+      setTotal,
+      setLoading,
+    }),
+    [posts, total, loading, setPosts, setTotal, setLoading],
+  );
 
-  useEffect(() => {
-    setPosts(values.posts);
-  }, [values.posts]);
-
-  return <PostContext.Provider value={{ ...values, posts, handleSetPosts }}>{children}</PostContext.Provider>;
+  return <PostContext.Provider value={value}>{children}</PostContext.Provider>;
 };
 
 export const usePostContext = () => {
   const context = useContext(PostContext);
   if (!context) {
-    throw new Error("usePostContext must be used within a PostProvider");
+    throw new Error("usePostContext must be used within PostProvider");
   }
   return context;
 };

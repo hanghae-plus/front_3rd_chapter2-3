@@ -1,8 +1,7 @@
 import { userApi } from "@/entities/user/api/userApi";
 import { findById } from "@/shared/lib/array";
-import { useEffect, useState } from "react";
+import { usePostContext } from "@/shared/model/PostContext";
 import { postApi } from "../api/postApi";
-import { Post } from "../model/types";
 
 type UseFetchPostsProps = {
   limit?: number;
@@ -13,12 +12,9 @@ type UseFetchPostsProps = {
   tag?: string;
 };
 
-export const useFetchPosts = (props?: UseFetchPostsProps) => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  const getPosts = async (props?: UseFetchPostsProps) => {
+export const useFetchPosts = () => {
+  const { setPosts, setTotal, setLoading } = usePostContext();
+  const fetchPosts = async (props?: UseFetchPostsProps) => {
     setLoading(true);
     try {
       const { posts, total } = await postApi.getPosts(props || {});
@@ -36,10 +32,5 @@ export const useFetchPosts = (props?: UseFetchPostsProps) => {
     }
   };
 
-  useEffect(() => {
-    // 게시물 가져오기
-    getPosts(props);
-  }, [props, getPosts]);
-
-  return { posts, loading, total, refetch: getPosts };
+  return { fetchPosts };
 };
