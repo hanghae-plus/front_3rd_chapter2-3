@@ -1,8 +1,20 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { usePostsContext } from "../../../shared/model/PostContext"
+import { useState } from "react"
+import { createPostApi } from "../../../entities/post/api"
 
 export const PostAddModal = () => {
-  const { showAddDialog, setShowAddDialog, newPost, setNewPost, addPost } = usePostsContext()
+  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+
+  const { posts, setPosts, showAddDialog, setShowAddDialog } = usePostsContext()
+
+  const addPost = async () => {
+    const data = await createPostApi(newPost)
+
+    setPosts([data, ...posts])
+    setShowAddDialog(false)
+    setNewPost({ title: "", body: "", userId: 1 })
+  }
 
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>

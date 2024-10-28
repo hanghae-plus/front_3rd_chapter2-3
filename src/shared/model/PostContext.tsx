@@ -1,21 +1,19 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { usePosts } from "../../features/post/model/usePosts"
-import { NewPost, Post } from "../../entities/post/types"
+import { usePosts } from "../../features/post-view/model/usePosts"
+import { Post } from "../../entities/post/types"
 import { User } from "../../entities/user/model/types"
 
 interface PostContextType {
   posts: Post[]
+  setPosts: (posts: Post[]) => void
   showAddDialog: boolean
   setShowAddDialog: (show: boolean) => void
   selectedPost: Post | null
   setSelectedPost: (post: Post | null) => void
   showEditDialog: boolean
   setShowEditDialog: (show: boolean) => void
-  newPost: NewPost
-  setNewPost: (post: NewPost) => void
+
   total: number
-  addPost: () => void
-  updatePost: () => void
   deletePost: (postId: number) => void
   getPostsByTag: (tag: string) => void
   getSearchedPosts: (searchQuery: string) => void
