@@ -1,8 +1,4 @@
 {
-  "baseUrl": "./src",
-  "paths": {
-    "~/*": ["."]
-  },
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -23,7 +19,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["*"]
+    }
   },
   "include": ["src"]
 }
