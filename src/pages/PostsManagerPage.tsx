@@ -132,13 +132,8 @@ const PostsManager = () => {
   // 게시물 추가
   const addPost = async (): Promise<void> => {
     try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data: Post = await response.json()
-      setPosts([data, ...posts])
+      const newPostData = await postsApi.addPost(newPost)
+      setPosts([newPostData, ...posts])
       setShowAddDialog(false)
       setNewPost({ title: "", body: "", userId: 1 })
     } catch (error) {
@@ -149,14 +144,10 @@ const PostsManager = () => {
   // 게시물 업데이트
   const updatePost = async (): Promise<void> => {
     if (!selectedPost) return
+    
     try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data: Post = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
+      const updatedPost = await postsApi.updatePost(selectedPost)
+      setPosts(posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)))
       setShowEditDialog(false)
     } catch (error) {
       console.error("게시물 업데이트 오류:", error)
@@ -166,9 +157,7 @@ const PostsManager = () => {
   // 게시물 삭제
   const deletePost = async (id: number): Promise<void> => {
     try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
+      await postsApi.deletePost(id)
       setPosts(posts.filter((post) => post.id !== id))
     } catch (error) {
       console.error("게시물 삭제 오류:", error)
