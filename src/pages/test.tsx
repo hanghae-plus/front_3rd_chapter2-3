@@ -24,28 +24,35 @@ import PostDetailDialog from "../widgets/Post/ui/PostDetailDialog"
 import UserModal from "../widgets/User/ui/UserModal"
 import AddPostButton from "../widgets/Post/ui/AddPostButton"
 
+import useQueryParams from "../shared/model/useQueryParams"
 
 const PostsManager: React.FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
+  const [
+    { skip, limit, searchQuery, sortBy, sortOrder, selectedTag },
+    updateQueryParams,
+  ] = useQueryParams();
+
+
+  // const navigate = useNavigate()
+  // const location = useLocation()
+  // const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
+  // const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
+  // const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
+  // const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+  // const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
+  // const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
 
   const [tags, setTags] = useState<Tag[]>([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+  // const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
 
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
@@ -57,16 +64,16 @@ const PostsManager: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // URL 업데이트 함수
-  const updateURL = () => {
-    const params = new URLSearchParams()
-    if (skip) params.set("skip", skip.toString())
-    if (limit) params.set("limit", limit.toString())
-    if (searchQuery) params.set("search", searchQuery)
-    if (sortBy) params.set("sortBy", sortBy)
-    if (sortOrder) params.set("sortOrder", sortOrder)
-    if (selectedTag) params.set("tag", selectedTag)
-    navigate(`?${params.toString()}`)
-  }
+  // const updateURL = () => {
+  //   const params = new URLSearchParams()
+  //   if (skip) params.set("skip", skip.toString())
+  //   if (limit) params.set("limit", limit.toString())
+  //   if (searchQuery) params.set("search", searchQuery)
+  //   if (sortBy) params.set("sortBy", sortBy)
+  //   if (sortOrder) params.set("sortOrder", sortOrder)
+  //   if (selectedTag) params.set("tag", selectedTag)
+  //   navigate(`?${params.toString()}`)
+  // }
 
   // 게시물 가져오기
   const fetchPosts = () => {
@@ -307,25 +314,25 @@ const PostsManager: React.FC = () => {
     fetchTags()
   }, [])
 
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
+  // useEffect(() => {
+  //   if (selectedTag) {
+  //     fetchPostsByTag(selectedTag)
+  //   } else {
+  //     fetchPosts()
+  //   }
+  //   updateURL()
+  // }, [skip, limit, sortBy, sortOrder, selectedTag])
 
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search)
+  //   setSkip(parseInt(params.get("skip") || "0"))
+  //   setLimit(parseInt(params.get("limit") || "10"))
+  //   setSearchQuery(params.get("search") || "")
+  //   setSortBy(params.get("sortBy") || "")
+  //   setSortOrder(params.get("sortOrder") || "asc")
+  //   setSelectedTag(params.get("tag") || "")
+  // }, [location.search])
 
 
 
@@ -344,10 +351,25 @@ const PostsManager: React.FC = () => {
           {/* 검색 및 필터 컨트롤 */}
           <div className="flex gap-4">
 
-            <SearchWidget searchQuery={searchQuery} setSearchQuery={setSearchQuery} searchPosts={searchPosts} />
-            <TagSelectWidget selectedTag={selectedTag} setSelectedTag={setSelectedTag} tags={tags} fetchPostsByTag={fetchPostsByTag} updateURL={updateURL} />
-            <SortByWidget sortBy={sortBy} setSortBy={setSortBy} />
-            <SortOrderWidget sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <SearchWidget 
+              searchQuery={searchQuery} 
+              setSearchQuery={(query) => updateQueryParams({ searchQuery: query })} 
+              searchPosts={searchPosts} 
+            />
+            <TagSelectWidget 
+              selectedTag={selectedTag} 
+              setSelectedTag={(tag) => updateQueryParams({ selectedTag: tag })} 
+              tags={tags} 
+              fetchPostsByTag={fetchPostsByTag} 
+            />
+            <SortByWidget 
+              sortBy={sortBy} 
+              setSortBy={(sort) => updateQueryParams({ sortBy: sort })} 
+            />
+            <SortOrderWidget 
+              sortOrder={sortOrder} 
+              setSortOrder={(order) => updateQueryParams({ sortOrder: order })} 
+            />
 
           </div>
 
@@ -356,7 +378,7 @@ const PostsManager: React.FC = () => {
             posts={posts}
             searchQuery={searchQuery}
             selectedTag={selectedTag}
-            onSelectTag={setSelectedTag}
+            onSelectTag={(tag) => updateQueryParams({ selectedTag: tag })}
             onOpenUserModal={openUserModal}
             onOpenPostDetail={openPostDetail}
             onEditPost={(post) => {
@@ -364,11 +386,17 @@ const PostsManager: React.FC = () => {
               setShowEditDialog(true);
             }}
             onDeletePost={deletePost}
-            onupdateURL={updateURL}
+            // onupdateURL={updateQueryParams}
           />}
 
           {/* 페이지네이션 */}
-          <PaginationWidget skip={skip} limit={limit} total={total} setSkip={setSkip} setLimit={setLimit} />
+          <PaginationWidget 
+            skip={skip} 
+            limit={limit} 
+            total={total} 
+            setSkip={(newSkip) => updateQueryParams({ skip: newSkip })} 
+            setLimit={(newLimit) => updateQueryParams({ limit: newLimit })} 
+          />
 
         </div>
       </CardContent>

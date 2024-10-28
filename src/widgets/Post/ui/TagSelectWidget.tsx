@@ -12,17 +12,17 @@ interface TagSelectWidgetProps {
   setSelectedTag: (tag: string) => void;
   tags: { url: string; slug: string }[];
   fetchPostsByTag: (tag: string) => void;
-  updateURL: () => void;
+  // updateURL: () => void;
 }
 
-const TagSelectWidget: React.FC<TagSelectWidgetProps> = ({ selectedTag, setSelectedTag, tags, fetchPostsByTag, updateURL }) => {
+const TagSelectWidget: React.FC<TagSelectWidgetProps> = ({ selectedTag, setSelectedTag, tags, fetchPostsByTag }) => {
     return (
         <Select
             value={selectedTag}
             onValueChange={(value) => {
             setSelectedTag(value)
             fetchPostsByTag(value)
-            updateURL()
+            // updateURL()
             }}
         >
             <SelectTrigger className="w-[180px]">

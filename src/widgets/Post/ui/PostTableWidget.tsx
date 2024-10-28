@@ -22,7 +22,7 @@ import {
     onOpenPostDetail: (post: Post) => void;
     onEditPost: (post: Post) => void;
     onDeletePost: (id: number) => void;
-    onupdateURL: () => void;
+    // onupdateURL: () => void;
   }
 
   // 게시물 테이블 렌더링
@@ -35,7 +35,7 @@ import {
     onOpenPostDetail,
     onEditPost,
     onDeletePost,
-    onupdateURL
+    // onupdateURL
   }) => {
 
     return (
@@ -68,7 +68,7 @@ import {
                           }`}
                           onClick={() => {
                             onSelectTag(tag)
-                            onupdateURL()
+                            // onupdateURL()
                           }}
                         >
                           {tag}
@@ -101,7 +101,7 @@ import {
                       size="sm"
                       onClick={() => {
                         onEditPost(post)
-                        // setShowEditDialog(true)
+                        setShowEditDialog(true)
                       }}
                     >
                       <Edit2 className="w-4 h-4" />
