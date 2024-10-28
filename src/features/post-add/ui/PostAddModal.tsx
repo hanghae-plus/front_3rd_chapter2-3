@@ -1,6 +1,6 @@
+import { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { usePostsContext } from "../../../entities/post/model/PostContext"
-import { useState } from "react"
 import { createPostApi } from "../../../entities/post/api"
 
 export const PostAddModal = () => {
