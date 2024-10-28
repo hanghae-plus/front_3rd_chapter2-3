@@ -1,4 +1,5 @@
-import FormAddComment from "@/features/comment/ui/FormAddComment";
+import { Comment } from "@/entities/comment/model/types";
+import FormAddComment from "@/features/post-comment/ui/FormAddComment";
 import useToggle from "@/shared/lib/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 import { DialogTitle } from "@radix-ui/react-dialog";

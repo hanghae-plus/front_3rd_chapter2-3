@@ -13,7 +13,7 @@ interface PostContextActions {
   setLoading: (loading: boolean) => void;
 }
 
-interface PostContextValue extends PostContextState, PostContextActions {}
+type PostContextValue = PostContextState & PostContextActions;
 
 const PostContext = createContext<PostContextValue | null>(null);
 
@@ -22,7 +22,7 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const value = useMemo(
+  const value: PostContextValue = useMemo(
     () => ({
       // state
       posts,

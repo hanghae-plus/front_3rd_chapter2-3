@@ -1,6 +1,7 @@
 import { Comment } from "@/entities/comment/model/types";
 import { Button, Textarea } from "@/shared/ui";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { postCommentApi } from "../api/postCommentApi";
 import { useSelectedComment } from "../model/SelectedCommentContext";
 
 type FormEditCommentProps = {
@@ -19,13 +20,9 @@ const FormEditComment = ({ setComments, close, comment }: FormEditCommentProps) 
 
   // 댓글 업데이트
   const updateComment = async () => {
+    if (!selectedComment) return;
     try {
-      const response = await fetch(`/api/comments/${selectedComment?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment?.body }),
-      });
-      const data = await response.json();
+      const data = await postCommentApi.updateComment(selectedComment);
       setComments((prev) => ({
         ...prev,
         [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),

@@ -11,16 +11,27 @@ import ModalEditPost from "./ModalEditPost";
 import ModalPostDetail from "./ModalPostDetail";
 
 type TablePostsProps = {
-  deletePost: (postId: number) => void;
   fetchComments: (postId: number) => Promise<void>;
   renderComments: (postId: number) => React.ReactNode;
 };
 
-const TablePosts = ({ deletePost, fetchComments, renderComments }: TablePostsProps) => {
+const TablePosts = ({ fetchComments, renderComments }: TablePostsProps) => {
   const { queries, handleUpdateQuery } = useNavigator();
   const { search, tag: selectedTag, limit, skip } = queries;
-  const { loading, posts, total } = usePostContext();
+  const { loading, posts, total, setPosts } = usePostContext();
   const { fetchPosts } = useFetchPosts();
+
+  // 게시물 삭제
+  const deletePost = async (id: number) => {
+    try {
+      await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+      });
+      setPosts(posts.filter((post) => post.id !== id));
+    } catch (error) {
+      console.error("게시물 삭제 오류:", error);
+    }
+  };
 
   useEffect(() => {
     if (posts.length === 0) {

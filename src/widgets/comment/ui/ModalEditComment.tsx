@@ -1,5 +1,5 @@
 import { Comment } from "@/entities/comment/model/types";
-import FormEditComment from "@/features/comment/ui/FormEditComment";
+import FormEditComment from "@/features/post-comment/ui/FormEditComment";
 import useToggle from "@/shared/lib/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 import { Edit2 } from "lucide-react";
