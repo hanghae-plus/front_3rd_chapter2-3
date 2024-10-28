@@ -1,4 +1,4 @@
-import { NewPost, Post } from "../types"
+import { NewPost, Post } from "../model/types"
 
 // 게시물 추가
 export const createPostApi = async (newPost: NewPost) => {

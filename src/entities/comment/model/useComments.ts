@@ -6,7 +6,7 @@ import {
   createCommentApi,
   updateCommentApi,
 } from "../../../entities/comment/api"
-import { Comment, NewComment } from "../../../entities/comment/types"
+import { Comment, NewComment } from "../../../entities/comment/model/types"
 
 export const useComments = () => {
   const [comments, setComments] = useState<Record<number, Comment[]>>({})

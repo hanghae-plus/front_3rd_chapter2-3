@@ -1,4 +1,4 @@
-import { Comment, CommentDTO, NewComment } from "../types"
+import { Comment, CommentDTO, NewComment } from "../model/types"
 
 // 댓글 가져오기
 export const fetchCommentsApi = async (postId: number) => {

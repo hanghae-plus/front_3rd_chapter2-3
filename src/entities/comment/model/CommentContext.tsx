@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { Comment, NewComment } from "../types"
+import { Comment, NewComment } from "../model/types"
 import { useComments } from "./useComments"
 
 interface CommentContextType {

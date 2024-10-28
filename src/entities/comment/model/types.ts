@@ -21,10 +21,3 @@ export interface NewComment {
   postId: number | null
   userId: number
 }
-export interface NewCommentDTO extends NewComment {
-  user: {
-    id: number
-    username: string
-    fullName: string
-  }
-}
