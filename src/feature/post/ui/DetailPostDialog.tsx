@@ -1,19 +1,20 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, HighlightText } from "../../../shared/ui";
 import { CommentSection } from "../../comment/ui";
+import { usePostContext } from "../model/PostContext.tsx";
 
-export const DetailPostDialog = ({
-  isOpen,
-  onClose,
-  searchQuery,
-  selectedPost,
-  comments,
-  setNewComment,
-  setSelectedComment,
-  setShowAddCommentDialog,
-  setShowEditCommentDialog,
-  likeComment,
-  deleteComment,
-}) => {
+export const DetailPostDialog = ({ isOpen, onClose }) => {
+  const {
+    searchQuery,
+    selectedPost,
+    comments,
+    setNewComment,
+    setSelectedComment,
+    setShowAddCommentDialog,
+    setShowEditCommentDialog,
+    likeComment,
+    deleteComment,
+  } = usePostContext();
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       {selectedPost && (

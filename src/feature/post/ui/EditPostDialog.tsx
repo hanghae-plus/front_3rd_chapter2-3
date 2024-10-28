@@ -1,8 +1,11 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
+import { usePostContext } from "../model/PostContext.tsx";
 
-export const EditPostDialog = ({ isOpen, onClose, selectedPost, setSelectedPost, updatePost }) => {
+export const EditPostDialog = () => {
+  const { selectedPost, setSelectedPost, updatePost, showEditDialog, setShowEditDialog } = usePostContext();
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>

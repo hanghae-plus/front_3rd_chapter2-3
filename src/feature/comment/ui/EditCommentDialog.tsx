@@ -1,8 +1,12 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
+import { useCommentContext } from "../model/CommentContext.tsx";
 
-export const EditCommentDialog = ({ isOpen, onClose, selectedComment, setSelectedComment, updateComment }) => {
+export const EditCommentDialog = () => {
+  const { selectedComment, setSelectedComment, updateComment, showEditCommentDialog, setShowEditCommentDialog } =
+    useCommentContext();
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>댓글 수정</DialogTitle>

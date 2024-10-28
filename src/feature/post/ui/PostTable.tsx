@@ -9,19 +9,15 @@ import {
   TableRow,
 } from "../../../shared/ui";
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { usePostContext } from "../model/PostContext.tsx";
+import { useUser } from "../../user/model";
 
-export const PostTable = ({
-  posts,
-  searchQuery,
-  selectedTag,
-  openUserModal,
-  setSelectedTag,
-  updateURL,
-  openPostDetail,
-  deletePost,
-  setSelectedPost,
-  setShowEditDialog,
-}) => {
+export const PostTable = ({ openPostDetail }) => {
+  const { posts, searchQuery, selectedTag, setSelectedTag, updateURL, deletePost, setSelectedPost, setShowEditDialog } =
+    usePostContext();
+
+  const { openUserModal } = useUser();
+
   return (
     <Table>
       <TableHeader>

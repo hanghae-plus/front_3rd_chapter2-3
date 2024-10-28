@@ -1,8 +1,10 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
+import { useCommentContext } from "../model/CommentContext.tsx";
 
-export const AddCommentDialog = ({ isOpen, onClose, newComment, setNewComment, addComment }) => {
+export const AddCommentDialog = () => {
+  const { newComment, setNewComment, addComment, showAddCommentDialog, setShowAddCommentDialog } = useCommentContext();
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 댓글 추가</DialogTitle>
