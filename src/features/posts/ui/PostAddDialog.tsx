@@ -1,16 +1,16 @@
 import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
-import { Button, DialogHeader, Input, Textarea } from "../../shared/ui"
-import { Post } from "../../entities/posts/model/types"
+import { Button, DialogHeader, Input, Textarea } from "../../../shared/ui"
+import { PostPayload } from "../../../entities/posts/model/types"
 
-interface PostDialogProps {
+interface PostAddDialogProps {
   isShow: boolean
   handleDialog: () => void
-  newPost: Post
-  setNewPost: (post: Post) => void
+  newPost: PostPayload
+  setNewPost: (post: PostPayload) => void
   addPost: () => void
 }
 
-const PostDialog = ({ isShow, handleDialog, newPost, setNewPost, addPost }: PostDialogProps) => {
+export const PostAddDialog = ({ isShow, handleDialog, newPost, setNewPost, addPost }: PostAddDialogProps) => {
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>
       <DialogContent>
@@ -41,5 +41,3 @@ const PostDialog = ({ isShow, handleDialog, newPost, setNewPost, addPost }: Post
     </Dialog>
   )
 }
-
-export default PostDialog

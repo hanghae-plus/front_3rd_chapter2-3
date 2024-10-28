@@ -1,8 +1,8 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../shared/ui"
-import { Post } from "../../entities/posts/model/types"
-import { User } from "../../entities/user/model/types"
-import highlightText from "../../shared/ui/highlightText"
+import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui"
+import { Post } from "../../../entities/posts/model/types"
+import { User } from "../../../entities/user/model/types"
+import highlightText from "../../../shared/ui/highlightText"
 
 interface TableProps {
   posts: Post[]
@@ -49,7 +49,7 @@ const PostTable = ({
                 <div>{highlightText(item.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
-                  {item.tags.map((tag) => (
+                  {item.tags?.map((tag) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
@@ -69,7 +69,10 @@ const PostTable = ({
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(item.author)}>
+              <div
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={() => item.author && openUserModal(item.author)}
+              >
                 <img src={item.author?.image} alt={item.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{item.author?.username}</span>
               </div>

@@ -25,8 +25,9 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import PostSearchHeader from "../widgets/ui/posts/PostSearchHeader"
+
 import { Post } from "../entities/posts/model/types"
+import PostSearchHeader from "../widgets/ui/posts/PostSearchHeader"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -472,7 +473,7 @@ const PostsManager = () => {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      {/* <CardHeader>
+      <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
           <Button onClick={() => setShowAddDialog(true)}>
@@ -480,8 +481,8 @@ const PostsManager = () => {
             게시물 추가
           </Button>
         </CardTitle>
-      </CardHeader> */}
-      <PostSearchHeader handleDialog={() => setShowAddDialog(true)} />
+      </CardHeader>
+      {/* <PostSearchHeader handleDialog={() => setShowAddDialog(true)} /> */}
 
       <CardContent>
         <div className="flex flex-col gap-4">

@@ -1,14 +1,32 @@
-import { useState } from "react"
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { Search } from "lucide-react"
-import { useLocation } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { fetchTags } from "../../../entities/tags/api"
 
-const PostSearchFilter = () => {
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+interface PostSearchFilterProps {
+  searchQuery: string
+  setSearchQuery: (value: string) => void
+  selectedTag: string
+  setSelectedTag: (value: string) => void
+  sortBy: string
+  setSortBy: (value: string) => void
+  sortOrder: string
+  setSortOrder: (value: string) => void
+  updateURL: () => void
+}
 
+const PostSearchFilter = ({
+  searchQuery,
+  setSearchQuery,
+  selectedTag,
+  setSelectedTag,
+  sortBy,
+  setSortBy,
+  sortOrder,
+  setSortOrder,
+  updateURL,
+}: PostSearchFilterProps) => {
+  // 태그 데이터 가져오기
   const { data: tags } = useQuery({
     queryKey: ["tags"],
     queryFn: () => fetchTags(),
@@ -23,8 +41,15 @@ const PostSearchFilter = () => {
             placeholder="게시물 검색..."
             className="pl-8"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyUp={(e) => e.key === "Enter" && searchPosts()}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              updateURL()
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "Enter" && searchQuery) {
+                updateURL()
+              }
+            }}
           />
         </div>
       </div>
@@ -32,7 +57,6 @@ const PostSearchFilter = () => {
         value={selectedTag}
         onValueChange={(value) => {
           setSelectedTag(value)
-          fetchPostsByTag(value)
           updateURL()
         }}
       >
@@ -41,14 +65,20 @@ const PostSearchFilter = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">모든 태그</SelectItem>
-          {tags.map((tag) => (
+          {tags?.map((tag: { url: string; slug: string }) => (
             <SelectItem key={tag.url} value={tag.slug}>
               {tag.slug}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-      <Select value={sortBy} onValueChange={setSortBy}>
+      <Select
+        value={sortBy}
+        onValueChange={(value) => {
+          setSortBy(value)
+          updateURL()
+        }}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />
         </SelectTrigger>
@@ -59,7 +89,13 @@ const PostSearchFilter = () => {
           <SelectItem value="reactions">반응</SelectItem>
         </SelectContent>
       </Select>
-      <Select value={sortOrder} onValueChange={setSortOrder}>
+      <Select
+        value={sortOrder}
+        onValueChange={(value) => {
+          setSortOrder(value)
+          updateURL()
+        }}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 순서" />
         </SelectTrigger>

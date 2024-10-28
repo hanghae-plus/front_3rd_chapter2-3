@@ -1,7 +1,8 @@
 import { instance } from "../../../shared/api"
+import { ListResponse } from "../../../shared/model/types"
 import { Post, PostPayload } from "../model/types"
 
-export const fetchPosts = async (limit: number, skip: number) => {
+export const fetchPosts = async (limit: number, skip: number): Promise<ListResponse<Post, "posts">> => {
   const response = await instance.get(`/posts?limit=${limit}&skip=${skip}`)
   return response.data
 }

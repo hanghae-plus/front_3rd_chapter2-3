@@ -58,7 +58,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type
 })
 Input.displayName = "Input"
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
 }
 
@@ -68,17 +68,29 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({ className, ...props
 ))
 Card.displayName = "Card"
 
-export const CardHeader = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
+
+export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(({ className, ...props }, ref) => (
   <div ref={ref} className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
 ))
 CardHeader.displayName = "CardHeader"
 
-export const CardTitle = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  className?: string
+}
+
+export const CardTitle = forwardRef<HTMLDivElement, CardTitleProps>(({ className, ...props }, ref) => (
   <h3 ref={ref} className={`text-2xl font-semibold leading-none tracking-tight ${className}`} {...props} />
 ))
 CardTitle.displayName = "CardTitle"
 
-export const CardContent = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
+
+export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(({ className, ...props }, ref) => (
   <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
 ))
 CardContent.displayName = "CardContent"
@@ -216,7 +228,19 @@ export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(({ c
 ))
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
-interface TableProps extends React.HTMLAttributes<HTMLDivElement> {
+interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  className?: string
+}
+
+interface TableSectionProps extends React.HTMLAttributes<HTMLTableSectionElement> {
+  className?: string
+}
+
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  className?: string
+}
+
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   className?: string
 }
 
@@ -228,17 +252,17 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(({ className, ...p
 ))
 Table.displayName = "Table"
 
-export const TableHeader = forwardRef<HTMLTableSectionElement, TableProps>(({ className, ...props }, ref) => (
+export const TableHeader = forwardRef<HTMLTableSectionElement, TableSectionProps>(({ className, ...props }, ref) => (
   <thead ref={ref} className={`[&_tr]:border-b ${className}`} {...props} />
 ))
 TableHeader.displayName = "TableHeader"
 
-export const TableBody = forwardRef<HTMLTableSectionElement, TableProps>(({ className, ...props }, ref) => (
+export const TableBody = forwardRef<HTMLTableSectionElement, TableSectionProps>(({ className, ...props }, ref) => (
   <tbody ref={ref} className={`[&_tr:last-child]:border-0 ${className}`} {...props} />
 ))
 TableBody.displayName = "TableBody"
 
-export const TableRow = forwardRef<HTMLTableRowElement, TableProps>(({ className, ...props }, ref) => (
+export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(({ className, ...props }, ref) => (
   <tr
     ref={ref}
     className={`border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted h-14 ${className}`}
@@ -260,7 +284,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(({ cla
 ))
 TableHead.displayName = "TableHead"
 
-export const TableCell = forwardRef<HTMLTableCellElement, TableProps>(({ className, ...props }, ref) => (
+export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(({ className, ...props }, ref) => (
   <td ref={ref} className={`p-2 align-middle [&:has([role=checkbox])]:pr-0 ${className}`} {...props} />
 ))
 TableCell.displayName = "TableCell"
