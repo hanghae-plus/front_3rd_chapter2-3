@@ -10,7 +10,7 @@ export type Author = {
   image: string
 }
 
-export type Post = {
+export type PostDTO = {
   id: number
   title: string
   body: string
@@ -23,15 +23,15 @@ export type Post = {
   userId: number
 }
 
-export type PostWithAuthor = Post & {
+export type Post = PostDTO & {
   author: Author | undefined
 }
 
-export type NewPost = Pick<Post, "title" | "body" | "userId">
+export type NewPost = Pick<PostDTO, "title" | "body" | "userId">
 
 export type PostsResponse = {
   limit: number
-  posts: Post[]
+  posts: PostDTO[]
   skip: number
   total: number
 }

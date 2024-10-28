@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { postApi } from "../entities/post/api/postApi"
-import { Author, NewPost, PostsResponse, PostWithAuthor, Tag, UsersResponse } from "../entities/post/model/types"
+import { Author, NewPost, Post, PostsResponse, Tag, UsersResponse } from "../entities/post/model/types"
 import { User } from "../entities/user/model/types"
 import {
   Button,
@@ -36,9 +36,9 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState<PostWithAuthor[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
-  const [selectedPost, setSelectedPost] = useState<PostWithAuthor | null>(null)
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
 
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -87,8 +87,8 @@ const PostsManager = () => {
   const fetchPosts = async () => {
     setLoading(true)
     try {
-      const { postsWithUsers, total } = await postApi.fetchPosts({ limit, skip })
-      setPosts(postsWithUsers)
+      const { posts, total } = await postApi.fetchPosts({ limit, skip })
+      setPosts(posts)
       setTotal(total)
     } finally {
       setLoading(false)
@@ -116,6 +116,7 @@ const PostsManager = () => {
     try {
       const response = await fetch(`/api/posts/search?q=${searchQuery}`)
       const data = await response.json()
+
       setPosts(data.posts)
       setTotal(data.total)
     } catch (error) {
@@ -283,7 +284,7 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post: PostWithAuthor) => {
+  const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
@@ -423,7 +424,7 @@ const PostsManager = () => {
   )
 
   // 댓글 렌더링
-  const renderComments = (postId: PostWithAuthor["id"]) => (
+  const renderComments = (postId: Post["id"]) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>

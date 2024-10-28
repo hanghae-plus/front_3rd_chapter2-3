@@ -19,7 +19,7 @@ export const postApi = {
       }))
 
       return {
-        postsWithUsers,
+        posts: postsWithUsers,
         total: postsData.total,
       }
     } catch (error) {
