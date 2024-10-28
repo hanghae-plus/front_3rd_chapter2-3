@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/ui"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
 import PostTagsItem from "../entities/post/ui/PostTagsItem.tsx"
+import PostAuthorUser from "../entities/post/ui/PostAuthorUser.tsx"
+import PostReactionsItem from "../entities/post/ui/PostReactionsItem.tsx"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -359,18 +361,10 @@ const PostsManager = () => {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
+              <PostAuthorUser author={post.author} onClick={() => openUserModal(post.author)} />
             </TableCell>
             <TableCell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
+              <PostReactionsItem reactions={post.reactions} />
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
