@@ -1,4 +1,4 @@
-import { Comment } from "@/pages/PostsManagerPage";
+import { Comment } from "@/entities/comment/model/types";
 import { Button, Textarea } from "@/shared/ui";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useSelectedComment } from "../model/SelectedCommentContext";

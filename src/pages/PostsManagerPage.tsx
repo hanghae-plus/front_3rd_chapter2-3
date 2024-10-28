@@ -35,7 +35,7 @@ export type NewPost = {
 const PostsManager = () => {
   const { handleUpdateQuery, queries } = useNavigator();
   const { search, limit, skip, tag } = queries;
-  const { posts, total } = useFetchPosts(queries);
+  const { posts, total, loading } = useFetchPosts(queries);
   // const { comments, loading } = useFetchComments({ postId: queries.id });
 
   // 상태 관리
@@ -153,15 +153,19 @@ const PostsManager = () => {
                 {/* 검색 및 필터 컨트롤 */}
                 <ProductSearchFilter />
                 {/* 게시물 테이블 */}
-                <TablePosts
-                  posts={posts}
-                  searchQuery={search}
-                  selectedTag={selectedTag}
-                  setSelectedTag={setSelectedTag}
-                  fetchComments={fetchComments}
-                  renderComments={renderComments}
-                  deletePost={deletePost}
-                />
+                {loading ? (
+                  <div>로딩 중...</div>
+                ) : (
+                  <TablePosts
+                    posts={posts}
+                    searchQuery={search}
+                    selectedTag={selectedTag}
+                    setSelectedTag={setSelectedTag}
+                    fetchComments={fetchComments}
+                    renderComments={renderComments}
+                    deletePost={deletePost}
+                  />
+                )}
                 {/* 페이지네이션 */}
                 <Pagination
                   size={limit}

@@ -20,27 +20,27 @@ export const useNavigator = () => {
       const params = new URLSearchParams(queryParams);
       switch (key) {
         case "skip":
-          params.set("skip", value.toString());
+          // params.set("skip", value.toString());
           setSkip(parseInt(value.toString()));
           break;
         case "limit":
-          params.set("limit", value.toString());
+          // params.set("limit", value.toString());
           setLimit(parseInt(value.toString()));
           break;
         case "search":
-          params.set("search", value as string);
+          // params.set("search", value as string);
           setSearchQuery(value as string);
           break;
         case "sortBy":
-          params.set("sortBy", value as string);
+          // params.set("sortBy", value as string);
           setSortBy(value as string);
           break;
         case "sortOrder":
-          params.set("sortOrder", value as string);
+          // params.set("sortOrder", value as string);
           setSortOrder(value as string);
           break;
         case "tag":
-          params.set("tag", value as string);
+          // params.set("tag", value as string);
           setSelectedTag(value as string);
           break;
         default:

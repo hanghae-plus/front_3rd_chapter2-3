@@ -1,6 +1,8 @@
+import { userApi } from "@/entities/user/api/userApi";
+import { findById } from "@/shared/lib/array";
 import { useEffect, useState } from "react";
+import { postApi } from "../api/postApi";
 import { Post } from "../model/types";
-import { postApi } from "./postApi";
 
 type UseFetchPostsProps = {
   limit?: number;
@@ -16,12 +18,17 @@ export const useFetchPosts = (props?: UseFetchPostsProps) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const getPosts = async () => {
+  const getPosts = async (props?: UseFetchPostsProps) => {
     setLoading(true);
     try {
-      const { posts: postsData, total: totalCount } = await postApi.getAll(props || {});
-      setPosts(postsData);
-      setTotal(totalCount);
+      const { posts, total } = await postApi.getPosts(props || {});
+      const users = await userApi.getUsers();
+      const postsWithUsers = posts.map((post) => ({
+        ...post,
+        author: findById(users, post.userId),
+      }));
+      setPosts(postsWithUsers);
+      setTotal(total);
     } catch (error) {
       console.error("게시물 가져오기 오류:", error);
     } finally {
@@ -31,12 +38,8 @@ export const useFetchPosts = (props?: UseFetchPostsProps) => {
 
   useEffect(() => {
     // 게시물 가져오기
-    getPosts();
-  }, [props]);
+    getPosts(props);
+  }, [props, getPosts]);
 
-  const refetch = () => {
-    getPosts();
-  };
-
-  return { posts, loading, total, refetch };
+  return { posts, loading, total, refetch: getPosts };
 };

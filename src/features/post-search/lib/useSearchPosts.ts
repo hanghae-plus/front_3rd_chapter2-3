@@ -1,9 +1,10 @@
 import { postApi } from "@/entities/post/api/postApi";
 import { Post } from "@/entities/post/model/types";
 import { useEffect, useState } from "react";
+import { searchPostApi } from "../api/searchPostApi";
 
 type UseSearchPostsProps = {
-  searchQuery: string | number;
+  searchQuery: string;
   limit: number;
   skip: number;
 };
@@ -15,17 +16,16 @@ export const useSearchPosts = ({ searchQuery, limit, skip }: UseSearchPostsProps
 
   const searchPosts = async () => {
     if (!searchQuery) {
-      const { posts, total } = await postApi.getAll({ limit, skip });
+      const { posts, total } = await postApi.getPosts({ limit, skip });
       setPosts(posts);
       setTotal(total);
       return;
     }
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`);
-      const data = await response.json();
-      setPosts(data.posts);
-      setTotal(data.total);
+      const { posts, total } = await searchPostApi.getSearchPosts(searchQuery);
+      setPosts(posts);
+      setTotal(total);
     } catch (error) {
       console.error("게시물 검색 오류:", error);
     }

@@ -1,3 +1,4 @@
+import { PostProvider } from "@/shared/model/PostContext";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -46,7 +47,9 @@ afterAll(() => server.close());
 const renderPostsManager = () => {
   return render(
     <MemoryRouter>
-      <PostsManager />
+      <PostProvider>
+        <PostsManager />
+      </PostProvider>
     </MemoryRouter>,
   );
 };

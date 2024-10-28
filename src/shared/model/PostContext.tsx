@@ -1,8 +1,11 @@
-import { useFetchPosts } from "@/entities/post/api/hooks";
-import { createContext, useContext } from "react";
+import { useFetchPosts } from "@/entities/post/lib/useFetchPosts";
+import { Post } from "@/entities/post/model/types";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigator } from "../lib/useNavigator";
 
-type PostContextType = ReturnType<typeof useFetchPosts>;
+type PostContextType = ReturnType<typeof useFetchPosts> & {
+  handleSetPosts: (posts: Post[]) => void;
+};
 
 export const PostContext = createContext<PostContextType | null>(null);
 
@@ -13,8 +16,17 @@ type PostProviderProps = {
 export const PostProvider = ({ children }: PostProviderProps) => {
   const { queries } = useNavigator();
   const values = useFetchPosts(queries);
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  return <PostContext.Provider value={values}>{children}</PostContext.Provider>;
+  const handleSetPosts = (posts: Post[]) => {
+    setPosts(posts);
+  };
+
+  useEffect(() => {
+    setPosts(values.posts);
+  }, [values.posts]);
+
+  return <PostContext.Provider value={{ ...values, posts, handleSetPosts }}>{children}</PostContext.Provider>;
 };
 
 export const usePostContext = () => {

@@ -1,4 +1,4 @@
-import { Comment } from "@/pages/PostsManagerPage";
+import { Comment } from "@/entities/comment/model/types";
 import { createContext, useContext, useState } from "react";
 type SelectedCommentContextType = {
   selectedComment: Comment | null;

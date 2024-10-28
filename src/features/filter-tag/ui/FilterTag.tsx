@@ -1,10 +1,9 @@
 import useFetchTags from "@/entities/tag/api/useFetchTags";
 import { useNavigator } from "@/shared/lib/useNavigator";
-import { usePostContext } from "@/shared/model/PostContext";
 import { Select } from "@/shared/ui/Select";
 
-const FilterTags = () => {
-  const { refetch } = usePostContext();
+const FilterTag = () => {
+  // const { refetch } = usePostContext();
   const { queries, handleUpdateQuery } = useNavigator();
   const { tags } = useFetchTags();
 
@@ -13,7 +12,7 @@ const FilterTags = () => {
       value={queries.tag}
       onValueChange={(value) => {
         handleUpdateQuery("tag", value);
-        refetch();
+        // refetch();
       }}
     >
       <Select.Trigger className="w-[180px]">
@@ -31,4 +30,4 @@ const FilterTags = () => {
   );
 };
 
-export default FilterTags;
+export default FilterTag;
