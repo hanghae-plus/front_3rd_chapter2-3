@@ -3,7 +3,7 @@ import { deletePostApi, fetchPostsApi } from "../../../entities/post/api"
 import { fetchUsersApi } from "../../../entities/user/api"
 import { Post } from "../../../entities/post/model/types"
 import { User } from "../../../entities/user/model/types"
-import { fetchPostsByTagApi, searchPostsApi } from "../api"
+import { fetchPostsByTagApi, searchPostsApi } from "../../../features/post-filter/api"
 
 export const usePosts = () => {
   const [posts, setPosts] = useState<Post[]>([])

@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { usePostParams } from "../../../features/post-view/model/usePostParams"
+import { usePostParams } from "./usePostParams"
 
 interface PostParamsContextType {
   skip: number
