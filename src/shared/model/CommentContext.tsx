@@ -1,11 +1,11 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { useComments } from "../../features/comment/model/useComments"
 import { Comment, NewComment } from "../../entities/comment/types"
+import { useComments } from "../../entities/comment/model/useComments"
 
 interface CommentContextType {
   comments: Record<number, Comment[]>
   newComment: NewComment
-  setNewComment: (comment: NewComment) => void
+  setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
 
   showAddCommentDialog: boolean
   setShowAddCommentDialog: (show: boolean) => void
