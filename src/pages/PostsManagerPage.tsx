@@ -103,44 +103,30 @@ const PostsManager = () => {
       fetchPosts()
       return
     }
+    
     setLoading(true)
     try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data: PaginatedResponse<Post> = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
+      const result = await postsApi.searchPosts(searchQuery)
+      setPosts(result.posts)
+      setTotal(result.total)
     } catch (error) {
       console.error("게시물 검색 오류:", error)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // 태그별 게시물 가져오기
   const fetchPostsByTag = async (tag: string): Promise<void> => {
-    if (!tag || tag === "all") {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
     try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData: PaginatedResponse<Post> = await postsResponse.json()
-      const usersData: { users: User[] } = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
+      const result = await postsApi.fetchPostsByTag(tag)
+      setPosts(result.posts)
+      setTotal(result.total)
     } catch (error) {
       console.error("태그별 게시물 가져오기 오류:", error)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // 게시물 추가
@@ -197,7 +183,7 @@ const PostsManager = () => {
       const data: { comments: Comment[] } = await response.json()
       setComments((prev) => ({ ...prev, [postId]: data.comments }))
     } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
+      console.error("글 가져오기 오류:", error)
     }
   }
 
