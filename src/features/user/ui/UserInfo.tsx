@@ -1,4 +1,4 @@
-import { useSelectedUser } from "../model/SelectedUserContext";
+import { useSelectedUser } from "@/features/user/model/SelectedUserContext";
 
 const UserInfo = () => {
   const { selectedUser } = useSelectedUser();

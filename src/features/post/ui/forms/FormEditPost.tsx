@@ -1,7 +1,10 @@
 import { Post } from "@/entities/post/model/types";
+
+import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
+
 import { usePostContext } from "@/shared/model/PostContext";
+
 import { Button, Input, Textarea } from "@/shared/ui";
-import { useSelectedPost } from "../model/SelectedPostContext";
 
 type FormEditPostProps = {
   close: () => void;

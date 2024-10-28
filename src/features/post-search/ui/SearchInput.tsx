@@ -1,7 +1,10 @@
+import { useSearchPosts } from "@/features/post-search/lib/useSearchPosts";
+
 import { useNavigator } from "@/shared/lib/useNavigator";
+
 import { Input } from "@/shared/ui";
+
 import { Search } from "lucide-react";
-import { useSearchPosts } from "../lib/useSearchPosts";
 
 const SearchInput = () => {
   const {

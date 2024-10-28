@@ -1,6 +1,9 @@
-import FormAddComment from "@/features/post-comment/ui/FormAddComment";
+import FormAddComment from "@/features/post-comment/ui/forms/FormAddComment";
+
 import useToggle from "@/shared/lib/useToggle";
+
 import { Button, Dialog } from "@/shared/ui";
+
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Plus } from "lucide-react";
 

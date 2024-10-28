@@ -1,14 +1,16 @@
 import { useFetchPosts } from "@/entities/post/lib/useFetchPosts";
+import ModalEditPost from "@/features/post/ui/modals/ModalEditPost";
+import ModalPostDetail from "@/features/post/ui/modals/ModalPostDetail";
+import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
+
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
 import { usePostContext } from "@/shared/model/PostContext";
 import { Button, Table } from "@/shared/ui";
 import Pagination from "@/shared/ui/Pagination";
-import ModalUserInfo from "@/widgets/user/ui/ModalUserInfo";
+
 import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect } from "react";
-import ModalEditPost from "./ModalEditPost";
-import ModalPostDetail from "./ModalPostDetail";
 
 type TablePostsProps = {
   renderComments: (postId: number) => React.ReactNode;

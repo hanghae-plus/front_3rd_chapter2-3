@@ -1,6 +1,9 @@
-import FormEditPost from "@/features/post/ui/FormEditPost";
+import FormEditPost from "@/features/post/ui/forms/FormEditPost";
+
 import useToggle from "@/shared/lib/useToggle";
+
 import { Button, Dialog } from "@/shared/ui";
+
 import { Edit2 } from "lucide-react";
 
 const ModalEditPost = () => {

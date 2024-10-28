@@ -1,5 +1,5 @@
 import { Comment, CommentResponse } from "@/entities/comment/model/types";
-import { NewComment } from "@/pages/PostsManagerPage";
+import { NewComment } from "@/features/post-comment/model/types";
 
 const fetchComments = async (postId: number) => {
   const response = await fetch(`/api/comments/post/${postId}`);

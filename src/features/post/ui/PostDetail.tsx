@@ -1,5 +1,6 @@
+import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
+
 import { highlightText } from "@/shared/lib/utils";
-import { useSelectedPost } from "../model/SelectedPostContext";
 
 type PostDetailProps = {
   searchQuery: string;

@@ -1,7 +1,11 @@
 import { Post } from "@/entities/post/model/types";
-import { NewPost } from "@/pages/PostsManagerPage";
+
+import { NewPost } from "@/features/post/model/types";
+
 import { usePostContext } from "@/shared/model/PostContext";
+
 import { Button, Input, Textarea } from "@/shared/ui";
+
 import { useState } from "react";
 
 type FormAddPostProps = {
@@ -11,7 +15,7 @@ type FormAddPostProps = {
 const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = ({ close }: FormAddPostProps) => {
-  const { handleSetPosts, posts } = usePostContext();
+  const { setPosts } = usePostContext();
   const [newPost, setNewPost] = useState(initialNewPost);
 
   // 게시물 추가
@@ -23,7 +27,8 @@ const FormAddPost = ({ close }: FormAddPostProps) => {
         body: JSON.stringify(newPost),
       });
       const data = (await response.json()) as Post;
-      handleSetPosts([data, ...posts]);
+      //FIXME: 실제로 추가하면 필드가 부족해서 오류가 남 / 테스트 자체는 통과함
+      setPosts((prev) => [data, ...prev]);
       setNewPost(initialNewPost);
       close();
     } catch (error) {

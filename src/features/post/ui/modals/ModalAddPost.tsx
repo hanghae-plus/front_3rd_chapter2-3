@@ -1,6 +1,9 @@
-import FormAddPost from "@/features/post/ui/FormAddPost";
+import FormAddPost from "@/features/post/ui/forms/FormAddPost";
+
 import useToggle from "@/shared/lib/useToggle";
+
 import { Button, Dialog } from "@/shared/ui";
+
 import { Plus } from "lucide-react";
 
 const ModalAddPost = () => {

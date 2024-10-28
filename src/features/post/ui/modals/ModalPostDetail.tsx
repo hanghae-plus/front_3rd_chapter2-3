@@ -1,12 +1,15 @@
 import { CommentResponse } from "@/entities/comment/model/types";
 import { Post } from "@/entities/post/model/types";
+
 import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
 import PostDetail from "@/features/post/ui/PostDetail";
+
 import { useNavigator } from "@/shared/lib/useNavigator";
 import useToggle from "@/shared/lib/useToggle";
 import { highlightText } from "@/shared/lib/utils";
 import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Button, Dialog } from "@/shared/ui";
+
 import { MessageSquare } from "lucide-react";
 import React from "react";
 

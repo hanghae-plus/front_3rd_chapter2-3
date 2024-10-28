@@ -1,7 +1,11 @@
 import { Comment } from "@/entities/comment/model/types";
+
 import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
+
 import { useCommentContext } from "@/shared/model/CommnentContext";
+
 import { Button } from "@/shared/ui";
+
 import { Trash2 } from "lucide-react";
 
 type CommentLikeButtonProps = {

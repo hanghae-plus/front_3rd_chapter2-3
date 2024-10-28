@@ -1,8 +1,10 @@
-import { NewComment } from "@/pages/PostsManagerPage";
+import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
+import { NewComment } from "@/features/post-comment/model/types";
+
 import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Button, Textarea } from "@/shared/ui";
+
 import { useEffect, useState } from "react";
-import { postCommentApi } from "../api/postCommentApi";
 
 type FormAddCommentProps = {
   close: () => void;

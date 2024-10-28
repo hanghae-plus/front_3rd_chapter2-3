@@ -14,6 +14,7 @@ type UseFetchPostsProps = {
 
 export const useFetchPosts = () => {
   const { setPosts, setTotal, setLoading } = usePostContext();
+
   const fetchPosts = async (props?: UseFetchPostsProps) => {
     setLoading(true);
     try {

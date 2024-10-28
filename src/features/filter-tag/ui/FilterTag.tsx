@@ -1,7 +1,9 @@
 import useFetchTags from "@/entities/tag/api/useFetchTags";
+
+import { usePostsByTagQuery } from "@/features/filter-tag/lib/usePostsByTagQuery";
+
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";
-import { usePostsByTagQuery } from "../lib/usePostsByTagQuery";
 
 const FilterTag = () => {
   const {

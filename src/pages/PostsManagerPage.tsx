@@ -1,30 +1,19 @@
-import CommentDeleteButton from "@/features/comment-delete/ui/CommentDeleteButton";
-import CommentLikeButton from "@/features/comment-like/ui/CommentLikeButton";
-
 import { SelectedCommentProvider } from "@/features/post-comment/model/SelectedCommentContext";
+import CommentDeleteButton from "@/features/post-comment/ui/CommentDeleteButton";
+import CommentLikeButton from "@/features/post-comment/ui/CommentLikeButton";
+import { ModalAddComment } from "@/features/post-comment/ui/modals/ModalAddComment";
+import ModalEditComment from "@/features/post-comment/ui/modals/ModalEditComment";
 import { SelectedPostProvider } from "@/features/post/model/SelectedPostContext";
+import ModalAddPost from "@/features/post/ui/modals/ModalAddPost";
 import { SelectedUserProvider } from "@/features/user/model/SelectedUserContext";
+
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
 import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Card } from "@/shared/ui";
-import { ModalAddComment } from "@/widgets/comment/ui/ModalAddComment";
-import ModalEditComment from "@/widgets/comment/ui/ModalEditComment";
-import ModalAddPost from "@/widgets/post/ui/ModalAddPost";
+
 import ProductSearchFilter from "@/widgets/post/ui/ProductSearchFilter";
 import TablePosts from "@/widgets/post/ui/TablePosts";
-
-export type NewComment = {
-  body: string;
-  postId: number | null;
-  userId: number;
-};
-
-export type NewPost = {
-  title: string;
-  body: string;
-  userId: number;
-};
 
 const PostsManager = () => {
   const { queries } = useNavigator();
