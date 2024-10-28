@@ -26,34 +26,247 @@ import {
   Textarea,
 } from "../shared/ui"
 
+type Tag = {
+  slug: string
+  name: string
+  url: string
+}
+type TagName = Tag["name"]
+type UserAddressCoordinates = {
+  lat: number
+  lng: number
+}
+
+type UserAddress = {
+  address: string
+  city: string
+  state: string
+  stateCode: string
+  postalCode: string
+  coordinates: UserAddressCoordinates
+  country: string
+}
+
+type UserCompanyAddress = {
+  address: string
+  city: string
+  state: string
+  stateCode: string
+  postalCode: string
+  coordinates: UserAddressCoordinates
+  country: string
+}
+
+type UserCompany = {
+  department: string
+  name: string
+  title: string
+  address: UserCompanyAddress
+}
+
+type UserBank = {
+  cardExpire: string
+  cardNumber: string
+  cardType: string
+  currency: string
+  iban: string
+}
+
+type UserHair = {
+  color: string
+  type: string
+}
+
+type UserCrypto = {
+  coin: string
+  wallet: string
+  network: string
+}
+
+type User = {
+  id: number
+  firstName: string
+  lastName: string
+  maidenName: string
+  age: number
+  gender: "male" | "female" // 성별의 경우 문자열 리터럴 타입으로 제한
+  email: string
+  phone: string
+  username: string
+  password: string // 비밀번호는 일반적으로 외부에 노출되지 않도록 주의
+  birthDate: string // ISO 8601 형식의 날짜 문자열
+  image: string
+  bloodGroup: string
+  height: number // 단위는 cm일 가능성이 높음
+  weight: number // 단위는 kg일 가능성이 높음
+  eyeColor: string
+  hair: UserHair
+  ip: string
+  address: UserAddress
+  macAddress: string
+  university: string
+  bank: UserBank
+  company: UserCompany
+  ein: string
+  ssn: string // 미국 사회 보장 번호
+  userAgent: string // 사용자의 브라우저 정보
+  crypto: UserCrypto
+  role: string // 사용자 역할
+}
+
+const initialUser: User = {
+  id: 0,
+  firstName: "",
+  lastName: "",
+  maidenName: "",
+  age: 0,
+  gender: "female", // 또는 "male"로 설정
+  email: "",
+  phone: "",
+  username: "",
+  password: "", // 비밀번호는 일반적으로 외부에 노출되지 않도록 주의
+  birthDate: "", // ISO 8601 형식의 날짜 문자열로 초기화
+  image: "", // 기본 이미지 URL 또는 경로를 설정할 수 있습니다
+  bloodGroup: "",
+  height: 0, // cm 단위로 초기화
+  weight: 0, // kg 단위로 초기화
+  eyeColor: "",
+  hair: {
+    color: "",
+    type: "",
+  },
+  ip: "",
+  address: {
+    address: "",
+    city: "",
+    state: "",
+    stateCode: "",
+    postalCode: "",
+    coordinates: {
+      lat: 0,
+      lng: 0,
+    },
+    country: "",
+  },
+  macAddress: "",
+  university: "",
+  bank: {
+    cardExpire: "",
+    cardNumber: "",
+    cardType: "",
+    currency: "",
+    iban: "",
+  },
+  company: {
+    department: "",
+    name: "",
+    title: "",
+    address: {
+      address: "",
+      city: "",
+      state: "",
+      stateCode: "",
+      postalCode: "",
+      coordinates: {
+        lat: 0,
+        lng: 0,
+      },
+      country: "",
+    },
+  },
+  ein: "",
+  ssn: "",
+  userAgent: "",
+  crypto: {
+    coin: "",
+    wallet: "",
+    network: "",
+  },
+  role: "user", // 기본 역할을 설정
+}
+
+type Post = {
+  id: number
+  title: string
+  body: string
+  tags: TagName[]
+  author: User | null
+  reactions: {
+    likes: number
+    dislikes: number
+  }
+  views: number
+  userId: User["id"]
+}
+type PostId = Post["id"]
+const initialPost: Post = {
+  id: 0,
+  title: "",
+  body: "",
+  tags: [],
+  author: initialUser,
+  reactions: {
+    likes: 0,
+    dislikes: 0,
+  },
+  views: 0,
+  userId: 0,
+}
+type PostsData = {
+  posts: Post[]
+  total: number
+}
+
+type UsersData = {
+  users: User[]
+}
+type Comment = {
+  id: number
+  body: string
+  postId: PostId
+  likes: number
+  user: User
+}
+const initialComment: Comment = {
+  id: 0,
+  body: "",
+  postId: 1,
+  likes: 0,
+  user: initialUser,
+}
+
+type CommentsMap = {
+  [postId: PostId]: Comment[]
+}
+
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedPost, setSelectedPost] = useState<Post>(initialPost)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const [newPost, setNewPost] = useState<Post>(initialPost)
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
+  const [tags, setTags] = useState<Tag[]>([])
+  const [selectedTag, setSelectedTag] = useState<TagName>(queryParams.get("tag") || "")
+  const [comments, setComments] = useState<CommentsMap>({})
+  const [selectedComment, setSelectedComment] = useState<Comment>(initialComment)
+  const [newComment, setNewComment] = useState(initialComment)
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedUser, setSelectedUser] = useState<User>(initialUser)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -70,21 +283,28 @@ const PostsManager = () => {
   // 게시물 가져오기
   const fetchPosts = () => {
     setLoading(true)
-    let postsData
-    let usersData
+    let postsData: PostsData
 
     fetch(`/api/posts?limit=${limit}&skip=${skip}`)
       .then((response) => response.json())
       .then((data) => {
-        postsData = data
+        // API 응답 구조가 맞는지 확인
+        if (!data.posts || typeof data.total !== "number") {
+          throw new Error("Invalid posts data format")
+        }
+        postsData = data as PostsData // 타입 단언
         return fetch("/api/users?limit=0&select=username,image")
       })
       .then((response) => response.json())
       .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
+        // API 응답 구조가 맞는지 확인
+        if (!users.users) {
+          throw new Error("Invalid users data format")
+        }
+        const usersData: UsersData = users as UsersData // 타입 단언
+        const postsWithUsers = postsData.posts.map((post: Post) => ({
           ...post,
-          author: usersData.find((user) => user.id === post.userId),
+          author: usersData.users.find((user: User) => user.id === post.userId) || null,
         }))
         setPosts(postsWithUsers)
         setTotal(postsData.total)
@@ -127,7 +347,7 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
+  const fetchPostsByTag = async (tag: TagName) => {
     if (!tag || tag === "all") {
       fetchPosts()
       return
@@ -141,9 +361,9 @@ const PostsManager = () => {
       const postsData = await postsResponse.json()
       const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post) => ({
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.users.find((user: User) => user.id === post.userId),
       }))
 
       setPosts(postsWithUsers)
@@ -165,7 +385,7 @@ const PostsManager = () => {
       const data = await response.json()
       setPosts([data, ...posts])
       setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
+      setNewPost(initialPost)
     } catch (error) {
       console.error("게시물 추가 오류:", error)
     }
@@ -188,7 +408,7 @@ const PostsManager = () => {
   }
 
   // 게시물 삭제
-  const deletePost = async (id) => {
+  const deletePost = async (id: number) => {
     try {
       await fetch(`/api/posts/${id}`, {
         method: "DELETE",
@@ -200,7 +420,7 @@ const PostsManager = () => {
   }
 
   // 댓글 가져오기
-  const fetchComments = async (postId) => {
+  const fetchComments = async (postId: PostId) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
       const response = await fetch(`/api/comments/post/${postId}`)
@@ -225,7 +445,7 @@ const PostsManager = () => {
         [data.postId]: [...(prev[data.postId] || []), data],
       }))
       setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
+      setNewComment(initialComment)
     } catch (error) {
       console.error("댓글 추가 오류:", error)
     }
@@ -251,7 +471,7 @@ const PostsManager = () => {
   }
 
   // 댓글 삭제
-  const deleteComment = async (id, postId) => {
+  const deleteComment = async (id: number, postId: PostId) => {
     try {
       await fetch(`/api/comments/${id}`, {
         method: "DELETE",
@@ -266,32 +486,38 @@ const PostsManager = () => {
   }
 
   // 댓글 좋아요
-  const likeComment = async (id, postId) => {
+  const likeComment = async (id: number, postId: PostId) => {
     try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
+      const postComments = comments[postId] || []
+      const commentToLike = postComments.find((c) => c.id === id)
+      if (commentToLike) {
+        const response = await fetch(`/api/comments/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ likes: commentToLike.likes + 1 }),
+        })
+        const data = await response.json()
+        setComments((prev) => ({
+          ...prev,
+          [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+        }))
+      } else {
+        console.error("해당 댓글을 찾을 수 없습니다.")
+      }
     } catch (error) {
       console.error("댓글 좋아요 오류:", error)
     }
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
+  const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
+  const openUserModal = async (user: User) => {
     try {
       const response = await fetch(`/api/users/${user.id}`)
       const userData = await response.json()
@@ -353,7 +579,7 @@ const PostsManager = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {posts.map((post) => (
+        {posts.map((post: Post) => (
           <TableRow key={post.id}>
             <TableCell>{post.id}</TableCell>
             <TableCell>
@@ -361,7 +587,7 @@ const PostsManager = () => {
                 <div>{highlightText(post.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
+                  {post.tags.map((tag: TagName) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
@@ -381,7 +607,10 @@ const PostsManager = () => {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+              <div
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={() => post.author && openUserModal(post.author)}
+              >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>
@@ -421,7 +650,7 @@ const PostsManager = () => {
   )
 
   // 댓글 렌더링
-  const renderComments = (postId) => (
+  const renderComments = (postId: PostId) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
