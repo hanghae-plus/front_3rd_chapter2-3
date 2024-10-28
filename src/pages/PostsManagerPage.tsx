@@ -1,4 +1,3 @@
-import { CommentResponse } from "@/entities/comment/model/types";
 import CommentDeleteButton from "@/features/comment-delete/ui/CommentDeleteButton";
 import CommentLikeButton from "@/features/comment-like/ui/CommentLikeButton";
 
@@ -32,19 +31,7 @@ const PostsManager = () => {
   const { search } = queries;
 
   // comments
-  const { comments, handleSetComments } = useCommentContext();
-
-  //! 댓글 가져오기
-  const fetchComments = async (postId: number) => {
-    if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`);
-      const data = (await response.json()) as CommentResponse;
-      handleSetComments((prev) => ({ ...prev, [postId]: data.comments }));
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error);
-    }
-  };
+  const { comments } = useCommentContext();
 
   // 댓글 렌더링
   const renderComments = (postId: number) => (
@@ -52,7 +39,7 @@ const PostsManager = () => {
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
         {/* 댓글 추가 대화상자 */}
-        <ModalAddComment setComments={handleSetComments} postId={postId} />
+        <ModalAddComment postId={postId} />
       </div>
       <div className="space-y-1">
         {comments[postId]?.map((comment) => (
@@ -64,7 +51,7 @@ const PostsManager = () => {
             <div className="flex items-center space-x-1">
               <CommentLikeButton comment={comment} postId={postId} />
               {/* 댓글 수정 대화상자 */}
-              <ModalEditComment setComments={handleSetComments} comment={comment} />
+              <ModalEditComment comment={comment} />
               <CommentDeleteButton comment={comment} postId={postId} />
             </div>
           </div>
@@ -90,7 +77,7 @@ const PostsManager = () => {
                 {/* 검색 및 필터 컨트롤 */}
                 <ProductSearchFilter />
                 {/* 게시물 테이블 */}
-                <TablePosts fetchComments={fetchComments} renderComments={renderComments} />
+                <TablePosts renderComments={renderComments} />
               </div>
             </Card.Content>
           </Card.Container>

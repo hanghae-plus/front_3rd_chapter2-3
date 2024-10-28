@@ -1,17 +1,18 @@
 import { Comment } from "@/entities/comment/model/types";
+import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Button, Textarea } from "@/shared/ui";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { postCommentApi } from "../api/postCommentApi";
 import { useSelectedComment } from "../model/SelectedCommentContext";
 
 type FormEditCommentProps = {
-  setComments: Dispatch<SetStateAction<{ [key: number]: Comment[] }>>;
   close: () => void;
   comment: Comment | null;
 };
 
-const FormEditComment = ({ setComments, close, comment }: FormEditCommentProps) => {
+const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
   const { selectedComment, handleSelectComment } = useSelectedComment();
+  const { handleSetComments } = useCommentContext();
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!selectedComment) return;
@@ -21,9 +22,11 @@ const FormEditComment = ({ setComments, close, comment }: FormEditCommentProps) 
   // 댓글 업데이트
   const updateComment = async () => {
     if (!selectedComment) return;
+    console.log(selectedComment);
     try {
       const data = await postCommentApi.updateComment(selectedComment);
-      setComments((prev) => ({
+      console.log(data);
+      handleSetComments((prev) => ({
         ...prev,
         [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
       }));

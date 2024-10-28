@@ -11,11 +11,10 @@ import ModalEditPost from "./ModalEditPost";
 import ModalPostDetail from "./ModalPostDetail";
 
 type TablePostsProps = {
-  fetchComments: (postId: number) => Promise<void>;
   renderComments: (postId: number) => React.ReactNode;
 };
 
-const TablePosts = ({ fetchComments, renderComments }: TablePostsProps) => {
+const TablePosts = ({ renderComments }: TablePostsProps) => {
   const { queries, handleUpdateQuery } = useNavigator();
   const { search, tag: selectedTag, limit, skip } = queries;
   const { loading, posts, total, setPosts } = usePostContext();
@@ -94,12 +93,7 @@ const TablePosts = ({ fetchComments, renderComments }: TablePostsProps) => {
                 <Table.Cell>
                   <div className="flex items-center gap-2">
                     {/* 게시물 상세 보기 대화상자 */}
-                    <ModalPostDetail
-                      fetchComments={fetchComments}
-                      searchQuery={search}
-                      renderComments={renderComments}
-                      post={post}
-                    />
+                    <ModalPostDetail renderComments={renderComments} post={post} />
 
                     <ModalEditPost />
                     <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>

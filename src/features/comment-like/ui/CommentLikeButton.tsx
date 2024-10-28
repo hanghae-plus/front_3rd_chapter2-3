@@ -15,9 +15,11 @@ const CommentLikeButton = ({ comment, postId }: CommentLikeButtonProps) => {
   // 댓글 좋아요
   const likeComment = async (id: number, postId: number) => {
     const comment = comments[postId]?.find((c) => c.id === id);
-    if (!comment) return;
+
     try {
+      if (!comment) return;
       const data = await postCommentApi.likeComment(comment);
+      console.log(data);
       handleSetComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),

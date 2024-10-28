@@ -8,7 +8,7 @@ interface PostContextState {
 }
 
 interface PostContextActions {
-  setPosts: (posts: Post[]) => void;
+  setPosts: (posts: Post[] | ((prev: Post[]) => Post[])) => void;
   setTotal: (total: number) => void;
   setLoading: (loading: boolean) => void;
 }

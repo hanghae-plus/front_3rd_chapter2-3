@@ -10,6 +10,7 @@ const fetchComments = async (postId: number) => {
 const addComment = async (newComment: NewComment) => {
   const response = await fetch(`/api/comments/add`, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newComment),
   });
   const data = (await response.json()) as Comment;
@@ -19,6 +20,7 @@ const addComment = async (newComment: NewComment) => {
 const updateComment = async (comment: Comment) => {
   const response = await fetch(`/api/comments/${comment.id}`, {
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ body: comment.body }),
   });
   const data = (await response.json()) as Comment;
@@ -33,7 +35,7 @@ const deleteComment = async (id: number) => {
 };
 
 const likeComment = async (comment: Comment) => {
-  const response = await fetch(`/api/comments/like/${comment.id}`, {
+  const response = await fetch(`/api/comments/${comment.id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ likes: comment.likes + 1 }),

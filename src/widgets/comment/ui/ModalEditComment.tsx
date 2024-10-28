@@ -3,14 +3,12 @@ import FormEditComment from "@/features/post-comment/ui/FormEditComment";
 import useToggle from "@/shared/lib/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 import { Edit2 } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 
 type ModalEditCommentProps = {
-  setComments: Dispatch<SetStateAction<{ [key: number]: Comment[] }>>;
   comment: Comment | null;
 };
 
-const ModalEditComment = ({ setComments, comment }: ModalEditCommentProps) => {
+const ModalEditComment = ({ comment }: ModalEditCommentProps) => {
   const { toggle, isOpen, close } = useToggle();
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
@@ -23,7 +21,7 @@ const ModalEditComment = ({ setComments, comment }: ModalEditCommentProps) => {
         <Dialog.Header>
           <Dialog.Title>댓글 수정</Dialog.Title>
         </Dialog.Header>
-        <FormEditComment setComments={setComments} close={close} comment={comment} />
+        <FormEditComment close={close} comment={comment} />
       </Dialog.Content>
     </Dialog.Container>
   );

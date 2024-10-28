@@ -1,22 +1,38 @@
+import { CommentResponse } from "@/entities/comment/model/types";
 import { Post } from "@/entities/post/model/types";
 import { useSelectedPost } from "@/features/post/model/SelectedPostContext";
 import PostDetail from "@/features/post/ui/PostDetail";
+import { useNavigator } from "@/shared/lib/useNavigator";
 import useToggle from "@/shared/lib/useToggle";
 import { highlightText } from "@/shared/lib/utils";
+import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Button, Dialog } from "@/shared/ui";
 import { MessageSquare } from "lucide-react";
 import React from "react";
 
 type ModalPostDetailProps = {
-  fetchComments: (postId: number) => Promise<void>;
-  searchQuery: string;
   renderComments: (postId: number) => React.ReactNode;
   post: Post;
 };
 
-const ModalPostDetail = ({ fetchComments, searchQuery, renderComments, post }: ModalPostDetailProps) => {
+const ModalPostDetail = ({ renderComments, post }: ModalPostDetailProps) => {
+  const { queries } = useNavigator();
+  const { search: searchQuery } = queries;
+  const { comments, handleSetComments } = useCommentContext();
   const { isOpen, toggle } = useToggle();
   const { selectedPost, handleSelectPost } = useSelectedPost();
+
+  //! 댓글 가져오기
+  const fetchComments = async (postId: number) => {
+    if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+    try {
+      const response = await fetch(`/api/comments/post/${postId}`);
+      const data = (await response.json()) as CommentResponse;
+      handleSetComments((prev) => ({ ...prev, [postId]: data.comments }));
+    } catch (error) {
+      console.error("댓글 가져오기 오류:", error);
+    }
+  };
 
   const openPostDetail = (post: Post) => {
     handleSelectPost(post);

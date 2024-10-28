@@ -1,4 +1,5 @@
 import { Post } from "@/entities/post/model/types";
+import { usePostContext } from "@/shared/model/PostContext";
 import { Button, Input, Textarea } from "@/shared/ui";
 import { useSelectedPost } from "../model/SelectedPostContext";
 
@@ -8,6 +9,7 @@ type FormEditPostProps = {
 
 const FormEditPost = ({ close }: FormEditPostProps) => {
   const { selectedPost, handleSelectPost } = useSelectedPost();
+  const { setPosts } = usePostContext();
 
   // 게시물 업데이트
   const updatePost = async () => {
@@ -18,7 +20,7 @@ const FormEditPost = ({ close }: FormEditPostProps) => {
         body: JSON.stringify(selectedPost),
       });
       const data = await response.json();
-      //   setPosts((prev) => prev.map((post) => (post.id === data.id ? data : post)));
+      setPosts((prev) => prev.map((post) => (post.id === data.id ? data : post)));
       close();
     } catch (error) {
       console.error("게시물 업데이트 오류:", error);

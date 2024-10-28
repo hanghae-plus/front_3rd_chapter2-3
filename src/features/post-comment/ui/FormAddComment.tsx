@@ -1,25 +1,25 @@
-import { Comment } from "@/entities/comment/model/types";
 import { NewComment } from "@/pages/PostsManagerPage";
+import { useCommentContext } from "@/shared/model/CommnentContext";
 import { Button, Textarea } from "@/shared/ui";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { postCommentApi } from "../api/postCommentApi";
 
 type FormAddCommentProps = {
-  setComments: Dispatch<SetStateAction<{ [key: number]: Comment[] }>>;
   close: () => void;
   postId: number;
 };
 
 const initialNewComment: NewComment = { body: "", postId: 0, userId: 1 };
 
-const FormAddComment = ({ setComments, close, postId }: FormAddCommentProps) => {
+const FormAddComment = ({ close, postId }: FormAddCommentProps) => {
+  const { handleSetComments } = useCommentContext();
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment);
 
   // 댓글 추가
   const addComment = async () => {
     try {
       const data = await postCommentApi.addComment(newComment);
-      setComments((prev) => ({
+      handleSetComments((prev) => ({
         ...prev,
         [data.postId]: [...(prev[data.postId] || []), data],
       }));
