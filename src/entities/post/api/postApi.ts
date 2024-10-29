@@ -6,6 +6,7 @@ type FetchPostsPayload = {
 }
 
 export const postApi = {
+  /** 게시물 가져오기 */
   fetchPosts: async ({ limit, skip }: FetchPostsPayload) => {
     try {
       const [postsData, usersData] = await Promise.all([
@@ -25,6 +26,16 @@ export const postApi = {
     } catch (error) {
       console.error("게시물 가져오기 오류:", error)
       throw error
+    }
+  },
+
+  /** 태그 가져오기 */
+  fetchTags: async () => {
+    try {
+      const response = await fetch("/api/posts/tags").then((response) => response.json())
+      return response
+    } catch (error) {
+      console.error("태그 가져오기 오류:", error)
     }
   },
 }
