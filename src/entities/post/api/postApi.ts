@@ -1,20 +1,13 @@
 import { NewPost, Post, PostsResponse } from "@/entities/post/model/types";
 
-type FetchPostsProps = {
-  limit?: number;
-  skip?: number;
-  sortBy?: string;
-  sortOrder?: string;
-  search?: string;
-  tag?: string;
-};
-
-const fetchPosts = async (props: FetchPostsProps): Promise<{ posts: Post[]; total: number }> => {
-  const queries = Object.entries(props)
-    .map(([key, value]) => (value ? `${key}=${value}` : ""))
-    .join("&");
-
-  const postsResponse = await fetch(`/api/posts?${queries}`);
+const fetchPosts = async ({
+  limit,
+  skip,
+}: {
+  limit: number;
+  skip: number;
+}): Promise<{ posts: Post[]; total: number }> => {
+  const postsResponse = await fetch(`/api/posts?limit=${limit}&skip=${skip}`);
   const postsData: PostsResponse = await postsResponse.json();
 
   return {

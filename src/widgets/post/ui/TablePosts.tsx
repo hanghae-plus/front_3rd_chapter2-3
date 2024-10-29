@@ -1,20 +1,21 @@
-import ModalEditPost from "@/features/post/ui/modals/ModalEditPost";
-import ModalPostDetail from "@/features/post/ui/modals/ModalPostDetail";
+import PostPagination from "@/features/post/ui/PostPagination";
+import PostTableRowActions from "@/features/post/ui/PostTableRowActions";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
 
 import { usePostContext } from "@/entities/post/model/PostContext";
+
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
-import { Button, Table } from "@/shared/ui";
-import Pagination from "@/shared/ui/Pagination";
+import { Table } from "@/shared/ui";
 
-import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import PostTableRowTags from "@/features/post/ui/PostTableRowTags";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { useEffect } from "react";
 
 const TablePosts = () => {
   const { queries, handleUpdateQuery } = useNavigator();
   const { search, tag: selectedTag, limit, skip } = queries;
-  const { loading, posts, total, actions } = usePostContext();
+  const { loading, posts, actions } = usePostContext();
 
   // 게시물 삭제
 
@@ -46,24 +47,7 @@ const TablePosts = () => {
                 <Table.Cell>
                   <div className="space-y-1">
                     <div>{highlightText(post.title, search)}</div>
-                    <div className="flex flex-wrap gap-1">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                            tag === selectedTag
-                              ? "text-white bg-blue-500 hover:bg-blue-600"
-                              : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                          }`}
-                          onClick={async () => {
-                            handleUpdateQuery("tag", tag);
-                            await actions.fetchPostsByTag(tag);
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    <PostTableRowTags post={post} />
                   </div>
                 </Table.Cell>
                 <Table.Cell>
@@ -78,34 +62,14 @@ const TablePosts = () => {
                   </div>
                 </Table.Cell>
                 <Table.Cell>
-                  <div className="flex items-center gap-2">
-                    {/* 게시물 상세 보기 대화상자 */}
-                    <ModalPostDetail post={post} />
-
-                    <ModalEditPost post={post} />
-                    <Button variant="ghost" size="sm" onClick={async () => await actions.deletePost(post.id)}>
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  <PostTableRowActions post={post} />
                 </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table.Container>
       )}
-      <Pagination
-        size={limit}
-        setSize={async (size) => {
-          handleUpdateQuery("limit", size.toString());
-          await actions.fetchPosts({ limit: size, skip });
-        }}
-        page={skip}
-        setPage={async (page) => {
-          handleUpdateQuery("skip", page.toString());
-          await actions.fetchPosts({ limit, skip: page });
-        }}
-        total={total}
-      />
+      <PostPagination />
     </>
   );
 };

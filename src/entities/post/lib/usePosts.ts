@@ -4,15 +4,6 @@ import { userApi } from "@/entities/user/api/userApi";
 import { findById } from "@/shared/lib/array";
 import { useCallback, useMemo, useState } from "react";
 
-type FetchPostsProps = {
-  limit?: number;
-  skip?: number;
-  sortBy?: string;
-  sortOrder?: string;
-  search?: string;
-  tag?: string;
-};
-
 type UseSearchPostsProps = {
   searchQuery: string;
   limit: number;
@@ -33,10 +24,16 @@ const usePosts = () => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const fetchPosts = useCallback(async (props?: FetchPostsProps) => {
+  const loadingHandler = async <T>(...props: Parameters<typeof handler>): Promise<T> => {
     setLoading(true);
+    const data = await handler(...props);
+    setLoading(false);
+    return data as T;
+  };
+
+  const fetchPosts = useCallback(async (props?: { limit: number; skip: number }) => {
     const { posts, total } = await handler(
-      () => postApi.getPosts(props || {}),
+      () => postApi.getPosts(props || { limit: 10, skip: 0 }),
       (error) => console.error("게시물 가져오기 오류:", error),
     );
     const users = await userApi.getUsers({ select: ["username", "image"] });
