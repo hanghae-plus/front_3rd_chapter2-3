@@ -5,7 +5,7 @@ import { likeComment } from "../model/likeComment"
 import { highlightText } from "../../../shared/ui"
 import { deleteComment } from "../model/deleteComment"
 import { Comment } from "../types/types"
-import { fetchComments } from "../model/fetchComment"
+import { fetchComments } from "../model/commentFetch.tsx"
 
 interface Props {
   postId: number | null
