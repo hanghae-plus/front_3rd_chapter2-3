@@ -98,6 +98,18 @@ export const postApi = {
       return response
     } catch (error) {
       console.error("게시물 추가 오류:", error)
+      throw error
+    }
+  },
+
+  /** 게시물 업데이트 */
+  updatePost: async (selectedPost: Post) => {
+    try {
+      const response = await safeFetch.put<Post>(`/api/posts/${selectedPost.id}`, selectedPost)
+      return response
+    } catch (error) {
+      console.error("게시물 업데이트 오류:", error)
+      throw error
     }
   },
 }
