@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { SelectedUser, User } from "../../../temp/types.ts";
 import { getUserInfo } from "../../../entities/user/api";
+import { SelectedUser, User } from "../../../entities/user/model/types.ts";
 
 export const useUser = () => {
   const [showUserModal, setShowUserModal] = useState<boolean>(false);

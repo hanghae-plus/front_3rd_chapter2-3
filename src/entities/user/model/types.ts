@@ -1,22 +1,4 @@
-export interface Post {
-  author?: User;
-  id: number;
-  body: string;
-  reactions?: {
-    likes: number;
-    dislikes: number;
-  };
-  tags?: string[];
-  title: string;
-  userId: number;
-  views?: number;
-}
-
-export interface NewPost {
-  title: string;
-  body: string;
-  userId: number;
-}
+import { ResponseData } from "../../../temp/types.ts";
 
 export interface User {
   id: number;
@@ -24,46 +6,8 @@ export interface User {
   username: string;
 }
 
-export interface NewComment {
-  body: string;
-  postId: number | null;
-  userId: number;
-}
-
-export interface Comments {
-  body: string;
-  id: number;
-  likes: number;
-  postId: number;
-  user: {
-    fullName: string;
-    id: number;
-    username: string;
-  };
-}
-
-export interface Tag {
-  name: string;
-  slug: string;
-  url: string;
-}
-
-export interface ResponseData {
-  limit: number;
-  total: number;
-  skip: number;
-}
-
-export interface PostResponse extends ResponseData {
-  posts: Post[];
-}
-
 export interface UserResponse extends ResponseData {
   users: User[];
-}
-
-export interface CommentResponse extends ResponseData {
-  comments: Comments[];
 }
 
 export interface SelectedUser {

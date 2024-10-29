@@ -1,5 +1,4 @@
-import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { Comments, NewComment } from "../../../temp/types.ts";
+import React, { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 import {
   deleteExistingComment,
   getComments,
@@ -7,6 +6,7 @@ import {
   postNewComment,
   putExistingComment,
 } from "../../../entities/comment/api";
+import { Comments, NewComment } from "../../../entities/comment/model/types.ts";
 
 interface CommentContextProps {
   comments: Record<number, Comments[]>;
@@ -32,24 +32,19 @@ export const CommentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [comments, setComments] = useState<Record<number, Comments[]>>([]);
   const [selectedComment, setSelectedComment] = useState<Comments>();
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 });
+
   const [showAddCommentDialog, setShowAddCommentDialog] = useState<boolean>(false);
   const [showEditCommentDialog, setShowEditCommentDialog] = useState<boolean>(false);
 
   const fetchComments = async (postId: number) => {
-    if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+    if (comments[postId]) return;
 
     const data = await getComments(postId);
 
-    console.log(data, "comment", postId);
     if (data) {
       setComments((prev) => ({ ...prev, [postId]: data.comments }));
-      console.log(comments);
     }
   };
-
-  useEffect(() => {
-    console.log(comments, "context");
-  }, [comments]);
 
   const addComment = async () => {
     const data = await postNewComment(newComment);

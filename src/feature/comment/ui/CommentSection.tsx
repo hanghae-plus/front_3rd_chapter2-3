@@ -1,8 +1,8 @@
 import { Button, HighlightText } from "../../../shared/ui";
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
-import { Comments } from "../../../temp/types.ts";
 import { useCommentContext } from "../model/CommentContext.tsx";
 import { usePostContext } from "../../post/model/PostContext.tsx";
+import { Comments } from "../../../entities/comment/model/types.ts";
 
 interface CommentSectionProps {
   postId: number;

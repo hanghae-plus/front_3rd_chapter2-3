@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, CardContent } from "../shared/ui";
 import { UserModal } from "../feature/user/ui";
 import {
@@ -13,8 +12,6 @@ import { AddCommentDialog, EditCommentDialog } from "../feature/comment/ui";
 import { PostTableWidget } from "../widgets/post/ui";
 
 const PostsManager = () => {
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false);
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <PostHeader />
@@ -24,7 +21,7 @@ const PostsManager = () => {
           <PostSearchBar />
 
           {/*/!* 게시물 테이블 *!/*/}
-          <PostTableWidget setShowPostDetailDialog={setShowPostDetailDialog} />
+          <PostTableWidget />
 
           {/* 페이지네이션 */}
           <PostPagination />
@@ -44,7 +41,7 @@ const PostsManager = () => {
       <EditCommentDialog />
 
       {/* 게시물 상세 보기 대화상자 */}
-      <DetailPostDialog isOpen={showPostDetailDialog} onClose={() => setShowPostDetailDialog(false)} />
+      <DetailPostDialog />
 
       {/* 사용자 모달 */}
       <UserModal />

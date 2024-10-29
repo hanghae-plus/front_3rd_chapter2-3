@@ -11,7 +11,7 @@ import {
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { usePostContext } from "../model/PostContext.tsx";
 import { useUser } from "../../user/model";
-import { Post } from "../../../temp/types.ts";
+import { Post } from "../../../entities/post/model/types.ts";
 
 interface PostTableProps {
   openPostDetail: (post: Post) => void;

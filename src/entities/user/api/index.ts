@@ -1,4 +1,4 @@
-import { User } from "../../../temp/types.ts";
+import { User } from "../model/types.ts";
 
 export const getUserInfo = async (user: User) => {
   try {

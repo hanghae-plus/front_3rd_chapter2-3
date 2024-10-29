@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { NewPost, Post, Tag, User } from "../../../temp/types.ts";
 import { useNavigate } from "react-router-dom";
 import {
   deleteExistingPost,
@@ -10,6 +9,8 @@ import {
   postNewPost,
   putExistingPost,
 } from "../../../entities/post/api";
+import { NewPost, Post, Tag } from "../../../entities/post/model/types.ts";
+import { User } from "../../../entities/user/model/types.ts";
 
 interface PostContextProps {
   posts: Post[];
@@ -44,6 +45,8 @@ interface PostContextProps {
   setShowEditDialog: (value: boolean) => void;
   searchPosts: () => void;
   updateURL: () => void;
+  showPostDetailDialog: boolean;
+  setShowPostDetailDialog: (showPostDetailDialog: boolean) => void;
 }
 
 const PostContext = createContext<PostContextProps | undefined>(undefined);
@@ -66,6 +69,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>(queryParams.get("tag") || "");
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false);
 
   const updateURL = () => {
     const params = new URLSearchParams();
@@ -177,6 +181,16 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSkip(parseInt(params.get("skip") || "0"));
+    setLimit(parseInt(params.get("limit") || "10"));
+    setSearchQuery(params.get("search") || "");
+    setSortBy(params.get("sortBy") || "");
+    setSortOrder(params.get("sortOrder") || "asc");
+    setSelectedTag(params.get("tag") || "");
+  }, [location.search]);
+
+  useEffect(() => {
     fetchTags();
   }, []);
 
@@ -188,16 +202,6 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     updateURL();
   }, [skip, limit, sortBy, sortOrder, selectedTag]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setSkip(parseInt(params.get("skip") || "0"));
-    setLimit(parseInt(params.get("limit") || "10"));
-    setSearchQuery(params.get("search") || "");
-    setSortBy(params.get("sortBy") || "");
-    setSortOrder(params.get("sortOrder") || "asc");
-    setSelectedTag(params.get("tag") || "");
-  }, [location.search]);
 
   return (
     <PostContext.Provider
@@ -216,6 +220,8 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
         searchQuery,
         sortBy,
         sortOrder,
+        showPostDetailDialog,
+        setShowPostDetailDialog,
         fetchPosts,
         fetchPostsByTag,
         fetchTags,

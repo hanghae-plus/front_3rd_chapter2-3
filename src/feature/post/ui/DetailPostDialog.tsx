@@ -2,16 +2,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, HighlightText } from 
 import { CommentSection } from "../../comment/ui";
 import { usePostContext } from "../model/PostContext.tsx";
 
-interface DialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const DetailPostDialog = ({ isOpen, onClose }: DialogProps) => {
-  const { searchQuery, selectedPost } = usePostContext();
+export const DetailPostDialog = () => {
+  const { searchQuery, selectedPost, showPostDetailDialog, setShowPostDetailDialog } = usePostContext();
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
       {selectedPost && (
         <DialogContent className="max-w-3xl">
           <DialogHeader>

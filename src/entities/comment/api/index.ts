@@ -1,4 +1,4 @@
-import { CommentResponse, Comments, NewComment } from "../../../temp/types.ts";
+import { CommentResponse, Comments, NewComment } from "../model/types.ts";
 
 export const getComments = async (postId: number): Promise<CommentResponse | undefined> => {
   try {

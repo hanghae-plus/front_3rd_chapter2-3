@@ -1,4 +1,5 @@
-import { NewPost, Post, PostResponse, Tag, UserResponse } from "../../../temp/types.ts";
+import { NewPost, Post, PostResponse, Tag } from "../model/types.ts";
+import { UserResponse } from "../../user/model/types.ts";
 
 export const getPosts = async (
   limit: number,
