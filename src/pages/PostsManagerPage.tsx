@@ -9,6 +9,7 @@ import Textarea from "../shared/ui/TextArea"
 import Select from "../shared/ui/Select"
 import Dialog from "../shared/ui/Dialog"
 import Table from "../shared/ui/Table"
+import HighlightText from "../shared/ui/HighlightText"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -309,21 +310,6 @@ const PostsManager = () => {
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
 
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
-
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
     <Table.Table>
@@ -342,7 +328,9 @@ const PostsManager = () => {
             <Table.TableCell>{post.id}</Table.TableCell>
             <Table.TableCell>
               <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
+                <div>
+                  <HighlightText text={post.title} highlight={searchQuery} />
+                </div>
 
                 <div className="flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
@@ -425,7 +413,9 @@ const PostsManager = () => {
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
             <div className="flex items-center space-x-2 overflow-hidden">
               <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+              <span className="truncate">
+                <HighlightText text={comment.body} highlight={searchQuery} />
+              </span>
             </div>
             <div className="flex items-center space-x-1">
               <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
@@ -642,10 +632,14 @@ const PostsManager = () => {
       <Dialog.Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
         <Dialog.DialogContent className="max-w-3xl">
           <Dialog.DialogHeader>
-            <Dialog.DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</Dialog.DialogTitle>
+            <Dialog.DialogTitle>
+              <HighlightText text={selectedPost?.title} highlight={searchQuery} />
+            </Dialog.DialogTitle>
           </Dialog.DialogHeader>
           <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
+            <p>
+              <HighlightText text={selectedPost?.body} highlight={searchQuery} />
+            </p>
             {renderComments(selectedPost?.id)}
           </div>
         </Dialog.DialogContent>
