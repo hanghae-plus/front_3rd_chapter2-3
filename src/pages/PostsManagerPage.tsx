@@ -173,7 +173,7 @@ const PostsManager = () => {
   }
 
   // 게시물 삭제
-  const deletePost = async (id: string) => {
+  const deletePost = async (id: number) => {
     try {
       await deletePostApi(id);
       setPosts(posts.filter((post) => post.id !== id))
@@ -183,7 +183,7 @@ const PostsManager = () => {
   }
 
   // 댓글 가져오기
-  const fetchComments = async (postId: string) => {
+  const fetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
       const data = await fetchCommentsApi(postId);
@@ -212,7 +212,10 @@ const PostsManager = () => {
   // 댓글 업데이트
   const updateComment = async () => {
     try {
-      const data = await updateCommentApi(selectedComment.id, selectedComment.body);
+      const updatedComment = {
+        body: selectedComment.body
+      }
+      const data = await updateCommentApi(selectedComment.id, updatedComment);
       setComments((prev) => ({
         ...prev,
         [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
@@ -224,7 +227,7 @@ const PostsManager = () => {
   }
 
   // 댓글 삭제
-  const deleteComment = async (id, postId) => {
+  const deleteComment = async (id: number, postId: number) => {
     try {
       await deleteCommentApi(id);
       setComments((prev) => ({
@@ -237,7 +240,7 @@ const PostsManager = () => {
   }
 
   // 댓글 좋아요
-  const likeComment = async (id, postId) => {
+  const likeComment = async (id: number, postId: number) => {
     try {
       const updatedLikes = comments[postId].find((c) => c.id === id).likes + 1;
       const data = await likeCommentApi(id, updatedLikes)

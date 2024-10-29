@@ -10,19 +10,30 @@ const apiBase = axios.create({
 });
 
 const apiClient = {
-  get: <T>(url: string, params?: any, config?: AxiosRequestConfig) =>
-    apiBase.get<T>(url, { ...config, params }).then((r) => r.data),
+  get: async <T>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> => {
+    const response = await apiBase.get<T>(url, { ...config, params });
+    return response.data;
+  },
 
-  post: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-    apiBase.post<T>(url, data, config).then((r) => r.data),
+  post: async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+    const response = await apiBase.post<T>(url, data, config);
+    return response.data;
+  },
 
-  put: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-    apiBase.put<T>(url, data, config).then((r) => r.data),
+  put: async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+    const response = await apiBase.put<T>(url, data, config);
+    return response.data;
+  },
 
-  patch: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-    apiBase.put<T>(url, data, config).then((r) => r.data),
+  patch: async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+    const response = await apiBase.patch<T>(url, data, config);
+    return response.data;
+  },
 
-  delete: <T>(url: string, config?: AxiosRequestConfig) => apiBase.delete<T>(url, config).then((r) => r.data),
+  delete: async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
+    const response = await apiBase.delete<T>(url, config);
+    return response.data;
+  },
 };
 
 export default apiClient;
