@@ -9,7 +9,12 @@ import {
   updateComment as updateCommentApi,
 } from '~/entities/comment/api/commentApi';
 import { CommentResponseDto } from '~/entities/comment/api/type';
-import { addPost as addPostApi, fetchAllPosts, updatePost as updatePostApi } from '~/entities/post/api/postApi';
+import {
+  addPost as addPostApi,
+  deletePost as deletePostApi,
+  fetchAllPosts,
+  updatePost as updatePostApi,
+} from '~/entities/post/api/postApi';
 import { PostResponseDto } from '~/entities/post/api/type';
 import { fetchAllPostTags, fetchPostsByTag as fetchPostsByTagApi } from '~/entities/tag/api/tagApi';
 import { TagResponseDto } from '~/entities/tag/api/type';
@@ -166,7 +171,7 @@ const PostsManager = () => {
   // 게시물 삭제
   const deletePost = async (id: number) => {
     try {
-      await deletePost(id);
+      await deletePostApi(id);
       setPosts(posts.filter((post) => post.id !== id));
     } catch (error) {
       console.error('게시물 삭제 오류:', error);
@@ -329,7 +334,7 @@ const PostsManager = () => {
                 <div>{highlightText(post.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
+                  {post.tags?.map((tag) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
