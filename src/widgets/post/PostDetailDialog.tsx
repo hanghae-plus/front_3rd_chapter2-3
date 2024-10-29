@@ -32,24 +32,33 @@ const PostDetailDialog = ({
   setComments,
 }: Props) => {
   // 댓글 삭제
-  const deleteComment = async (id: number, postId: number) => {
-    await deleteCommentApi(id)
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].filter((comment) => comment.id !== id),
-    }))
-  }
-  // 댓글 좋아요
-  const likeComment = async (id: number, postId: number) => {
-    const newLikes = comments[postId].find((c) => c.id === id)?.likes || 0 + 1
-    const data = await likeCommentApi(id, newLikes)
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
-    }))
+
+  const CommentLikeButton = ({ comment, postId }: { comment: Comment; postId: PostId }) => {
+    // 댓글 좋아요
+    const likeComment = async (id: number, postId: number) => {
+      const newLikes = comments[postId].find((c) => c.id === id)?.likes || 0 + 1
+      const data = await likeCommentApi(id, newLikes)
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+      }))
+    }
+    return (
+      <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+        <ThumbsUp className="w-3 h-3" />
+        <span className="ml-1 text-xs">{comment.likes}</span>
+      </Button>
+    )
   }
 
   const CommentItem = ({ comment, postId }: { comment: Comment; postId: PostId }) => {
+    const deleteComment = async (id: number, postId: number) => {
+      await deleteCommentApi(id)
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].filter((comment) => comment.id !== id),
+      }))
+    }
     return (
       <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
         <div className="flex items-center space-x-2 overflow-hidden">
@@ -59,10 +68,7 @@ const PostDetailDialog = ({
           </span>
         </div>
         <div className="flex items-center space-x-1">
-          <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
-            <ThumbsUp className="w-3 h-3" />
-            <span className="ml-1 text-xs">{comment.likes}</span>
-          </Button>
+          <CommentLikeButton comment={comment} postId={postId} />
           <Button
             variant="ghost"
             size="sm"
@@ -81,7 +87,7 @@ const PostDetailDialog = ({
     )
   }
   // 댓글 렌더링
-  const renderComments = (postId: number) => (
+  const CommentContent = ({ postId }: { postId: PostId }) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
@@ -113,7 +119,7 @@ const PostDetailDialog = ({
           <p>
             <HighlightText text={selectedPost?.body} highlight={searchQuery} />
           </p>
-          {renderComments(selectedPost?.id as number)}
+          <CommentContent postId={selectedPost?.id as number} />
         </div>
       </DialogContent>
     </Dialog>

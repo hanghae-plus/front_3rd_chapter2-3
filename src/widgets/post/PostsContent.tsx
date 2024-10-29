@@ -85,71 +85,25 @@ const PostsContent = ({
   setSkip,
   total,
 }: Props) => {
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
+  const PostAuthor = ({ author }: { author: Post["author"] }) => {
+    // 사용자 모달 열기
+    const openUserModal = async (user: User) => {
+      try {
+        const response = await fetch(`/api/users/${user.id}`)
+        const userData = await response.json()
+        setSelectedUser(userData)
+        setShowUserModal(true)
+      } catch (error) {
+        console.error("사용자 정보 가져오기 오류:", error)
+      }
     }
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
-    setLoading(false)
+    return (
+      <div className="flex items-center space-x-2 cursor-pointer" onClick={() => author && openUserModal(author)}>
+        <img src={author?.image} alt={author?.username} className="w-8 h-8 rounded-full" />
+        <span>{author?.username}</span>
+      </div>
+    )
   }
-
-  // 게시물 삭제
-  const deletePost = async (id: number) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
-    }
-  }
-
-  // 댓글 가져오기
-  const fetchComments = async (postId: number) => {
-    if (comments?.[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      setComments((prev: Comments) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
-    }
-  }
-
-  // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
-
-  // 사용자 모달 열기
-  const openUserModal = async (user: User) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
-  const PostAuthor = ({ author }: { author: Post["author"] }) => (
-    <div className="flex items-center space-x-2 cursor-pointer" onClick={() => author && openUserModal(author)}>
-      <img src={author?.image} alt={author?.username} className="w-8 h-8 rounded-full" />
-      <span>{author?.username}</span>
-    </div>
-  )
   const PostReaction = ({ reactions }: { reactions: Post["reactions"] }) => (
     <div className="flex items-center gap-2">
       <ThumbsUp className="w-4 h-4" />
@@ -158,49 +112,81 @@ const PostsContent = ({
       <span>{reactions?.dislikes || 0}</span>
     </div>
   )
-  const PostTableRow = ({ post }: { key: Key; post: Post }) => (
-    <TableRow key={post.id}>
-      <TableCell>{post.id}</TableCell>
-      <TableCell>
-        <div className="space-y-1">
-          <div>
-            <HighlightText text={post.title} highlight={searchQuery} />
+  const PostTableRow = ({ post }: { key: Key; post: Post }) => {
+    // 댓글 가져오기
+    const fetchComments = async (postId: number) => {
+      if (comments?.[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+      try {
+        const response = await fetch(`/api/comments/post/${postId}`)
+        const data = await response.json()
+        setComments((prev: Comments) => ({ ...prev, [postId]: data.comments }))
+      } catch (error) {
+        console.error("댓글 가져오기 오류:", error)
+      }
+    }
+
+    // 게시물 상세 보기
+    const openPostDetail = (post: Post) => {
+      setSelectedPost(post)
+      fetchComments(post.id)
+      setShowPostDetailDialog(true)
+    }
+    // 게시물 삭제
+    const deletePost = async (id: number) => {
+      try {
+        await fetch(`/api/posts/${id}`, {
+          method: "DELETE",
+        })
+        setPosts(posts.filter((post) => post.id !== id))
+      } catch (error) {
+        console.error("게시물 삭제 오류:", error)
+      }
+    }
+
+    return (
+      <TableRow key={post.id}>
+        <TableCell>{post.id}</TableCell>
+        <TableCell>
+          <div className="space-y-1">
+            <div>
+              <HighlightText text={post.title} highlight={searchQuery} />
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {post.tags.map((tag: TagName) => (
+                <PostTag key={tag} tag={tag} selectedTag={selectedTag} />
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1">
-            {post.tags.map((tag: TagName) => (
-              <PostTag key={tag} tag={tag} selectedTag={selectedTag} />
-            ))}
+        </TableCell>
+        <TableCell>
+          <PostAuthor author={post.author} />
+        </TableCell>
+        <TableCell>
+          <PostReaction reactions={post.reactions} />
+        </TableCell>
+        <TableCell>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+              <MessageSquare className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSelectedPost(post)
+                setShowEditDialog(true)
+              }}
+            >
+              <Edit2 className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+              <Trash2 className="w-4 h-4" />
+            </Button>
           </div>
-        </div>
-      </TableCell>
-      <TableCell>
-        <PostAuthor author={post.author} />
-      </TableCell>
-      <TableCell>
-        <PostReaction reactions={post.reactions} />
-      </TableCell>
-      <TableCell>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-            <MessageSquare className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setSelectedPost(post)
-              setShowEditDialog(true)
-            }}
-          >
-            <Edit2 className="w-4 h-4" />
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
-      </TableCell>
-    </TableRow>
-  )
+        </TableCell>
+      </TableRow>
+    )
+  }
   // 게시물 테이블 렌더링
   const PostTable = () => (
     <Table>
@@ -234,24 +220,45 @@ const PostsContent = ({
       {tag}
     </span>
   )
+  const PostSearch = () => {
+    const searchPosts = async () => {
+      if (!searchQuery) {
+        fetchPosts()
+        return
+      }
+      setLoading(true)
+      try {
+        const response = await fetch(`/api/posts/search?q=${searchQuery}`)
+        const data = await response.json()
+        setPosts(data.posts)
+        setTotal(data.total)
+      } catch (error) {
+        console.error("게시물 검색 오류:", error)
+      }
+      setLoading(false)
+    }
+    return (
+      <div className="flex-1">
+        <div className="relative">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="게시물 검색..."
+            className="pl-8"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+          />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <CardContent>
       <div className="flex flex-col gap-4">
         {/* 검색 및 필터 컨트롤 */}
         <div className="flex gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="게시물 검색..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && searchPosts()}
-              />
-            </div>
-          </div>
+          <PostSearch />
           <Select
             value={selectedTag}
             onValueChange={(value) => {
