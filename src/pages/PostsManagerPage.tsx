@@ -100,6 +100,18 @@ const PostsManager = () => {
     })
   }, [skip, limit, searchQuery, sortBy, sortOrder, selectedTag, updateURL])
 
+  const handleTagChange = (tag: string) => {
+    setSelectedTag(tag)
+    if (tag === "all") {
+      fetchPosts()
+    } else {
+      fetchPostsByTag(tag)
+    }
+    updateURL({
+      tag
+    })
+  }
+
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
@@ -124,18 +136,7 @@ const PostsManager = () => {
               if (value !== searchQuery) return;
               searchPosts();
             }}
-            onTagChange={(value) => {
-              setSelectedTag(value);
-              fetchPostsByTag(value);
-              updateURL({
-                skip: skip.toString(),
-                limit: limit.toString(),
-                search: searchQuery,
-                sortBy,
-                sortOrder,
-                tag: value
-              });
-            }}
+            onTagChange={handleTagChange}
             onSortByChange={(value) => setSortBy(value)}
             onSortOrderChange={(value) => setSortOrder(value)}
           />
