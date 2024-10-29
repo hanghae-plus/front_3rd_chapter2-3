@@ -1,7 +1,7 @@
 import { Post } from "@/entities/post/model/types";
 
-import PostTableRowActions from "@/features/post-table/ui/PostTableRowActions";
-import PostTableRowTags from "@/features/post-table/ui/PostTableRowTags";
+import PostTableRowActions from "@/features/post/ui/table/PostTableRowActions";
+import PostTableRowTags from "@/features/post/ui/table/PostTableRowTags";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
 import { useNavigator } from "@/shared/lib/useNavigator";
 

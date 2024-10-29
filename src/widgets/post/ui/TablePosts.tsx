@@ -3,8 +3,8 @@ import PostPagination from "@/features/post/ui/PostPagination";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Table } from "@/shared/ui";
 
-import PostTableIRow from "@/features/post-table/ui/PostTableIRow";
 import usePostsStore from "@/features/post/model/usePostsStore";
+import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 
