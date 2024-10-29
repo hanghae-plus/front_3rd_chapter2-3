@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import { Card, CardContent } from "../shared/ui";
-
 import { UserModal } from "../feature/user/ui";
 import {
   AddPostDialog,
@@ -20,7 +18,6 @@ const PostsManager = () => {
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <PostHeader />
-
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}

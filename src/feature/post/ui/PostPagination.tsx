@@ -3,6 +3,7 @@ import { usePostContext } from "../model/PostContext.tsx";
 
 export const PostPagination = () => {
   const { limit, skip, total, setSkip, setLimit } = usePostContext();
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">

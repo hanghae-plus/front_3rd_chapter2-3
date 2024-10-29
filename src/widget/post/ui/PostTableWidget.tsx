@@ -3,7 +3,11 @@ import { usePostContext } from "../../../feature/post/model/PostContext.tsx";
 import { Post } from "../../../temp/types.ts";
 import { useCommentContext } from "../../../feature/comment/model/CommentContext.tsx";
 
-export const PostTableWidget = ({ setShowPostDetailDialog }) => {
+interface PostTableWidgetProps {
+  setShowPostDetailDialog: (isShowPostDetailDialog: boolean) => void;
+}
+
+export const PostTableWidget = ({ setShowPostDetailDialog }: PostTableWidgetProps) => {
   const { loading, setSelectedPost } = usePostContext();
   const { fetchComments } = useCommentContext();
 

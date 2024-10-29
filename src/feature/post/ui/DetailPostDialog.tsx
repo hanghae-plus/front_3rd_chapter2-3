@@ -2,17 +2,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, HighlightText } from 
 import { CommentSection } from "../../comment/ui";
 import { usePostContext } from "../model/PostContext.tsx";
 
-export const DetailPostDialog = ({ isOpen, onClose }) => {
-  const {
-    searchQuery,
-    selectedPost,
-    setNewComment,
-    setSelectedComment,
-    setShowAddCommentDialog,
-    setShowEditCommentDialog,
-    likeComment,
-    deleteComment,
-  } = usePostContext();
+interface DialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const DetailPostDialog = ({ isOpen, onClose }: DialogProps) => {
+  const { searchQuery, selectedPost } = usePostContext();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -23,16 +19,7 @@ export const DetailPostDialog = ({ isOpen, onClose }) => {
           </DialogHeader>
           <div className="space-y-4">
             <p>{HighlightText(selectedPost.body, searchQuery)}</p>
-            <CommentSection
-              postId={selectedPost.id}
-              setNewComment={setNewComment}
-              setSelectedComment={setSelectedComment}
-              setShowAddCommentDialog={setShowAddCommentDialog}
-              setShowEditCommentDialog={setShowEditCommentDialog}
-              searchQuery={searchQuery}
-              likeComment={likeComment}
-              deleteComment={deleteComment}
-            />
+            <CommentSection postId={selectedPost.id} />
           </div>
         </DialogContent>
       )}

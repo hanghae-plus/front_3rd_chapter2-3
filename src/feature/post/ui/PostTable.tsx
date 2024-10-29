@@ -11,8 +11,13 @@ import {
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { usePostContext } from "../model/PostContext.tsx";
 import { useUser } from "../../user/model";
+import { Post } from "../../../temp/types.ts";
 
-export const PostTable = ({ openPostDetail }) => {
+interface PostTableProps {
+  openPostDetail: (post: Post) => void;
+}
+
+export const PostTable = ({ openPostDetail }: PostTableProps) => {
   const { posts, searchQuery, selectedTag, setSelectedTag, updateURL, deletePost, setSelectedPost, setShowEditDialog } =
     usePostContext();
 
@@ -77,7 +82,6 @@ export const PostTable = ({ openPostDetail }) => {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    console.log("click!", post);
                     openPostDetail(post);
                   }}
                 >
