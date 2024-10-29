@@ -1,4 +1,4 @@
-import { ResponseData } from "../../../temp/types.ts";
+import { ResponseData } from "../../../types.ts";
 
 export interface User {
   id: number;
