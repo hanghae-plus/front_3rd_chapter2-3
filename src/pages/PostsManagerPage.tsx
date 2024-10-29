@@ -1,10 +1,9 @@
 import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Comment, CreateCommentRequest, fetchComments } from "../entities/comment"
-import { CreatePostRequest, fetchPosts, fetchPostsByTag, PostTag, PostWithUser } from "../entities/post"
+import { fetchComments } from "../entities/comment"
+import { fetchPosts, fetchPostsByTag } from "../entities/post"
 import { fetchTags } from "../entities/tag/api/get"
-import { UserData } from "../entities/user/model/types"
 import { updatePost } from "../features/posts/api/editPostApi"
 import AddPostDialog from "../features/posts/ui/AddPostDialog"
 import EditPostDialog from "../features/posts/ui/EditPostDialog"
@@ -22,28 +21,28 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리 - 개별 타입 적용
-  const [posts, setPosts] = useState<PostWithUser[]>([])
-  const [total, setTotal] = useState<number>(0)
-  const [skip, setSkip] = useState<number>(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState<number>(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState<string>(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState<PostWithUser | null>(null)
-  const [sortBy, setSortBy] = useState<string>(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">((queryParams.get("sortOrder") as "asc" | "desc") || "asc")
-  const [showAddDialog, setShowAddDialog] = useState<boolean>(false)
-  const [showEditDialog, setShowEditDialog] = useState<boolean>(false)
-  const [newPost, setNewPost] = useState<CreatePostRequest>({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState<boolean>(false)
-  const [tags, setTags] = useState<PostTag[]>([])
-  const [selectedTag, setSelectedTag] = useState<string>(queryParams.get("tag") || "")
-  const [comments, setComments] = useState<Record<number, Comment[]>>({})
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [newComment, setNewComment] = useState<CreateCommentRequest>({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState<boolean>(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState<boolean>(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false)
-  const [showUserModal, setShowUserModal] = useState<boolean>(false)
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
+  const [posts, setPosts] = useState([])
+  const [total, setTotal] = useState(0)
+  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
+  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
+  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
+  const [selectedPost, setSelectedPost] = useState(null)
+  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
+  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+  const [showAddDialog, setShowAddDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const [loading, setLoading] = useState(false)
+  const [tags, setTags] = useState([])
+  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+  const [comments, setComments] = useState({})
+  const [selectedComment, setSelectedComment] = useState(null)
+  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
+  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+  const [showUserModal, setShowUserModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -76,17 +75,17 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post: PostWithUser): void => {
+  const openPostDetail = (post) => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user: UserData): Promise<void> => {
+  const openUserModal = async (user) => {
     try {
       const response = await fetch(`/api/users/${user.id}`)
-      const userData: UserData = await response.json()
+      const userData = await response.json()
       setSelectedUser(userData)
       setShowUserModal(true)
     } catch (error) {
@@ -113,7 +112,7 @@ const PostsManager = () => {
     setLimit(parseInt(params.get("limit") || "10"))
     setSearchQuery(params.get("search") || "")
     setSortBy(params.get("sortBy") || "")
-    setSortOrder((params.get("sortOrder") as "asc" | "desc") || "asc")
+    setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
 
@@ -170,7 +169,7 @@ const PostsManager = () => {
             />
             <Select
               value={sortOrder}
-              onValueChange={(value) => setSortOrder(value as "asc" | "desc")}
+              onValueChange={(value) => setSortOrder(value)}
               placeholder="정렬 순서"
               options={[
                 { value: "asc", label: "오름차순" },
@@ -195,8 +194,6 @@ const PostsManager = () => {
               setShowEditDialog={setShowEditDialog}
             />
           )}
-
-          {/* 페이지네이션 */}
           <PostsPagination
             total={total}
             limit={limit}

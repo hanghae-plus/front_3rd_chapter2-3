@@ -3,9 +3,8 @@ import { deletePost } from "../../../entities/post"
 import { highlightText } from "../../../shared"
 import { Button } from "../../../shared/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/table"
-import { PostTableProps } from "../model/types"
 
-const PostTable = ({ posts, selectedTag }: PostTableProps) => {
+const PostTable = ({ posts, selectedTag }) => {
   return (
     <Table>
       <TableHeader>

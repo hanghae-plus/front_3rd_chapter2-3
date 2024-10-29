@@ -1,7 +1,6 @@
 import { Pagination } from "../../../shared/ui/pagination/Pagination"
-import { PostsPaginationProps } from "../model/type"
 
-export const PostsPagination = ({ total, limit, skip, setSkip, setLimit, updateURL }: PostsPaginationProps) => {
+export const PostsPagination = ({ total, limit, skip, setSkip, setLimit, updateURL }) => {
   const onNext = () => {
     setSkip(skip + limit)
     updateURL()

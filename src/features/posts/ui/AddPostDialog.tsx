@@ -1,4 +1,4 @@
-import { addPost, CreatePostRequest } from "../../../entities/post"
+import { addPost } from "../../../entities/post"
 import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Input } from "../../../shared/ui/input"

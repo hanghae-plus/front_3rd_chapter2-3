@@ -1,8 +1,8 @@
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import { deleteComment, likeComment } from "../../../entities/comment"
-import { highlightText } from "../../../shared"
-import { Button } from "../../../shared/ui/button"
-import { CommentListProps } from "../../../widgets/CommentList/model/type"
+import { deleteComment, likeComment } from "../../../../entities/comment"
+import { highlightText } from "../../../../shared"
+import { Button } from "../../../../shared/ui/button"
+import { CommentListProps } from "../../../../widgets/CommentList/model/type"
 
 const CommentList = ({ comments, postId }: CommentListProps) => {
   return (

@@ -1,6 +1,6 @@
 import { highlightText } from "../../../shared"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
-import CommentList from "../../comments/ui/CommentList"
+import CommentList from "../../comments/ui/CommentList/CommentList"
 
 const PostDetailDialog = () => {
   return (
