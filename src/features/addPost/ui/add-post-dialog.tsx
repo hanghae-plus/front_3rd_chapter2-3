@@ -8,8 +8,6 @@ import {
   Textarea,
 } from "@/shared/ui";
 import AddNewPost from "@/features/addPost/model/add-new-post";
-import { postListState } from "@/entities/post/model/post-state";
-import { useEffect } from "react";
 
 interface AddDialogProps {
   isOpen: boolean;
@@ -18,12 +16,6 @@ interface AddDialogProps {
 
 const AddPostDialog = ({ isOpen, close }: AddDialogProps) => {
   const { newPost, updateNewPost, addPost } = AddNewPost();
-
-  const { postList } = postListState();
-
-  useEffect(() => {
-    console.log(postList);
-  }, [postList]);
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
