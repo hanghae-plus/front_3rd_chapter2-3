@@ -13,7 +13,7 @@ export interface Post {
   id: number
   title: string
   body: string
-  author: Author
+  author?: Author
   reactions: Reactions
   tags: string[]
   userId: number
