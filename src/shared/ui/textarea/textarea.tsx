@@ -1,6 +1,14 @@
-import { forwardRef } from "react";
+import { ChangeEvent, forwardRef } from "react";
 
-export const Textarea = forwardRef<HTMLTextAreaElement, { className: string }>(
+interface TextareaProps {
+  className?: string;
+  rows?: number;
+  placeholder?: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
     return (
       <textarea

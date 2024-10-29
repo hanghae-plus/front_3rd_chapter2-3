@@ -1,6 +1,14 @@
-import { forwardRef } from "react";
+import { ChangeEvent, forwardRef } from "react";
 
-export const Input = forwardRef<HTMLInputElement, { className: string; type: string }>(
+interface InputProps {
+  className?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
