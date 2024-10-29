@@ -112,4 +112,13 @@ export const postApi = {
       throw error
     }
   },
+
+  deletePost: async (id: number) => {
+    try {
+      const response = await safeFetch.delete<Post>(`/api/posts/${id}`)
+      return response
+    } catch (error) {
+      console.error("게시물 삭제 오류:", error)
+    }
+  },
 }
