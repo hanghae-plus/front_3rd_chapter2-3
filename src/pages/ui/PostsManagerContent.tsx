@@ -1,5 +1,4 @@
 import { Search } from "lucide-react"
-import { User } from "../model/User"
 import { Input } from "../../shared/ui/input/Input"
 import { CardContent } from "../../shared/ui/card/Card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/select/Select"
@@ -9,13 +8,13 @@ import PostTable from "./PostTable"
 import Pagination from "./Pagination"
 import { usePost } from "../../features/post/model/usePost"
 import { useTag } from "../../features/tags/model/useTag"
+import { useUser } from "../../features/user/model/useUser"
 
 interface Props {
   searchQuery: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
   setTotal: React.Dispatch<React.SetStateAction<number>>
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
   updateURL: () => void
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
@@ -37,7 +36,6 @@ const PostsManagerContent = ({
   setLoading,
   setTotal,
   setShowPostDetailDialog,
-  setSelectedUser,
   setShowUserModal,
   updateURL,
   setShowEditDialog,
@@ -55,6 +53,7 @@ const PostsManagerContent = ({
 }: Props) => {
   const { setPosts } = usePost()
   const { tags, selectedTag, setSelectedTag } = useTag()
+  const { setSelectedUser } = useUser()
   return (
     <CardContent>
       <div className="flex flex-col gap-4">

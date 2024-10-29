@@ -2,15 +2,15 @@
 
 import React from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
-import { User } from "../model/User"
+import { useUser } from "../../features/user/model/useUser"
 
 interface Props {
   showUserModal: boolean
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
-  selectedUser: User | null
 }
 
-const UserModal = ({ showUserModal, setShowUserModal, selectedUser }: Props) => {
+const UserModal = ({ showUserModal, setShowUserModal }: Props) => {
+  const { selectedUser } = useUser()
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
       <DialogContent>

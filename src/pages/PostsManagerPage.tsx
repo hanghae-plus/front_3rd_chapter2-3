@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import PostsManagerHeader from "./ui/PostsManagerHeader"
-import { User } from "./model/User"
 import PostsManagerContent from "./ui/PostsManagerContent"
 import AddPostDialog from "./ui/AddPostDialog"
 import UpdatePostDialog from "./ui/UpdatePostDialog"
@@ -25,6 +24,7 @@ const PostsManager = () => {
   const { setPosts } = usePost()
   const { setTags, selectedTag, setSelectedTag } = useTag()
 
+  const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
@@ -33,12 +33,10 @@ const PostsManager = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -83,7 +81,6 @@ const PostsManager = () => {
         setLoading={setLoading}
         setTotal={setTotal}
         setShowPostDetailDialog={setShowPostDetailDialog}
-        setSelectedUser={setSelectedUser}
         setShowUserModal={setShowUserModal}
         updateURL={updateURL}
         setShowEditDialog={setShowEditDialog}
@@ -118,7 +115,7 @@ const PostsManager = () => {
         searchQuery={searchQuery}
       />
 
-      <UserModal showUserModal={showUserModal} setShowUserModal={setShowUserModal} selectedUser={selectedUser} />
+      <UserModal showUserModal={showUserModal} setShowUserModal={setShowUserModal} />
     </Card>
   )
 }
