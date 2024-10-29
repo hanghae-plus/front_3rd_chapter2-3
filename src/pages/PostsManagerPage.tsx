@@ -27,11 +27,10 @@ import {
 } from "../shared/ui"
 import { highlightText } from "../shared/lib/highlightText.tsx"
 import { addCommentApi, deleteCommentApi, updateCommentApi } from "../entities/comment/api/index.ts"
-import { fetchCommentsApi } from "../entities/comment/api/index.ts"
-import { likeCommentApi } from "../entities/comment/api/index.ts"
 import { usePosts } from "../features/post/model/usePosts.ts"
 import { useUser } from "../features/user/model/useUser.ts"
 import { useTags } from "../features/tags/model/useTags.ts"
+import { useComments } from "../features/comment/model/useComment.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -41,6 +40,7 @@ const PostsManager = () => {
   const { posts, total, getPosts, addPost, updatePost, deletePost, searchPostsWithQuery } = usePosts()
   const { showUserModal, setShowUserModal, selectedUser, openUserModal } = useUser()
   const { tags } = useTags()
+  const { comments, getComments, addComment, updateComment, deleteComment, likeComment } = useComments()
 
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -49,17 +49,19 @@ const PostsManager = () => {
   const [selectedPost, setSelectedPost] = useState(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+
+  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+
   const [loading, setLoading] = useState(false)
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
+
   const [selectedComment, setSelectedComment] = useState(null)
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -119,62 +121,24 @@ const PostsManager = () => {
     setShowEditDialog(false)
   }
 
-  // 댓글 가져오기
-  const fetchComments = async (postId) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    const data = await fetchCommentsApi(postId)
-    setComments((prev) => ({ ...prev, [postId]: data.comments }))
-  }
-
   // 댓글 추가
-  const addComment = async () => {
-    const data = await addCommentApi(newComment)
+  const submitAddCommentForm = async () => {
+    addComment(newComment)
 
-    setComments((prev) => ({
-      ...prev,
-      [data.postId]: [...(prev[data.postId] || []), data],
-    }))
     setShowAddCommentDialog(false)
     setNewComment({ body: "", postId: null, userId: 1 })
   }
 
   // 댓글 업데이트
-  const updateComment = async () => {
-    const data = await updateCommentApi(selectedComment)
-
-    setComments((prev) => ({
-      ...prev,
-      [data.postId]: prev[data.postId]?.map((comment) => (comment.id === data.id ? data : comment)),
-    }))
+  const submitUpdateCommentForm = async () => {
+    updateComment(selectedComment)
     setShowEditCommentDialog(false)
-  }
-
-  // 댓글 삭제
-  const deleteComment = (id, postId) => {
-    deleteCommentApi(id)
-
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].filter((comment) => comment.id !== id),
-    }))
-  }
-
-  // 댓글 좋아요
-  const likeComment = async (id, postId) => {
-    const likes = comments[postId].find((c) => c.id === id).likes + 1
-
-    const data = await likeCommentApi(id, likes)
-
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].map((comment) => (comment.id === data.id ? { ...data, likes } : comment)),
-    }))
   }
 
   // 게시물 상세 보기
   const openPostDetail = (post) => {
     setSelectedPost(post)
-    fetchComments(post.id)
+    getComments(post.id)
     setShowPostDetailDialog(true)
   }
 
@@ -489,7 +453,7 @@ const PostsManager = () => {
               value={newComment.body}
               onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
             />
-            <Button onClick={addComment}>댓글 추가</Button>
+            <Button onClick={submitAddCommentForm}>댓글 추가</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -506,7 +470,7 @@ const PostsManager = () => {
               value={selectedComment?.body || ""}
               onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
             />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
+            <Button onClick={submitUpdateCommentForm}>댓글 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>
