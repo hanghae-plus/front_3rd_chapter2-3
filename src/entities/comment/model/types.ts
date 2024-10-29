@@ -17,6 +17,11 @@ export type NewComment = Pick<Comment, "body"> & {
   userId: number
 }
 
+export type DeletedComment = Comment & {
+  isDeleted: boolean
+  deletedOn: string
+}
+
 export type FetchCommentResponse = {
   comments: Comment[]
   limit: number

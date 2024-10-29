@@ -47,6 +47,15 @@ safeFetch.put = async <T>(
   return safeFetch<T>(input, options)
 }
 
+safeFetch.patch = async <T>(
+  input: FetchProps[0],
+  body?: Record<string, unknown> | null,
+  init?: FetchProps[1],
+): Promise<T> => {
+  const options = createOptions("PATCH", body, init)
+  return safeFetch<T>(input, options)
+}
+
 safeFetch.delete = async <T>(input: FetchProps[0], init?: FetchProps[1]): Promise<T> => {
   const options = createOptions("DELETE", undefined, init)
   return safeFetch<T>(input, options)

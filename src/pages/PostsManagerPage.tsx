@@ -42,7 +42,11 @@ const PostsManager = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
+  const [newPost, setNewPost] = useState<NewPost>({
+    title: "",
+    body: "",
+    userId: 1,
+  })
 
   const [searchQuery, setSearchQuery] = useState(search)
 
@@ -175,34 +179,22 @@ const PostsManager = () => {
 
   // 댓글 삭제
   const deleteComment = async (id: Comment["id"], postId: Comment["postId"]) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
+    await commentApi.deleteComment(id)
+    setComments((prev) => ({
+      ...prev,
+      [postId]: prev[postId].filter((comment) => comment.id !== id),
+    }))
   }
 
   // 댓글 좋아요
   const likeComment = async (id: Comment["id"], postId: Comment["postId"]) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: (comments[postId].find((c) => c.id === id)?.likes ?? 0) + 1 }),
-      })
-      const data = await response.json()
+    const data = await commentApi.likeComment(id, comments[postId].find((c) => c.id === id)?.likes)
+
+    if (data) {
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
       }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
     }
   }
 
@@ -562,7 +554,10 @@ const PostsManager = () => {
               value={selectedComment?.body || ""}
               onChange={(e) => {
                 if (selectedComment) {
-                  setSelectedComment({ ...selectedComment, body: e.target.value })
+                  setSelectedComment({
+                    ...selectedComment,
+                    body: e.target.value,
+                  })
                 }
               }}
             />
