@@ -7,7 +7,7 @@ import { UserModal } from "../features/user/ui/UserModal"
 import { PostAddModal } from "../features/post-add/ui/PostAddModal"
 import { PostTable } from "../widgets/post/ui/PostTable"
 import { Pagination } from "../features/post-pagination/ui/Pagination"
-import { SelectTag } from "../features/post-filter/ui/TagSelect"
+import { TagSelect } from "../features/post-filter/ui/TagSelect"
 import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
 import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
@@ -102,7 +102,7 @@ const PostsManager = () => {
               onKeyPress={(e) => e.key === "Enter" && searchPosts()}
             />
 
-            <SelectTag handleGetPostsByTag={handleGetPostsByTag} />
+            <TagSelect handleGetPostsByTag={handleGetPostsByTag} />
             <SelectSortStandard />
             <SelectSortOrder />
           </div>

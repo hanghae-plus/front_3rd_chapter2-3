@@ -6,7 +6,7 @@ interface Props {
   handleGetPostsByTag: (value: string) => void
 }
 
-export const SelectTag = ({ handleGetPostsByTag }: Props) => {
+export const TagSelect = ({ handleGetPostsByTag }: Props) => {
   const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParamsContext()
   const { tags } = useTags()
 
@@ -26,7 +26,7 @@ export const SelectTag = ({ handleGetPostsByTag }: Props) => {
       <SelectContent>
         <SelectItem value="all">모든 태그</SelectItem>
         {tags.map((tag) => (
-          <SelectItem key={tag.url} value={tag.slug}>
+          <SelectItem key={tag.slug} value={tag.slug}>
             {tag.slug}
           </SelectItem>
         ))}
