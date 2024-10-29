@@ -1,24 +1,16 @@
+import { useComment } from "../../features/comment/model/useComment"
 import { Button } from "../../shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
-import { Comments } from "../model/Comment"
-import { NewComment } from "../model/NewComment"
 
 interface Props {
-  newComment: NewComment
-  setComments: React.Dispatch<React.SetStateAction<Comments>>
   setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
   showAddCommentDialog: boolean
 }
 
-const AddCommentDialog = ({
-  newComment,
-  setComments,
-  setShowAddCommentDialog,
-  setNewComment,
-  showAddCommentDialog,
-}: Props) => {
+const AddCommentDialog = ({ setShowAddCommentDialog, showAddCommentDialog }: Props) => {
+  const { setComments, newComment, setNewComment } = useComment()
+
   // 댓글 추가
   const addComment = async () => {
     try {

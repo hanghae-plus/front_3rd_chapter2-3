@@ -1,6 +1,5 @@
 import { Search } from "lucide-react"
 import { User } from "../model/User"
-import { Comments } from "../model/Comment"
 import { Tag } from "../model/Tag"
 import { Input } from "../../shared/ui/input/Input"
 import { CardContent } from "../../shared/ui/card/Card"
@@ -15,8 +14,6 @@ interface Props {
   searchQuery: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
   setTotal: React.Dispatch<React.SetStateAction<number>>
-  comments: Comments
-  setComments: React.Dispatch<React.SetStateAction<Comments>>
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -42,8 +39,6 @@ const PostsManagerContent = ({
   searchQuery,
   setLoading,
   setTotal,
-  comments,
-  setComments,
   setShowPostDetailDialog,
   setSelectedUser,
   setShowUserModal,
@@ -138,8 +133,6 @@ const PostsManagerContent = ({
             setSelectedUser={setSelectedUser}
             setShowUserModal={setShowUserModal}
             setShowEditDialog={setShowEditDialog}
-            comments={comments}
-            setComments={setComments}
             setShowPostDetailDialog={setShowPostDetailDialog}
           />
         )}

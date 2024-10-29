@@ -2,12 +2,10 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import PostsManagerHeader from "./ui/PostsManagerHeader"
 import { User } from "./model/User"
-import { Comment, Comments } from "./model/Comment"
 import { Tag } from "./model/Tag"
 import PostsManagerContent from "./ui/PostsManagerContent"
 import AddPostDialog from "./ui/AddPostDialog"
 import UpdatePostDialog from "./ui/UpdatePostDialog"
-import { NewComment } from "./model/NewComment"
 import AddCommentDialog from "./ui/AddCommentDialog"
 import UpdateCommentDialog from "./ui/UpdateCommentDialog"
 import PostDetailDialog from "./ui/PostDetailDialog"
@@ -25,6 +23,7 @@ const PostsManager = () => {
 
   // 상태 관리
   const { setPosts } = usePost()
+
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
@@ -37,9 +36,6 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState<Comments>({})
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
@@ -88,8 +84,6 @@ const PostsManager = () => {
         searchQuery={searchQuery}
         setLoading={setLoading}
         setTotal={setTotal}
-        comments={comments}
-        setComments={setComments}
         setShowPostDetailDialog={setShowPostDetailDialog}
         setSelectedUser={setSelectedUser}
         setShowUserModal={setShowUserModal}
@@ -120,31 +114,18 @@ const PostsManager = () => {
 
       <UpdatePostDialog setShowEditDialog={setShowEditDialog} showEditDialog={showEditDialog} />
 
-      <AddCommentDialog
-        newComment={newComment}
-        setComments={setComments}
-        setShowAddCommentDialog={setShowAddCommentDialog}
-        setNewComment={setNewComment}
-        showAddCommentDialog={showAddCommentDialog}
-      />
+      <AddCommentDialog setShowAddCommentDialog={setShowAddCommentDialog} showAddCommentDialog={showAddCommentDialog} />
 
       <UpdateCommentDialog
-        selectedComment={selectedComment}
-        setComments={setComments}
         setShowEditCommentDialog={setShowEditCommentDialog}
         showEditCommentDialog={showEditCommentDialog}
-        setSelectedComment={setSelectedComment}
       />
       <PostDetailDialog
-        setNewComment={setNewComment}
         setShowAddCommentDialog={setShowAddCommentDialog}
-        comments={comments}
-        setSelectedComment={setSelectedComment}
         setShowEditCommentDialog={setShowEditCommentDialog}
         showPostDetailDialog={showPostDetailDialog}
         setShowPostDetailDialog={setShowPostDetailDialog}
         searchQuery={searchQuery}
-        setComments={setComments}
       />
 
       <UserModal showUserModal={showUserModal} setShowUserModal={setShowUserModal} selectedUser={selectedUser} />

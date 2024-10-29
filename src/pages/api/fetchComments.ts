@@ -1,4 +1,4 @@
-import { Comments } from "../model/Comment"
+import { Comments } from "../../features/comment/model/types"
 
 interface Props {
   postId: number

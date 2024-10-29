@@ -6,9 +6,9 @@ import { Button } from "../../shared/ui/button/Button"
 import { deletePost } from "../api/deletePost"
 import { openUserModal } from "../api/openUserModal"
 import { fetchComments } from "../api/fetchComments"
-import { Comments } from "../model/Comment"
 import { usePost } from "../../features/post/model/usePost"
 import { Post } from "../../features/post/model/types"
+import { useComment } from "../../features/comment/model/useComment"
 
 interface Props {
   searchQuery: string
@@ -18,8 +18,6 @@ interface Props {
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
-  comments: Comments
-  setComments: React.Dispatch<React.SetStateAction<Comments>>
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -31,11 +29,10 @@ const PostTable = ({
   setSelectedUser,
   setShowUserModal,
   setShowEditDialog,
-  comments,
-  setComments,
   setShowPostDetailDialog,
 }: Props) => {
   const { posts, setPosts, setSelectedPost } = usePost()
+  const { comments, setComments } = useComment()
 
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {

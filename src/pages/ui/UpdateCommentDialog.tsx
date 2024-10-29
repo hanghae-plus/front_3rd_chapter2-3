@@ -1,25 +1,19 @@
 // 댓글 수정 대화상자
 import React from "react"
-import { Comment, Comments } from "../model/Comment"
 import { Button } from "../../shared/ui/button/Button"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { useComment } from "../../features/comment/model/useComment"
+import { Comment } from "../../features/comment/model/types"
 
 interface Props {
-  selectedComment: Comment | null
-  setComments: React.Dispatch<React.SetStateAction<Comments>>
   setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
   showEditCommentDialog: boolean
-  setSelectedComment: React.Dispatch<React.SetStateAction<Comment | null>>
 }
 
-const UpdateCommentDialog = ({
-  selectedComment,
-  setComments,
-  setShowEditCommentDialog,
-  showEditCommentDialog,
-  setSelectedComment,
-}: Props) => {
+const UpdateCommentDialog = ({ setShowEditCommentDialog, showEditCommentDialog }: Props) => {
+  const { setComments, selectedComment, setSelectedComment } = useComment()
+
   // 댓글 업데이트
   const updateComment = async () => {
     try {
