@@ -32,7 +32,6 @@ const PostsManager = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
@@ -105,12 +104,7 @@ const PostsManager = () => {
         total={total}
       />
 
-      <AddPostDialog
-        showAddDialog={showAddDialog}
-        setShowAddDialog={setShowAddDialog}
-        newPost={newPost}
-        setNewPost={setNewPost}
-      />
+      <AddPostDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
 
       <UpdatePostDialog setShowEditDialog={setShowEditDialog} showEditDialog={showEditDialog} />
 
