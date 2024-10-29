@@ -16,3 +16,10 @@ export type NewComment = Pick<Comment, "body"> & {
   postId: Comment["postId"] | null
   userId: number
 }
+
+export type FetchCommentResponse = {
+  comments: Comment[]
+  limit: number
+  skip: number
+  total: number
+}

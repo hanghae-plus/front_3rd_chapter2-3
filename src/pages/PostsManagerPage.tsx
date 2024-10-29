@@ -1,5 +1,6 @@
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
+import { commentApi } from "../entities/comment/api/commentApi"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { SortOrder, usePostQueryParams } from "../entities/post"
 import { postApi } from "../entities/post/api/postApi"
@@ -138,12 +139,10 @@ const PostsManager = () => {
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
+
+    const data = await commentApi.fetchComments(postId)
+    if (data) {
       setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
     }
   }
 

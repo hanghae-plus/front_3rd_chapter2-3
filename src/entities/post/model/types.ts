@@ -30,15 +30,15 @@ export type Post = PostDTO & {
 export type NewPost = Pick<PostDTO, "title" | "body" | "userId">
 
 export type PostsResponse = {
-  limit: number
   posts: PostDTO[]
+  limit: number
   skip: number
   total: number
 }
 
 export type UsersResponse = {
-  limit: number
   users: Author[]
+  limit: number
   skip: number
   total: number
 }
