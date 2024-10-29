@@ -1,4 +1,7 @@
-import { getQueryParameters, useUpdateQueryParameter } from "../../../shared/lib/queryParams"
+import {
+  getQueryParameters,
+  useUpdateQueryParameter,
+} from "../../../shared/lib/queryParams"
 
 export type SortOrder = "asc" | "desc"
 
@@ -26,7 +29,8 @@ const DEFAULT_POST_QUERY_PARAMS: PostQueryParams = {
 }
 
 export const usePostQueryParams: UsePostQueryParams = () => {
-  const { limit, skip, sortOrder, ...rest } = getQueryParameters<PostQueryParams>(DEFAULT_POST_QUERY_PARAMS)
+  const { limit, skip, sortOrder, ...rest } =
+    getQueryParameters<PostQueryParams>(DEFAULT_POST_QUERY_PARAMS)
   const updateQueryParam = useUpdateQueryParameter<PostQueryParams>()
 
   return {

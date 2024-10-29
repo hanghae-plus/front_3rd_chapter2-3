@@ -2,7 +2,10 @@ const DEFAULT_HEADERS = { "Content-Type": "application/json" }
 
 type FetchProps = Parameters<typeof fetch>
 
-export const safeFetch = async <T>(input: FetchProps[0], init?: FetchProps[1]): Promise<T> => {
+export const safeFetch = async <T>(
+  input: FetchProps[0],
+  init?: FetchProps[1],
+): Promise<T> => {
   const response = await fetch(input, init)
 
   if (!response.ok) {
@@ -12,7 +15,11 @@ export const safeFetch = async <T>(input: FetchProps[0], init?: FetchProps[1]): 
   return (await response.json()) as T
 }
 
-const createOptions = (method: string, body?: Record<string, unknown> | null, init?: FetchProps[1]): FetchProps[1] => {
+const createOptions = (
+  method: string,
+  body?: Record<string, unknown> | null,
+  init?: FetchProps[1],
+): FetchProps[1] => {
   const options: FetchProps[1] = {
     method,
     ...init,
@@ -56,7 +63,10 @@ safeFetch.patch = async <T>(
   return safeFetch<T>(input, options)
 }
 
-safeFetch.delete = async <T>(input: FetchProps[0], init?: FetchProps[1]): Promise<T> => {
+safeFetch.delete = async <T>(
+  input: FetchProps[0],
+  init?: FetchProps[1],
+): Promise<T> => {
   const options = createOptions("DELETE", undefined, init)
   return safeFetch<T>(input, options)
 }

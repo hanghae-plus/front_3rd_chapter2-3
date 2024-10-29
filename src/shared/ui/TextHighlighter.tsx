@@ -13,7 +13,13 @@ export const TextHighlighter = ({ highlight, text }: Props) => {
 
   return (
     <span>
-      {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <mark key={i}>{part}</mark>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
     </span>
   )
 }

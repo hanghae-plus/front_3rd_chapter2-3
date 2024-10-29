@@ -1,5 +1,11 @@
 import { safeFetch } from "../../../shared/lib"
-import { NewPost, Post, PostsResponse, Tag, UsersResponse } from "../model/types"
+import {
+  NewPost,
+  Post,
+  PostsResponse,
+  Tag,
+  UsersResponse,
+} from "../model/types"
 
 type FetchPostsPayload = {
   limit: number
@@ -105,7 +111,10 @@ export const postApi = {
   /** 게시물 업데이트 */
   updatePost: async (selectedPost: Post) => {
     try {
-      const response = await safeFetch.put<Post>(`/api/posts/${selectedPost.id}`, selectedPost)
+      const response = await safeFetch.put<Post>(
+        `/api/posts/${selectedPost.id}`,
+        selectedPost,
+      )
       return response
     } catch (error) {
       console.error("게시물 업데이트 오류:", error)
