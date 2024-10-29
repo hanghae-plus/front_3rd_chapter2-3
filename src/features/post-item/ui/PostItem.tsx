@@ -1,10 +1,10 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
+import { usePostParamsContext } from "../../post/model/PostParamsContext"
 import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
-import { useUserContext } from "../../../entities/user/model/UserContext"
-import { usePostsContext } from "../../../entities/post/model/PostContext"
+import { useUserContext } from "../../user/model/UserContext"
+import { usePostsContext } from "../../post/model/PostContext"
 
 interface Props {
   post: Post

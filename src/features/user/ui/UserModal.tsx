@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
-import { useUserContext } from "../../../entities/user/model/UserContext"
+import { useUserContext } from "../model/UserContext"
 
 export const UserModal = () => {
   const { selectedUser, showUserModal, setShowUserModal } = useUserContext()

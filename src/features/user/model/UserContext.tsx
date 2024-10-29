@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { User, UserInfo } from "./types"
-import { useUser } from "../../../features/user/model/useUser"
+import { User, UserInfo } from "../../../entities/user/model/types"
+import { useUser } from "./useUser"
 
 interface UserContextType {
   showUserModal: boolean

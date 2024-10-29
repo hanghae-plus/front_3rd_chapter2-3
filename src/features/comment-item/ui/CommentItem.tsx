@@ -1,9 +1,9 @@
 import { Edit2, ThumbsUp, Trash2 } from "lucide-react"
 import { Button } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
-import { useCommentContext } from "../../../entities/comment/model/CommentContext"
+import { useCommentContext } from "../../comment/model/CommentContext"
 import { Comment } from "../../../entities/comment/model/types"
-import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
+import { usePostParamsContext } from "../../post/model/PostParamsContext"
 
 interface Props {
   postId: number

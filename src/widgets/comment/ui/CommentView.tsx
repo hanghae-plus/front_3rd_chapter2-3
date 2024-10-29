@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useCommentContext } from "../../../entities/comment/model/CommentContext"
+import { useCommentContext } from "../../../features/comment/model/CommentContext"
 import { CommentAddModal } from "../../../features/comment-add/ui/CommentAddModal"
 import { CommentEditModal } from "../../../features/comment-edit/ui/CommentEditModal"
 import { CommentItem } from "../../../features/comment-item/ui/CommentItem"

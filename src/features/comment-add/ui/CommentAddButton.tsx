@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react"
-import { useCommentContext } from "../../../entities/comment/model/CommentContext"
+import { useCommentContext } from "../../comment/model/CommentContext"
 import { Button } from "../../../shared/ui"
 
 interface Props {

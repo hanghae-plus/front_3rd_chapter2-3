@@ -5,14 +5,14 @@ import { fetchUsersApi } from "../entities/user/api"
 import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
 import { UserModal } from "../features/user/ui/UserModal"
 import { PostAddModal } from "../features/post-add/ui/PostAddModal"
-import { usePostsContext } from "../entities/post/model/PostContext"
+import { usePostsContext } from "../features/post/model/PostContext"
 import { PostTable } from "../widgets/post/ui/PostTable"
 import { Pagination } from "../features/post-pagination/ui/Pagination"
 import { SelectTag } from "../features/post-filter/ui/TagSelect"
 import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
 import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
-import { usePostParamsContext } from "../entities/post/model/PostParamsContext"
+import { usePostParamsContext } from "../features/post/model/PostParamsContext"
 
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)

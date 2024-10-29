@@ -1,4 +1,4 @@
-import { useCommentContext } from "../../../entities/comment/model/CommentContext"
+import { useCommentContext } from "../../comment/model/CommentContext"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 
 export const CommentEditModal = () => {

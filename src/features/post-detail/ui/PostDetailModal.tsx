@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { CommentView } from "../../../widgets/comment/ui/CommentView"
-import { usePostsContext } from "../../../entities/post/model/PostContext"
-import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
+import { usePostsContext } from "../../post/model/PostContext"
+import { usePostParamsContext } from "../../post/model/PostParamsContext"
 
 export const PostDetailModal = () => {
   const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePostsContext()

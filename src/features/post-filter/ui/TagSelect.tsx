@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { usePostParamsContext } from "../../../entities/post/model/PostParamsContext"
-import { useTags } from "../../../entities/tag/model"
+import { usePostParamsContext } from "../../post/model/PostParamsContext"
+import { useTags } from "../../tag/model/useTags"
 
 interface Props {
   handleGetPostsByTag: (value: string) => void

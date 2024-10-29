@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react"
-import { Post } from "../model/types"
-import { User } from "../../user/model/types"
+import { Post } from "../../../entities/post/model/types"
+import { User } from "../../../entities/user/model/types"
 import { usePosts } from "./usePosts"
 
 interface PostContextType {

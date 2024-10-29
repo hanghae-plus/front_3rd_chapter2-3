@@ -1,6 +1,6 @@
 import { Table, TableBody } from "../../../shared/ui"
 import { PostTableHead } from "./PostTableHead"
-import { usePostsContext } from "../../../entities/post/model/PostContext"
+import { usePostsContext } from "../../../features/post/model/PostContext"
 import { PostItem } from "../../../features/post-item/ui/PostItem"
 
 export const PostTable = () => {

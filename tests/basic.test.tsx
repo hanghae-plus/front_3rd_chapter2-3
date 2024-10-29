@@ -8,10 +8,10 @@ import PostsManager from "../src/pages/PostsManagerPage"
 import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
-import { UserContextProvider } from "../src/entities/user/model/UserContext"
-import { PostContextProvider } from "../src/entities/post/model/PostContext"
-import { PostParamsContextProvider } from "../src/entities/post/model/PostParamsContext"
-import { CommentContextProvider } from "../src/entities/comment/model/CommentContext"
+import { UserContextProvider } from "../src/features/user/model/UserContext"
+import { PostContextProvider } from "../src/features/post/model/PostContext"
+import { PostParamsContextProvider } from "../src/features/post/model/PostParamsContext"
+import { CommentContextProvider } from "../src/features/comment/model/CommentContext"
 
 // MSW 서버 설정
 const server = setupServer(
