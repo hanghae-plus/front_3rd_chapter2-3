@@ -70,15 +70,12 @@ const usePostsStore = create<PostStore>()((set, get) => ({
     );
     if (!result) return;
     const { posts, total } = result;
-
     const users = await userApi.getUsers({ select: ["username", "image"] });
     const postsWithUsers = posts.map((post) => ({
       ...post,
       author: findById(users, post.userId),
     }));
-
-    set({ posts: postsWithUsers, total });
-    set({ loading: false });
+    set({ posts: postsWithUsers, total, loading: false });
   },
   updatePost: async (post) => {
     const updatedPost = await apiHandler(
@@ -108,8 +105,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       ...post,
       author: findById(users, post.userId),
     }));
-    set({ posts: postsWithUsers, total });
-    set({ loading: false });
+    set({ posts: postsWithUsers, total, loading: false });
   },
   searchPosts: async ({ searchQuery, limit, skip }) => {
     if (!searchQuery) {
@@ -128,8 +124,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       ...post,
       author: findById(users, post.userId),
     }));
-    set({ posts: postsWithUsers, total });
-    set({ loading: false });
+    set({ posts: postsWithUsers, total, loading: false });
   },
 }));
 

@@ -1,19 +1,9 @@
 import { NewPost, Post, PostsResponse } from "@/entities/post/model/types";
 
-const fetchPosts = async ({
-  limit,
-  skip,
-}: {
-  limit: number;
-  skip: number;
-}): Promise<{ posts: Post[]; total: number }> => {
+const fetchPosts = async ({ limit, skip }: { limit: number; skip: number }): Promise<PostsResponse> => {
   const postsResponse = await fetch(`/api/posts?limit=${limit}&skip=${skip}`);
   const postsData: PostsResponse = await postsResponse.json();
-
-  return {
-    posts: postsData.posts,
-    total: postsData.total,
-  };
+  return postsData;
 };
 
 const addPost = async (newPost: NewPost) => {

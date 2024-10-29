@@ -1,3 +1,4 @@
+import PostsManager from "@/pages/post-manager/ui/PostsManagerPage";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -5,7 +6,6 @@ import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter } from "react-router-dom";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import PostsManager from "../src/pages/post-manager/ui/PostsManagerPage";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
 
 // MSW 서버 설정
@@ -85,10 +85,6 @@ describe("PostsManager", () => {
       body: "This is a new post",
       userId: 1,
       tags: [],
-      reactions: {
-        likes: 0,
-        dislikes: 0,
-      },
     };
 
     // POST 요청에 대한 핸들러 추가

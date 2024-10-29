@@ -3,7 +3,7 @@ import PostPagination from "@/features/post/ui/PostPagination";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Table } from "@/shared/ui";
 
-import PostTableItem from "@/features/post-table/ui/PostTableItem";
+import PostTableIRow from "@/features/post-table/ui/PostTableIRow";
 import usePostsStore from "@/features/post/model/usePostsStore";
 import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
@@ -28,7 +28,7 @@ const TablePosts = () => {
   return (
     <>
       {loading ? (
-        <div>로딩 중...</div>
+        <div className="flex justify-center p-4">로딩 중...</div>
       ) : (
         <Table.Container>
           <Table.Header>
@@ -42,7 +42,7 @@ const TablePosts = () => {
           </Table.Header>
           <Table.Body>
             {posts.map((post) => (
-              <PostTableItem key={post.id} post={post} search={search} />
+              <PostTableIRow key={post.id} post={post} search={search} />
             ))}
           </Table.Body>
         </Table.Container>

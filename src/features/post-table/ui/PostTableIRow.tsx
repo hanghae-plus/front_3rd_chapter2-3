@@ -3,6 +3,7 @@ import { Post } from "@/entities/post/model/types";
 import PostTableRowActions from "@/features/post-table/ui/PostTableRowActions";
 import PostTableRowTags from "@/features/post-table/ui/PostTableRowTags";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
+import { useNavigator } from "@/shared/lib/useNavigator";
 
 import { highlightText } from "@/shared/lib/utils";
 import { Table } from "@/shared/ui";
@@ -14,7 +15,10 @@ type PostTableItemProps = {
   search: string;
 };
 
-const PostTableItem = ({ post, search }: PostTableItemProps) => {
+const PostTableIRow = ({ post }: PostTableItemProps) => {
+  const { queries } = useNavigator();
+  const { search } = queries;
+  console.log(search);
   return (
     <Table.Row key={post.id}>
       <Table.Cell>{post.id}</Table.Cell>
@@ -42,4 +46,4 @@ const PostTableItem = ({ post, search }: PostTableItemProps) => {
   );
 };
 
-export default PostTableItem;
+export default PostTableIRow;
