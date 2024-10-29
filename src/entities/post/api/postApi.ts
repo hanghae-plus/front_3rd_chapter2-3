@@ -1,5 +1,5 @@
 import { safeFetch } from "../../../shared/lib"
-import { PostsResponse, Tag, UsersResponse } from "../model/types"
+import { NewPost, Post, PostsResponse, Tag, UsersResponse } from "../model/types"
 
 type FetchPostsPayload = {
   limit: number
@@ -78,6 +78,26 @@ export const postApi = {
     } catch (error) {
       console.error("태그 가져오기 오류:", error)
       throw error
+    }
+  },
+
+  /** 게시물 추가 */
+  addPost: async (newPost: NewPost) => {
+    try {
+      /**
+       * TODO: Post 타입이 아님
+       {
+            "id": number;
+            "title": string;
+            "body": string;
+            "userId": number;
+        }
+       */
+      const response = await safeFetch.post<Post>("/api/posts/add", newPost)
+
+      return response
+    } catch (error) {
+      console.error("게시물 추가 오류:", error)
     }
   },
 }
