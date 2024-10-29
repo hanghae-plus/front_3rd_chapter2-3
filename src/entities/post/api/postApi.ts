@@ -50,12 +50,30 @@ export const postApi = {
     }
   },
 
+  /** 태그별 게시물 가져오기 */
+  fetchPostsByTag: async (tag: string) => {
+    try {
+      const [postsData, usersData] = await Promise.all([
+        safeFetch<PostsResponse>(`/api/posts/tag/${tag}`),
+        safeFetch<UsersResponse>("/api/users?limit=0&select=username,image"),
+      ])
+
+      const postsWithUsers = postsData.posts.map((post) => ({
+        ...post,
+        author: usersData.users.find((user) => user.id === post.userId),
+      }))
+
+      return { posts: postsWithUsers, total: postsData.total }
+    } catch (error) {
+      console.error("태그별 게시물 가져오기 오류:", error)
+      throw error
+    }
+  },
+
   /** 태그 가져오기 */
   fetchTags: async () => {
     try {
       const response = await safeFetch<Tag[]>("/api/posts/tags")
-      console.log(response)
-
       return response
     } catch (error) {
       console.error("태그 가져오기 오류:", error)

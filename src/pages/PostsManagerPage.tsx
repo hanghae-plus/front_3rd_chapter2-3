@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { postApi } from "../entities/post/api/postApi"
-import { Author, NewPost, Post, PostsResponse, Tag, UsersResponse } from "../entities/post/model/types"
+import { Author, NewPost, Post, Tag } from "../entities/post/model/types"
 import { User } from "../entities/user/model/types"
 import {
   Button,
@@ -127,24 +127,12 @@ const PostsManager = () => {
     }
     setLoading(true)
     try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData: PostsResponse = await postsResponse.json()
-      const usersData: UsersResponse = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
+      const { posts, total } = await postApi.fetchPostsByTag(tag)
+      setPosts(posts)
+      setTotal(total)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // 게시물 추가
