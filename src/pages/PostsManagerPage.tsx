@@ -6,30 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/Card
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/Dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/Select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table/Table"
-import {
-  // Button,
-  // Card,
-  // CardContent,
-  // CardHeader,
-  // CardTitle,
-  // Dialog,
-  // DialogContent,
-  // DialogHeader,
-  // DialogTitle,
-  Input,
-  // Select,
-  // SelectContent,
-  // SelectItem,
-  // SelectTrigger,
-  // SelectValue,
-  // Table,
-  // TableBody,
-  // TableCell,
-  // TableHead,
-  // TableHeader,
-  // TableRow,
-  Textarea,
-} from "../shared/ui"
+import { Input, Textarea } from "../shared/ui/input/Text"
 
 const PostsManager = () => {
   const navigate = useNavigate()
