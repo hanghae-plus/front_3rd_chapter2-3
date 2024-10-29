@@ -7,11 +7,13 @@ export type Post = {
   body: string
   tags: TagName[]
   author: User | null
-  reactions: {
-    likes: number
-    dislikes: number
-  }
+  reactions: Reactions
   views: number
   userId: User["id"]
 }
 export type PostId = Post["id"]
+
+type Reactions = {
+  likes: number
+  dislikes: number
+}

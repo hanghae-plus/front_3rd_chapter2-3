@@ -3,11 +3,17 @@ import { User } from "../../user/model/type"
 
 export type Comment = {
   id: number
-  body: string
-  postId: PostId
-  likes: number
   user: User
+  body: string
+  likes: number
+  postId: number
 }
-export type CommentsMap = {
+export type NewComment = {
+  body: string
+  postId: number | null
+  userId: number
+}
+
+export type Comments = {
   [postId: PostId]: Comment[]
 }
