@@ -1,8 +1,8 @@
-import { usePostParamsContext } from "../../post/model/PostParamsContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
+import { usePostParams } from "../../post/model/postParamsStore"
 
 export const SelectSortOrder = () => {
-  const { sortOrder, setSortOrder } = usePostParamsContext()
+  const { sortOrder, setSortOrder } = usePostParams()
 
   return (
     <Select value={sortOrder} onValueChange={setSortOrder}>

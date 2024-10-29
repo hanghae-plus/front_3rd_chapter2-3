@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react"
+import { atom, useAtom } from "jotai"
+import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+
+const queryParams = new URLSearchParams(location.search)
+
+const skipAtom = atom(parseInt(queryParams.get("skip") || "0"))
+const limitAtom = atom(parseInt(queryParams.get("limit") || "10"))
+const searchQueryAtom = atom(queryParams.get("search") || "")
+const sortByAtom = atom(queryParams.get("sortBy") || "")
+const sortOrderAtom = atom(queryParams.get("sortOrder") || "asc")
+const selectedTagAtom = atom(queryParams.get("tag") || "")
 
 export const usePostParams = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
 
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+  const [skip, setSkip] = useAtom(skipAtom)
+  const [limit, setLimit] = useAtom(limitAtom)
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
+  const [sortBy, setSortBy] = useAtom(sortByAtom)
+  const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
+  const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)

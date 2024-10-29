@@ -11,8 +11,8 @@ import { TagSelect } from "../features/post-filter/ui/TagSelect"
 import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
 import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
-import { usePostParamsContext } from "../features/post/model/PostParamsContext"
 import { usePosts } from "../features/post/model/postStore"
+import { usePostParams } from "../features/post/model/postParamsStore"
 
 const PostsManager = () => {
   const [loading, setLoading] = useState(false)
@@ -35,7 +35,7 @@ const PostsManager = () => {
     selectedTag,
 
     updateURL,
-  } = usePostParamsContext()
+  } = usePostParams()
 
   // 게시물 가져오기
   const fetchPosts = async () => {

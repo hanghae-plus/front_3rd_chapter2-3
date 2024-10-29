@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { usePostParamsContext } from "../../post/model/PostParamsContext"
+import { usePostParams } from "../../post/model/postParamsStore"
 import { useTags } from "../../tag/model/useTags"
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const TagSelect = ({ handleGetPostsByTag }: Props) => {
-  const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParamsContext()
+  const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParams()
   const { tags } = useTags()
 
   return (

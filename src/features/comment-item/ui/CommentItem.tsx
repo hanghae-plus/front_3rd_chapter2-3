@@ -2,8 +2,8 @@ import { Edit2, ThumbsUp, Trash2 } from "lucide-react"
 import { Button } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Comment } from "../../../entities/comment/model/types"
-import { usePostParamsContext } from "../../post/model/PostParamsContext"
 import { useComments } from "../../comment/model/commentStore"
+import { usePostParams } from "../../post/model/postParamsStore"
 
 interface Props {
   postId: number
@@ -18,7 +18,7 @@ export const CommentItem = ({ postId, comment }: Props) => {
     setSelectedComment,
     setShowEditCommentDialog,
   } = useComments()
-  const { searchQuery } = usePostParamsContext()
+  const { searchQuery } = usePostParams()
 
   return (
     <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">

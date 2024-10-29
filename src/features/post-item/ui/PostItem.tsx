@@ -1,10 +1,10 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { usePostParamsContext } from "../../post/model/PostParamsContext"
 import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { usePosts } from "../../post/model/postStore"
 import { useUser } from "../../user/model/userStore"
+import { usePostParams } from "../../post/model/postParamsStore"
 
 interface Props {
   post: Post
@@ -12,7 +12,7 @@ interface Props {
 
 export const PostItem = ({ post }: Props) => {
   const { openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePosts()
-  const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsContext()
+  const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParams()
   const { openUserModal } = useUser()
 
   return (
