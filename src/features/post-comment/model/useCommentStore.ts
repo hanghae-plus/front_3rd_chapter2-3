@@ -1,5 +1,8 @@
-import { postCommentApi } from "@/entities/comment/api/postCommentApi";
+import { commentApi } from "@/entities/comment/api/commentApi";
 import { Comment } from "@/entities/comment/model/types";
+import { apiHandler } from "@/shared/api/apiHandler";
+import { addItemInArray, filterByID, updateByID } from "@/shared/lib/array";
+import { addItemInObject } from "@/shared/lib/object";
 import { create } from "zustand";
 import { NewComment } from "./types";
 
@@ -23,15 +26,6 @@ type CommentActions = {
 
 type CommentStore = CommentStates & CommentActions & CommentApiActions;
 
-const handler = async <T>(fn: () => T, onError: (error: unknown) => void) => {
-  try {
-    return await fn();
-  } catch (error) {
-    onError(error);
-    throw error;
-  }
-};
-
 const useCommentStore = create<CommentStore>((set, get) => ({
   comments: {},
   loading: false,
@@ -39,54 +33,48 @@ const useCommentStore = create<CommentStore>((set, get) => ({
   handleSelectComment: (comment) => set({ selectedComment: comment }),
   fetchComments: async (postId) => {
     if (get().comments[postId]) return;
-
-    const comments = await handler(
-      () => postCommentApi.fetchComments(postId),
+    const comments = await apiHandler(
+      () => commentApi.fetchComments(postId),
       (error) => console.error("댓글 가져오기 오류:", error),
     );
-    console.log(postId, comments);
-    set((state) => ({ comments: { ...state.comments, [postId]: comments } }));
+    set((state) => ({ comments: addItemInObject(state.comments, { [postId]: comments }) }));
   },
   addComment: async (newComment) => {
-    const addedComment = await handler(
-      () => postCommentApi.addComment(newComment),
+    const addedComment = await apiHandler(
+      () => commentApi.addComment(newComment),
       (error) => console.error("댓글 추가 오류:", error),
     );
+    const postId = addedComment.postId;
     set((state) => ({
-      comments: { ...state.comments, [addedComment.postId]: [...state.comments[addedComment.postId], addedComment] },
+      comments: addItemInObject(state.comments, { [postId]: addItemInArray(state.comments[postId], addedComment) }),
     }));
   },
   updateComment: async (comment) => {
-    const updatedComment = await handler(
-      () => postCommentApi.updateComment(comment),
+    const updatedComment = await apiHandler(
+      () => commentApi.updateComment(comment),
       (error) => console.error("댓글 수정 오류:", error),
     );
+    const postId = updatedComment.postId;
     set((state) => ({
-      comments: {
-        ...state.comments,
-        [updatedComment.postId]: [
-          ...state.comments[updatedComment.postId].map((c) => (c.id === updatedComment.id ? updatedComment : c)),
-        ],
-      },
+      comments: addItemInObject(state.comments, { [postId]: updateByID(state.comments[postId], updatedComment) }),
     }));
   },
   deleteComment: async (id, postId) => {
-    await handler(
-      () => postCommentApi.deleteComment(id),
+    await apiHandler(
+      () => commentApi.deleteComment(id),
       (error) => console.error("댓글 삭제 오류:", error),
     );
-    set((state) => ({ comments: { ...state.comments, [postId]: state.comments[postId].filter((c) => c.id !== id) } }));
+    set((state) => ({
+      comments: addItemInObject(state.comments, { [postId]: filterByID(state.comments[postId], id) }),
+    }));
   },
   likeComment: async (comment, postId) => {
-    const likedComment = await handler(
-      () => postCommentApi.likeComment(comment),
+    const likedComment = await apiHandler(
+      () => commentApi.likeComment(comment),
       (error) => console.error("댓글 좋아요 오류:", error),
     );
     set((state) => ({
-      comments: {
-        ...state.comments,
-        [postId]: [...state.comments[postId].map((c) => (c.id === likedComment.id ? likedComment : c))],
-      },
+      comments: addItemInObject(state.comments, { [postId]: updateByID(state.comments[postId], likedComment) }),
     }));
   },
 }));

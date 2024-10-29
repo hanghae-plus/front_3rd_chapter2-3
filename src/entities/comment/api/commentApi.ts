@@ -44,7 +44,7 @@ const likeComment = async (comment: Comment) => {
   return data;
 };
 
-export const postCommentApi = {
+export const commentApi = {
   fetchComments,
   addComment,
   updateComment,

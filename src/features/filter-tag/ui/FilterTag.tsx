@@ -1,4 +1,4 @@
-import useFetchTags from "@/entities/tag/api/useFetchTags";
+import useFetchTags from "@/features/filter-tag/api/useFetchTags";
 import usePostsStore from "@/features/post/model/usePostsStore";
 
 import { useNavigator } from "@/shared/lib/useNavigator";

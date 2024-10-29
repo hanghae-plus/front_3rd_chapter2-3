@@ -1,7 +1,8 @@
 import { postApi } from "@/entities/post/api/postApi";
 import { NewPost, Post } from "@/entities/post/model/types";
 import { userApi } from "@/entities/user/api/userApi";
-import { findById } from "@/shared/lib/array";
+import { apiHandler } from "@/shared/api/apiHandler";
+import { addItemInArray, filterByID, findById, updateByID } from "@/shared/lib/array";
 import { create } from "zustand";
 
 type PostsStates = {
@@ -31,15 +32,6 @@ type UseSearchPostsProps = {
   skip: number;
 };
 
-const handler = async <T>(fn: () => T, onError: (error: unknown) => void) => {
-  try {
-    return await fn();
-  } catch (error) {
-    onError(error);
-    throw error;
-  }
-};
-
 type PostStore = PostsStates & PostActions & PostApiActions;
 
 const usePostsStore = create<PostStore>()((set, get) => ({
@@ -55,7 +47,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
     set({ posts: [], total: 0 });
   },
   addPost: async (newPost) => {
-    const data = await handler(
+    const data = await apiHandler(
       () => postApi.addPost(newPost),
       (error) => console.error("게시물 추가 오류:", error),
     );
@@ -67,15 +59,12 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       tags: [],
       reactions: { likes: 0, dislikes: 0 },
     };
-    console.log(postWithUser);
-
-    //FIXME: 실제로 추가하면 필드가 부족해서 오류가 남 / 테스트 자체는 통과함
-    set((state) => ({ posts: [postWithUser, ...state.posts] }));
+    set((state) => ({ posts: addItemInArray(state.posts, postWithUser, "start") }));
   },
   fetchPosts: async (props) => {
     set({ loading: true });
 
-    const { posts, total } = await handler(
+    const { posts, total } = await apiHandler(
       () => postApi.getPosts(props || { limit: 10, skip: 0 }),
       (error) => console.error("게시물 가져오기 오류:", error),
     );
@@ -90,24 +79,22 @@ const usePostsStore = create<PostStore>()((set, get) => ({
     set({ loading: false });
   },
   updatePost: async (post) => {
-    set({ loading: true });
-    const updatedPost = await handler(
+    const updatedPost = await apiHandler(
       () => postApi.updatePost(post),
       (error) => console.error("게시물 업데이트 오류:", error),
     );
-    set((state) => ({ posts: state.posts.map((p) => (p.id === updatedPost.id ? updatedPost : p)) }));
-    set({ loading: false });
+    set((state) => ({ posts: updateByID(state.posts, updatedPost) }));
   },
   deletePost: async (id) => {
-    await handler(
+    await apiHandler(
       () => postApi.deletePost(id),
       (error) => console.error("게시물 삭제 오류:", error),
     );
-    set((state) => ({ posts: state.posts.filter((p) => p.id !== id) }));
+    set((state) => ({ posts: filterByID(state.posts, id) }));
   },
   fetchPostsByTag: async (tag) => {
     set({ loading: true });
-    const { posts, total } = await handler(
+    const { posts, total } = await apiHandler(
       () => postApi.fetchPostsByTag(tag),
       (error) => console.error("게시물 태그 가져오기 오류:", error),
     );
@@ -125,7 +112,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       return;
     }
     set({ loading: true });
-    const { posts, total } = await handler(
+    const { posts, total } = await apiHandler(
       () => postApi.searchPosts(searchQuery),
       (error) => console.error("게시물 검색 오류:", error),
     );
