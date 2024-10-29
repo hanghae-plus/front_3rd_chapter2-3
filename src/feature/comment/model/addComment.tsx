@@ -1,5 +1,7 @@
+import { Comment } from "../types/types"
+
 // 댓글 추가
-export const addComment = async (newComment) => {
+export const addComment = async (newComment: Comment) => {
   try {
     const response = await fetch("/api/comments/add", {
       method: "POST",

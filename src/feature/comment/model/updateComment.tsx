@@ -1,5 +1,7 @@
+import { Comment } from "../types/types"
+
 // 댓글 업데이트
-export const updateComment = async (selectedComment) => {
+export const updateComment = async (selectedComment: Comment) => {
   try {
     const response = await fetch(`/api/comments/${selectedComment.id}`, {
       method: "PUT",

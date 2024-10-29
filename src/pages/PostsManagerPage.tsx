@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/d
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/Select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table/Table"
 import { Input, Textarea } from "../shared/ui/input/Text"
+import CommentSection from "../feature/comment/ui/renderingComments"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -109,7 +110,7 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
+  const fetchPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
       fetchPosts()
       return
@@ -187,6 +188,8 @@ const PostsManager = () => {
     try {
       const response = await fetch(`/api/comments/post/${postId}`)
       const data = await response.json()
+      console.log("fetchComments", data.comments)
+
       setComments((prev) => ({ ...prev, [postId]: data.comments }))
     } catch (error) {
       console.error("댓글 가져오기 오류:", error)
@@ -645,6 +648,8 @@ const PostsManager = () => {
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
             {renderComments(selectedPost?.id)}
+
+            {/* {CommentSection(selectedPost?.id, comments, setComments, searchQuery)} */}
           </div>
         </DialogContent>
       </Dialog>
