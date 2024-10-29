@@ -24,4 +24,16 @@ export const commentApi = {
       console.error("댓글 추가 오류:", error)
     }
   },
+
+  /* 댓글 업데이트 **/
+  updateComment: async (selectedComment: Comment) => {
+    try {
+      const response = await safeFetch.put<Comment>(`/api/comments/${selectedComment?.id}`, {
+        body: selectedComment?.body,
+      })
+      return response
+    } catch (error) {
+      console.error("댓글 업데이트 오류:", error)
+    }
+  },
 }
