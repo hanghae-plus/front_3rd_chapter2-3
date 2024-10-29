@@ -1,6 +1,6 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
 import { Post } from "@/entities/post/model/types";
 import { useNavigator } from "@/shared/lib/useNavigator";
+import usePostsStore from "../models/usePostsStore";
 
 type PostTableRowTagsProps = {
   post: Post;
@@ -8,7 +8,7 @@ type PostTableRowTagsProps = {
 
 const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
   const { queries, handleUpdateQuery } = useNavigator();
-  const { actions } = usePostContext();
+  const fetchPostsByTag = usePostsStore((state) => state.fetchPostsByTag);
   const { tag: selectedTag } = queries;
 
   return (
@@ -23,7 +23,7 @@ const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
           }`}
           onClick={async () => {
             handleUpdateQuery("tag", tag);
-            await actions.fetchPostsByTag(tag);
+            fetchPostsByTag(tag);
           }}
         >
           {tag}

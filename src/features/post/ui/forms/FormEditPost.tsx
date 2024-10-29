@@ -1,25 +1,31 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
-import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
 import { Post } from "@/entities/post/model/types";
 
 import { Button, Input, Textarea } from "@/shared/ui";
+import { useShallow } from "zustand/shallow";
+import usePostsStore from "../../models/usePostsStore";
 
 type FormEditPostProps = {
   close: () => void;
 };
 
 const FormEditPost = ({ close }: FormEditPostProps) => {
-  const { selectedPost, handleSelectPost } = useSelectedPost();
-  const { actions, loading } = usePostContext();
+  const { updatePost, loading, selectedPost, handleSelectPost } = usePostsStore(
+    useShallow((state) => ({
+      updatePost: state.updatePost,
+      loading: state.loading,
+      selectedPost: state.selectedPost,
+      handleSelectPost: state.handleSelectPost,
+    })),
+  );
 
   const handleChangePost = (key: keyof Post, value: string | number) => {
     if (!selectedPost) return;
     handleSelectPost({ ...selectedPost, [key]: value });
   };
 
-  const handleUpdatePost = async (post: Post | null) => {
+  const handleUpdatePost = (post: Post | null) => {
     if (!post) return;
-    await actions.updatePost(post);
+    updatePost(post);
     close();
   };
 

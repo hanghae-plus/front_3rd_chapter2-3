@@ -1,5 +1,5 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
 import useFetchTags from "@/entities/tag/api/useFetchTags";
+import usePostsStore from "@/features/post/models/usePostsStore";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";
@@ -10,14 +10,14 @@ const FilterTag = () => {
     handleUpdateQuery,
   } = useNavigator();
   const { tags } = useFetchTags();
-  const { actions } = usePostContext();
+  const fetchPostsByTag = usePostsStore((state) => state.fetchPostsByTag);
 
   return (
     <Select.Container
       value={tag}
       onValueChange={async (value) => {
         handleUpdateQuery("tag", value);
-        await actions.fetchPostsByTag(value);
+        fetchPostsByTag(value);
       }}
     >
       <Select.Trigger className="w-[180px]">

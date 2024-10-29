@@ -2,28 +2,32 @@ import PostPagination from "@/features/post/ui/PostPagination";
 import PostTableRowActions from "@/features/post/ui/PostTableRowActions";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
 
-import { usePostContext } from "@/entities/post/model/PostContext";
-
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
 import { Table } from "@/shared/ui";
 
+import usePostsStore from "@/features/post/models/usePostsStore";
 import PostTableRowTags from "@/features/post/ui/PostTableRowTags";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { useEffect } from "react";
+import { useShallow } from "zustand/shallow";
 
 const TablePosts = () => {
-  const { queries, handleUpdateQuery } = useNavigator();
-  const { search, tag: selectedTag, limit, skip } = queries;
-  const { loading, posts, actions } = usePostContext();
-
-  // 게시물 삭제
+  const { queries } = useNavigator();
+  const { search, limit, skip } = queries;
+  const { loading, posts, fetchPosts } = usePostsStore(
+    useShallow((state) => ({
+      loading: state.loading,
+      posts: state.posts,
+      fetchPosts: state.fetchPosts,
+    })),
+  );
 
   useEffect(() => {
     if (posts.length === 0) {
-      actions.fetchPosts({ limit, skip });
+      fetchPosts({ limit, skip });
     }
-  }, [limit, skip, actions, posts]);
+  }, [limit, skip, fetchPosts, posts]);
 
   return (
     <>

@@ -1,9 +1,9 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
 import { NewPost } from "@/entities/post/model/types";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useState } from "react";
+import usePostsStore from "../../models/usePostsStore";
 
 type FormAddPostProps = {
   close: () => void;
@@ -13,10 +13,10 @@ const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = ({ close }: FormAddPostProps) => {
   const [newPost, setNewPost] = useState(initialNewPost);
-  const { actions } = usePostContext();
+  const addPost = usePostsStore((state) => state.addPost);
 
-  const handleAddPost = async (newPost: NewPost) => {
-    await actions.addPost(newPost);
+  const handleAddPost = (newPost: NewPost) => {
+    addPost(newPost);
     setNewPost(initialNewPost);
     close();
   };

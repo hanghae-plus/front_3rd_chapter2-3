@@ -1,16 +1,16 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
 import { Button } from "@/shared/ui";
 import { Trash2 } from "lucide-react";
+import usePostsStore from "../models/usePostsStore";
 
 type PostDeleteButtonProps = {
   id: number;
 };
 
 const PostDeleteButton = ({ id }: PostDeleteButtonProps) => {
-  const { actions } = usePostContext();
+  const deletePost = usePostsStore((state) => state.deletePost);
 
   return (
-    <Button variant="ghost" size="sm" onClick={async () => await actions.deletePost(id)}>
+    <Button variant="ghost" size="sm" onClick={() => deletePost(id)}>
       <Trash2 className="w-4 h-4" />
     </Button>
   );

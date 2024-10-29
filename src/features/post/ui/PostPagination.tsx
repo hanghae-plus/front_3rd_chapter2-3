@@ -1,23 +1,29 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import Pagination from "@/shared/ui/Pagination";
+import { useShallow } from "zustand/shallow";
+import usePostsStore from "../models/usePostsStore";
 
 const PostPagination = () => {
   const { queries, handleUpdateQuery } = useNavigator();
   const { limit, skip } = queries;
-  const { total, actions } = usePostContext();
+  const { total, fetchPosts } = usePostsStore(
+    useShallow((state) => ({
+      total: state.total,
+      fetchPosts: state.fetchPosts,
+    })),
+  );
 
   return (
     <Pagination
       size={limit}
-      setSize={async (size) => {
+      setSize={(size) => {
         handleUpdateQuery("limit", size.toString());
-        await actions.fetchPosts({ limit: size, skip });
+        fetchPosts({ limit: size, skip });
       }}
       page={skip}
-      setPage={async (page) => {
+      setPage={(page) => {
         handleUpdateQuery("skip", page.toString());
-        await actions.fetchPosts({ limit, skip: page });
+        fetchPosts({ limit, skip: page });
       }}
       total={total}
     />

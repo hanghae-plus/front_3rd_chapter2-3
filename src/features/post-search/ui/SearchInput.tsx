@@ -1,10 +1,11 @@
-import { usePostContext } from "@/entities/post/model/PostContext";
+import usePostsStore from "@/features/post/models/usePostsStore";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 
 import { Input } from "@/shared/ui";
 
 import { Search } from "lucide-react";
+import { useShallow } from "zustand/shallow";
 
 const SearchInput = () => {
   const {
@@ -12,7 +13,12 @@ const SearchInput = () => {
     queries: { search, limit, skip },
   } = useNavigator();
 
-  const { actions, loading } = usePostContext();
+  const { searchPosts, loading } = usePostsStore(
+    useShallow((state) => ({
+      searchPosts: state.searchPosts,
+      loading: state.loading,
+    })),
+  );
 
   return (
     <div className="flex-1">
@@ -23,9 +29,7 @@ const SearchInput = () => {
           className="pl-8"
           value={search}
           onChange={(e) => handleUpdateQuery("search", e.target.value)}
-          onKeyDown={async (e) =>
-            e.key === "Enter" && (await actions.searchPosts({ limit, skip, searchQuery: search }))
-          }
+          onKeyDown={(e) => e.key === "Enter" && searchPosts({ limit, skip, searchQuery: search })}
           disabled={loading}
         />
       </div>

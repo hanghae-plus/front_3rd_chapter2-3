@@ -1,7 +1,6 @@
 import { CommentResponse } from "@/entities/comment/model/types";
 import { Post } from "@/entities/post/model/types";
 
-import { useSelectedPost } from "@/entities/post/model/SelectedPostContext";
 import PostDetail from "@/features/post/ui/PostDetail";
 
 import { useCommentContext } from "@/entities/comment/model/CommentContext";
@@ -11,6 +10,8 @@ import { highlightText } from "@/shared/lib/utils";
 import { Button, Dialog } from "@/shared/ui";
 
 import { MessageSquare } from "lucide-react";
+import { useShallow } from "zustand/shallow";
+import usePostsStore from "../../models/usePostsStore";
 
 type ModalPostDetailProps = {
   post: Post;
@@ -21,7 +22,12 @@ const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
   const { search: searchQuery } = queries;
   const { comments, handleSetComments } = useCommentContext();
   const { isOpen, toggle } = useToggle();
-  const { selectedPost, handleSelectPost } = useSelectedPost();
+  const { selectedPost, handleSelectPost } = usePostsStore(
+    useShallow((state) => ({
+      selectedPost: state.selectedPost,
+      handleSelectPost: state.handleSelectPost,
+    })),
+  );
 
   //! 댓글 가져오기
   const fetchComments = async (postId: number) => {
