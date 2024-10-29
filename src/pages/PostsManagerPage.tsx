@@ -8,7 +8,6 @@ import PostUpdateDialog from "../widgets/post/PostUpdateDialog"
 import CommentAddDialog from "../widgets/comments/CommentAddDialog"
 import CommentUpdateDialog from "../widgets/comments/CommentUpdateDialog"
 import { Post } from "../entities/post/model/type"
-import { Tag } from "../entities/tag/model/type"
 import { Comments, NewComment, Comment } from "../entities/comment/model/type"
 import { User } from "../entities/user/model/type"
 import PostDetailDialog from "../widgets/post/PostDetailDialog"
@@ -30,25 +29,28 @@ const PostsManager = () => {
 
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([])
+  const [showAddDialog, setShowAddDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [total, setTotal] = useState(0)
+
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState<Tag[]>([])
+
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+
   const [comments, setComments] = useState<Comments>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
@@ -67,6 +69,7 @@ const PostsManager = () => {
   // 게시물 가져오기
   const fetchPosts = () => {
     setLoading(true)
+
     let postsData: PostsData
 
     fetch(`/api/posts?limit=${limit}&skip=${skip}`)
@@ -101,17 +104,6 @@ const PostsManager = () => {
       })
   }
 
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags")
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
-  }
-
   // 태그별 게시물 가져오기
   const fetchPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
@@ -139,10 +131,6 @@ const PostsManager = () => {
     }
     setLoading(false)
   }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
 
   useEffect(() => {
     if (selectedTag) {
@@ -185,7 +173,6 @@ const PostsManager = () => {
         setShowEditDialog={setShowEditDialog}
         setSearchQuery={setSearchQuery}
         fetchPostsByTag={fetchPostsByTag}
-        tags={tags}
         sortBy={sortBy}
         setSortBy={setSortBy}
         sortOrder={sortOrder}
@@ -201,8 +188,6 @@ const PostsManager = () => {
       <PostAddDialog
         showAddDialog={showAddDialog}
         setShowAddDialog={setShowAddDialog}
-        newPost={newPost}
-        setNewPost={setNewPost}
         setPosts={setPosts}
         posts={posts}
       />

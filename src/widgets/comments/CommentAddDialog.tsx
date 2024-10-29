@@ -1,3 +1,4 @@
+import { createCommentApi } from "../../entities/comment/api"
 import { Comments, NewComment } from "../../entities/comment/model/type"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../shared/ui"
 
@@ -18,22 +19,13 @@ const CommentAddDialog = ({
 }: Props) => {
   // 댓글 추가
   const addComment = async () => {
-    try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
-      setComments((prev: Comments) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-      setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
-    } catch (error) {
-      console.error("댓글 추가 오류:", error)
-    }
+    const data = await createCommentApi(newComment)
+    setComments((prev: Comments) => ({
+      ...prev,
+      [data.postId]: [...(prev[data.postId] || []), data],
+    }))
+    setShowAddCommentDialog(false)
+    setNewComment({ body: "", postId: null, userId: 1 })
   }
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>

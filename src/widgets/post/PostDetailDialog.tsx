@@ -2,8 +2,9 @@ import React from "react"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
 import { Comments, NewComment, Comment } from "../../entities/comment/model/type"
-import { Post } from "../../entities/post/model/type"
+import { Post, PostId } from "../../entities/post/model/type"
 import HighlightText from "../ui/HighlightText"
+import { deleteCommentApi, likeCommentApi } from "../../entities/comment/api"
 
 interface Props {
   setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
@@ -32,34 +33,52 @@ const PostDetailDialog = ({
 }: Props) => {
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
+    await deleteCommentApi(id)
+    setComments((prev) => ({
+      ...prev,
+      [postId]: prev[postId].filter((comment) => comment.id !== id),
+    }))
   }
   // 댓글 좋아요
   const likeComment = async (id: number, postId: number) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id)?.likes || 0 + 1 }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
-    }
+    const newLikes = comments[postId].find((c) => c.id === id)?.likes || 0 + 1
+    const data = await likeCommentApi(id, newLikes)
+    setComments((prev) => ({
+      ...prev,
+      [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+    }))
+  }
+
+  const CommentItem = ({ comment, postId }: { comment: Comment; postId: PostId }) => {
+    return (
+      <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
+        <div className="flex items-center space-x-2 overflow-hidden">
+          <span className="font-medium truncate">{comment.user.username}:</span>
+          <span className="truncate">
+            <HighlightText text={comment.body} highlight={searchQuery} />
+          </span>
+        </div>
+        <div className="flex items-center space-x-1">
+          <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+            <ThumbsUp className="w-3 h-3" />
+            <span className="ml-1 text-xs">{comment.likes}</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSelectedComment(comment)
+              setShowEditCommentDialog(true)
+            }}
+          >
+            <Edit2 className="w-3 h-3" />
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+            <Trash2 className="w-3 h-3" />
+          </Button>
+        </div>
+      </div>
+    )
   }
   // 댓글 렌더링
   const renderComments = (postId: number) => (
@@ -78,35 +97,7 @@ const PostDetailDialog = ({
         </Button>
       </div>
       <div className="space-y-1">
-        {comments[postId]?.map((comment) => (
-          <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-            <div className="flex items-center space-x-2 overflow-hidden">
-              <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">
-                <HighlightText text={comment.body} highlight={searchQuery} />
-              </span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
-                <ThumbsUp className="w-3 h-3" />
-                <span className="ml-1 text-xs">{comment.likes}</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedComment(comment)
-                  setShowEditCommentDialog(true)
-                }}
-              >
-                <Edit2 className="w-3 h-3" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
-                <Trash2 className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
-        ))}
+        {comments[postId]?.map((comment) => <CommentItem comment={comment} postId={postId} />)}
       </div>
     </div>
   )
