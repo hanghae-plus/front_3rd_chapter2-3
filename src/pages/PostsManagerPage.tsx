@@ -291,12 +291,12 @@ const PostsManager = () => {
   //   }
   // }
 
-  // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
+  // // 게시물 상세 보기
+  // const openPostDetail = (post) => {
+  //   setSelectedPost(post)
+  //   fetchComments(post.id)
+  //   setShowPostDetailDialog(true)
+  // }
 
   // 사용자 모달 열기
   const openUserModal = async (user) => {

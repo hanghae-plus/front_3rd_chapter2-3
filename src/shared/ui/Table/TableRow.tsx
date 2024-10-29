@@ -1,10 +1,17 @@
-import { forwardRef } from "react"
+import { forwardRef, TableHTMLAttributes } from "react";
 
-export const TableRow = forwardRef(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={`border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted h-14 ${className}`}
-    {...props}
-  />
-))
-TableRow.displayName = "TableRow"
+interface TableRowProps extends TableHTMLAttributes<HTMLTableRowElement> {
+  className?: string;
+}
+
+export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
+  ({ className, ...props }, ref) => (
+    <tr
+      ref={ref}
+      className={`border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted h-14 ${className || ""}`}
+      {...props}
+    />
+  )
+);
+
+TableRow.displayName = "TableRow";

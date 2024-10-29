@@ -2,8 +2,8 @@ import { getResponseData } from "../../lib/service"
 
 // 게시물 가져오기
 export const fetchPosts = async (limit, skip) =>{
-const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-return getResponseData(response)
+  const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
+  return getResponseData(response)
 }
 // 게시물 검색
 export const searchPosts = async(searchQuery) =>{
@@ -16,9 +16,9 @@ export const fetchUsers = async() =>{
   return getResponseData(response)
 }
 
-// 태그 가져오기
-export const fetchTags = async() => {
-  const response = await fetch("/api/posts/tags")
+// 태그에 따른 게시물 가져오기
+export const getTagsPost = async(tag) => {
+  const response = await fetch(`/api/posts/tag/${tag}`)
   return getResponseData(response)
 }
 
