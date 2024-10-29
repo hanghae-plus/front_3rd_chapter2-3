@@ -26,6 +26,7 @@ import {
   Textarea,
 } from "../shared/ui"
 import { highlightText } from "../shared/lib/highlightText.tsx"
+import { addPostApi, deletePostApi, fetchPostsApi, updatePostApi } from "../entities/post/api/index.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -74,8 +75,7 @@ const PostsManager = () => {
     let postsData
     let usersData
 
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then((response) => response.json())
+    fetchPostsApi(limit, skip)
       .then((data) => {
         postsData = data
         return fetch("/api/users?limit=0&select=username,image")
@@ -157,47 +157,26 @@ const PostsManager = () => {
 
   // 게시물 추가
   const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
+    const data = await addPostApi(newPost)
+
+    setPosts([data, ...posts])
+    setShowAddDialog(false)
+    setNewPost({ title: "", body: "", userId: 1 })
   }
 
   // 게시물 업데이트
   const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
+    const data = await updatePostApi(selectedPost)
+
+    setPosts(posts.map((post) => (post.id === data.id ? data : post)))
+    setShowEditDialog(false)
   }
 
   // 게시물 삭제
-  const deletePost = async (id) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
-    }
+  const deletePost = (id) => {
+    deletePostApi(id)
+
+    setPosts(posts.filter((post) => post.id !== id))
   }
 
   // 댓글 가져오기
@@ -347,7 +326,7 @@ const PostsManager = () => {
                 <div>{highlightText(post.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
+                  {post.tags?.map((tag) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
