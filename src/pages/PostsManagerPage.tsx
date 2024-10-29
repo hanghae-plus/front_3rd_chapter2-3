@@ -14,19 +14,14 @@ import UpdateCommentDialog from "./ui/UpdateCommentDialog"
 import PostDetailDialog from "./ui/PostDetailDialog"
 import UserModal from "./ui/UserModal"
 import { Card } from "../shared/ui/card/Card"
+import { fetchPosts } from "./api/fetchPosts"
+import { fetchTags } from "./api/fetchTags"
+import { fetchPostsByTag } from "./api/fetchPostsByTag"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-
-  // interface
-  interface PostsData {
-    posts: Post[]
-    total: number
-    skip: number
-    limit: number
-  }
 
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([])
@@ -64,84 +59,15 @@ const PostsManager = () => {
     navigate(`?${params.toString()}`)
   }
 
-  // 게시물 가져오기
-  const fetchPosts = () => {
-    setLoading(true)
-    let postsData: PostsData
-    let usersData: User[]
-
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then((response) => response.json())
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags")
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
-  }
-
-  // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
-    setLoading(false)
-  }
-
   useEffect(() => {
-    fetchTags()
+    fetchTags(setTags)
   }, [])
 
   useEffect(() => {
     if (selectedTag) {
-      fetchPostsByTag(selectedTag)
+      fetchPostsByTag({ tag: selectedTag, setLoading, limit, skip, setPosts, setTotal })
     } else {
-      fetchPosts()
+      fetchPosts({ setLoading, limit, skip, setPosts, setTotal })
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
@@ -161,7 +87,6 @@ const PostsManager = () => {
       <PostsManagerHeader setShowAddDialog={setShowAddDialog} />
       <PostsManagerContent
         searchQuery={searchQuery}
-        fetchPosts={fetchPosts}
         setLoading={setLoading}
         setPosts={setPosts}
         setTotal={setTotal}
@@ -177,7 +102,6 @@ const PostsManager = () => {
         updateURL={updateURL}
         setShowEditDialog={setShowEditDialog}
         setSearchQuery={setSearchQuery}
-        fetchPostsByTag={fetchPostsByTag}
         tags={tags}
         sortBy={sortBy}
         setSortBy={setSortBy}
