@@ -1,6 +1,7 @@
 import React from "react"
-import { Button, CardHeader, CardTitle } from "../../shared/ui"
 import { Plus } from "lucide-react"
+import { Button } from "../../shared/ui/button/Button"
+import { CardHeader, CardTitle } from "../../shared/ui/card/Card"
 
 interface Props {
   setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>

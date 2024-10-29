@@ -1,4 +1,6 @@
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../shared/ui"
+import { Button } from "../../shared/ui/button/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Comments } from "../model/Comment"
 import { NewComment } from "../model/NewComment"
 

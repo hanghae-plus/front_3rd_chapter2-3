@@ -1,8 +1,11 @@
 // 게시물 추가 대화상자
 
 import React from "react"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
 import { Post } from "../model/Post"
+import { Button } from "../../shared/ui/button/Button"
+import { Input } from "../../shared/ui/input/Input"
+import { Textarea } from "../../shared/ui/textarea/Textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 
 interface NewPost {
   title: string

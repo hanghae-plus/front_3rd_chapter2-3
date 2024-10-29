@@ -1,25 +1,14 @@
 import { Edit2, MessageSquare, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import {
-  Button,
-  CardContent,
-  Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../shared/ui"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../shared/ui/table/Table"
 import { Post } from "../model/Post"
 import { User } from "../model/User"
 import HighlightText from "./HighlightText"
 import { Comments } from "../model/Comment"
 import { Tag } from "../model/Tag"
+import { Button } from "../../shared/ui/button/Button"
+import { Input } from "../../shared/ui/input/Input"
+import { CardContent } from "../../shared/ui/card/Card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/select/Select"
 
 interface Props {
   searchQuery: string

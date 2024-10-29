@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Card } from "../shared/ui"
 import PostsManagerHeader from "./ui/PostsManagerHeader"
 import { User } from "./model/User"
 import { Post } from "./model/Post"
@@ -14,6 +13,7 @@ import AddCommentDialog from "./ui/AddCommentDialog"
 import UpdateCommentDialog from "./ui/UpdateCommentDialog"
 import PostDetailDialog from "./ui/PostDetailDialog"
 import UserModal from "./ui/UserModal"
+import { Card } from "../shared/ui/card/Card"
 
 const PostsManager = () => {
   const navigate = useNavigate()

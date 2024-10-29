@@ -1,10 +1,11 @@
 import React from "react"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
 import HighlightText from "./HighlightText"
 import { NewComment } from "../model/NewComment"
 import { Comment, Comments } from "../model/Comment"
 import { Post } from "../model/Post"
+import { Button } from "../../shared/ui/button/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 
 interface Props {
   setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
