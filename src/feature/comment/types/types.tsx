@@ -1,4 +1,4 @@
-import { User } from "../../../shared/types/Types"
+import { User } from "../../../shared/model/Types"
 
 export interface Comment {
   id: number
