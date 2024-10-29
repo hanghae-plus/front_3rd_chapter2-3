@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "../shared/ui/button/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/Card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/Dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/Select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table/Table"
 import {
   // Button,
   // Card,
@@ -15,17 +17,17 @@ import {
   // DialogHeader,
   // DialogTitle,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  // Select,
+  // SelectContent,
+  // SelectItem,
+  // SelectTrigger,
+  // SelectValue,
+  // Table,
+  // TableBody,
+  // TableCell,
+  // TableHead,
+  // TableHeader,
+  // TableRow,
   Textarea,
 } from "../shared/ui"
 
