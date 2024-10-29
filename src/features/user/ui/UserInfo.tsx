@@ -6,6 +6,7 @@ type UserInfoProps = {
 
 const UserInfo = ({ selectedUser }: UserInfoProps) => {
   if (!selectedUser) return null;
+
   return (
     <div className="space-y-4">
       <img src={selectedUser.image} alt={selectedUser.username} className="w-24 h-24 rounded-full mx-auto" />

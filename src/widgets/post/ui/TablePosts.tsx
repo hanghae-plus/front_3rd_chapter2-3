@@ -20,10 +20,8 @@ const TablePosts = () => {
   );
 
   useEffect(() => {
-    if (posts.length === 0) {
-      fetchPosts({ limit, skip });
-    }
-  }, [limit, skip, fetchPosts, posts]);
+    fetchPosts({ limit, skip });
+  }, [limit, skip, fetchPosts]);
 
   return (
     <>

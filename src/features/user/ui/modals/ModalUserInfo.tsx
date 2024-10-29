@@ -1,11 +1,12 @@
 import { Post } from "@/entities/post/model/types";
 import { User } from "@/entities/user/model/types";
 
-import { useSelectedUser } from "@/entities/user/model/SelectedUserContext";
 import UserInfo from "@/features/user/ui/UserInfo";
 
 import useToggle from "@/shared/lib/useToggle";
 import { Dialog } from "@/shared/ui";
+import { useShallow } from "zustand/shallow";
+import useUserStore from "../../model/useUserStore";
 
 type ModalUserInfoProps = {
   post: Post;
@@ -13,18 +14,17 @@ type ModalUserInfoProps = {
 
 // Data Component
 const ModalUserInfo = ({ post }: ModalUserInfoProps) => {
-  const { handleSelectUser, selectedUser } = useSelectedUser();
+  const { selectedUser, fetchUser } = useUserStore(
+    useShallow((state) => ({
+      selectedUser: state.selectedUser,
+      fetchUser: state.fetchUser,
+    })),
+  );
   const { isOpen, toggle } = useToggle();
 
   const openUserModal = async (user: Pick<User, "id" | "username" | "image"> | undefined) => {
     if (!user) return;
-    try {
-      const response = await fetch(`/api/users/${user.id}`);
-      const userData = await response.json();
-      handleSelectUser(userData);
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error);
-    }
+    fetchUser(user.id);
   };
 
   return (

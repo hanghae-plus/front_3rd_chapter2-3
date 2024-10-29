@@ -18,7 +18,7 @@ type PostTableItemProps = {
 const PostTableIRow = ({ post }: PostTableItemProps) => {
   const { queries } = useNavigator();
   const { search } = queries;
-  console.log(search);
+
   return (
     <Table.Row key={post.id}>
       <Table.Cell>{post.id}</Table.Cell>
