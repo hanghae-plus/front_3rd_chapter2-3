@@ -1,9 +1,10 @@
 import { baseApi } from "../../../shared/api/base"
+import { NewPostDto, PostsResponse } from "../model/type"
 
 export const postApi = {
   get: {
     posts: async ({ limit, skip }: { limit: number; skip: number }) => {
-      const response = await baseApi.get("/posts", {
+      const response = await baseApi.get<PostsResponse>("/posts", {
         params: {
           limit,
           skip,
@@ -16,7 +17,7 @@ export const postApi = {
         return postApi.get.posts({ limit, skip })
       }
 
-      const response = await baseApi.get(`/posts/tag/${tag}`, {
+      const response = await baseApi.get<PostsResponse>(`/posts/tag/${tag}`, {
         params: {
           limit,
           skip,
@@ -26,7 +27,7 @@ export const postApi = {
     },
   },
   post: {
-    addPost: async (newPost: { title: string; body: string; userId: number }) => {
+    addPost: async (newPost: NewPostDto) => {
       const response = await baseApi.post("/posts/add", newPost)
       return response.data
     },
