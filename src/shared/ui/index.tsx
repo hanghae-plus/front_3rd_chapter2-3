@@ -1,7 +1,7 @@
 import * as React from "react"
 import { forwardRef } from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-// import * as DialogPrimitive from "@radix-ui/react-dialog"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Check, ChevronDown, X } from "lucide-react"
 
 // 입력 컴포넌트
@@ -17,7 +17,7 @@ export const Input = forwardRef(({ className, type, ...props }, ref) => {
 })
 Input.displayName = "Input"
 
-// // 카드 컴포넌트
+// 카드 컴포넌트
 // export const Card = forwardRef(({ className, ...props }, ref) => (
 //   <div ref={ref} className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props} />
 // ))

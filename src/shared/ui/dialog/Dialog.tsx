@@ -1,5 +1,6 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { forwardRef } from "react"
+import { X } from "lucide-react"
 
 // 대화상자 컴포넌트
 export const Dialog = DialogPrimitive.Root
