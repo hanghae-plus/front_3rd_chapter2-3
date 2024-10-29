@@ -1,5 +1,3 @@
-import { CommentProvider } from "@/entities/comment/model/CommentContext";
-import { PostProvider } from "@/entities/post/model/PostContext";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -48,11 +46,7 @@ afterAll(() => server.close());
 const renderPostsManager = () => {
   return render(
     <MemoryRouter>
-      <PostProvider>
-        <CommentProvider>
-          <PostsManager />
-        </CommentProvider>
-      </PostProvider>
+      <PostsManager />
     </MemoryRouter>,
   );
 };

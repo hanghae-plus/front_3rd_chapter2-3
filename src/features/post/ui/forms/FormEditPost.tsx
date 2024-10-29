@@ -2,7 +2,7 @@ import { Post } from "@/entities/post/model/types";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 import { useShallow } from "zustand/shallow";
-import usePostsStore from "../../models/usePostsStore";
+import usePostsStore from "../../model/usePostsStore";
 
 type FormEditPostProps = {
   close: () => void;

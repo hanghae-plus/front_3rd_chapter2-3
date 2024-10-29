@@ -6,7 +6,7 @@ import useToggle from "@/shared/lib/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 
 import { Edit2 } from "lucide-react";
-import usePostsStore from "../../models/usePostsStore";
+import usePostsStore from "../../model/usePostsStore";
 
 type ModalEditPostProps = {
   post: Post;

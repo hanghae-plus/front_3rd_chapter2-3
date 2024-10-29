@@ -55,16 +55,22 @@ const usePostsStore = create<PostStore>()((set, get) => ({
     set({ posts: [], total: 0 });
   },
   addPost: async (newPost) => {
-    set({ loading: true });
-
     const data = await handler(
       () => postApi.addPost(newPost),
       (error) => console.error("게시물 추가 오류:", error),
     );
 
+    const users = await userApi.getUsers({ select: ["username", "image"] });
+    const postWithUser: Post = {
+      ...data,
+      author: findById(users, data.userId),
+      tags: [],
+      reactions: { likes: 0, dislikes: 0 },
+    };
+    console.log(postWithUser);
+
     //FIXME: 실제로 추가하면 필드가 부족해서 오류가 남 / 테스트 자체는 통과함
-    set((state) => ({ posts: [data, ...state.posts] }));
-    set({ loading: false });
+    set((state) => ({ posts: [postWithUser, ...state.posts] }));
   },
   fetchPosts: async (props) => {
     set({ loading: true });

@@ -17,7 +17,7 @@ const fetchPosts = async ({
 };
 
 const addPost = async (newPost: NewPost) => {
-  const response = await fetch("/api/posts", {
+  const response = await fetch("/api/posts/add", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newPost),

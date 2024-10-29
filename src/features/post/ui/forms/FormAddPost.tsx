@@ -3,7 +3,7 @@ import { NewPost } from "@/entities/post/model/types";
 import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useState } from "react";
-import usePostsStore from "../../models/usePostsStore";
+import usePostsStore from "../../model/usePostsStore";
 
 type FormAddPostProps = {
   close: () => void;

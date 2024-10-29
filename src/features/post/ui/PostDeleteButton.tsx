@@ -1,6 +1,6 @@
 import { Button } from "@/shared/ui";
 import { Trash2 } from "lucide-react";
-import usePostsStore from "../models/usePostsStore";
+import usePostsStore from "../model/usePostsStore";
 
 type PostDeleteButtonProps = {
   id: number;

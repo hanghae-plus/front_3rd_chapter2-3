@@ -1,12 +1,10 @@
 import { Comment } from "@/entities/comment/model/types";
 
-import { useSelectedComment } from "@/entities/comment/model/SelectedCommentContext";
-import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
-
-import { useCommentContext } from "@/entities/comment/model/CommentContext";
 import { Button, Textarea } from "@/shared/ui";
 
 import { useEffect } from "react";
+import { useShallow } from "zustand/shallow";
+import useCommentStore from "../../model/useCommentStore";
 
 type FormEditCommentProps = {
   close: () => void;
@@ -14,27 +12,23 @@ type FormEditCommentProps = {
 };
 
 const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
-  const { selectedComment, handleSelectComment } = useSelectedComment();
-  const { handleSetComments } = useCommentContext();
+  const { updateComment, handleSelectComment, selectedComment } = useCommentStore(
+    useShallow((state) => ({
+      updateComment: state.updateComment,
+      handleSelectComment: state.handleSelectComment,
+      selectedComment: state.selectedComment,
+    })),
+  );
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!selectedComment) return;
     handleSelectComment({ ...selectedComment, body: e.target.value });
   };
 
-  // 댓글 업데이트
-  const updateComment = async () => {
+  const handleUpdateComment = () => {
     if (!selectedComment) return;
-    try {
-      const data = await postCommentApi.updateComment(selectedComment);
-      handleSetComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }));
-      close();
-    } catch (error) {
-      console.error("댓글 업데이트 오류:", error);
-    }
+    updateComment(selectedComment);
+    close();
   };
 
   useEffect(() => {
@@ -45,7 +39,7 @@ const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
   return (
     <div className="space-y-4">
       <Textarea placeholder="댓글 내용" value={selectedComment?.body || ""} onChange={handleChangeComment} />
-      <Button onClick={updateComment}>댓글 업데이트</Button>
+      <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
     </div>
   );
 };

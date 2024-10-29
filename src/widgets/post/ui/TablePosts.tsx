@@ -6,7 +6,7 @@ import { useNavigator } from "@/shared/lib/useNavigator";
 import { highlightText } from "@/shared/lib/utils";
 import { Table } from "@/shared/ui";
 
-import usePostsStore from "@/features/post/models/usePostsStore";
+import usePostsStore from "@/features/post/model/usePostsStore";
 import PostTableRowTags from "@/features/post/ui/PostTableRowTags";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { useEffect } from "react";

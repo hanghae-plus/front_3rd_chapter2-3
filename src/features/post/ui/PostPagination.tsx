@@ -1,7 +1,7 @@
 import { useNavigator } from "@/shared/lib/useNavigator";
 import Pagination from "@/shared/ui/Pagination";
 import { useShallow } from "zustand/shallow";
-import usePostsStore from "../models/usePostsStore";
+import usePostsStore from "../model/usePostsStore";
 
 const PostPagination = () => {
   const { queries, handleUpdateQuery } = useNavigator();

@@ -1,17 +1,16 @@
-import { useCommentContext } from "@/entities/comment/model/CommentContext";
-
 import CommentActions from "@/features/post-comment/ui/CommentActions";
 import CommentInfo from "@/features/post-comment/ui/CommentInfo";
 import { ModalAddComment } from "@/features/post-comment/ui/modals/ModalAddComment";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
+import useCommentStore from "../model/useCommentStore";
 
 type CommentsProps = {
   postId: number;
 };
 
 const Comments = ({ postId }: CommentsProps) => {
-  const { comments } = useCommentContext();
+  const comments = useCommentStore((state) => state.comments[postId]);
   const { queries } = useNavigator();
   const { search } = queries;
 
@@ -22,7 +21,7 @@ const Comments = ({ postId }: CommentsProps) => {
         <ModalAddComment postId={postId} />
       </div>
       <div className="space-y-1">
-        {comments[postId]?.map((comment) => (
+        {comments?.map((comment) => (
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
             <CommentInfo comment={comment} search={search} />
             <CommentActions comment={comment} postId={postId} />

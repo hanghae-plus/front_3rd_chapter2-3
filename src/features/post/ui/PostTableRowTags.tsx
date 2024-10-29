@@ -1,6 +1,6 @@
 import { Post } from "@/entities/post/model/types";
 import { useNavigator } from "@/shared/lib/useNavigator";
-import usePostsStore from "../models/usePostsStore";
+import usePostsStore from "../model/usePostsStore";
 
 type PostTableRowTagsProps = {
   post: Post;

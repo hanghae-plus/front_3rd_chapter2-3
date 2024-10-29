@@ -1,4 +1,4 @@
-import usePostsStore from "@/features/post/models/usePostsStore";
+import usePostsStore from "@/features/post/model/usePostsStore";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 

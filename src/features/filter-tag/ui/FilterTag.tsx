@@ -1,5 +1,5 @@
 import useFetchTags from "@/entities/tag/api/useFetchTags";
-import usePostsStore from "@/features/post/models/usePostsStore";
+import usePostsStore from "@/features/post/model/usePostsStore";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";

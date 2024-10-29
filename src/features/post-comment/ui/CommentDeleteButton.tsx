@@ -1,12 +1,9 @@
 import { Comment } from "@/entities/comment/model/types";
 
-import { postCommentApi } from "@/features/post-comment/api/postCommentApi";
-
-import { useCommentContext } from "@/entities/comment/model/CommentContext";
-
 import { Button } from "@/shared/ui";
 
 import { Trash2 } from "lucide-react";
+import useCommentStore from "../model/useCommentStore";
 
 type CommentLikeButtonProps = {
   comment: Comment;
@@ -14,20 +11,7 @@ type CommentLikeButtonProps = {
 };
 
 const CommentDeleteButton = ({ comment, postId }: CommentLikeButtonProps) => {
-  const { handleSetComments } = useCommentContext();
-
-  // 댓글 삭제
-  const deleteComment = async (id: number, postId: number) => {
-    try {
-      await postCommentApi.deleteComment(id);
-      handleSetComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }));
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error);
-    }
-  };
+  const deleteComment = useCommentStore((state) => state.deleteComment);
 
   return (
     <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
