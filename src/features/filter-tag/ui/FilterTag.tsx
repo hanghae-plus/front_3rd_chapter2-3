@@ -12,14 +12,13 @@ const FilterTag = () => {
   const { tags } = useFetchTags();
   const fetchPostsByTag = usePostsStore((state) => state.fetchPostsByTag);
 
+  const handleChangeTag = (value: string) => {
+    handleUpdateQuery("tag", value);
+    fetchPostsByTag(value);
+  };
+
   return (
-    <Select.Container
-      value={tag}
-      onValueChange={async (value) => {
-        handleUpdateQuery("tag", value);
-        fetchPostsByTag(value);
-      }}
-    >
+    <Select.Container value={tag} onValueChange={handleChangeTag}>
       <Select.Trigger className="w-[180px]">
         <Select.Value placeholder="태그 선택" />
       </Select.Trigger>

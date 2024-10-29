@@ -85,6 +85,10 @@ describe("PostsManager", () => {
       body: "This is a new post",
       userId: 1,
       tags: [],
+      reactions: {
+        likes: 0,
+        dislikes: 0,
+      },
     };
 
     // POST 요청에 대한 핸들러 추가

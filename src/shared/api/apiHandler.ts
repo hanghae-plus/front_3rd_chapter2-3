@@ -3,6 +3,5 @@ export const apiHandler = async <T>(fn: () => T, onError?: (error: unknown) => v
     return await fn();
   } catch (error: unknown) {
     onError?.(error);
-    throw error;
   }
 };

@@ -1,7 +1,9 @@
 import { tagApi } from "@/entities/tag/api/tagApi";
+import { Tag } from "@/entities/tag/model/types";
+
 import { apiHandler } from "@/shared/api/apiHandler";
+
 import { useEffect, useState } from "react";
-import { Tag } from "../../../entities/tag/model/types";
 
 const useFetchTags = () => {
   const [tags, setTags] = useState<Tag[]>([]);

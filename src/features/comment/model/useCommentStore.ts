@@ -37,6 +37,7 @@ const useCommentStore = create<CommentStore>((set, get) => ({
       () => commentApi.fetchComments(postId),
       (error) => console.error("댓글 가져오기 오류:", error),
     );
+    if (!comments) return;
     set((state) => ({ comments: addItemInObject(state.comments, { [postId]: comments }) }));
   },
   addComment: async (newComment) => {
@@ -44,6 +45,7 @@ const useCommentStore = create<CommentStore>((set, get) => ({
       () => commentApi.addComment(newComment),
       (error) => console.error("댓글 추가 오류:", error),
     );
+    if (!addedComment) return;
     const postId = addedComment.postId;
     set((state) => ({
       comments: addItemInObject(state.comments, { [postId]: addItemInArray(state.comments[postId], addedComment) }),
@@ -54,6 +56,7 @@ const useCommentStore = create<CommentStore>((set, get) => ({
       () => commentApi.updateComment(comment),
       (error) => console.error("댓글 수정 오류:", error),
     );
+    if (!updatedComment) return;
     const postId = updatedComment.postId;
     set((state) => ({
       comments: addItemInObject(state.comments, { [postId]: updateByID(state.comments[postId], updatedComment) }),
@@ -73,6 +76,7 @@ const useCommentStore = create<CommentStore>((set, get) => ({
       () => commentApi.likeComment(comment),
       (error) => console.error("댓글 좋아요 오류:", error),
     );
+    if (!likedComment) return;
     set((state) => ({
       comments: addItemInObject(state.comments, { [postId]: updateByID(state.comments[postId], likedComment) }),
     }));

@@ -13,21 +13,17 @@ const PostPagination = () => {
     })),
   );
 
-  return (
-    <Pagination
-      size={limit}
-      setSize={(size) => {
-        handleUpdateQuery("limit", size.toString());
-        fetchPosts({ limit: size, skip });
-      }}
-      page={skip}
-      setPage={(page) => {
-        handleUpdateQuery("skip", page.toString());
-        fetchPosts({ limit, skip: page });
-      }}
-      total={total}
-    />
-  );
+  const handlePageChange = (page: number) => {
+    handleUpdateQuery("skip", page.toString());
+    fetchPosts({ limit, skip: page });
+  };
+
+  const handleSizeChange = (size: number) => {
+    handleUpdateQuery("limit", size.toString());
+    fetchPosts({ limit: size, skip });
+  };
+
+  return <Pagination size={limit} setSize={handleSizeChange} page={skip} setPage={handlePageChange} total={total} />;
 };
 
 export default PostPagination;

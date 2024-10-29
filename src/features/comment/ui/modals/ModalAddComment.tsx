@@ -1,4 +1,4 @@
-import FormAddComment from "@/features/post-comment/ui/forms/FormAddComment";
+import FormAddComment from "@/features/comment/ui/forms/FormAddComment";
 
 import useToggle from "@/shared/lib/useToggle";
 

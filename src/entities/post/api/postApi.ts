@@ -23,7 +23,7 @@ const addPost = async (newPost: NewPost) => {
     body: JSON.stringify(newPost),
   });
   const data = await response.json();
-  return data;
+  return data as Post;
 };
 
 const updatePost = async (updatedPost: Post) => {
@@ -33,7 +33,7 @@ const updatePost = async (updatedPost: Post) => {
     body: JSON.stringify(updatedPost),
   });
   const data = await response.json();
-  return data;
+  return data as Post;
 };
 
 const deletePost = async (id: number) => {
@@ -41,7 +41,7 @@ const deletePost = async (id: number) => {
     method: "DELETE",
   });
   const data = await response.json();
-  return data;
+  return data as Post;
 };
 
 const searchPosts = async (search: string) => {

@@ -51,7 +51,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       () => postApi.addPost(newPost),
       (error) => console.error("게시물 추가 오류:", error),
     );
-
+    if (!data) return;
     const users = await userApi.getUsers({ select: ["username", "image"] });
     const postWithUser: Post = {
       ...data,
@@ -64,10 +64,12 @@ const usePostsStore = create<PostStore>()((set, get) => ({
   fetchPosts: async (props) => {
     set({ loading: true });
 
-    const { posts, total } = await apiHandler(
+    const result = await apiHandler(
       () => postApi.getPosts(props || { limit: 10, skip: 0 }),
       (error) => console.error("게시물 가져오기 오류:", error),
     );
+    if (!result) return;
+    const { posts, total } = result;
 
     const users = await userApi.getUsers({ select: ["username", "image"] });
     const postsWithUsers = posts.map((post) => ({
@@ -83,6 +85,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       () => postApi.updatePost(post),
       (error) => console.error("게시물 업데이트 오류:", error),
     );
+    if (!updatedPost) return;
     set((state) => ({ posts: updateByID(state.posts, updatedPost) }));
   },
   deletePost: async (id) => {
@@ -94,10 +97,12 @@ const usePostsStore = create<PostStore>()((set, get) => ({
   },
   fetchPostsByTag: async (tag) => {
     set({ loading: true });
-    const { posts, total } = await apiHandler(
+    const result = await apiHandler(
       () => postApi.fetchPostsByTag(tag),
       (error) => console.error("게시물 태그 가져오기 오류:", error),
     );
+    if (!result) return;
+    const { posts, total } = result;
     const users = await userApi.getUsers({ select: ["username", "image"] });
     const postsWithUsers = posts.map((post) => ({
       ...post,
@@ -112,10 +117,12 @@ const usePostsStore = create<PostStore>()((set, get) => ({
       return;
     }
     set({ loading: true });
-    const { posts, total } = await apiHandler(
+    const result = await apiHandler(
       () => postApi.searchPosts(searchQuery),
       (error) => console.error("게시물 검색 오류:", error),
     );
+    if (!result) return;
+    const { posts, total } = result;
     const users = await userApi.getUsers({ select: ["username", "image"] });
     const postsWithUsers = posts.map((post) => ({
       ...post,

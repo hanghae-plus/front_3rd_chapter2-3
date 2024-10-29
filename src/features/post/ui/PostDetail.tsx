@@ -1,5 +1,5 @@
 import { Post } from "@/entities/post/model/types";
-import Comments from "@/features/post-comment/ui/Comments";
+import Comments from "@/features/comment/ui/Comments";
 
 import { highlightText } from "@/shared/lib/utils";
 

@@ -1,7 +1,7 @@
 import { Comment } from "@/entities/comment/model/types";
-import CommentDeleteButton from "@/features/post-comment/ui/CommentDeleteButton";
-import CommentLikeButton from "@/features/post-comment/ui/CommentLikeButton";
-import ModalEditComment from "@/features/post-comment/ui/modals/ModalEditComment";
+import CommentDeleteButton from "@/features/comment/ui/CommentDeleteButton";
+import CommentLikeButton from "@/features/comment/ui/CommentLikeButton";
+import ModalEditComment from "@/features/comment/ui/modals/ModalEditComment";
 
 type CommentActionsProps = {
   comment: Comment;

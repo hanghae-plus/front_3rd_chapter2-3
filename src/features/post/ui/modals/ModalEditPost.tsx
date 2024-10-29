@@ -15,6 +15,7 @@ type ModalEditPostProps = {
 const ModalEditPost = ({ post }: ModalEditPostProps) => {
   const { isOpen, toggle, close } = useToggle();
   const handleSelectPost = usePostsStore((state) => state.handleSelectPost);
+
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>

@@ -1,6 +1,6 @@
-import CommentActions from "@/features/post-comment/ui/CommentActions";
-import CommentInfo from "@/features/post-comment/ui/CommentInfo";
-import { ModalAddComment } from "@/features/post-comment/ui/modals/ModalAddComment";
+import CommentActions from "@/features/comment/ui/CommentActions";
+import CommentInfo from "@/features/comment/ui/CommentInfo";
+import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 import useCommentStore from "../model/useCommentStore";

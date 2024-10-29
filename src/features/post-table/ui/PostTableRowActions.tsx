@@ -1,4 +1,5 @@
 import { Post } from "@/entities/post/model/types";
+
 import ModalEditPost from "@/features/post/ui/modals/ModalEditPost";
 import ModalPostDetail from "@/features/post/ui/modals/ModalPostDetail";
 import PostDeleteButton from "@/features/post/ui/PostDeleteButton";

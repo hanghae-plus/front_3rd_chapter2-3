@@ -1,6 +1,6 @@
 import { Comment } from "@/entities/comment/model/types";
 
-import FormEditComment from "@/features/post-comment/ui/forms/FormEditComment";
+import FormEditComment from "@/features/comment/ui/forms/FormEditComment";
 
 import useToggle from "@/shared/lib/useToggle";
 
