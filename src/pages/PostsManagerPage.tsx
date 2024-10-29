@@ -10,7 +10,7 @@ import {
   PostSearchBar,
 } from "../feature/post/ui";
 import { AddCommentDialog, EditCommentDialog } from "../feature/comment/ui";
-import { PostTableWidget } from "../widget/post/ui";
+import { PostTableWidget } from "../widgets/post/ui";
 
 const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false);
