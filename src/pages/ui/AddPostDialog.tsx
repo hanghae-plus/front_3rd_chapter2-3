@@ -1,20 +1,17 @@
 // 게시물 추가 대화상자
 
-import React, { useState } from "react"
+import { useState } from "react"
 import { Button } from "../../shared/ui/button/Button"
 import { Input } from "../../shared/ui/input/Input"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { usePost } from "../../features/post/model/usePost"
+import { usePostDialog } from "../../features/post/model/usePostDialog"
 
-interface Props {
-  showAddDialog: boolean
-  setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const AddPostDialog = ({ showAddDialog, setShowAddDialog }: Props) => {
+const AddPostDialog = () => {
   const { posts, setPosts } = usePost()
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const { showAddDialog, setShowAddDialog } = usePostDialog()
 
   // 게시물 추가
   const addPost = async () => {

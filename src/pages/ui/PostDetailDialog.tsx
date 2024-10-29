@@ -1,28 +1,22 @@
-import React from "react"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import HighlightText from "./HighlightText"
 import { Button } from "../../shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { usePost } from "../../features/post/model/usePost"
 import { useComment } from "../../features/comment/model/useComment"
+import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
+import { usePostDialog } from "../../features/post/model/usePostDialog"
 
 interface Props {
-  setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
-  showPostDetailDialog: boolean
-  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
   searchQuery: string
 }
 
-const PostDetailDialog = ({
-  setShowAddCommentDialog,
-  setShowEditCommentDialog,
-  showPostDetailDialog,
-  setShowPostDetailDialog,
-  searchQuery,
-}: Props) => {
+const PostDetailDialog = ({ searchQuery }: Props) => {
   const { selectedPost } = usePost()
   const { comments, setComments, setSelectedComment, setNewComment } = useComment()
+  const { setShowAddCommentDialog, setShowEditCommentDialog } = useCommentDialog()
+  const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
+
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
     try {

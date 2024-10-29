@@ -1,15 +1,12 @@
 import { useComment } from "../../features/comment/model/useComment"
+import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
 import { Button } from "../../shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 
-interface Props {
-  setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
-  showAddCommentDialog: boolean
-}
-
-const AddCommentDialog = ({ setShowAddCommentDialog, showAddCommentDialog }: Props) => {
+const AddCommentDialog = () => {
   const { setComments, newComment, setNewComment } = useComment()
+  const { showAddCommentDialog, setShowAddCommentDialog } = useCommentDialog()
 
   // 댓글 추가
   const addComment = async () => {

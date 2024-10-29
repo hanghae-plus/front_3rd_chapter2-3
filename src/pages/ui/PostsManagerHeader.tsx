@@ -1,13 +1,10 @@
-import React from "react"
 import { Plus } from "lucide-react"
 import { Button } from "../../shared/ui/button/Button"
 import { CardHeader, CardTitle } from "../../shared/ui/card/Card"
+import { usePostDialog } from "../../features/post/model/usePostDialog"
 
-interface Props {
-  setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const PostsManagerHeader = ({ setShowAddDialog }: Props) => {
+const PostsManagerHeader = () => {
+  const { setShowAddDialog } = usePostDialog()
   return (
     <CardHeader>
       <CardTitle className="flex items-center justify-between">

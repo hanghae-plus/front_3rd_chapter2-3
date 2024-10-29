@@ -9,15 +9,14 @@ import Pagination from "./Pagination"
 import { usePost } from "../../features/post/model/usePost"
 import { useTag } from "../../features/tags/model/useTag"
 import { useUser } from "../../features/user/model/useUser"
+import { useUserDialog } from "../../features/user/model/useUserDialog"
+import { usePostDialog } from "../../features/post/model/usePostDialog"
 
 interface Props {
   searchQuery: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
   setTotal: React.Dispatch<React.SetStateAction<number>>
-  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
   updateURL: () => void
-  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
   sortBy: string
   setSortBy: React.Dispatch<React.SetStateAction<string>>
@@ -35,10 +34,7 @@ const PostsManagerContent = ({
   searchQuery,
   setLoading,
   setTotal,
-  setShowPostDetailDialog,
-  setShowUserModal,
   updateURL,
-  setShowEditDialog,
   setSearchQuery,
   sortBy,
   setSortBy,
@@ -54,6 +50,9 @@ const PostsManagerContent = ({
   const { setPosts } = usePost()
   const { tags, selectedTag, setSelectedTag } = useTag()
   const { setSelectedUser } = useUser()
+  const { setShowUserModal } = useUserDialog()
+  const { setShowEditDialog, setShowPostDetailDialog } = usePostDialog()
+
   return (
     <CardContent>
       <div className="flex flex-col gap-4">

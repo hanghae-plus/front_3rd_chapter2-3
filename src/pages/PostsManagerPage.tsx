@@ -31,12 +31,6 @@ const PostsManager = () => {
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -75,15 +69,12 @@ const PostsManager = () => {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <PostsManagerHeader setShowAddDialog={setShowAddDialog} />
+      <PostsManagerHeader />
       <PostsManagerContent
         searchQuery={searchQuery}
         setLoading={setLoading}
         setTotal={setTotal}
-        setShowPostDetailDialog={setShowPostDetailDialog}
-        setShowUserModal={setShowUserModal}
         updateURL={updateURL}
-        setShowEditDialog={setShowEditDialog}
         setSearchQuery={setSearchQuery}
         sortBy={sortBy}
         setSortBy={setSortBy}
@@ -97,25 +88,16 @@ const PostsManager = () => {
         total={total}
       />
 
-      <AddPostDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
+      <AddPostDialog />
 
-      <UpdatePostDialog setShowEditDialog={setShowEditDialog} showEditDialog={showEditDialog} />
+      <UpdatePostDialog />
 
-      <AddCommentDialog setShowAddCommentDialog={setShowAddCommentDialog} showAddCommentDialog={showAddCommentDialog} />
+      <AddCommentDialog />
 
-      <UpdateCommentDialog
-        setShowEditCommentDialog={setShowEditCommentDialog}
-        showEditCommentDialog={showEditCommentDialog}
-      />
-      <PostDetailDialog
-        setShowAddCommentDialog={setShowAddCommentDialog}
-        setShowEditCommentDialog={setShowEditCommentDialog}
-        showPostDetailDialog={showPostDetailDialog}
-        setShowPostDetailDialog={setShowPostDetailDialog}
-        searchQuery={searchQuery}
-      />
+      <UpdateCommentDialog />
+      <PostDetailDialog searchQuery={searchQuery} />
 
-      <UserModal showUserModal={showUserModal} setShowUserModal={setShowUserModal} />
+      <UserModal />
     </Card>
   )
 }
