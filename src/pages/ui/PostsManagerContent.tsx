@@ -1,5 +1,4 @@
 import { Search } from "lucide-react"
-import { Post } from "../model/Post"
 import { User } from "../model/User"
 import { Comments } from "../model/Comment"
 import { Tag } from "../model/Tag"
@@ -10,16 +9,14 @@ import { fetchPostsByTag } from "../api/fetchPostsByTag"
 import { searchPosts } from "../api/searchPosts"
 import PostTable from "./PostTable"
 import Pagination from "./Pagination"
+import { usePost } from "../../features/post/model/usePost"
 
 interface Props {
   searchQuery: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
   setTotal: React.Dispatch<React.SetStateAction<number>>
-  posts: Post[]
   comments: Comments
   setComments: React.Dispatch<React.SetStateAction<Comments>>
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -44,12 +41,9 @@ interface Props {
 const PostsManagerContent = ({
   searchQuery,
   setLoading,
-  setPosts,
   setTotal,
-  posts,
   comments,
   setComments,
-  setSelectedPost,
   setShowPostDetailDialog,
   setSelectedUser,
   setShowUserModal,
@@ -70,6 +64,7 @@ const PostsManagerContent = ({
   setSkip,
   total,
 }: Props) => {
+  const { setPosts } = usePost()
   return (
     <CardContent>
       <div className="flex flex-col gap-4">
@@ -136,16 +131,13 @@ const PostsManagerContent = ({
           <div className="flex justify-center p-4">로딩 중...</div>
         ) : (
           <PostTable
-            posts={posts}
             searchQuery={searchQuery}
             selectedTag={selectedTag}
             setSelectedTag={setSelectedTag}
             updateURL={updateURL}
             setSelectedUser={setSelectedUser}
             setShowUserModal={setShowUserModal}
-            setSelectedPost={setSelectedPost}
             setShowEditDialog={setShowEditDialog}
-            setPosts={setPosts}
             comments={comments}
             setComments={setComments}
             setShowPostDetailDialog={setShowPostDetailDialog}

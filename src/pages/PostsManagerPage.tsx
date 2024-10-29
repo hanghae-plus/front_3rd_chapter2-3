@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import PostsManagerHeader from "./ui/PostsManagerHeader"
 import { User } from "./model/User"
-import { Post } from "./model/Post"
 import { Comment, Comments } from "./model/Comment"
 import { Tag } from "./model/Tag"
 import PostsManagerContent from "./ui/PostsManagerContent"
@@ -17,6 +16,7 @@ import { Card } from "../shared/ui/card/Card"
 import { fetchPosts } from "./api/fetchPosts"
 import { fetchTags } from "./api/fetchTags"
 import { fetchPostsByTag } from "./api/fetchPostsByTag"
+import { usePost } from "../features/post/model/usePost"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -24,12 +24,11 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState<Post[]>([])
+  const { setPosts } = usePost()
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
@@ -88,12 +87,9 @@ const PostsManager = () => {
       <PostsManagerContent
         searchQuery={searchQuery}
         setLoading={setLoading}
-        setPosts={setPosts}
         setTotal={setTotal}
-        posts={posts}
         comments={comments}
         setComments={setComments}
-        setSelectedPost={setSelectedPost}
         setShowPostDetailDialog={setShowPostDetailDialog}
         setSelectedUser={setSelectedUser}
         setShowUserModal={setShowUserModal}
@@ -120,18 +116,9 @@ const PostsManager = () => {
         setShowAddDialog={setShowAddDialog}
         newPost={newPost}
         setNewPost={setNewPost}
-        setPosts={setPosts}
-        posts={posts}
       />
 
-      <UpdatePostDialog
-        selectedPost={selectedPost}
-        setPosts={setPosts}
-        posts={posts}
-        setShowEditDialog={setShowEditDialog}
-        showEditDialog={showEditDialog}
-        setSelectedPost={setSelectedPost}
-      />
+      <UpdatePostDialog setShowEditDialog={setShowEditDialog} showEditDialog={showEditDialog} />
 
       <AddCommentDialog
         newComment={newComment}
@@ -156,7 +143,6 @@ const PostsManager = () => {
         setShowEditCommentDialog={setShowEditCommentDialog}
         showPostDetailDialog={showPostDetailDialog}
         setShowPostDetailDialog={setShowPostDetailDialog}
-        selectedPost={selectedPost}
         searchQuery={searchQuery}
         setComments={setComments}
       />

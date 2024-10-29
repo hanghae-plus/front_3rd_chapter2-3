@@ -6,24 +6,16 @@ import { Button } from "../../shared/ui/button/Button"
 import { Input } from "../../shared/ui/input/Input"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { usePost } from "../../features/post/model/usePost"
 
 interface Props {
-  selectedPost: Post | null
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
-  posts: Post[]
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
   showEditDialog: boolean
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
 }
 
-const UpdatePostDialog = ({
-  selectedPost,
-  setPosts,
-  posts,
-  setShowEditDialog,
-  showEditDialog,
-  setSelectedPost,
-}: Props) => {
+const UpdatePostDialog = ({ setShowEditDialog, showEditDialog }: Props) => {
+  const { posts, setPosts, selectedPost, setSelectedPost } = usePost()
+
   // 게시물 업데이트
   const updatePost = async () => {
     try {

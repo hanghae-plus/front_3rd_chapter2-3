@@ -1,11 +1,11 @@
 // 게시물 추가 대화상자
 
 import React from "react"
-import { Post } from "../model/Post"
 import { Button } from "../../shared/ui/button/Button"
 import { Input } from "../../shared/ui/input/Input"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { usePost } from "../../features/post/model/usePost"
 
 interface NewPost {
   title: string
@@ -18,11 +18,10 @@ interface Props {
   setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>
   newPost: NewPost
   setNewPost: React.Dispatch<React.SetStateAction<NewPost>>
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
-  posts: Post[]
 }
 
-const AddPostDialog = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, setPosts, posts }: Props) => {
+const AddPostDialog = ({ showAddDialog, setShowAddDialog, newPost, setNewPost }: Props) => {
+  const { posts, setPosts } = usePost()
   // 게시물 추가
   const addPost = async () => {
     try {

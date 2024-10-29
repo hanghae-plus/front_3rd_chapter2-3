@@ -3,9 +3,9 @@ import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import HighlightText from "./HighlightText"
 import { NewComment } from "../model/NewComment"
 import { Comment, Comments } from "../model/Comment"
-import { Post } from "../model/Post"
 import { Button } from "../../shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { usePost } from "../../features/post/model/usePost"
 
 interface Props {
   setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
@@ -15,7 +15,6 @@ interface Props {
   setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
   showPostDetailDialog: boolean
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
-  selectedPost: Post | null
   searchQuery: string
   setComments: React.Dispatch<React.SetStateAction<Comments>>
 }
@@ -28,10 +27,10 @@ const PostDetailDialog = ({
   setShowEditCommentDialog,
   showPostDetailDialog,
   setShowPostDetailDialog,
-  selectedPost,
   searchQuery,
   setComments,
 }: Props) => {
+  const { selectedPost } = usePost()
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
     try {

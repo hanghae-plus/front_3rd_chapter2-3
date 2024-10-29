@@ -8,38 +8,35 @@ import { Post } from "../model/Post"
 import { openUserModal } from "../api/openUserModal"
 import { fetchComments } from "../api/fetchComments"
 import { Comments } from "../model/Comment"
+import { usePost } from "../../features/post/model/usePost"
 
 interface Props {
-  posts: Post[]
   searchQuery: string
   selectedTag: string
   setSelectedTag: React.Dispatch<React.SetStateAction<string>>
   updateURL: () => void
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
   comments: Comments
   setComments: React.Dispatch<React.SetStateAction<Comments>>
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PostTable = ({
-  posts,
   searchQuery,
   selectedTag,
   setSelectedTag,
   updateURL,
   setSelectedUser,
   setShowUserModal,
-  setSelectedPost,
   setShowEditDialog,
-  setPosts,
   comments,
   setComments,
   setShowPostDetailDialog,
 }: Props) => {
+  const { posts, setPosts, setSelectedPost } = usePost()
+
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
