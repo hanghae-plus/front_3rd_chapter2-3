@@ -98,7 +98,9 @@ const PostsManager = () => {
   // 태그 가져오기
   const fetchTags = async () => {
     const data = await postApi.fetchTags()
-    setTags(data)
+    if (data) {
+      setTags(data)
+    }
   }
 
   // 게시물 검색
@@ -109,15 +111,12 @@ const PostsManager = () => {
     }
     setLoading(true)
     try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
+      const { posts, total } = await postApi.searchPosts(searchQuery)
+      setPosts(posts)
+      setTotal(total)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // 태그별 게시물 가져오기

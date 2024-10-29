@@ -1,4 +1,5 @@
-import { PostsResponse, UsersResponse } from "../model/types"
+import { safeFetch } from "../../../shared/lib"
+import { PostsResponse, Tag, UsersResponse } from "../model/types"
 
 type FetchPostsPayload = {
   limit: number
@@ -10,8 +11,8 @@ export const postApi = {
   fetchPosts: async ({ limit, skip }: FetchPostsPayload) => {
     try {
       const [postsData, usersData] = await Promise.all([
-        fetch(`/api/posts?limit=${limit}&skip=${skip}`).then((response) => response.json() as Promise<PostsResponse>),
-        fetch("/api/users?limit=0&select=username,image").then((response) => response.json() as Promise<UsersResponse>),
+        safeFetch<PostsResponse>(`/api/posts?limit=${limit}&skip=${skip}`),
+        safeFetch<UsersResponse>("/api/users?limit=0&select=username,image"),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -29,13 +30,36 @@ export const postApi = {
     }
   },
 
+  /** 게시물 검색 */
+  searchPosts: async (searchQuery: string) => {
+    try {
+      const [postsData, usersData] = await Promise.all([
+        safeFetch<PostsResponse>(`/api/posts/search?q=${searchQuery}`),
+        safeFetch<UsersResponse>("/api/users?limit=0&select=username,image"),
+      ])
+
+      const postsWithUsers = postsData.posts.map((post) => ({
+        ...post,
+        author: usersData.users.find((user) => user.id === post.userId),
+      }))
+
+      return { posts: postsWithUsers, total: postsData.total }
+    } catch (error) {
+      console.error("게시물 검색 오류:", error)
+      throw error
+    }
+  },
+
   /** 태그 가져오기 */
   fetchTags: async () => {
     try {
-      const response = await fetch("/api/posts/tags").then((response) => response.json())
+      const response = await safeFetch<Tag[]>("/api/posts/tags")
+      console.log(response)
+
       return response
     } catch (error) {
       console.error("태그 가져오기 오류:", error)
+      throw error
     }
   },
 }
