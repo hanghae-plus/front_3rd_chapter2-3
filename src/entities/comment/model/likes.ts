@@ -1,3 +1,5 @@
+import { Comment } from "./type"
+
 export const calculateNewLikes = (currentLikes: number): number => {
   return currentLikes + 1
 }
