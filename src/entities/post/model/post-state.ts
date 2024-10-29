@@ -8,5 +8,8 @@ interface PostListState {
 
 export const postListState = create<PostListState>(set => ({
   postList: [],
-  addPostState: post => set(prev => ({ ...prev, post })),
+  addPostState: post =>
+    set(prev => ({
+      postList: [...prev.postList, post],
+    })),
 }));

@@ -8,6 +8,8 @@ import {
   Textarea,
 } from "@/shared/ui";
 import AddNewPost from "@/features/addPost/model/add-new-post";
+import { postListState } from "@/entities/post/model/post-state";
+import { useEffect } from "react";
 
 interface AddDialogProps {
   isOpen: boolean;
@@ -15,7 +17,13 @@ interface AddDialogProps {
 }
 
 const AddPostDialog = ({ isOpen, close }: AddDialogProps) => {
-  const { newPost, setNewPost, addPost } = AddNewPost();
+  const { newPost, updateNewPost, addPost } = AddNewPost();
+
+  const { postList } = postListState();
+
+  useEffect(() => {
+    console.log(postList);
+  }, [postList]);
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
@@ -27,19 +35,19 @@ const AddPostDialog = ({ isOpen, close }: AddDialogProps) => {
           <Input
             placeholder="제목"
             value={newPost.title}
-            onChange={e => setNewPost({ ...newPost, title: e.target.value })}
+            onChange={e => updateNewPost("title", e.target.value)}
           />
           <Textarea
             rows={30}
             placeholder="내용"
             value={newPost.body}
-            onChange={e => setNewPost({ ...newPost, body: e.target.value })}
+            onChange={e => updateNewPost("body", e.target.value)}
           />
           <Input
             type="number"
             placeholder="사용자 ID"
             value={newPost.userId}
-            onChange={e => setNewPost({ ...newPost, userId: Number(e.target.value) })}
+            onChange={e => updateNewPost("userId", Number(e.target.value))}
           />
           <Button onClick={addPost}>게시물 추가</Button>
         </div>
