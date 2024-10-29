@@ -7,7 +7,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/d
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/Select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table/Table"
 import { Input, Textarea } from "../shared/ui/input/Text"
-import CommentSection from "../feature/comment/ui/renderingComments"
+import { postFetch } from "../feature/post/model/postFetch"
+import { postFetchTags } from "../entities/model/postFetchTags"
+import { highlightText } from "../shared/utils/highlightText"
+import { usePost } from "../feature/post/model/usePost"
+import { useAtom } from "jotai"
+
+import {
+  showAddDialogAtom,
+  showEditDialogAtom,
+  postsAtom,
+  newPostAtom,
+  commentsAtom,
+  selectedCommentAtom,
+  newCommentAtom,
+  showAddCommentDialogAtom,
+  showEditCommentDialogAtom,
+  showPostDetailDialogAtom,
+} from "../feature/post/model/atoms"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -15,7 +32,6 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
