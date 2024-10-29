@@ -1,9 +1,9 @@
-import { useCommentContext } from "../../comment/model/CommentContext"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
+import { useComments } from "../../comment/model/commentStore"
 
 export const CommentEditModal = () => {
   const { showEditCommentDialog, setShowEditCommentDialog, selectedComment, setSelectedComment, updateComment } =
-    useCommentContext()
+    useComments()
 
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>

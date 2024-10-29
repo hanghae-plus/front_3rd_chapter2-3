@@ -1,17 +1,24 @@
-import { useState } from "react"
+import { atom, useAtom } from "jotai"
+import { Comment, NewComment } from "../../../entities/comment/model/types"
 import {
-  fetchCommentsApi,
-  deleteCommentApi,
-  likeCommentApi,
   createCommentApi,
+  deleteCommentApi,
+  fetchCommentsApi,
+  likeCommentApi,
   updateCommentApi,
 } from "../../../entities/comment/api"
-import { Comment, NewComment } from "../../../entities/comment/model/types"
+
+const commentsAtom = atom<Record<number, Comment[]>>({})
+const newCommentAtom = atom<NewComment>({ body: "", postId: null, userId: 1 })
+const showAddCommentDialogAtom = atom(false)
+
+const selectedCommentAtom = atom<Comment | null>(null)
+const showEditCommentDialogAtom = atom(false)
 
 export const useComments = () => {
-  const [comments, setComments] = useState<Record<number, Comment[]>>({})
-  const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
+  const [comments, setComments] = useAtom(commentsAtom)
+  const [newComment, setNewComment] = useAtom(newCommentAtom)
+  const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom)
 
   const getComments = (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
@@ -57,8 +64,8 @@ export const useComments = () => {
     }))
   }
 
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
+  const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
 
   const updateComment = async () => {
     if (!selectedComment) return

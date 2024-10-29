@@ -1,13 +1,13 @@
 import { useEffect } from "react"
-import { useCommentContext } from "../../comment/model/CommentContext"
 import { CommentItem } from "../../comment-item/ui/CommentItem"
+import { useComments } from "../../comment/model/commentStore"
 
 interface Props {
   postId: number
 }
 
 export const CommentItems = ({ postId }: Props) => {
-  const { comments, getComments } = useCommentContext()
+  const { comments, getComments } = useComments()
 
   useEffect(() => {
     getComments(postId)

@@ -5,7 +5,6 @@ import PostsManagerPage from "./pages/PostsManagerPage.tsx"
 import { UserContextProvider } from "./features/user/model/UserContext.tsx"
 import { PostContextProvider } from "./features/post/model/PostContext.tsx"
 import { PostParamsContextProvider } from "./features/post/model/PostParamsContext.tsx"
-import { CommentContextProvider } from "./features/comment/model/CommentContext.tsx"
 
 const App = () => {
   return (
@@ -17,9 +16,7 @@ const App = () => {
           <main className="flex-grow container mx-auto px-4 py-8">
             <PostContextProvider>
               <PostParamsContextProvider>
-                <CommentContextProvider>
-                  <PostsManagerPage />
-                </CommentContextProvider>
+                <PostsManagerPage />
               </PostParamsContextProvider>
             </PostContextProvider>
 

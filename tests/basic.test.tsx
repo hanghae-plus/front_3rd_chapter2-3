@@ -11,7 +11,6 @@ import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
 import { UserContextProvider } from "../src/features/user/model/UserContext"
 import { PostContextProvider } from "../src/features/post/model/PostContext"
 import { PostParamsContextProvider } from "../src/features/post/model/PostParamsContext"
-import { CommentContextProvider } from "../src/features/comment/model/CommentContext"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -54,9 +53,7 @@ const renderPostsManager = () => {
       <UserContextProvider>
         <PostContextProvider>
           <PostParamsContextProvider>
-            <CommentContextProvider>
-              <PostsManager />
-            </CommentContextProvider>
+            <PostsManager />
           </PostParamsContextProvider>
         </PostContextProvider>
       </UserContextProvider>

@@ -1,13 +1,13 @@
 import { Plus } from "lucide-react"
-import { useCommentContext } from "../../comment/model/CommentContext"
 import { Button } from "../../../shared/ui"
+import { useComments } from "../../comment/model/commentStore"
 
 interface Props {
   postId: number
 }
 
 export const CommentAddButton = ({ postId }: Props) => {
-  const { setNewComment, setShowAddCommentDialog } = useCommentContext()
+  const { setNewComment, setShowAddCommentDialog } = useComments()
 
   return (
     <Button
