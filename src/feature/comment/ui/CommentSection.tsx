@@ -1,10 +1,11 @@
 import { Button, HighlightText } from "../../../shared/ui";
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
 import { Comments } from "../../../temp/types.ts";
+import { useEffect } from "react";
+import { useCommentContext } from "../model/CommentContext.tsx";
 
 export const CommentSection = ({
   postId,
-  comments,
   setNewComment,
   setSelectedComment,
   setShowAddCommentDialog,
@@ -13,6 +14,10 @@ export const CommentSection = ({
   likeComment,
   deleteComment,
 }) => {
+  const { comments } = useCommentContext();
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">

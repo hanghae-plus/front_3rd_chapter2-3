@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
+import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { Comments, NewComment } from "../../../temp/types.ts";
 import {
   deleteExistingComment,
@@ -39,10 +39,17 @@ export const CommentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
 
     const data = await getComments(postId);
+
+    console.log(data, "comment", postId);
     if (data) {
       setComments((prev) => ({ ...prev, [postId]: data.comments }));
+      console.log(comments);
     }
   };
+
+  useEffect(() => {
+    console.log(comments, "context");
+  }, [comments]);
 
   const addComment = async () => {
     const data = await postNewComment(newComment);

@@ -6,7 +6,6 @@ export const DetailPostDialog = ({ isOpen, onClose }) => {
   const {
     searchQuery,
     selectedPost,
-    comments,
     setNewComment,
     setSelectedComment,
     setShowAddCommentDialog,
@@ -26,7 +25,6 @@ export const DetailPostDialog = ({ isOpen, onClose }) => {
             <p>{HighlightText(selectedPost.body, searchQuery)}</p>
             <CommentSection
               postId={selectedPost.id}
-              comments={comments}
               setNewComment={setNewComment}
               setSelectedComment={setSelectedComment}
               setShowAddCommentDialog={setShowAddCommentDialog}
@@ -34,7 +32,7 @@ export const DetailPostDialog = ({ isOpen, onClose }) => {
               searchQuery={searchQuery}
               likeComment={likeComment}
               deleteComment={deleteComment}
-            ></CommentSection>
+            />
           </div>
         </DialogContent>
       )}

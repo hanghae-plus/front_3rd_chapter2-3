@@ -4,3 +4,4 @@ export * from "./EditPostDialog.tsx";
 export * from "./DetailPostDialog.tsx";
 export * from "./PostPagination.tsx";
 export * from "./PostSearchBar.tsx";
+export * from "./PostHeader.tsx";
