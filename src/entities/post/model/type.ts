@@ -17,3 +17,9 @@ type Reactions = {
   likes: number
   dislikes: number
 }
+
+export type NewPost = {
+  title: string
+  body: string
+  userId: number
+}

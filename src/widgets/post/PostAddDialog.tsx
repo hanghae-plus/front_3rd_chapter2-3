@@ -1,40 +1,25 @@
 // 게시물 추가 대화상자
 
-import React from "react"
+import React, { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
 import { Post } from "../../entities/post/model/type"
-
-interface NewPost {
-  title: string
-  body: string
-  userId: number
-}
+import { createPostApi } from "../../entities/post/api"
 
 interface Props {
   showAddDialog: boolean
   setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>
-  newPost: NewPost
-  setNewPost: React.Dispatch<React.SetStateAction<NewPost>>
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>
   posts: Post[]
 }
 
-const PosAddtDialog = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, setPosts, posts }: Props) => {
-  // 게시물 추가
+const PostAddDialog = ({ showAddDialog, setShowAddDialog, setPosts, posts }: Props) => {
+  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
+    const data = await createPostApi(newPost)
+
+    setPosts([data, ...posts])
+    setShowAddDialog(false)
+    setNewPost({ title: "", body: "", userId: 1 })
   }
 
   return (
@@ -68,4 +53,4 @@ const PosAddtDialog = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, s
   )
 }
 
-export default PosAddtDialog
+export default PostAddDialog
