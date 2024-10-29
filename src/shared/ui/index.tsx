@@ -9,6 +9,7 @@ export {
   DialogHeader,
   DialogTitle,
 } from "./dialog/Dialog"
+export { Error } from "./error/Error"
 export { Input } from "./input/Input"
 export { SearchInput } from "./input/SearchInput"
 export { Loader } from "./loader/Loader"

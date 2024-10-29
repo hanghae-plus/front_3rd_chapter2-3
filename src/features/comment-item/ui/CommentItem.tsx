@@ -17,7 +17,7 @@ export const CommentItem = ({ postId, comment }: Props) => {
 
     setSelectedComment,
     setShowEditCommentDialog,
-  } = useComments()
+  } = useComments(postId)
   const { searchQuery } = usePostParams()
 
   return (
@@ -27,7 +27,7 @@ export const CommentItem = ({ postId, comment }: Props) => {
         <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
       </div>
       <div className="flex items-center space-x-1">
-        <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+        <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id)}>
           <ThumbsUp className="w-3 h-3" />
           <span className="ml-1 text-xs">{comment.likes}</span>
         </Button>
@@ -41,7 +41,7 @@ export const CommentItem = ({ postId, comment }: Props) => {
         >
           <Edit2 className="w-3 h-3" />
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+        <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id)}>
           <Trash2 className="w-3 h-3" />
         </Button>
       </div>
