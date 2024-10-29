@@ -2,7 +2,14 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown } from "lucide-react"
 import { ComponentPropsWithoutRef, forwardRef } from "react"
 
-export const Select = SelectPrimitive.Root
+interface SelectProps {
+  value: string
+  onValueChange: (value: string) => void
+  options: { value: string; label: string }[]
+  placeholder: string
+}
+
+export const SelectRoot = SelectPrimitive.Root
 export const SelectGroup = SelectPrimitive.Group
 export const SelectValue = SelectPrimitive.Value
 
@@ -67,3 +74,20 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({ classNa
   </SelectPrimitive.Item>
 ))
 SelectItem.displayName = SelectPrimitive.Item.displayName
+
+export const Select = ({ value, onValueChange, options, placeholder }: SelectProps) => {
+  return (
+    <SelectRoot value={value} onValueChange={onValueChange}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </SelectRoot>
+  )
+}

@@ -1,1 +1,6 @@
+export * from "./api/delete"
+export * from "./api/get"
+export * from "./api/patch"
+export * from "./api/post"
+export * from "./api/put"
 export * from "./type"

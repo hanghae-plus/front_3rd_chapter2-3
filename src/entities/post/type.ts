@@ -1,5 +1,5 @@
 import { Comment } from "../comment"
-import { UserData } from "../user"
+import { UserData } from "../user/model/types"
 
 // 게시물 기본 타입
 export interface Post {
