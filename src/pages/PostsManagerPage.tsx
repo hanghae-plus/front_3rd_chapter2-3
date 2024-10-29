@@ -26,21 +26,20 @@ import {
   Textarea,
 } from "../shared/ui"
 import { highlightText } from "../shared/lib/highlightText.tsx"
-import { addPostApi, deletePostApi, fetchPostsApi, updatePostApi } from "../entities/post/api/index.ts"
 import { addCommentApi, deleteCommentApi, updateCommentApi } from "../entities/comment/api/index.ts"
 import { fetchCommentsApi } from "../entities/comment/api/index.ts"
 import { likeCommentApi } from "../entities/comment/api/index.ts"
 import { fetchTagsApi } from "../entities/tag/api/index.ts"
-import { fetchUsersApi } from "../entities/user/api/index.ts"
+import { usePosts } from "../features/post/model/usePosts.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
 
+  const { posts, total, getPosts, addPost, updatePost, deletePost, searchPostsWithQuery } = usePosts()
+
   // 상태 관리
-  const [posts, setPosts] = useState([])
-  const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
@@ -77,18 +76,7 @@ const PostsManager = () => {
   // 게시물 가져오기
   const fetchPosts = async () => {
     setLoading(true)
-
-    const postsData = await fetchPostsApi(limit, skip)
-    const usersData = await fetchUsersApi()
-
-    const postsWithUsers = postsData.posts.map((post) => ({
-      ...post,
-      author: usersData.find((user) => user.id === post.userId),
-    }))
-
-    setPosts(postsWithUsers)
-    setTotal(postsData.total)
-
+    await getPosts(limit, skip)
     setLoading(false)
   }
 
@@ -105,15 +93,9 @@ const PostsManager = () => {
       fetchPosts()
       return
     }
+
     setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
+    await searchPostsWithQuery(searchQuery)
     setLoading(false)
   }
 
@@ -123,50 +105,25 @@ const PostsManager = () => {
       fetchPosts()
       return
     }
+
     setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
+    getPosts(limit, skip, tag)
     setLoading(false)
   }
 
   // 게시물 추가
-  const addPost = async () => {
-    const data = await addPostApi(newPost)
+  const submitAddPostForm = () => {
+    addPost(newPost)
 
-    setPosts([data, ...posts])
     setShowAddDialog(false)
     setNewPost({ title: "", body: "", userId: 1 })
   }
 
   // 게시물 업데이트
-  const updatePost = async () => {
-    const data = await updatePostApi(selectedPost)
+  const submitUpdatePostForm = async () => {
+    updatePost(selectedPost)
 
-    setPosts(posts.map((post) => (post.id === data.id ? data : post)))
     setShowEditDialog(false)
-  }
-
-  // 게시물 삭제
-  const deletePost = (id) => {
-    deletePostApi(id)
-
-    setPosts(posts.filter((post) => post.id !== id))
   }
 
   // 댓글 가져오기
@@ -213,11 +170,7 @@ const PostsManager = () => {
   const likeComment = async (id, postId) => {
     const likes = comments[postId].find((c) => c.id === id).likes + 1
 
-    console.log(likes)
-
     const data = await likeCommentApi(id, likes)
-
-    console.log(data)
 
     setComments((prev) => ({
       ...prev,
@@ -519,7 +472,7 @@ const PostsManager = () => {
               value={newPost.userId}
               onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
             />
-            <Button onClick={addPost}>게시물 추가</Button>
+            <Button onClick={submitAddPostForm}>게시물 추가</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -542,7 +495,7 @@ const PostsManager = () => {
               value={selectedPost?.body || ""}
               onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={submitUpdatePostForm}>게시물 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>

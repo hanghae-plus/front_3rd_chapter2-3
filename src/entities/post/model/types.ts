@@ -1,3 +1,5 @@
+import { User } from "../../user/model/types"
+
 export interface NewPost {
   title: string
   body: string
@@ -15,9 +17,5 @@ export interface Post {
   }
   views: number
   userId: number
-  author: {
-    id: number
-    username: string
-    image: string
-  }
+  author: User
 }
