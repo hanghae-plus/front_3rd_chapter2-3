@@ -31,6 +31,7 @@ import { addCommentApi, deleteCommentApi, updateCommentApi } from "../entities/c
 import { fetchCommentsApi } from "../entities/comment/api/index.ts"
 import { likeCommentApi } from "../entities/comment/api/index.ts"
 import { fetchTagsApi } from "../entities/tag/api/index.ts"
+import { fetchUsersApi } from "../entities/user/api/index.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -74,32 +75,21 @@ const PostsManager = () => {
   }
 
   // 게시물 가져오기
-  const fetchPosts = () => {
+  const fetchPosts = async () => {
     setLoading(true)
-    let postsData
-    let usersData
 
-    fetchPostsApi(limit, skip)
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    const postsData = await fetchPostsApi(limit, skip)
+    const usersData = await fetchUsersApi()
+
+    const postsWithUsers = postsData.posts.map((post) => ({
+      ...post,
+      author: usersData.find((user) => user.id === post.userId),
+    }))
+
+    setPosts(postsWithUsers)
+    setTotal(postsData.total)
+
+    setLoading(false)
   }
 
   // 태그 가져오기

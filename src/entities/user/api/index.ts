@@ -1,0 +1,10 @@
+export const fetchUsersApi = async () => {
+  try {
+    const response = await fetch("/api/users?limit=0&select=username,image")
+    const data = await response.json()
+
+    return data.users
+  } catch (error) {
+    console.log(`사용자 가져오기 오류: ${error}`)
+  }
+}
