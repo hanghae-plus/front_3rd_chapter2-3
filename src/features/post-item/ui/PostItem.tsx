@@ -4,14 +4,14 @@ import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { useUserContext } from "../../user/model/UserContext"
-import { usePostsContext } from "../../post/model/PostContext"
+import { usePosts } from "../../post/model/postStore"
 
 interface Props {
   post: Post
 }
 
 export const PostItem = ({ post }: Props) => {
-  const { openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePostsContext()
+  const { openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePosts()
   const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsContext()
   const { openUserModal } = useUserContext()
 

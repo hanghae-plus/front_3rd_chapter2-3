@@ -9,7 +9,6 @@ import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
 import { UserContextProvider } from "../src/features/user/model/UserContext"
-import { PostContextProvider } from "../src/features/post/model/PostContext"
 import { PostParamsContextProvider } from "../src/features/post/model/PostParamsContext"
 
 // MSW 서버 설정
@@ -51,11 +50,9 @@ const renderPostsManager = () => {
   return render(
     <MemoryRouter>
       <UserContextProvider>
-        <PostContextProvider>
-          <PostParamsContextProvider>
-            <PostsManager />
-          </PostParamsContextProvider>
-        </PostContextProvider>
+        <PostParamsContextProvider>
+          <PostsManager />
+        </PostParamsContextProvider>
       </UserContextProvider>
     </MemoryRouter>,
   )

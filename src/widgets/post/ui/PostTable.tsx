@@ -1,9 +1,9 @@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
-import { usePostsContext } from "../../../features/post/model/PostContext"
 import { PostItem } from "../../../features/post-item/ui/PostItem"
+import { usePosts } from "../../../features/post/model/postStore"
 
 export const PostTable = () => {
-  const { posts } = usePostsContext()
+  const { posts } = usePosts()
 
   return (
     <Table>

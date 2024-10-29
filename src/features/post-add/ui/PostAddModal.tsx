@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { usePostsContext } from "../../post/model/PostContext"
 import { createPostApi } from "../../../entities/post/api"
+import { usePosts } from "../../post/model/postStore"
 
 export const PostAddModal = () => {
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
 
-  const { posts, setPosts, showAddDialog, setShowAddDialog } = usePostsContext()
+  const { posts, setPosts, showAddDialog, setShowAddDialog } = usePosts()
 
   const addPost = async () => {
     const data = await createPostApi(newPost)

@@ -1,11 +1,11 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { CommentView } from "../../../widgets/comment/ui/CommentView"
-import { usePostsContext } from "../../post/model/PostContext"
 import { usePostParamsContext } from "../../post/model/PostParamsContext"
+import { usePosts } from "../../post/model/postStore"
 
 export const PostDetailModal = () => {
-  const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePostsContext()
+  const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePosts()
   const { searchQuery } = usePostParamsContext()
 
   return (
