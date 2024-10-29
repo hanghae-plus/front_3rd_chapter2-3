@@ -29,9 +29,9 @@ import { highlightText } from "../shared/lib/highlightText.tsx"
 import { addCommentApi, deleteCommentApi, updateCommentApi } from "../entities/comment/api/index.ts"
 import { fetchCommentsApi } from "../entities/comment/api/index.ts"
 import { likeCommentApi } from "../entities/comment/api/index.ts"
-import { fetchTagsApi } from "../entities/tag/api/index.ts"
 import { usePosts } from "../features/post/model/usePosts.ts"
 import { useUser } from "../features/user/model/useUser.ts"
+import { useTags } from "../features/tags/model/useTags.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -40,6 +40,7 @@ const PostsManager = () => {
 
   const { posts, total, getPosts, addPost, updatePost, deletePost, searchPostsWithQuery } = usePosts()
   const { showUserModal, setShowUserModal, selectedUser, openUserModal } = useUser()
+  const { tags } = useTags()
 
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -52,7 +53,6 @@ const PostsManager = () => {
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [comments, setComments] = useState({})
   const [selectedComment, setSelectedComment] = useState(null)
@@ -78,13 +78,6 @@ const PostsManager = () => {
     setLoading(true)
     await getPosts(limit, skip)
     setLoading(false)
-  }
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    const data = await fetchTagsApi()
-
-    setTags(data)
   }
 
   // 게시물 검색
@@ -184,10 +177,6 @@ const PostsManager = () => {
     fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
 
   useEffect(() => {
     if (selectedTag) {
