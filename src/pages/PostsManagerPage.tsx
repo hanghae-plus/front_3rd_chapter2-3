@@ -30,6 +30,7 @@ import { addPostApi, deletePostApi, fetchPostsApi, updatePostApi } from "../enti
 import { addCommentApi, deleteCommentApi, updateCommentApi } from "../entities/comment/api/index.ts"
 import { fetchCommentsApi } from "../entities/comment/api/index.ts"
 import { likeCommentApi } from "../entities/comment/api/index.ts"
+import { fetchTagsApi } from "../entities/tag/api/index.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -103,13 +104,9 @@ const PostsManager = () => {
 
   // 태그 가져오기
   const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags")
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
+    const data = await fetchTagsApi()
+
+    setTags(data)
   }
 
   // 게시물 검색
