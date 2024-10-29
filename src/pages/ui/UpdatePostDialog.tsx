@@ -1,12 +1,12 @@
 // 게시물 수정 대화상자
 
 import React from "react"
-import { Post } from "../model/Post"
 import { Button } from "../../shared/ui/button/Button"
 import { Input } from "../../shared/ui/input/Input"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { usePost } from "../../features/post/model/usePost"
+import { Post } from "../../features/post/model/types"
 
 interface Props {
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>

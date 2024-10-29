@@ -1,4 +1,4 @@
-import { Post } from "../model/Post"
+import { Post } from "../../features/post/model/types"
 
 interface Props {
   id: number

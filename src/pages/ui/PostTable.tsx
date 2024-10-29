@@ -4,11 +4,11 @@ import { User } from "../model/User"
 import HighlightText from "./HighlightText"
 import { Button } from "../../shared/ui/button/Button"
 import { deletePost } from "../api/deletePost"
-import { Post } from "../model/Post"
 import { openUserModal } from "../api/openUserModal"
 import { fetchComments } from "../api/fetchComments"
 import { Comments } from "../model/Comment"
 import { usePost } from "../../features/post/model/usePost"
+import { Post } from "../../features/post/model/types"
 
 interface Props {
   searchQuery: string
