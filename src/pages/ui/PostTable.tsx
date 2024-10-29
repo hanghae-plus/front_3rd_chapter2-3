@@ -9,11 +9,10 @@ import { fetchComments } from "../api/fetchComments"
 import { usePost } from "../../features/post/model/usePost"
 import { Post } from "../../features/post/model/types"
 import { useComment } from "../../features/comment/model/useComment"
+import { useTag } from "../../features/tags/model/useTag"
 
 interface Props {
   searchQuery: string
-  selectedTag: string
-  setSelectedTag: React.Dispatch<React.SetStateAction<string>>
   updateURL: () => void
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -23,8 +22,6 @@ interface Props {
 
 const PostTable = ({
   searchQuery,
-  selectedTag,
-  setSelectedTag,
   updateURL,
   setSelectedUser,
   setShowUserModal,
@@ -33,6 +30,7 @@ const PostTable = ({
 }: Props) => {
   const { posts, setPosts, setSelectedPost } = usePost()
   const { comments, setComments } = useComment()
+  const { selectedTag, setSelectedTag } = useTag()
 
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {

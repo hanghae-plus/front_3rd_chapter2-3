@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import PostsManagerHeader from "./ui/PostsManagerHeader"
 import { User } from "./model/User"
-import { Tag } from "./model/Tag"
 import PostsManagerContent from "./ui/PostsManagerContent"
 import AddPostDialog from "./ui/AddPostDialog"
 import UpdatePostDialog from "./ui/UpdatePostDialog"
@@ -15,6 +14,7 @@ import { fetchPosts } from "./api/fetchPosts"
 import { fetchTags } from "./api/fetchTags"
 import { fetchPostsByTag } from "./api/fetchPostsByTag"
 import { usePost } from "../features/post/model/usePost"
+import { useTag } from "../features/tags/model/useTag"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -23,6 +23,7 @@ const PostsManager = () => {
 
   // 상태 관리
   const { setPosts } = usePost()
+  const { setTags, selectedTag, setSelectedTag } = useTag()
 
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -33,8 +34,6 @@ const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState<Tag[]>([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
@@ -86,12 +85,9 @@ const PostsManager = () => {
         setShowPostDetailDialog={setShowPostDetailDialog}
         setSelectedUser={setSelectedUser}
         setShowUserModal={setShowUserModal}
-        selectedTag={selectedTag}
-        setSelectedTag={setSelectedTag}
         updateURL={updateURL}
         setShowEditDialog={setShowEditDialog}
         setSearchQuery={setSearchQuery}
-        tags={tags}
         sortBy={sortBy}
         setSortBy={setSortBy}
         sortOrder={sortOrder}

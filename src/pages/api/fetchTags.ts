@@ -1,4 +1,4 @@
-import { Tag } from "../model/Tag"
+import { Tag } from "../../features/tags/model/types"
 
 // 태그 가져오기
 export const fetchTags = async (setTags: React.Dispatch<React.SetStateAction<Tag[]>>) => {

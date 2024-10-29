@@ -1,6 +1,5 @@
 import { Search } from "lucide-react"
 import { User } from "../model/User"
-import { Tag } from "../model/Tag"
 import { Input } from "../../shared/ui/input/Input"
 import { CardContent } from "../../shared/ui/card/Card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/select/Select"
@@ -9,6 +8,7 @@ import { searchPosts } from "../api/searchPosts"
 import PostTable from "./PostTable"
 import Pagination from "./Pagination"
 import { usePost } from "../../features/post/model/usePost"
+import { useTag } from "../../features/tags/model/useTag"
 
 interface Props {
   searchQuery: string
@@ -17,12 +17,9 @@ interface Props {
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
-  selectedTag: string
-  setSelectedTag: React.Dispatch<React.SetStateAction<string>>
   updateURL: () => void
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
-  tags: Tag[]
   sortBy: string
   setSortBy: React.Dispatch<React.SetStateAction<string>>
   sortOrder: string
@@ -42,12 +39,9 @@ const PostsManagerContent = ({
   setShowPostDetailDialog,
   setSelectedUser,
   setShowUserModal,
-  selectedTag,
-  setSelectedTag,
   updateURL,
   setShowEditDialog,
   setSearchQuery,
-  tags,
   sortBy,
   setSortBy,
   sortOrder,
@@ -60,6 +54,7 @@ const PostsManagerContent = ({
   total,
 }: Props) => {
   const { setPosts } = usePost()
+  const { tags, selectedTag, setSelectedTag } = useTag()
   return (
     <CardContent>
       <div className="flex flex-col gap-4">
@@ -127,8 +122,6 @@ const PostsManagerContent = ({
         ) : (
           <PostTable
             searchQuery={searchQuery}
-            selectedTag={selectedTag}
-            setSelectedTag={setSelectedTag}
             updateURL={updateURL}
             setSelectedUser={setSelectedUser}
             setShowUserModal={setShowUserModal}
