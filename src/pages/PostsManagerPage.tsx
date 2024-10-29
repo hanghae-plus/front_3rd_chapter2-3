@@ -31,6 +31,7 @@ import { fetchCommentsApi } from "../entities/comment/api/index.ts"
 import { likeCommentApi } from "../entities/comment/api/index.ts"
 import { fetchTagsApi } from "../entities/tag/api/index.ts"
 import { usePosts } from "../features/post/model/usePosts.ts"
+import { useUser } from "../features/user/model/useUser.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -38,6 +39,7 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   const { posts, total, getPosts, addPost, updatePost, deletePost, searchPostsWithQuery } = usePosts()
+  const { showUserModal, setShowUserModal, selectedUser, openUserModal } = useUser()
 
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -58,8 +60,6 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -183,18 +183,6 @@ const PostsManager = () => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
-  }
-
-  // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
   }
 
   useEffect(() => {
