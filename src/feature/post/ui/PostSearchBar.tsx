@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
 import { usePostContext } from "../model/PostContext.tsx";
+import { useQueryParams } from "../model";
 
 export const PostSearchBar = () => {
   const {
@@ -8,7 +9,6 @@ export const PostSearchBar = () => {
     tags,
     setSelectedTag,
     fetchPostsByTag,
-    updateURL,
     sortBy,
     sortOrder,
     setSortOrder,
@@ -17,6 +17,8 @@ export const PostSearchBar = () => {
     setSearchQuery,
     searchPosts,
   } = usePostContext();
+
+  const { setQueryParams } = useQueryParams();
 
   return (
     <div className="flex gap-4">
@@ -37,7 +39,7 @@ export const PostSearchBar = () => {
         onValueChange={(value) => {
           setSelectedTag(value);
           fetchPostsByTag(value);
-          updateURL();
+          setQueryParams({ selectedTag: value });
         }}
       >
         <SelectTrigger className="w-[180px]">

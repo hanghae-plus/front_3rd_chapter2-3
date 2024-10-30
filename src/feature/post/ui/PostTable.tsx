@@ -9,7 +9,6 @@ import {
   TableRow,
 } from "../../../shared/ui";
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
-import { usePostContext } from "../model/PostContext.tsx";
 import { useUser } from "../../user/model";
 import { Post } from "../../../entities/post/model/types.ts";
 import { deleteExistingPost } from "../../../entities/post/api";
@@ -17,6 +16,8 @@ import { User } from "../../../entities/user/model/types.ts";
 import { getUserInfo } from "../../../entities/user/api";
 import { useCommentContext } from "../../comment/model/CommentContext.tsx";
 import { getComments } from "../../../entities/comment/api";
+import { usePostContext } from "../model/PostContext.tsx";
+import { useQueryParams } from "../model";
 
 export const PostTable = () => {
   const {
@@ -25,13 +26,15 @@ export const PostTable = () => {
     searchQuery,
     selectedTag,
     setSelectedTag,
-    updateURL,
     setSelectedPost,
     setShowEditDialog,
     setPosts,
   } = usePostContext();
 
   const { comments, setComments } = useCommentContext();
+  const { setQueryParams } = useQueryParams();
+
+  const { setShowUserModal, setSelectedUser } = useUser();
 
   const fetchComments = async (postId: number) => {
     if (comments[postId]) return;
@@ -41,8 +44,6 @@ export const PostTable = () => {
       setComments((prev) => ({ ...prev, [postId]: response.comments }));
     }
   };
-
-  const { setShowUserModal, setSelectedUser } = useUser();
 
   const handleDeletePost = async (id: number) => {
     await deleteExistingPost(id);
@@ -95,7 +96,7 @@ export const PostTable = () => {
                       }`}
                       onClick={() => {
                         setSelectedTag(tag);
-                        updateURL();
+                        setQueryParams({ selectedTag: tag });
                       }}
                     >
                       {tag}
