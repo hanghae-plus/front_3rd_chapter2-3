@@ -25,6 +25,7 @@ import {
   TableRow,
   Textarea,
 } from '../shared/ui';
+import { PostDeleteButton } from '../features/post/postDelete';
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -184,18 +185,6 @@ const PostsManager = () => {
       setShowEditDialog(false);
     } catch (error) {
       console.error('게시물 업데이트 오류:', error);
-    }
-  };
-
-  // 게시물 삭제
-  const deletePost = async (id) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: 'DELETE',
-      });
-      setPosts(posts.filter((post) => post.id !== id));
-    } catch (error) {
-      console.error('게시물 삭제 오류:', error);
     }
   };
 
@@ -409,9 +398,12 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <PostDeleteButton
+                  post={post}
+                  onDelete={(deletedPost) => {
+                    setPosts(posts.filter((p) => p.id !== deletedPost.id));
+                  }}
+                />
               </div>
             </TableCell>
           </TableRow>
