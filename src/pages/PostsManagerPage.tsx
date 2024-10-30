@@ -2,30 +2,6 @@ import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Textarea,
-} from "../shared/ui"
-import {
   CommentType,
   CommentsResponseType,
   NewCommentType,
@@ -35,6 +11,14 @@ import {
   TagType,
   UserType,
 } from "../shared/type"
+import { Input } from "../shared/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table"
+import { Textarea } from "../shared/ui/textarea"
+import { Button } from "../shared/ui/button"
+// import CardHeader from "../features/post-header/ui/PostHeader"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -64,8 +48,6 @@ const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<SelectUserType | null>(null)
-
-  console.log("selectedUser", selectedUser)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -497,6 +479,7 @@ const PostsManager = () => {
           </Button>
         </CardTitle>
       </CardHeader>
+      {/* <CardHeader /> */}
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}

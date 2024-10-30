@@ -1,6 +1,3 @@
-import { HTMLAttributes, ReactNode } from "react"
-import * as SelectPrimitive from "@radix-ui/react-select" // 가정: SelectPrimitive가 Radix UI를 통해 제공되는 경우
-
 interface PostsResponseType {
   limit: number
   posts: PostType[]
@@ -128,79 +125,12 @@ interface TagType {
   slug: string
 }
 
-//컴포넌트
-interface TableProps extends HTMLAttributes<HTMLTableElement> {
-  className?: string
-}
-
-interface TableSectionProps extends HTMLAttributes<HTMLTableSectionElement> {
-  className?: string
-}
-
-interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
-  className?: string
-}
-
-interface TableHeaderCell extends HTMLAttributes<HTMLTableHeaderCellElement> {
-  className?: string
-}
-
-interface TableDataCell extends HTMLAttributes<HTMLTableDataCellElement> {
-  className?: string
-}
-
-interface InputProps extends HTMLAttributes<HTMLInputElement> {
-  className?: string
-  type?: string
-  placeholder: string
-  value: number | string
-}
-
-interface DivProps extends HTMLAttributes<HTMLDivElement> {
-  className?: string
-  children?: ReactNode
-}
-
-interface TextareaProps extends HTMLAttributes<HTMLTextAreaElement> {
-  className?: string
-  rows?: number
-  placeholder: string
-  value: string
-}
-
-interface SelectTriggerProps extends HTMLAttributes<HTMLButtonElement> {
-  className?: string
-  children: ReactNode
-}
-
-interface SelectItemProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
-  className?: string
-  children: ReactNode
-}
-
-interface SelectContentProps extends HTMLAttributes<HTMLDivElement> {
-  className?: string
-  children: ReactNode
-  position?: "popper" | "item-aligned" | undefined
-}
-
 export type {
   PostType,
-  InputProps,
-  TextareaProps,
   PostsResponseType,
-  DivProps,
   CommentsResponseType,
   CommentType,
   UserType,
-  TableProps,
-  SelectTriggerProps,
-  SelectContentProps,
-  SelectItemProps,
-  TableSectionProps,
-  TableRowProps,
-  TableHeaderCell,
-  TableDataCell,
   SelectUserType,
   NewCommentType,
   TagType,
