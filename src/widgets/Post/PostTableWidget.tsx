@@ -1,32 +1,77 @@
 import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react"
-import { deletePost } from "../../entities/Post/api"
 import { TableHeader, TableRow, TableHead, TableBody, TableCell, Button, Table } from "../../shared/ui"
 import { PostType } from "../../entities/Post/model/types"
 import { highlightText } from "../../shared/lib"
+import { useQueryParams } from "../../features/post/model/useQueryParams"
+import { usePostDialog } from "../../features/post/model/usePostDialog"
+import usePost from "../../features/post/model/usePost"
+import { useUser } from "../../features/user/model/useUser"
+import { useUserDialog } from "../../features/user/model/useUserDialog"
 
 interface PostTableWidgetProps {
   postList: PostType[]
-  searchQuery: string
-  selectedTag: string
-  onSelectTag: (tag: string) => void
-  onOpenUserModal: (userId: number) => void
-  onOpenPostDetail: (post: PostType) => void
-  onEditDialog: (post: PostType) => void
-  // onDeletePost: (id: number) => void
-  onUpdateURL: () => void
 }
 
-const PostTableWidget = ({
-  postList,
-  searchQuery,
-  selectedTag,
-  onSelectTag,
-  onOpenUserModal,
-  onOpenPostDetail,
-  onEditDialog,
-  // onDeletePost,
-  onUpdateURL,
-}: PostTableWidgetProps) => {
+const PostTableWidget = ({ postList }: PostTableWidgetProps) => {
+  const { searchQuery, selectedTag, setSelectedTag, updateURL } = useQueryParams()
+  const { setShowEditDialog, setShowPostDetailDialog } = usePostDialog()
+  const { setSelectedPost } = usePost()
+  const { setSelectedUser } = useUser()
+  const { setShowUserDialog } = useUserDialog()
+
+  const onEditDialog = (post: PostType) => {
+    setSelectedPost(post)
+    setShowEditDialog(true)
+  }
+
+  const handelSelectedTag = (tag: string) => {
+    setSelectedTag(tag)
+    updateURL()
+  }
+
+  // 댓글 가져오기
+  const fetchComments = async (postId: number) => {
+    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+    try {
+      const response = await fetch(`/api/comments/post/${postId}`)
+      const data = await response.json()
+      setComments((prev) => ({ ...prev, [postId]: data.comments }))
+    } catch (error) {
+      console.error("댓글 가져오기 오류:", error)
+    }
+  }
+
+  // 게시물 상세 보기
+  const onOpenPostDetail = (post: PostType) => {
+    setSelectedPost(post)
+    fetchComments(post.id)
+    setShowPostDetailDialog(true)
+  }
+
+  // 게시물 삭제
+  const deletePost = async (id: number) => {
+    try {
+      await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+      })
+      setPosts(posts.filter((post) => post.id !== id))
+    } catch (error) {
+      console.error("게시물 삭제 오류:", error)
+    }
+  }
+
+  // 사용자 모달 열기
+  const onOpenUserModal = async (userId: number) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`)
+      const userData = await response.json()
+      setSelectedUser(userData)
+      setShowUserDialog(true)
+    } catch (error) {
+      console.error("사용자 정보 가져오기 오류:", error)
+    }
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -47,7 +92,7 @@ const PostTableWidget = ({
                 <div>{highlightText(post.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
+                  {post?.tags.map((tag) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
@@ -55,10 +100,7 @@ const PostTableWidget = ({
                           ? "text-white bg-blue-500 hover:bg-blue-600"
                           : "text-blue-800 bg-blue-100 hover:bg-blue-200"
                       }`}
-                      onClick={() => {
-                        onSelectTag(tag)
-                        onUpdateURL()
-                      }}
+                      onClick={() => handelSelectedTag(tag)}
                     >
                       {tag}
                     </span>

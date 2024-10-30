@@ -1,13 +1,28 @@
 import { Search } from "lucide-react"
 import { Input } from "../../shared/ui"
+import { useQueryParams } from "../../features/post/model/useQueryParams"
 
-interface SearchWidgetProps {
-  searchQuery: string
-  setSearchQuery: (query: string) => void
-  searchPosts: () => void
-}
+export const SearchWidget = () => {
+  const { searchQuery, setSearchQuery } = useQueryParams()
 
-export const SearchWidget = ({ searchQuery, setSearchQuery, searchPosts }: SearchWidgetProps) => {
+  // 게시물 검색
+  const searchPosts = async () => {
+    if (!searchQuery) {
+      fetchPosts()
+      return
+    }
+    setLoading(true)
+    try {
+      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
+      const data = await response.json()
+      setPosts(data.posts)
+      setTotal(data.total)
+    } catch (error) {
+      console.error("게시물 검색 오류:", error)
+    }
+    setLoading(false)
+  }
+
   return (
     <div className="flex-1">
       <div className="relative">

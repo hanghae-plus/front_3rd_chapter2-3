@@ -1,14 +1,9 @@
+import { useQueryParams } from "../../features/post/model/useQueryParams"
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui"
 
-interface PaginationWidgetProps {
-  limit: number
-  setLimit: (limit: number) => void
-  skip: number
-  setSkip: (skip: number) => void
-  total: number
-}
+const PaginationWidget: React.FC<{ total: number }> = ({ total }) => {
+  const { limit, setLimit, skip, setSkip } = useQueryParams()
 
-const PaginationWidget: React.FC<PaginationWidgetProps> = ({ limit, setLimit, skip, setSkip, total }) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">

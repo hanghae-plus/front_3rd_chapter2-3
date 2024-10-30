@@ -1,11 +1,9 @@
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select"
+import { useQueryParams } from "../../features/post/model/useQueryParams"
 
-interface SortOrderSelectWidgetProps {
-  sortOrder: string
-  setSortOrder: (value: string) => void
-}
+const SortOrderSelectWidget = () => {
+  const { sortOrder, setSortOrder } = useQueryParams()
 
-const SortOrderSelectWidget = ({ sortOrder, setSortOrder }: SortOrderSelectWidgetProps) => {
   return (
     <Select value={sortOrder} onValueChange={setSortOrder}>
       <SelectTrigger className="w-[180px]">

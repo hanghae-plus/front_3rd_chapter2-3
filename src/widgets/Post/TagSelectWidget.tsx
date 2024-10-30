@@ -1,30 +1,23 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@radix-ui/react-select"
 import { TagType } from "../../entities/Tag/model/types"
+import { useQueryParams } from "../../features/post/model/useQueryParams"
 
 interface TagSelectWidgetProps {
-  selectedTag: string
-  setSelectedTag: (value: string) => void
   fetchPostsByTag: (value: string) => void
-  updateURL: () => void
   tagList: TagType[]
 }
 
-const TagSelectWidget = ({
-  selectedTag,
-  setSelectedTag,
-  fetchPostsByTag,
-  updateURL,
-  tagList,
-}: TagSelectWidgetProps) => {
+const TagSelectWidget = ({ fetchPostsByTag, tagList }: TagSelectWidgetProps) => {
+  const { selectedTag, setSelectedTag, updateURL } = useQueryParams()
+
+  const handleTagChange = (value: string) => {
+    setSelectedTag(value)
+    fetchPostsByTag(value)
+    updateURL()
+  }
+
   return (
-    <Select
-      value={selectedTag}
-      onValueChange={(value) => {
-        setSelectedTag(value)
-        fetchPostsByTag(value)
-        updateURL()
-      }}
-    >
+    <Select value={selectedTag} onValueChange={handleTagChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="태그 선택" />
       </SelectTrigger>

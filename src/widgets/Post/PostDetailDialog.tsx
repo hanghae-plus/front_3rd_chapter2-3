@@ -2,40 +2,56 @@ import React from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
 import { highlightText } from "../../shared/lib"
 import { Plus, ThumbsUp, Edit2, Trash2 } from "lucide-react"
-import { PostType } from "../../entities/Post/model/types"
+import { usePostDialog } from "../../features/post/model/usePostDialog"
+import { useQueryParams } from "../../features/post/model/useQueryParams"
+import usePost from "../../features/post/model/usePost"
+import { useComment } from "../../features/comment/model/useComment"
+import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
+import { CommentType } from "../../entities/Comment/model/types"
 
 interface PostDetailDialogProps {
-  showPostDetailDialog: boolean
-  setShowPostDetailDialog: (show: boolean) => void
-  selectedPost: PostType
-  searchQuery: string
-  comments: { [key: number]: { id: number; body: string; likes: number; user: { username: string }[] }[] }
-  likeComment: (commentId: number, postId: number) => void
-  deleteComment: (commentId: number, postId: number) => void
-  setNewComment: (newComment: { postId: number; body: string }) => void
-  setShowAddCommentDialog: (show: boolean) => void
-  setSelectedComment: (selectedComment: {
-    id: number
-    body: string
-    likes: number
-    user: { username: string }[]
-  }) => void
-  setShowEditCommentDialog: (show: boolean) => void
+  comments: CommentType[]
 }
 
-const PostDetailDialog: React.FC<PostDetailDialogProps> = ({
-  showPostDetailDialog,
-  setShowPostDetailDialog,
-  selectedPost,
-  searchQuery,
-  comments,
-  likeComment,
-  deleteComment,
-  setNewComment,
-  setShowAddCommentDialog,
-  setSelectedComment,
-  setShowEditCommentDialog,
-}) => {
+const PostDetailDialog: React.FC<PostDetailDialogProps> = ({ comments }) => {
+  const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
+  const { selectedPost } = usePost()
+  const { setNewComment, setSelectedComment } = useComment()
+  const { searchQuery } = useQueryParams()
+  const { setShowAddCommentDialog, setShowEditCommentDialog } = useCommentDialog()
+
+  // 댓글 좋아요
+  const likeComment = async (id: number, postId: number) => {
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
+      })
+      const data = await response.json()
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+      }))
+    } catch (error) {
+      console.error("댓글 좋아요 오류:", error)
+    }
+  }
+  // 댓글 삭제
+  const deleteComment = async (id: number, postId: number) => {
+    try {
+      await fetch(`/api/comments/${id}`, {
+        method: "DELETE",
+      })
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].filter((comment) => comment.id !== id),
+      }))
+    } catch (error) {
+      console.error("댓글 삭제 오류:", error)
+    }
+  }
+
   const renderComments = (postId: number) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">

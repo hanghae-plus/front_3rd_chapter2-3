@@ -1,33 +1,14 @@
 import React from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { useUser } from "../../../features/user/model/useUser"
+import { useUserDialog } from "../../../features/user/model/useUserDialog"
 
-interface UserDialogProps {
-  showUserModal: boolean
-  setShowUserModal: (show: boolean) => void
-  selectedUser: {
-    id: number
-    username: string
-    firstName: string
-    lastName: string
-    age: number
-    email: string
-    phone: string
-    image: string
-    address: {
-      address: string
-      city: string
-      state: string
-    }
-    company: {
-      name: string
-      title: string
-    }
-  } | null
-}
+export const UserDialog: React.FC = () => {
+  const { showUserDialog, setShowUserDialog } = useUserDialog()
+  const { selectedUser } = useUser()
 
-export const UserDialog: React.FC<UserDialogProps> = ({ showUserModal, setShowUserModal, selectedUser }) => {
   return (
-    <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
+    <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>사용자 정보</DialogTitle>
