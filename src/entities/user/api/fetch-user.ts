@@ -14,7 +14,7 @@ const fetchUserList = async () => {
 
 export const useQueryUserList = () => {
   return useQuery<UserType[]>({
-    queryKey: ["search-user"],
+    queryKey: ["get-user-list"],
     queryFn: () => fetchUserList(),
   });
 };

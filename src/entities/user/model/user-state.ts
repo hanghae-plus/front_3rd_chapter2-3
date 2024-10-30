@@ -3,7 +3,7 @@ import { UserType } from "./user-type";
 
 interface UserListState {
   userList: UserType[];
-  setNewUserList: (newUser: UserType[]) => void;
+  setNewUserList: (newUserList: UserType[]) => void;
 }
 
 export const userListState = create<UserListState>(set => ({
