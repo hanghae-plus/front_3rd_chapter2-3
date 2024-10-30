@@ -14,7 +14,7 @@ const Pagination = ({ size, setSize, page, setPage, total }: PaginationProps) =>
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
         <span>표시</span>
-        <Select.Container value={size.toString()} onValueChange={(value) => setSize(Number(value))}>
+        <Select.Container value={size.toString()} onValueChange={(value: string) => setSize(Number(value))}>
           <Select.Trigger className="w-[180px]">
             <Select.Value placeholder="10" />
           </Select.Trigger>

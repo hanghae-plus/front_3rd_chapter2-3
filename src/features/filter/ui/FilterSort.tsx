@@ -7,7 +7,7 @@ const FilterSort = () => {
     queries: { sortBy },
   } = useQueryParams();
   return (
-    <Select.Container value={sortBy} onValueChange={(value) => handleUpdateQuery("sortBy", value)}>
+    <Select.Container value={sortBy} onValueChange={(value: string) => handleUpdateQuery("sortBy", value)}>
       <Select.Trigger className="w-[180px]">
         <Select.Value placeholder="정렬 기준" />
       </Select.Trigger>

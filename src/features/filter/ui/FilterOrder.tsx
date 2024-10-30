@@ -7,7 +7,7 @@ const FilterOrder = () => {
     queries: { sortOrder },
   } = useQueryParams();
   return (
-    <Select.Container value={sortOrder} onValueChange={(value) => handleUpdateQuery("sortOrder", value)}>
+    <Select.Container value={sortOrder} onValueChange={(value: string) => handleUpdateQuery("sortOrder", value)}>
       <Select.Trigger className="w-[180px]">
         <Select.Value placeholder="정렬 순서" />
       </Select.Trigger>
