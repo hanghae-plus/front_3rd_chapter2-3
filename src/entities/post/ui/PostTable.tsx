@@ -1,4 +1,4 @@
-import { Post } from "../../../entities/post/model/types"
+import { Post } from "../model/types"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
 import { PostTableRow } from "./PostTableRow"
 

@@ -1,6 +1,7 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
-import { Post } from "../../../entities/post/model/types"
+import { Post } from "../model/types"
+import { HighlightedText } from "../../../widgets/ui/HighlightedText"
 
 export const PostTableRow: React.FC<{
   post: Post
@@ -25,28 +26,14 @@ export const PostTableRow: React.FC<{
   openPostDetail,
   deletePost,
 }) => {
-
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
-  
   return (
     <TableRow key={post.id}>
       <TableCell>{post.id}</TableCell>
       <TableCell>
         <div className="space-y-1">
-          <div>{highlightText(post.title, searchQuery)}</div>
+          <div>
+            <HighlightedText text={post.title} highlight={searchQuery} />
+          </div>
 
           <div className="flex flex-wrap gap-1">
             {post.tags.map((tag) => (
