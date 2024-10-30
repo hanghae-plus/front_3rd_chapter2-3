@@ -18,13 +18,21 @@ import {
   showEditDialogAtom,
   postsAtom,
   newPostAtom,
+  showPostDetailDialogAtom,
+  selectedPostAtom,
+} from "../feature/post/model/postAtoms"
+
+import {
   commentsAtom,
   selectedCommentAtom,
   newCommentAtom,
   showAddCommentDialogAtom,
   showEditCommentDialogAtom,
-  showPostDetailDialogAtom,
-} from "../feature/post/model/atoms"
+} from "../feature/comment/model/commentAtom"
+
+import { userFetch } from "../entities/model/userFetch"
+import { commentFetch } from "../feature/comment/model/commentFetch"
+import { Post } from "../feature/post/ui/Post"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -36,7 +44,7 @@ const PostsManager = () => {
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState(null)
+
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [loading, setLoading] = useState(false)
@@ -56,6 +64,7 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom)
   const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
+  const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -137,19 +146,6 @@ const PostsManager = () => {
     }
     setLoading(false)
   }
-  // 댓글 가져오기
-  const fetchComments = async (postId) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      console.log("fetchComments", data.comments)
-
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
-    }
-  }
 
   // 댓글 추가
   const addComment = async () => {
@@ -226,20 +222,18 @@ const PostsManager = () => {
   // 게시물 상세 보기
   const openPostDetail = (post) => {
     setSelectedPost(post)
-    fetchComments(post.id)
+
+    const getComment = commentFetch(post.id)
+
+    setComments((prev) => ({ ...prev, [postId]: getComment.comments }))
     setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
+  const handleOpenUserModal = async (user) => {
+    const userData = await userFetch(user)
+    setSelectedUser(userData)
+    setShowUserModal(true)
   }
 
   // 게시물 추가
@@ -292,7 +286,6 @@ const PostsManager = () => {
         await fetchPostsByTag(selectedTag)
       } else {
         const { posts, total, error } = await postFetch({ limit, skip })
-        console.log("limit, skip", limit, skip)
 
         if (!error) {
           console.log("posts", posts)
@@ -361,7 +354,10 @@ const PostsManager = () => {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+              <div
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={() => handleOpenUserModal(post.author)}
+              >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>
@@ -572,8 +568,8 @@ const PostsManager = () => {
               value={newPost.userId}
               onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
             />
-            {/* <Button onClick={addPost}>게시물 추가</Button> */}
             <Button onClick={handleAddPost}>게시물 추가</Button>
+            {/* <Button onClick={handleAddPost}>게시물 추가</Button> */}
           </div>
         </DialogContent>
       </Dialog>
