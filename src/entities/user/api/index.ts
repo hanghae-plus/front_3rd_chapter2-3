@@ -8,3 +8,14 @@ export const fetchUsersApi = async () => {
     throw new Error(`사용자 가져오기 오류: ${error}`)
   }
 }
+
+export const fetchUserApi = async (userId: number) => {
+  try {
+    const response = await fetch(`/api/users/${userId}`)
+    const userData = await response.json()
+    return userData
+  } catch (error) {
+    console.error("사용자 정보 가져오기 오류:", error)
+    throw new Error(`사용자 정보 가져오기 오류: ${error}`)
+  }
+}
