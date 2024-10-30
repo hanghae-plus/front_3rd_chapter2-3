@@ -7,10 +7,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
   Input,
   Select,
   SelectContent,
@@ -33,9 +29,10 @@ import { fetchTagsApi } from "../entities/tag/api"
 import { Tag } from "../entities/tag/model/types"
 import { addToPosts, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
 import { User } from "../entities/user/model/types"
+import { CustomDialog } from "../widgets/ui/CustomDialog"
 import { PostTable } from "../entities/post/ui/PostTable"
 
-const initialNewPost = { title: "", body: "", userId: 1, tags: [] };
+const initialNewPost = { title: "", body: "", userId: 1, tags: [] }
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -82,28 +79,28 @@ const PostsManager = () => {
     setLoading(true)
     const usersData = await fetchUsersApi()
     const postsData = await fetchPostsApi({ limit, skip })
-    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users);
+    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users)
     setPosts(postsWithUsers)
     setTotal(postsData.total)
     setLoading(false)
   }
 
   // 태그 가져오기
-  const getTags = async() => {
-    const tagsData = await fetchTagsApi();
-    setTags(tagsData);
+  const getTags = async () => {
+    const tagsData = await fetchTagsApi()
+    setTags(tagsData)
   }
 
   // 게시물 검색
-  const getSearchedPosts = async(searchQuery = "") => {
+  const getSearchedPosts = async (searchQuery = "") => {
     setLoading(true)
     const usersData = await fetchUsersApi()
-    const postsData = await searchPostsApi(searchQuery);
-    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users);
+    const postsData = await searchPostsApi(searchQuery)
+    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users)
     setPosts(postsWithUsers)
     setTotal(postsData.total)
     setLoading(false)
-  };
+  }
 
   // 태그별 게시물 가져오기
   const getTaggedPosts = async (tag = "all") => {
@@ -113,32 +110,32 @@ const PostsManager = () => {
     }
     setLoading(true)
     const usersData = await fetchUsersApi()
-    const postsData = await fecthPostsByTagApi(tag);
-    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users);
+    const postsData = await fecthPostsByTagApi(tag)
+    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users)
     setPosts(postsWithUsers)
     setTotal(postsData.total)
     setLoading(false)
   }
 
   // 게시물 추가
-  const addPost = async (newPost : NewPost) => {
-    const postData = await createPostApi(newPost);
+  const addPost = async (newPost: NewPost) => {
+    const postData = await createPostApi(newPost)
     setPosts(addToPosts(posts, postData))
     setShowAddDialog(false)
     setNewPost({ ...initialNewPost })
   }
 
   // 게시물 업데이트
-  const updatePost = async (updatingPost : Post | null) => {
+  const updatePost = async (updatingPost: Post | null) => {
     if (!updatingPost) return
-    const postData = await updatePostApi(updatingPost);
+    const postData = await updatePostApi(updatingPost)
     setPosts(updateInPosts(posts, postData))
     setShowEditDialog(false)
   }
 
   // 게시물 삭제
   const deletePost = async (id: number) => {
-    await deletePostApi(id);
+    await deletePostApi(id)
     setPosts(removeFromPosts(posts, id))
   }
 
@@ -236,8 +233,8 @@ const PostsManager = () => {
   // 사용자 모달 열기
   const openUserModal = async (userId: number) => {
     const userData = await fetchUserApi(userId)
-      setSelectedUser(userData)
-      setShowUserModal(true)
+    setSelectedUser(userData)
+    setShowUserModal(true)
   }
 
   useEffect(() => {
@@ -443,137 +440,112 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-            />
-            <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CustomDialog open={showAddDialog} onOpenChange={setShowAddDialog} title={"새 게시물 추가"}>
+        <>
+          <Input
+            placeholder="제목"
+            value={newPost.title}
+            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+          />
+          <Textarea
+            rows={30}
+            placeholder="내용"
+            value={newPost.body}
+            onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
+          />
+          <Input
+            type="number"
+            placeholder="사용자 ID"
+            value={newPost.userId}
+            onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
+          />
+          <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
+        </>
+      </CustomDialog>
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-            />
-            <Button onClick={() => updatePost(selectedPost)}>게시물 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CustomDialog open={showEditDialog} onOpenChange={setShowEditDialog} title={"게시물 수정"}>
+        <>
+          <Input
+            placeholder="제목"
+            value={selectedPost?.title || ""}
+            onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
+          />
+          <Textarea
+            rows={15}
+            placeholder="내용"
+            value={selectedPost?.body || ""}
+            onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
+          />
+          <Button onClick={() => updatePost(selectedPost)}>게시물 업데이트</Button>
+        </>
+      </CustomDialog>
 
       {/* 댓글 추가 대화상자 */}
-      <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-            />
-            <Button onClick={addComment}>댓글 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CustomDialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog} title={"새 댓글 추가"}>
+        <>
+          <Textarea
+            placeholder="댓글 내용"
+            value={newComment.body}
+            onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
+          />
+          <Button onClick={addComment}>댓글 추가</Button>
+        </>
+      </CustomDialog>
 
       {/* 댓글 수정 대화상자 */}
-      <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
-            />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CustomDialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog} title={"댓글 수정"}>
+        <>
+          <Textarea
+            placeholder="댓글 내용"
+            value={selectedComment?.body || ""}
+            onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
+          />
+          <Button onClick={updateComment}>댓글 업데이트</Button>
+        </>
+      </CustomDialog>
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CustomDialog
+        open={showPostDetailDialog}
+        onOpenChange={setShowPostDetailDialog}
+        className={"max-w-3xl"}
+        title={highlightText(selectedPost?.title, searchQuery)}
+      >
+        <>
+          <p>{highlightText(selectedPost?.body, searchQuery)}</p>
+          {renderComments(selectedPost?.id)}
+        </>
+      </CustomDialog>
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
+      <CustomDialog open={showUserModal} onOpenChange={setShowUserModal} title={"사용자 정보"}>
+        <>
+          <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
+          <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
+          <div className="space-y-2">
+            <p>
+              <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
+            </p>
+            <p>
+              <strong>나이:</strong> {selectedUser?.age}
+            </p>
+            <p>
+              <strong>이메일:</strong> {selectedUser?.email}
+            </p>
+            <p>
+              <strong>전화번호:</strong> {selectedUser?.phone}
+            </p>
+            <p>
+              <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
+              {selectedUser?.address?.state}
+            </p>
+            <p>
+              <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
+            </p>
           </div>
-        </DialogContent>
-      </Dialog>
+        </>
+      </CustomDialog>
     </Card>
   )
 }
