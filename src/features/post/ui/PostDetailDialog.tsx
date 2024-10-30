@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { highlightText } from "../../../shared/lib/highlightText.tsx"
 import { usePostDialog } from "../model/usePostDialog.ts"
 import { usePostParams } from "../model/usePostParams.ts"
+import CommentList from "../../comment/ui/CommentList.tsx"
 
 export default function PostDetailDialog() {
   const { selectedPost, showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
@@ -15,7 +16,7 @@ export default function PostDetailDialog() {
         </DialogHeader>
         <div className="space-y-4">
           <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-          {/*{renderComments(selectedPost?.id)}*/}
+          <CommentList postId={selectedPost?.id} />
         </div>
       </DialogContent>
     </Dialog>
