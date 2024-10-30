@@ -1,12 +1,12 @@
-import apiClient from "../../../shared/api"
-import { ReqNewComment, ReqUpdateComment } from "../model/types";
+import apiClient from "../../../shared/api/base"
+import { NewComment, ReqUpdateComment, ResAddComment, ResFetchComments } from "../model/types";
 
 export const fetchCommentsApi = async (postId: number) => {
-    return apiClient.get(`/comments/post/${postId}`);
+    return apiClient.get<ResFetchComments>(`/comments/post/${postId}`);
 };
 
-export const addCommentApi = async (newComment: ReqNewComment) => {
-    return apiClient.post('/comments/add', newComment);
+export const addCommentApi = async (newComment: NewComment) => {
+    return apiClient.post<ResAddComment>('/comments/add', newComment);
 };
 
 export const updateCommentApi = async (commentId: number, updatedComment: ReqUpdateComment) => {

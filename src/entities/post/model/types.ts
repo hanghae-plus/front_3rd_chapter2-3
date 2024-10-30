@@ -9,15 +9,15 @@ interface Reaction {
 export interface Post {
     body: string;
     id: number;
-    reactions: Reaction;
-    tags: string[];
+    reactions?: Reaction;
+    tags?: string[];
     title: string;
     userId: number;
-    views: number;
+    views?: number;
 }
 
 export interface ReqUpdatePost extends Post {
     author: User;
 }
 
-export type ReqNewPost = Pick<Post, 'body' | 'title' | 'userId'>;
+export type NewPost = Pick<Post, 'body' | 'title' | 'userId'>;

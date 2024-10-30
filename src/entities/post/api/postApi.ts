@@ -1,5 +1,5 @@
-import apiClient from "../../../shared/api"
-import { Post, ReqNewPost, ReqUpdatePost } from "../model/types";
+import apiClient from "../../../shared/api/base"
+import { Post, NewPost, ReqUpdatePost } from "../model/types";
 
 
 export const fetchPostsApi = async (limit: number, skip: number) => {
@@ -14,8 +14,8 @@ export const fetchPostsByTagApi = async (tag: string) => {
     return apiClient.get<{ posts: Post[], total: number }>(`/posts/tag/${tag}`);
 };
 
-export const addPostApi = async (newPost: ReqNewPost) => {
-    return apiClient.post('/posts/add', newPost);
+export const addPostApi = async (newPost: NewPost) => {
+    return apiClient.post<Post>('/posts/add', newPost);
 };  
 
 export const updatePostApi = async (postId: number, updatedPost: ReqUpdatePost) => {
