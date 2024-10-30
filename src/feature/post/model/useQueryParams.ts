@@ -38,7 +38,7 @@ export const useQueryParams = () => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
     setQueryParamsState({
       skip: parseInt(params.get("skip") || "0"),
       limit: parseInt(params.get("limit") || "10"),
@@ -47,7 +47,7 @@ export const useQueryParams = () => {
       sortOrder: params.get("sortOrder") || "asc",
       selectedTag: params.get("tag") || "",
     });
-  }, [window.location.search]);
+  }, [location.search]);
 
   return { queryParams, setQueryParams };
 };
