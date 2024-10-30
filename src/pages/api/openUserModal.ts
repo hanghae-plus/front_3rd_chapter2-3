@@ -1,4 +1,5 @@
-import { User } from "../../features/user/model/types"
+import { fetchUserFetch } from "../../entities/user/api"
+import { User } from "../../entities/user/model/types"
 
 interface Props {
   user: User
@@ -9,8 +10,7 @@ interface Props {
 // 사용자 모달 열기
 export const openUserModal = async ({ user, setSelectedUser, setShowUserModal }: Props) => {
   try {
-    const response = await fetch(`/api/users/${user.id}`)
-    const userData = await response.json()
+    const userData = await fetchUserFetch(user.id)
     setSelectedUser(userData)
   } catch (error) {
     console.error("사용자 정보 가져오기 오류:", error)

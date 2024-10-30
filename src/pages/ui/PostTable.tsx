@@ -6,10 +6,10 @@ import { deletePost } from "../api/deletePost"
 import { openUserModal } from "../api/openUserModal"
 import { fetchComments } from "../api/fetchComments"
 import { usePost } from "../../features/post/model/usePost"
-import { Post } from "../../features/post/model/types"
 import { useComment } from "../../features/comment/model/useComment"
 import { useTag } from "../../features/tags/model/useTag"
-import { User } from "../../features/user/model/types"
+import { User } from "../../entities/user/model/types"
+import { Post } from "../../entities/post/model/types"
 
 interface Props {
   searchQuery: string

@@ -7,6 +7,7 @@ import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { usePost } from "../../features/post/model/usePost"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
+import { postPostFetch } from "../../entities/post/api"
 
 const AddPostDialog = () => {
   const { posts, setPosts } = usePost()
@@ -16,12 +17,7 @@ const AddPostDialog = () => {
   // 게시물 추가
   const addPost = async () => {
     try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
+      const data = await postPostFetch(newPost)
       setPosts([data, ...posts])
       setShowAddDialog(false)
       setNewPost({ title: "", body: "", userId: 1 })

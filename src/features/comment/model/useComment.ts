@@ -1,5 +1,6 @@
 import { atom, useAtom } from "jotai"
-import { Comment, Comments, NewComment } from "./types"
+import { Comment, Comments } from "./types"
+import { NewComment } from "../../../entities/comment/model/types"
 
 const commentsAtom = atom<Comments>({})
 const selectedCommentAtom = atom<Comment | null>(null)

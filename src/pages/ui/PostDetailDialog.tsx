@@ -6,6 +6,7 @@ import { usePost } from "../../features/post/model/usePost"
 import { useComment } from "../../features/comment/model/useComment"
 import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
+import { deleteCommentFetch, patchCommentFetch } from "../../entities/comment/api"
 
 interface Props {
   searchQuery: string
@@ -20,9 +21,7 @@ const PostDetailDialog = ({ searchQuery }: Props) => {
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
     try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
+      await deleteCommentFetch(id)
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].filter((comment) => comment.id !== id),
@@ -34,12 +33,8 @@ const PostDetailDialog = ({ searchQuery }: Props) => {
   // 댓글 좋아요
   const likeComment = async (id: number, postId: number) => {
     try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id)?.likes || 0 + 1 }),
-      })
-      const data = await response.json()
+      const likes = comments[postId].find((c) => c.id === id)?.likes || 0 + 1
+      const data = await patchCommentFetch(id, likes)
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),

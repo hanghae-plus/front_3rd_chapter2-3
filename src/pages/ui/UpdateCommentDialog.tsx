@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { useComment } from "../../features/comment/model/useComment"
 import { Comment } from "../../features/comment/model/types"
 import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
+import { putCommentFetch } from "../../entities/comment/api"
 
 const UpdateCommentDialog = () => {
   const { setComments, selectedComment, setSelectedComment } = useComment()
@@ -13,12 +14,8 @@ const UpdateCommentDialog = () => {
   // 댓글 업데이트
   const updateComment = async () => {
     try {
-      const response = await fetch(`/api/comments/${selectedComment?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment?.body }),
-      })
-      const data = await response.json()
+      if (!selectedComment) throw new Error("do not selected comment")
+      const data = await putCommentFetch(selectedComment.id, selectedComment.body)
       setComments((prev) => ({
         ...prev,
         [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),

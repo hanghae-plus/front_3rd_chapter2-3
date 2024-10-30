@@ -1,5 +1,7 @@
-import { Post } from "../../features/post/model/types"
-import { User } from "../../features/user/model/types"
+import { fetchPostsByTagFetch } from "../../entities/post/api"
+import { Post } from "../../entities/post/model/types"
+import { fetchUsersFetch } from "../../entities/user/api"
+import { User } from "../../entities/user/model/types"
 import { fetchPosts } from "./fetchPosts"
 
 interface Props {
@@ -19,13 +21,7 @@ export const fetchPostsByTag = async ({ tag, setLoading, limit, skip, setPosts, 
   }
   setLoading(true)
   try {
-    const [postsResponse, usersResponse] = await Promise.all([
-      fetch(`/api/posts/tag/${tag}`),
-      fetch("/api/users?limit=0&select=username,image"),
-    ])
-    const postsData = await postsResponse.json()
-    const usersData = await usersResponse.json()
-
+    const [postsData, usersData] = await Promise.all([fetchPostsByTagFetch(tag), fetchUsersFetch()])
     const postsWithUsers = postsData.posts.map((post: Post) => ({
       ...post,
       author: usersData.users.find((user: User) => user.id === post.userId),

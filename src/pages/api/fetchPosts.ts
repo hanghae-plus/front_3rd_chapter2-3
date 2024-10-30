@@ -1,5 +1,7 @@
-import { Post } from "../../features/post/model/types"
-import { User } from "../../features/user/model/types"
+import { fetchPostsFetch } from "../../entities/post/api"
+import { Post } from "../../entities/post/model/types"
+import { fetchUsersFetch } from "../../entities/user/api"
+import { User } from "../../entities/user/model/types"
 
 interface PostsData {
   posts: Post[]
@@ -22,13 +24,11 @@ export const fetchPosts = ({ setLoading, limit, skip, setPosts, setTotal }: Prop
   let postsData: PostsData
   let usersData: User[]
 
-  fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-    .then((response) => response.json())
+  fetchPostsFetch(limit, skip)
     .then((data) => {
       postsData = data
-      return fetch("/api/users?limit=0&select=username,image")
+      return fetchUsersFetch()
     })
-    .then((response) => response.json())
     .then((users) => {
       usersData = users.users
       const postsWithUsers = postsData.posts.map((post) => ({

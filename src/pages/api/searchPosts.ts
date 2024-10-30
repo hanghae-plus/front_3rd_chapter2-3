@@ -1,4 +1,5 @@
-import { Post } from "../../features/post/model/types"
+import { fetchPostsBySearchFetch } from "../../entities/post/api"
+import { Post } from "../../entities/post/model/types"
 import { fetchPosts } from "./fetchPosts"
 
 interface Props {
@@ -18,8 +19,7 @@ export const searchPosts = async ({ searchQuery, setLoading, limit, skip, setPos
   }
   setLoading(true)
   try {
-    const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-    const data = await response.json()
+    const data = await fetchPostsBySearchFetch(searchQuery)
     setPosts(data.posts)
     setTotal(data.total)
   } catch (error) {

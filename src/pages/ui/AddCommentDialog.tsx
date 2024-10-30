@@ -1,3 +1,4 @@
+import { postCommentFetch } from "../../entities/comment/api"
 import { useComment } from "../../features/comment/model/useComment"
 import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
 import { Button } from "../../shared/ui/button/Button"
@@ -11,12 +12,7 @@ const AddCommentDialog = () => {
   // 댓글 추가
   const addComment = async () => {
     try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
+      const data = await postCommentFetch(newComment)
       setComments((prev) => ({
         ...prev,
         [data.postId]: [...(prev[data.postId] || []), data],

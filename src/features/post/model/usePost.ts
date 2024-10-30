@@ -1,5 +1,5 @@
 import { atom, useAtom } from "jotai"
-import { Post } from "./types"
+import { Post } from "../../../entities/post/model/types"
 
 const postsAtom = atom<Post[]>([])
 const selectedPostAtom = atom<Post | null>(null)

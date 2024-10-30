@@ -1,4 +1,5 @@
-import { Post } from "../../features/post/model/types"
+import { deletePostFetch } from "../../entities/post/api"
+import { Post } from "../../entities/post/model/types"
 
 interface Props {
   id: number
@@ -9,9 +10,7 @@ interface Props {
 // 게시물 삭제
 export const deletePost = async ({ id, setPosts, posts }: Props) => {
   try {
-    await fetch(`/api/posts/${id}`, {
-      method: "DELETE",
-    })
+    deletePostFetch(id)
     setPosts(posts.filter((post) => post.id !== id))
   } catch (error) {
     console.error("게시물 삭제 오류:", error)

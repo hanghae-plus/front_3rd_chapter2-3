@@ -5,8 +5,9 @@ import { Input } from "../../shared/ui/input/Input"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { usePost } from "../../features/post/model/usePost"
-import { Post } from "../../features/post/model/types"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
+import { putPostFetch } from "../../entities/post/api"
+import { Post } from "../../entities/post/model/types"
 
 const UpdatePostDialog = () => {
   const { posts, setPosts, selectedPost, setSelectedPost } = usePost()
@@ -15,12 +16,8 @@ const UpdatePostDialog = () => {
   // 게시물 업데이트
   const updatePost = async () => {
     try {
-      const response = await fetch(`/api/posts/${selectedPost?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
+      if (!selectedPost) throw new Error("do not selected Post")
+      const data = await putPostFetch(selectedPost)
       setPosts(posts.map((post) => (post.id === data.id ? data : post)))
       setShowEditDialog(false)
     } catch (error) {

@@ -1,4 +1,4 @@
-import { User } from "../../../pages/model/User"
+import { User } from "../../../entities/user/model/types"
 
 export interface Comments {
   [postId: number]: Comment[]
@@ -10,10 +10,4 @@ export interface Comment {
   body: string
   likes: number
   postId: number
-}
-
-export interface NewComment {
-  body: string
-  postId: number | null
-  userId: number
 }
