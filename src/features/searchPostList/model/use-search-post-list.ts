@@ -7,10 +7,11 @@ import { userListState } from "@/entities/user/model/user-state";
 export function useSearchPostList() {
   const { setNewPostList } = postListState();
   const { userList } = userListState();
-  const { data: postList } = useQueryGetPost();
+  const { refetch } = useQueryGetPost();
 
-  const searchPostList = () => {
-    setNewPostList(postList ?? []);
+  const searchPostList = async () => {
+    const postList = await refetch();
+    setNewPostList(postList.data ?? []);
     // setTotal(postsData.total);
   };
 
