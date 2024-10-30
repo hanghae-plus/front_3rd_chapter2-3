@@ -22,9 +22,7 @@ interface PostContextProps {
   fetchPosts: () => void;
   fetchPostsByTag: (tag: string) => void;
   fetchTags: () => void;
-  addPost: () => void;
-  updatePost: () => void;
-  deletePost: (id: number) => void;
+  setPosts: (post: Post[]) => void;
   setSkip: (value: number) => void;
   setLimit: (value: number) => void;
   setSearchQuery: (value: string) => void;
@@ -191,8 +189,6 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchPostsByTag,
         fetchTags,
         setPosts,
-        updatePost,
-        deletePost,
         setSkip,
         setLimit,
         setSearchQuery,
