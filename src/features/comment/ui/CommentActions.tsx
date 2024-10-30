@@ -5,15 +5,14 @@ import ModalEditComment from "@/features/comment/ui/modals/ModalEditComment";
 
 type CommentActionsProps = {
   comment: Comment;
-  postId: number;
 };
 
-const CommentActions = ({ comment, postId }: CommentActionsProps) => {
+const CommentActions = ({ comment }: CommentActionsProps) => {
   return (
     <div className="flex items-center space-x-1">
-      <CommentLikeButton comment={comment} postId={postId} />
+      <CommentLikeButton comment={comment} />
       <ModalEditComment comment={comment} />
-      <CommentDeleteButton comment={comment} postId={postId} />
+      <CommentDeleteButton comment={comment} />
     </div>
   );
 };

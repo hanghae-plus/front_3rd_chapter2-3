@@ -2,6 +2,7 @@ import { Post } from "@/entities/post/model/types";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 import { useShallow } from "zustand/shallow";
+import { useUpdatePost } from "../../api/use-update-post";
 import usePostsStore from "../../model/usePostsStore";
 
 type FormEditPostProps = {
@@ -9,14 +10,13 @@ type FormEditPostProps = {
 };
 
 const FormEditPost = ({ close }: FormEditPostProps) => {
-  const { updatePost, loading, selectedPost, handleSelectPost } = usePostsStore(
+  const { selectedPost, handleSelectPost } = usePostsStore(
     useShallow((state) => ({
-      updatePost: state.updatePost,
-      loading: state.loading,
       selectedPost: state.selectedPost,
       handleSelectPost: state.handleSelectPost,
     })),
   );
+  const { mutate: updatePost, isPending } = useUpdatePost();
 
   const handleChangePost = (key: keyof Post, value: string | number) => {
     if (!selectedPost) return;
@@ -46,8 +46,8 @@ const FormEditPost = ({ close }: FormEditPostProps) => {
           handleChangePost("body", e.target.value);
         }}
       />
-      <Button onClick={() => handleUpdatePost(selectedPost)} disabled={loading}>
-        {loading ? "업데이트 중..." : "게시물 업데이트"}
+      <Button onClick={() => handleUpdatePost(selectedPost)} disabled={isPending}>
+        {isPending ? "업데이트 중..." : "게시물 업데이트"}
       </Button>
     </div>
   );

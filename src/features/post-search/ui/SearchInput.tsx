@@ -1,24 +1,18 @@
-import usePostsStore from "@/features/post/model/usePostsStore";
+import { useSearchPosts } from "@/features/post/api/use-search-post";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 
 import { Input } from "@/shared/ui";
 
 import { Search } from "lucide-react";
-import { useShallow } from "zustand/shallow";
 
 const SearchInput = () => {
   const {
     handleUpdateQuery,
-    queries: { search, limit, skip },
+    queries: { search },
   } = useNavigator();
 
-  const { searchPosts, loading } = usePostsStore(
-    useShallow((state) => ({
-      searchPosts: state.searchPosts,
-      loading: state.loading,
-    })),
-  );
+  const { mutate: searchPosts, isPending } = useSearchPosts();
 
   return (
     <div className="flex-1">
@@ -29,8 +23,8 @@ const SearchInput = () => {
           className="pl-8"
           value={search}
           onChange={(e) => handleUpdateQuery("search", e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && searchPosts({ limit, skip, searchQuery: search })}
-          disabled={loading}
+          onKeyDown={(e) => e.key === "Enter" && searchPosts(search)}
+          disabled={isPending}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { Post } from "@/entities/post/model/types";
-import usePostsStore from "@/features/post/model/usePostsStore";
 import { useNavigator } from "@/shared/lib/useNavigator";
+import { useFilterTagPosts } from "../../api/use-filter-tag-post";
 
 type PostTableRowTagsProps = {
   post: Post;
@@ -8,8 +8,8 @@ type PostTableRowTagsProps = {
 
 const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
   const { queries, handleUpdateQuery } = useNavigator();
-  const fetchPostsByTag = usePostsStore((state) => state.fetchPostsByTag);
   const { tag: selectedTag } = queries;
+  const { mutate: filterTagPosts } = useFilterTagPosts();
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -23,7 +23,7 @@ const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
           }`}
           onClick={async () => {
             handleUpdateQuery("tag", tag);
-            fetchPostsByTag(tag);
+            filterTagPosts(tag);
           }}
         >
           {tag}

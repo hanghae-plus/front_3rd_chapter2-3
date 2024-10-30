@@ -3,18 +3,18 @@ import { Comment } from "@/entities/comment/model/types";
 import { Button } from "@/shared/ui";
 
 import { ThumbsUp } from "lucide-react";
-import useCommentStore from "../model/useCommentStore";
+import { useLikeComment } from "../api/use-like-comment";
 
 type CommentLikeButtonProps = {
   comment: Comment;
-  postId: number;
+
 };
 
-const CommentLikeButton = ({ comment, postId }: CommentLikeButtonProps) => {
-  const likeComment = useCommentStore((state) => state.likeComment);
+const CommentLikeButton = ({ comment }: CommentLikeButtonProps) => {
+  const { mutate: likeComment } = useLikeComment();
 
   const handleLikeComment = () => {
-    likeComment(comment, postId);
+    likeComment(comment);
   };
 
   return (

@@ -3,16 +3,18 @@ import CommentInfo from "@/features/comment/ui/CommentInfo";
 import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
-import useCommentStore from "../model/useCommentStore";
+import { useQueryComments } from "../api/use-get-comment";
 
 type CommentsProps = {
   postId: number;
 };
 
 const Comments = ({ postId }: CommentsProps) => {
-  const comments = useCommentStore((state) => state.comments[postId]);
+  const { data: comments, isLoading: loading } = useQueryComments({ postId });
   const { queries } = useNavigator();
   const { search } = queries;
+
+  if (loading) return <div className="flex justify-center p-4">로딩 중...</div>;
 
   return (
     <div className="mt-2">
@@ -24,7 +26,7 @@ const Comments = ({ postId }: CommentsProps) => {
         {comments?.map((comment) => (
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
             <CommentInfo comment={comment} search={search} />
-            <CommentActions comment={comment} postId={postId} />
+            <CommentActions comment={comment} />
           </div>
         ))}
       </div>

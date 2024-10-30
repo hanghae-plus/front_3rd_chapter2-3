@@ -3,25 +3,13 @@ import PostPagination from "@/features/post/ui/PostPagination";
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Table } from "@/shared/ui";
 
-import usePostsStore from "@/features/post/model/usePostsStore";
+import { useQueryPosts } from "@/features/post/api/use-get-post";
 import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
-import { useEffect } from "react";
-import { useShallow } from "zustand/shallow";
 
 const TablePosts = () => {
   const { queries } = useNavigator();
   const { search, limit, skip } = queries;
-  const { loading, posts, fetchPosts } = usePostsStore(
-    useShallow((state) => ({
-      loading: state.loading,
-      posts: state.posts,
-      fetchPosts: state.fetchPosts,
-    })),
-  );
-
-  useEffect(() => {
-    fetchPosts({ limit, skip });
-  }, [limit, skip, fetchPosts]);
+  const { data: posts, isLoading: loading } = useQueryPosts({ limit, skip });
 
   return (
     <>
@@ -39,13 +27,11 @@ const TablePosts = () => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {posts.map((post) => (
-              <PostTableIRow key={post.id} post={post} search={search} />
-            ))}
+            {posts?.posts.map((post) => <PostTableIRow key={post.id} post={post} search={search} />)}
           </Table.Body>
         </Table.Container>
       )}
-      <PostPagination />
+      <PostPagination total={posts?.total || 0} size={limit} skip={skip} />
     </>
   );
 };

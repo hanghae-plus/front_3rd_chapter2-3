@@ -1,13 +1,13 @@
 import { Button } from "@/shared/ui";
 import { Trash2 } from "lucide-react";
-import usePostsStore from "../model/usePostsStore";
+import { useDeletePost } from "../api/use-delete-post";
 
 type PostDeleteButtonProps = {
   id: number;
 };
 
 const PostDeleteButton = ({ id }: PostDeleteButtonProps) => {
-  const deletePost = usePostsStore((state) => state.deletePost);
+  const { mutate: deletePost } = useDeletePost();
 
   return (
     <Button variant="ghost" size="sm" onClick={() => deletePost(id)}>

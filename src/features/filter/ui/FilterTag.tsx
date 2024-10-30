@@ -1,5 +1,5 @@
 import useFetchTags from "@/features/filter/api/useFetchTags";
-import usePostsStore from "@/features/post/model/usePostsStore";
+import { useFilterTagPosts } from "@/features/post/api/use-filter-tag-post";
 
 import { useNavigator } from "@/shared/lib/useNavigator";
 import { Select } from "@/shared/ui/Select";
@@ -10,11 +10,11 @@ const FilterTag = () => {
     handleUpdateQuery,
   } = useNavigator();
   const { tags } = useFetchTags();
-  const fetchPostsByTag = usePostsStore((state) => state.fetchPostsByTag);
+  const { mutate: filterTagPosts } = useFilterTagPosts();
 
   const handleChangeTag = (value: string) => {
     handleUpdateQuery("tag", value);
-    fetchPostsByTag(value);
+    filterTagPosts(value);
   };
 
   return (

@@ -3,7 +3,7 @@ import { NewPost } from "@/entities/post/model/types";
 import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useState } from "react";
-import usePostsStore from "../../model/usePostsStore";
+import { useAddPost } from "../../api/use-add-post";
 
 type FormAddPostProps = {
   close: () => void;
@@ -13,10 +13,10 @@ const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = ({ close }: FormAddPostProps) => {
   const [newPost, setNewPost] = useState(initialNewPost);
-  const addPost = usePostsStore((state) => state.addPost);
+  const { mutateAsync: addPost } = useAddPost();
 
-  const handleAddPost = (newPost: NewPost) => {
-    addPost(newPost);
+  const handleAddPost = async (newPost: NewPost) => {
+    await addPost(newPost);
     setNewPost(initialNewPost);
     close();
   };

@@ -3,7 +3,7 @@ import { NewComment } from "@/features/comment/model/types";
 import { Button, Textarea } from "@/shared/ui";
 
 import { useEffect, useState } from "react";
-import useCommentStore from "../../model/useCommentStore";
+import { useAddComment } from "../../api/use-add-comment";
 
 type FormAddCommentProps = {
   close: () => void;
@@ -13,11 +13,11 @@ type FormAddCommentProps = {
 const initialNewComment: NewComment = { body: "", postId: 0, userId: 1 };
 
 const FormAddComment = ({ close, postId }: FormAddCommentProps) => {
-  const addComment = useCommentStore((state) => state.addComment);
+  const { mutateAsync: addComment } = useAddComment();
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment);
 
-  const handleAddComment = () => {
-    addComment(newComment);
+  const handleAddComment = async () => {
+    await addComment(newComment);
     setNewComment(initialNewComment);
     close();
   };

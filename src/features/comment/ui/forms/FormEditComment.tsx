@@ -4,6 +4,7 @@ import { Button, Textarea } from "@/shared/ui";
 
 import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
+import { useUpdateComment } from "../../api/use-update-comment";
 import useCommentStore from "../../model/useCommentStore";
 
 type FormEditCommentProps = {
@@ -12,9 +13,9 @@ type FormEditCommentProps = {
 };
 
 const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
-  const { updateComment, handleSelectComment, selectedComment } = useCommentStore(
+  const { mutate: updateComment } = useUpdateComment();
+  const { handleSelectComment, selectedComment } = useCommentStore(
     useShallow((state) => ({
-      updateComment: state.updateComment,
       handleSelectComment: state.handleSelectComment,
       selectedComment: state.selectedComment,
     })),

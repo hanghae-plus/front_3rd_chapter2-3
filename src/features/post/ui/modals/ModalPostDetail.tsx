@@ -7,7 +7,6 @@ import useToggle from "@/shared/lib/useToggle";
 import { highlightText } from "@/shared/lib/utils";
 import { Button, Dialog } from "@/shared/ui";
 
-import useCommentStore from "@/features/comment/model/useCommentStore";
 import { MessageSquare } from "lucide-react";
 import { useShallow } from "zustand/shallow";
 import usePostsStore from "../../model/usePostsStore";
@@ -20,7 +19,7 @@ const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
   const { queries } = useNavigator();
   const { search: searchQuery } = queries;
   const { isOpen, toggle } = useToggle();
-  const fetchComments = useCommentStore((state) => state.fetchComments);
+
   const { selectedPost, handleSelectPost } = usePostsStore(
     useShallow((state) => ({
       selectedPost: state.selectedPost,
@@ -30,7 +29,6 @@ const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
 
   const openPostDetail = (post: Post) => {
     handleSelectPost(post);
-    fetchComments(post.id);
   };
 
   return (
