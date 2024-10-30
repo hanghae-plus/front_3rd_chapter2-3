@@ -5,12 +5,11 @@ import { Button, Textarea } from "@/shared/ui";
 import { useModalStore } from "@/shared/model/useModalStore";
 import { useState } from "react";
 import { useAddComment } from "../../api/use-add-comment";
+import { initialNewComment } from "../../config/initialValues";
 
 type FormAddCommentProps = {
   postId: number;
 };
-
-const initialNewComment: NewComment = { body: "", postId: 0, userId: 1 };
 
 const FormAddComment = ({ postId }: FormAddCommentProps) => {
   const close = useModalStore((state) => state.close);

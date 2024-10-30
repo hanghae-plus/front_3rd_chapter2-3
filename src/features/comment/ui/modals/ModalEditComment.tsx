@@ -12,7 +12,7 @@ type ModalEditCommentProps = {
 };
 
 const ModalEditComment = ({ comment }: ModalEditCommentProps) => {
-  const { toggle, isOpen } = useModalEditComment({ commentId: comment?.id ?? -1 });
+  const { toggle, isOpen } = useModalEditComment(comment);
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>

@@ -1,13 +1,12 @@
+import { Comment } from "@/entities/comment/model/types";
 import { getModalKey, useModalStore } from "@/shared/model/useModalStore";
+import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 import { useUpdateComment } from "../api/use-update-comment";
 import useCommentStore from "./useCommentStore";
 
-type ModalEditCommentProps = {
-  commentId: number;
-};
-
-export const useModalEditComment = ({ commentId }: ModalEditCommentProps) => {
+export const useModalEditComment = (comment: Comment | null) => {
+  const commentId = comment?.id;
   const { mutate: updateComment } = useUpdateComment();
 
   const modalStore = useModalStore(
@@ -25,12 +24,28 @@ export const useModalEditComment = ({ commentId }: ModalEditCommentProps) => {
     })),
   );
 
+  const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!selectedComment) return;
+    handleSelectComment({ ...selectedComment, body: e.target.value });
+  };
+
+  const handleUpdateComment = () => {
+    if (!selectedComment) return;
+    updateComment(selectedComment);
+    modalStore.close({ type: "editComment", id: selectedComment.id });
+  };
+
+  useEffect(() => {
+    if (!comment) return;
+    handleSelectComment(comment);
+  }, [comment, handleSelectComment]);
+
   return {
     isOpen: modalStore.activeModals.has(getModalKey({ type: "editComment", id: commentId })),
     toggle: (isOpen: boolean) => modalStore.toggle({ type: "editComment", id: commentId }, isOpen),
     close: () => modalStore.close({ type: "editComment", id: commentId }),
     selectedComment,
-    handleSelectComment,
-    updateComment,
+    handleChangeComment,
+    handleUpdateComment,
   };
 };
