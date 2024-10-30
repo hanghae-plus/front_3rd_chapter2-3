@@ -1,10 +1,10 @@
-import { Comments, NewComment, Comment } from "../model/type"
+import { NewComment, Comment } from "../model/type"
 
 // 댓글 가져오기
 export const fetchCommentsApi = async (postId: number) => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
-    const data: Comments = await response.json()
+    const data = await response.json()
     return data
   } catch (error) {
     console.error("댓글 가져오기 오류:", error)

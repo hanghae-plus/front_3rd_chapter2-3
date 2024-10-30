@@ -1,16 +1,10 @@
 // 사용자 모달
 
-import React from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
-import { User } from "../../entities/user/model/type"
+import { useUser } from "../../features/user/model/store"
 
-interface Props {
-  showUserModal: boolean
-  setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
-  selectedUser: User | null
-}
-
-const UserModal = ({ showUserModal, setShowUserModal, selectedUser }: Props) => {
+export const UserModal = () => {
+  const { showUserModal, setShowUserModal, selectedUser } = useUser()
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
       <DialogContent>

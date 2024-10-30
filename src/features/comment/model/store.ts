@@ -1,5 +1,11 @@
 import { Comments, NewComment, Comment } from "../../../entities/comment/model/type"
-import { createCommentApi, deleteCommentApi, likeCommentApi, updateCommentApi } from "../../../entities/comment/api"
+import {
+  createCommentApi,
+  deleteCommentApi,
+  fetchCommentsApi,
+  likeCommentApi,
+  updateCommentApi,
+} from "../../../entities/comment/api"
 import { atom, useAtom } from "jotai"
 
 export const commentsAtom = atom<Comments>({})
@@ -49,7 +55,13 @@ export const useComment = () => {
     }))
     setShowEditCommentDialog(false)
   }
+  const fetchComments = async (postId: number) => {
+    if (comments?.[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+    const data = await fetchCommentsApi(postId)
+    setComments((prev: Comments) => ({ ...prev, [postId]: data.comments }))
+  }
   return {
+    fetchComments,
     newComment,
     setNewComment,
     showAddCommentDialog,
