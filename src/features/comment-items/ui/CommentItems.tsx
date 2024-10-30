@@ -1,12 +1,12 @@
 import { CommentItem } from "../../comment-item/ui/CommentItem"
-import { useCommentsQuery } from "../../comment/api/useQueryComments"
+import { useQueryComments } from "../../comment/api/useQueryComments"
 
 interface Props {
   postId: number
 }
 
 export const CommentItems = ({ postId }: Props) => {
-  const { data } = useCommentsQuery(postId)
+  const { data } = useQueryComments(postId)
 
   return (
     <div className="space-y-1">
