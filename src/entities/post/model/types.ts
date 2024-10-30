@@ -19,3 +19,23 @@ export interface Post {
   userId: number
   views: number
 }
+
+export interface PostsResponse {
+  limit: number
+  skip: number
+  total: number
+  posts: Post[]
+}
+
+export interface User {
+  id: number
+  image: string
+  username: string
+}
+
+export interface UserResponse {
+  limit: number
+  skip: number
+  total: number
+  users: User[]
+}
