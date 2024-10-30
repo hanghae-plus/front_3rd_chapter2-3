@@ -1,10 +1,13 @@
+import { useAtom } from "jotai";
+import { selectedTagAtom } from "../../../entities/tag/model/tagAtom";
+
 interface TagProps {
   tag: string
-  selectedTag: string
-  onTagSelect: (tag: string) => void
 }
 
-const Tag: React.FC<TagProps> = ({ tag, selectedTag, onTagSelect }) => {
+const Tag: React.FC<TagProps> = ({ tag }) => {
+  const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom);
+  
   const isSelected = selectedTag === tag
   const tagClass = isSelected
     ? "text-white bg-blue-500 hover:bg-blue-600"
@@ -14,7 +17,10 @@ const Tag: React.FC<TagProps> = ({ tag, selectedTag, onTagSelect }) => {
     <span
       key={tag}
       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${tagClass}`}
-      onClick={() => onTagSelect(tag)}
+      onClick={() => {
+        setSelectedTag(tag);
+        updateURL();
+      }}
     >
       {tag}
     </span>

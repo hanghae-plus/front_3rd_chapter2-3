@@ -96,7 +96,8 @@ const fetchComments = async (postId) => {
 };
 
 // PostsManager 컴포넌트
-const PostsManager = () => {
+const OriginC = () => {
+  console.log('OriginC')
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -702,4 +703,4 @@ const PostsManager = () => {
   );
 };
 
-export default PostsManager;
+export default OriginC;

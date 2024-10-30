@@ -17,7 +17,7 @@ const apiInstance = async (endpoint:string, { method = 'GET', body = undefined, 
   }
 
   try {
-    const response = await fetch(`/api${endpoint}`, config);
+    const response = await fetch(`${endpoint}`, config);
 
     // 응답이 성공적이지 않은 경우 에러 처리
     if (!response.ok) {
