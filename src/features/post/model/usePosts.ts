@@ -4,16 +4,19 @@ import { NewPost, Post } from "../../../entities/post/model/types"
 import { fetchUsersApi } from "../../../entities/user/api"
 import { getPostsWithUsers } from "../../../entities/post/model"
 import { fetchPostsByTagApi, searchPostsApi } from "../api"
-import { useState } from "react"
 
 const postsAtom = atom<Post[]>([])
 const totalAtom = atom(0)
+const loadingAtom = atom(false)
 
 export const usePosts = () => {
   const [posts, setPosts] = useAtom(postsAtom)
   const [total, setTotal] = useAtom(totalAtom)
+  const [loading, setLoading] = useAtom(loadingAtom)
 
   const getPosts = async (limit: number, skip: number, tag?: string) => {
+    setLoading(true)
+
     const [postsData, usersData] = await Promise.all([
       tag ? fetchPostsByTagApi(tag) : fetchPostsApi(limit, skip),
       fetchUsersApi(),
@@ -23,13 +26,26 @@ export const usePosts = () => {
 
     setPosts(postsWithUsers)
     setTotal(postsData.total)
+    setLoading(false)
   }
 
   const searchPostsWithQuery = async (searchQuery: string) => {
+    setLoading(true)
+
     const postsData = await searchPostsApi(searchQuery)
 
     setPosts(postsData.posts)
     setTotal(postsData.total)
+    setLoading(false)
+  }
+
+  const fetchPostsByTag = async (tag: string, limit: number, skip: number) => {
+    if (!tag || tag === "all") {
+      getPosts(limit, skip)
+      return
+    }
+
+    getPosts(limit, skip, tag)
   }
 
   const addPost = async (newPost: NewPost) => {
@@ -57,5 +73,7 @@ export const usePosts = () => {
     updatePost,
     deletePost,
     searchPostsWithQuery,
+    fetchPostsByTag,
+    loading,
   }
 }
