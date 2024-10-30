@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
-import { useQueryUser } from "../model/useQueryUser"
+import { useQueryUser } from "../api/useQueryUser"
 import { useUser } from "../model/userStore"
 
 export const UserModal = () => {
