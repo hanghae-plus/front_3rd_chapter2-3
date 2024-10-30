@@ -16,6 +16,7 @@ export const commentApi = {
       return response
     } catch (error) {
       console.error("댓글 가져오기 오류:", error)
+      throw error
     }
   },
 
@@ -29,6 +30,7 @@ export const commentApi = {
       return response
     } catch (error) {
       console.error("댓글 추가 오류:", error)
+      throw error
     }
   },
 
@@ -44,6 +46,7 @@ export const commentApi = {
       return response
     } catch (error) {
       console.error("댓글 업데이트 오류:", error)
+      throw error
     }
   },
 
@@ -56,6 +59,7 @@ export const commentApi = {
       return response
     } catch (error) {
       console.error("댓글 삭제 오류:", error)
+      throw error
     }
   },
 
@@ -68,6 +72,7 @@ export const commentApi = {
       return response
     } catch (error) {
       console.error("댓글 좋아요 오류:", error)
+      throw error
     }
   },
 }

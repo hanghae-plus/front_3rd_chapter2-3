@@ -1,11 +1,6 @@
 import { safeFetch } from "../../../shared/lib"
-import {
-  NewPost,
-  Post,
-  PostsResponse,
-  Tag,
-  UsersResponse,
-} from "../model/types"
+import { userApi } from "../../user/api/userApi"
+import { NewPost, Post, PostsResponse, Tag } from "../model/types"
 
 type FetchPostsPayload = {
   limit: number
@@ -18,7 +13,7 @@ export const postApi = {
     try {
       const [postsData, usersData] = await Promise.all([
         safeFetch<PostsResponse>(`/api/posts?limit=${limit}&skip=${skip}`),
-        safeFetch<UsersResponse>("/api/users?limit=0&select=username,image"),
+        userApi.fetchUsers(),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -41,7 +36,7 @@ export const postApi = {
     try {
       const [postsData, usersData] = await Promise.all([
         safeFetch<PostsResponse>(`/api/posts/search?q=${searchQuery}`),
-        safeFetch<UsersResponse>("/api/users?limit=0&select=username,image"),
+        userApi.fetchUsers(),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -61,7 +56,7 @@ export const postApi = {
     try {
       const [postsData, usersData] = await Promise.all([
         safeFetch<PostsResponse>(`/api/posts/tag/${tag}`),
-        safeFetch<UsersResponse>("/api/users?limit=0&select=username,image"),
+        userApi.fetchUsers(),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -128,6 +123,7 @@ export const postApi = {
       return response
     } catch (error) {
       console.error("게시물 삭제 오류:", error)
+      throw error
     }
   },
 }
