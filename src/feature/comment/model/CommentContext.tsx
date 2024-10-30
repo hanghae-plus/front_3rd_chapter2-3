@@ -12,7 +12,6 @@ interface CommentContextProps {
   setShowEditCommentDialog: Dispatch<SetStateAction<boolean>>;
   selectedComment: Comments | undefined;
   setSelectedComment: Dispatch<SetStateAction<Comments | undefined>>;
-  fetchComments: (postId: number) => Promise<void>;
 }
 
 const CommentContext = createContext<CommentContextProps | undefined>(undefined);

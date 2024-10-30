@@ -13,9 +13,10 @@ import { usePostContext } from "../model/PostContext.tsx";
 import { useUser } from "../../user/model";
 import { Post } from "../../../entities/post/model/types.ts";
 import { deleteExistingPost } from "../../../entities/post/api";
-import { useCommentContext } from "../../comment/model/CommentContext.tsx";
 import { User } from "../../../entities/user/model/types.ts";
 import { getUserInfo } from "../../../entities/user/api";
+import { useCommentContext } from "../../comment/model/CommentContext.tsx";
+import { getComments } from "../../../entities/comment/api";
 
 export const PostTable = () => {
   const {
@@ -30,7 +31,16 @@ export const PostTable = () => {
     setPosts,
   } = usePostContext();
 
-  const { fetchComments } = useCommentContext();
+  const { comments, setComments } = useCommentContext();
+
+  const fetchComments = async (postId: number) => {
+    if (comments[postId]) return;
+
+    const response = await getComments(postId);
+    if (response) {
+      setComments((prev) => ({ ...prev, [postId]: response.comments }));
+    }
+  };
 
   const { setShowUserModal, setSelectedUser } = useUser();
 
