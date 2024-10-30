@@ -2,8 +2,8 @@
 import { atom } from "jotai"
 
 // 댓글 상태
-export const commentsAtom = atom<Record<number, any>>({}) // 댓글을 postId로 그룹화하기 위한 예시
-export const selectedCommentAtom = atom<any>(null) // 선택된 댓글
+export const commentsAtom = atom<Record<number, any>>({})
+export const selectedCommentAtom = atom<any>(null)
 export const newCommentAtom = atom<{ body: string; postId: number | null; userId: number }>({
   body: "",
   postId: null,
