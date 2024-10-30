@@ -1,6 +1,6 @@
 import { overlay } from "overlay-kit";
 import { Button } from "@/shared/ui";
-import AddPostDialog from "@/features/addPost/ui/add-post-dialog";
+import AddPostDialog from "@/features/addPost/ui/post-add-dialog";
 import { Plus } from "lucide-react";
 
 const AddPostButton = () => {

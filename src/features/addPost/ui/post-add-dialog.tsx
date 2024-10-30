@@ -7,7 +7,7 @@ import {
   Input,
   Textarea,
 } from "@/shared/ui";
-import AddNewPost from "@/features/addPost/model/add-new-post";
+import useAddPost from "@/features/addPost/model/use-add-post";
 
 interface AddDialogProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ interface AddDialogProps {
 }
 
 const AddPostDialog = ({ isOpen, close }: AddDialogProps) => {
-  const { newPost, updateNewPost, addPost } = AddNewPost();
+  const { newPost, updateNewPost, addPost } = useAddPost();
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
