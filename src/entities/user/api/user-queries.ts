@@ -8,12 +8,28 @@ export const userQueries = {
   list: (props: FetchUsersProps) =>
     queryOptions({
       queryKey: createQueryKey(userQueries.all(), "list", props.select),
-      queryFn: () => userApi.getUsers(props),
+      queryFn: async () => {
+        try {
+          const data = await userApi.getUsers(props);
+          return data;
+        } catch (error) {
+          console.error("유저 가져오기 오류:", error);
+          throw error;
+        }
+      },
     }),
   detail: ({ id, options }: { id: number; options?: Omit<UseQueryOptions<User>, "queryKey" | "queryFn"> }) =>
     queryOptions({
       queryKey: createQueryKey(userQueries.all(), "detail", id),
-      queryFn: () => userApi.getUser(id),
+      queryFn: async () => {
+        try {
+          const data = await userApi.getUser(id);
+          return data;
+        } catch (error) {
+          console.error("유저 가져오기 오류:", error);
+          throw error;
+        }
+      },
       ...options,
     }),
 };
