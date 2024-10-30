@@ -8,8 +8,8 @@ import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 
 const TablePosts = () => {
   const { queries } = useQueryParams();
-  const { search, limit, skip, tag } = queries;
-  const { data, isLoading } = useQueryPosts({ limit, skip, search, tag });
+  const { search, limit, skip, tag, priorityKey } = queries;
+  const { data, isLoading } = useQueryPosts({ limit, skip, search, tag, priorityKey });
 
   return (
     <>

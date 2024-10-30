@@ -1,3 +1,4 @@
+import { AppProviders } from "@/app/providers";
 import PostsManager from "@/pages/post-manager/ui/PostsManagerPage";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -7,7 +8,6 @@ import { setupServer } from "msw/node";
 import { MemoryRouter } from "react-router-dom";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // MSW 서버 설정
 const server = setupServer(
@@ -45,12 +45,11 @@ afterAll(() => server.close());
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
-  const queryClient = new QueryClient();
   return render(
     <MemoryRouter>
-      <QueryClientProvider client={queryClient}>
+      <AppProviders>
         <PostsManager />
-      </QueryClientProvider>
+      </AppProviders>
     </MemoryRouter>,
   );
 };

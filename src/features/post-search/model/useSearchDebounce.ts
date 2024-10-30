@@ -23,7 +23,7 @@ export const useSearchDebounce = ({ delay = 1000 }: UseSearchDebounceProps = {})
 
   useEffect(() => {
     handleUpdateQuery("search", debouncedSearch);
-  }, [debouncedSearch, handleUpdateQuery]);
+  }, [debouncedSearch]);
 
   return {
     search,
