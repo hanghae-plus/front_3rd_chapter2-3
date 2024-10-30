@@ -7,7 +7,7 @@ import { Edit2 } from "lucide-react";
 import { useModalEditPost } from "../../model/useModalEditPost";
 
 const ModalEditPost = ({ post }: { post: Post }) => {
-  const { isOpen, toggle, close, openEditModal } = useModalEditPost(post);
+  const { isOpen, toggle, openEditModal } = useModalEditPost(post);
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
@@ -20,7 +20,7 @@ const ModalEditPost = ({ post }: { post: Post }) => {
         <Dialog.Header>
           <Dialog.Title>게시물 수정</Dialog.Title>
         </Dialog.Header>
-        <FormEditPost close={close} />
+        <FormEditPost />
       </Dialog.Content>
     </Dialog.Container>
   );

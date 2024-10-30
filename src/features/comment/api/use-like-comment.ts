@@ -17,5 +17,8 @@ export const useLikeComment = () => {
         },
       );
     },
+    onError: (error) => {
+      console.error("댓글 좋아요 오류:", error);
+    },
   });
 };

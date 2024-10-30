@@ -23,5 +23,8 @@ export const useUpdatePost = () => {
         },
       );
     },
+    onError: (error) => {
+      console.error("게시물 수정 오류:", error);
+    },
   });
 };

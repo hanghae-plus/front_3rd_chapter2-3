@@ -17,7 +17,7 @@ export const useQueryPosts = ({
   if (search && priorityKey === "search") {
     return useQuery(postQueries.search({ searchQuery: search }));
   }
-  if (tag && tag !== "all" && priorityKey !== "tag") {
+  if (tag && tag !== "all" && priorityKey === "tag") {
     return useQuery(postQueries.tag({ tag }));
   }
   return useQuery(postQueries.list({ limit, skip }));

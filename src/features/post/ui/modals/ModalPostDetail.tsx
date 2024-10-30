@@ -13,7 +13,7 @@ type ModalPostDetailProps = {
 };
 
 const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
-  const { isOpen, toggle, selectedPost, searchQuery, openPostDetail } = useModalPostDetail();
+  const { isOpen, toggle, selectedPost, searchQuery, openPostDetail } = useModalPostDetail({ postId: post.id });
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>

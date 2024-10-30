@@ -1,11 +1,22 @@
-import useToggle from "@/shared/model/useToggle";
+import { getModalKey, useModalStore } from "@/shared/model/useModalStore";
 import { useShallow } from "zustand/shallow";
 import { useUpdateComment } from "../api/use-update-comment";
 import useCommentStore from "./useCommentStore";
 
-export const useModalEditComment = () => {
-  const { isOpen, toggle, close } = useToggle();
+type ModalEditCommentProps = {
+  commentId: number;
+};
+
+export const useModalEditComment = ({ commentId }: ModalEditCommentProps) => {
   const { mutate: updateComment } = useUpdateComment();
+
+  const modalStore = useModalStore(
+    useShallow((state) => ({
+      activeModals: state.activeModals,
+      toggle: state.toggle,
+      close: state.close,
+    })),
+  );
 
   const { selectedComment, handleSelectComment } = useCommentStore(
     useShallow((state) => ({
@@ -15,9 +26,9 @@ export const useModalEditComment = () => {
   );
 
   return {
-    isOpen,
-    toggle,
-    close,
+    isOpen: modalStore.activeModals.has(getModalKey({ type: "editComment", id: commentId })),
+    toggle: (isOpen: boolean) => modalStore.toggle({ type: "editComment", id: commentId }, isOpen),
+    close: () => modalStore.close({ type: "editComment", id: commentId }),
     selectedComment,
     handleSelectComment,
     updateComment,

@@ -1,14 +1,18 @@
-import useToggle from "@/shared/model/useToggle";
-import { useAddPost } from "../api/use-add-post";
+import { getModalKey, useModalStore } from "@/shared/model/useModalStore";
+import { useShallow } from "zustand/shallow";
 
 export const useModalAddPost = () => {
-  const { isOpen, toggle, close } = useToggle();
-  const { mutate: addPost } = useAddPost();
+  const modalStore = useModalStore(
+    useShallow((state) => ({
+      activeModals: state.activeModals,
+      toggle: state.toggle,
+      close: state.close,
+    })),
+  );
 
   return {
-    isOpen,
-    toggle,
-    close,
-    addPost,
+    isOpen: modalStore.activeModals.has(getModalKey({ type: "addPost" })),
+    toggle: (isOpen: boolean) => modalStore.toggle({ type: "addPost" }, isOpen),
+    close: () => modalStore.close({ type: "addPost" }),
   };
 };

@@ -1,16 +1,21 @@
-import { keepPreviousData, queryOptions } from "@tanstack/react-query";
+import { createQueryKey } from "@/shared/lib/api";
+import { queryOptions } from "@tanstack/react-query";
 import { withDefaultLikes } from "../lib/comment-query-helper";
 import { commentApi } from "./comment-api";
-
-const createQueryKey = (base: string[], ...params: unknown[]) => [...base, ...params];
 
 export const commentQueries = {
   all: () => ["comments"],
   list: ({ postId }: { postId: number }) =>
     queryOptions({
       queryKey: createQueryKey(commentQueries.all(), "list", postId),
-      queryFn: () => commentApi.fetchComments(postId),
-      placeholderData: keepPreviousData,
+      queryFn: async () => {
+        try {
+          return await commentApi.fetchComments(postId);
+        } catch (error) {
+          console.error("댓글 조회 오류:", error);
+          throw error;
+        }
+      },
       select: (data) => {
         return data.map(withDefaultLikes);
       },

@@ -1,6 +1,7 @@
+import { postQueries } from "@/entities/post/api/post-queries";
 import { Post } from "@/entities/post/model/types";
 import { useQueryParams } from "@/shared/model/useQueryParams";
-import { useFilterTagPosts } from "../../api/use-filter-tag-post";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PostTableRowTagsProps = {
   post: Post;
@@ -9,7 +10,12 @@ type PostTableRowTagsProps = {
 const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
   const { queries, handleUpdateQuery } = useQueryParams();
   const { tag: selectedTag } = queries;
-  const { mutate: filterTagPosts } = useFilterTagPosts();
+  const queryClient = useQueryClient();
+
+  const handleTagClick = (tag: string) => {
+    handleUpdateQuery("tag", tag);
+    queryClient.prefetchQuery(postQueries.tag({ tag }));
+  };
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -21,10 +27,7 @@ const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
               ? "text-white bg-blue-500 hover:bg-blue-600"
               : "text-blue-800 bg-blue-100 hover:bg-blue-200"
           }`}
-          onClick={async () => {
-            handleUpdateQuery("tag", tag);
-            filterTagPosts(tag);
-          }}
+          onClick={() => handleTagClick(tag)}
         >
           {tag}
         </span>

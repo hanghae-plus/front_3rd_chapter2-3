@@ -47,6 +47,9 @@ const deletePost = async (id: number) => {
   return response;
 };
 
+// ======================================================
+
+// total
 export const postApi = Object.freeze({
   getPosts: fetchPosts,
   addPost: addPost,

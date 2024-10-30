@@ -1,6 +1,5 @@
+import { createQueryKey } from "@/shared/lib/api";
 import { tagApi } from "./tag-api";
-
-const createQueryKey = (base: string[], ...params: unknown[]) => [...base, ...params];
 
 export const tagQueries = {
   all: () => ["tags"],

@@ -20,5 +20,8 @@ export const useDeletePost = () => {
         },
       );
     },
+    onError: (error) => {
+      console.error("게시물 삭제 오류:", error);
+    },
   });
 };

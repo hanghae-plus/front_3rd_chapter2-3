@@ -1,8 +1,7 @@
+import { createQueryKey } from "@/shared/lib/api";
 import { queryOptions } from "@tanstack/react-query";
 import { FetchUsersProps } from "../model/types";
 import { userApi } from "./user-api";
-
-const createQueryKey = (base: string[], ...params: unknown[]) => [...base, ...params];
 
 export const userQueries = {
   all: () => ["users"],

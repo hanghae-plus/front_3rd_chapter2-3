@@ -1,12 +1,23 @@
 import { Post } from "@/entities/post/model/types";
+import { getModalKey, useModalStore } from "@/shared/model/useModalStore";
 import { useQueryParams } from "@/shared/model/useQueryParams";
-import useToggle from "@/shared/model/useToggle";
 import { useShallow } from "zustand/shallow";
 import usePostsStore from "./usePostsStore";
 
-export const useModalPostDetail = () => {
-  const { isOpen, toggle } = useToggle();
+type ModalPostDetailProps = {
+  postId: number;
+};
+
+export const useModalPostDetail = ({ postId }: ModalPostDetailProps) => {
   const { queries } = useQueryParams();
+
+  const modalStore = useModalStore(
+    useShallow((state) => ({
+      activeModals: state.activeModals,
+      toggle: state.toggle,
+      close: state.close,
+    })),
+  );
 
   const { selectedPost, handleSelectPost } = usePostsStore(
     useShallow((state) => ({
@@ -20,8 +31,8 @@ export const useModalPostDetail = () => {
   };
 
   return {
-    isOpen,
-    toggle,
+    isOpen: modalStore.activeModals.has(getModalKey({ type: "postDetail", id: postId })),
+    toggle: (isOpen: boolean) => modalStore.toggle({ type: "postDetail", id: postId }, isOpen),
     selectedPost,
     searchQuery: queries.search,
     openPostDetail,

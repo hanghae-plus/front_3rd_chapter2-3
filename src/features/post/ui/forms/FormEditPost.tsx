@@ -1,15 +1,13 @@
 import { Post } from "@/entities/post/model/types";
 
+import { useModalStore } from "@/shared/model/useModalStore";
 import { Button, Input, Textarea } from "@/shared/ui";
 import { useShallow } from "zustand/shallow";
 import { useUpdatePost } from "../../api/use-update-post";
 import usePostsStore from "../../model/usePostsStore";
 
-type FormEditPostProps = {
-  close: () => void;
-};
-
-const FormEditPost = ({ close }: FormEditPostProps) => {
+const FormEditPost = () => {
+  const closeAll = useModalStore((state) => state.closeAll);
   const { selectedPost, handleSelectPost } = usePostsStore(
     useShallow((state) => ({
       selectedPost: state.selectedPost,
@@ -26,7 +24,7 @@ const FormEditPost = ({ close }: FormEditPostProps) => {
   const handleUpdatePost = (post: Post | null) => {
     if (!post) return;
     updatePost(post);
-    close();
+    closeAll();
   };
 
   return (

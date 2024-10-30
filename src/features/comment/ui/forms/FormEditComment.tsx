@@ -8,11 +8,11 @@ import { useUpdateComment } from "../../api/use-update-comment";
 import useCommentStore from "../../model/useCommentStore";
 
 type FormEditCommentProps = {
-  close: () => void;
   comment: Comment | null;
 };
 
-const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
+const FormEditComment = ({ comment }: FormEditCommentProps) => {
+  // const closeAll = useModalStore((state) => state.closeAll);
   const { mutate: updateComment } = useUpdateComment();
   const { handleSelectComment, selectedComment } = useCommentStore(
     useShallow((state) => ({
@@ -29,7 +29,7 @@ const FormEditComment = ({ close, comment }: FormEditCommentProps) => {
   const handleUpdateComment = () => {
     if (!selectedComment) return;
     updateComment(selectedComment);
-    close();
+    // closeAll();
   };
 
   useEffect(() => {

@@ -2,24 +2,25 @@ import { NewComment } from "@/entities/comment/model/types";
 
 import { Button, Textarea } from "@/shared/ui";
 
+import { useModalStore } from "@/shared/model/useModalStore";
 import { useEffect, useState } from "react";
 import { useAddComment } from "../../api/use-add-comment";
 
 type FormAddCommentProps = {
-  close: () => void;
   postId: number;
 };
 
 const initialNewComment: NewComment = { body: "", postId: 0, userId: 1 };
 
-const FormAddComment = ({ close, postId }: FormAddCommentProps) => {
+const FormAddComment = ({ postId }: FormAddCommentProps) => {
+  const closeAll = useModalStore((state) => state.closeAll);
   const { mutate: addComment } = useAddComment();
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment);
 
   const handleAddComment = async () => {
     addComment(newComment);
     setNewComment(initialNewComment);
-    close();
+    closeAll();
   };
 
   const handleChangeComment = (key: keyof NewComment, value: string | number) => {

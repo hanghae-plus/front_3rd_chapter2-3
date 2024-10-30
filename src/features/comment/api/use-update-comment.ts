@@ -17,5 +17,8 @@ export const useUpdateComment = () => {
         },
       );
     },
+    onError: (error) => {
+      console.error("댓글 수정 오류:", error);
+    },
   });
 };

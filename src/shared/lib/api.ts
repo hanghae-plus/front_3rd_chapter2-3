@@ -26,3 +26,5 @@ export const fetchApi = async <T>(
   const response = await fetch(fullUrl, options);
   return response.json();
 };
+
+export const createQueryKey = (base: string[], ...params: unknown[]) => [...base, ...params];

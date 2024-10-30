@@ -1,18 +1,17 @@
 import FormAddComment from "@/features/comment/ui/forms/FormAddComment";
 
-import useToggle from "@/shared/model/useToggle";
-
 import { Button, Dialog } from "@/shared/ui";
 
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Plus } from "lucide-react";
+import { useModalAddComment } from "../../model/useModalAddComment";
 
 type ModalAddCommentProps = {
   postId: number;
 };
 
 export const ModalAddComment = ({ postId }: ModalAddCommentProps) => {
-  const { toggle, isOpen, close } = useToggle();
+  const { toggle, isOpen } = useModalAddComment();
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>
@@ -25,7 +24,7 @@ export const ModalAddComment = ({ postId }: ModalAddCommentProps) => {
         <Dialog.Header>
           <DialogTitle>새 댓글 추가</DialogTitle>
         </Dialog.Header>
-        <FormAddComment close={close} postId={postId} />
+        <FormAddComment postId={postId} />
       </Dialog.Content>
     </Dialog.Container>
   );

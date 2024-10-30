@@ -2,20 +2,22 @@ import { NewPost } from "@/entities/post/model/types";
 
 import { Button, Input, Textarea } from "@/shared/ui";
 
+import { useModalStore } from "@/shared/model/useModalStore";
 import { useState } from "react";
-
-type FormAddPostProps = {
-  onSubmit: (newPost: NewPost) => void;
-};
+import { useAddPost } from "../../api/use-add-post";
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
-const FormAddPost = ({ onSubmit }: FormAddPostProps) => {
+const FormAddPost = () => {
+  const closeAll = useModalStore((state) => state.closeAll);
+  const { mutate: addPost } = useAddPost();
+
   const [newPost, setNewPost] = useState(initialNewPost);
 
   const handleAddPost = (newPost: NewPost) => {
-    onSubmit(newPost);
+    addPost(newPost);
     setNewPost(initialNewPost);
+    closeAll();
   };
 
   const handleChangePost = (key: keyof NewPost, value: string | number) => {

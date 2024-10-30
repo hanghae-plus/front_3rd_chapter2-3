@@ -2,18 +2,17 @@ import { Comment } from "@/entities/comment/model/types";
 
 import FormEditComment from "@/features/comment/ui/forms/FormEditComment";
 
-import useToggle from "@/shared/model/useToggle";
-
 import { Button, Dialog } from "@/shared/ui";
 
 import { Edit2 } from "lucide-react";
+import { useModalEditComment } from "../../model/useModalEditComment";
 
 type ModalEditCommentProps = {
   comment: Comment | null;
 };
 
 const ModalEditComment = ({ comment }: ModalEditCommentProps) => {
-  const { toggle, isOpen, close } = useToggle();
+  const { toggle, isOpen } = useModalEditComment({ commentId: comment?.id ?? -1 });
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>
@@ -25,7 +24,7 @@ const ModalEditComment = ({ comment }: ModalEditCommentProps) => {
         <Dialog.Header>
           <Dialog.Title>댓글 수정</Dialog.Title>
         </Dialog.Header>
-        <FormEditComment close={close} comment={comment} />
+        <FormEditComment comment={comment} />
       </Dialog.Content>
     </Dialog.Container>
   );

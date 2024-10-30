@@ -14,5 +14,8 @@ export const useDeleteComment = () => {
         return filterByID(oldData, id);
       });
     },
+    onError: (error) => {
+      console.error("댓글 삭제 오류:", error);
+    },
   });
 };

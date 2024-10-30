@@ -40,6 +40,10 @@ const likeComment = async (comment: Comment) => {
   return response;
 };
 
+// ======================================================
+
+// total
+
 export const commentApi = Object.freeze({
   fetchComments,
   addComment,

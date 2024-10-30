@@ -19,9 +19,12 @@ export const useAddPost = () => {
         (oldData: PostsResponse | undefined) => {
           if (!oldData) return undefined;
           const pipePost = pipe(withDefaultAuthor, withDefaultTags, withDefaultReactions);
-          return merge<PostsResponse>(oldData, "posts", addItemInArray(oldData.posts, pipePost(data)));
+          return merge<PostsResponse>(oldData, "posts", addItemInArray(oldData.posts, pipePost(data), "start"));
         },
       );
+    },
+    onError: (error) => {
+      console.error("게시물 추가 오류:", error);
     },
   });
 };

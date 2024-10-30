@@ -1,8 +1,10 @@
+import { postQueries } from "@/entities/post/api/post-queries";
+import Tags from "@/entities/tag/ui/Tags";
 import useFetchTags from "@/features/filter/api/use-get-tags";
-import { useFilterTagPosts } from "@/features/post/api/use-filter-tag-post";
 
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Select } from "@/shared/ui/Select";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FilterTag = () => {
   const {
@@ -10,11 +12,11 @@ const FilterTag = () => {
     handleUpdateQuery,
   } = useQueryParams();
   const { data: tags } = useFetchTags();
-  const { mutate: filterTagPosts } = useFilterTagPosts();
+  const queryClient = useQueryClient();
 
   const handleChangeTag = (value: string) => {
     handleUpdateQuery("tag", value);
-    filterTagPosts(value);
+    queryClient.prefetchQuery(postQueries.tag({ tag }));
   };
 
   return (
@@ -24,11 +26,7 @@ const FilterTag = () => {
       </Select.Trigger>
       <Select.Content>
         <Select.Item value="all">모든 태그</Select.Item>
-        {tags?.map((tag) => (
-          <Select.Item key={tag.url} value={tag.slug}>
-            {tag.slug}
-          </Select.Item>
-        ))}
+        <Tags tags={tags} component={Select.Item} />
       </Select.Content>
     </Select.Container>
   );
