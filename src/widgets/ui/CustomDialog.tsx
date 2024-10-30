@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 export const CustomDialog: React.FC<{
   open: boolean
   onOpenChange: (value: boolean) => void
-  title: string
+  title: string | React.ReactNode
   className?: string
   children: React.ReactNode
 }> = ({ open, onOpenChange, title, className = "", children }) => {

@@ -16,7 +16,6 @@ import { fetchTagsApi } from "../entities/tag/api"
 import { Tag } from "../entities/tag/model/types"
 import { addToPosts, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
 import { User } from "../entities/user/model/types"
-import { CustomDialog } from "../widgets/ui/CustomDialog"
 import { PostSearch } from "../features/post/ui/PostSearch"
 import { ContentSearch } from "../widgets/ui/ContentSearch"
 import { ContentControls } from "../widgets/ui/ContentControls"
@@ -25,8 +24,16 @@ import { ContentFilter } from "../widgets/ui/ContentFilter"
 import { PostFilter } from "../features/post/ui/PostFilter"
 import { Pagination } from "../widgets/ui/Pagination"
 import { PostTable } from "../features/post/ui/PostTable"
+import { PostAddDialog } from "../features/post/ui/PostAddDialog"
+import { PostUpdateDialog } from "../features/post/ui/PostUpdateDialog"
+import { Comment, NewComment } from "../entities/comment/model/types"
+import { CommentAddDialog } from "../features/comment/ui/CommentAddDialog"
+import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
+import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
+import { UserDetailDialog } from "../entities/user/ui/UserDetailDialog"
 
-const initialNewPost = { title: "", body: "", userId: 1, tags: [] }
+const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
+const initialNewComment: NewComment = { body: "", postId: null, userId: 1 }
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -43,13 +50,13 @@ const PostsManager = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ ...initialNewPost })
+  const [newPost, setNewPost] = useState<NewPost>({ ...initialNewPost })
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
+  const [selectedComment, setSelectedComment] = useState<Comment>(null)
+  const [newComment, setNewComment] = useState<NewComment>({ ...initialNewComment })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
@@ -120,8 +127,7 @@ const PostsManager = () => {
   }
 
   // 게시물 업데이트
-  const updatePost = async (updatingPost: Post | null) => {
-    if (!updatingPost) return
+  const updatePost = async (updatingPost: Post) => {
     const postData = await updatePostApi(updatingPost)
     setPosts(updateInPosts(posts, postData))
     setShowEditDialog(false)
@@ -146,7 +152,7 @@ const PostsManager = () => {
   }
 
   // 댓글 추가
-  const addComment = async () => {
+  const addComment = async (newComment: NewComment) => {
     try {
       const response = await fetch("/api/comments/add", {
         method: "POST",
@@ -159,19 +165,19 @@ const PostsManager = () => {
         [data.postId]: [...(prev[data.postId] || []), data],
       }))
       setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
+      setNewComment({ ...initialNewComment })
     } catch (error) {
       console.error("댓글 추가 오류:", error)
     }
   }
 
   // 댓글 업데이트
-  const updateComment = async () => {
+  const updateComment = async (updatingComment: Comment) => {
     try {
-      const response = await fetch(`/api/comments/${selectedComment.id}`, {
+      const response = await fetch(`/api/comments/${updatingComment.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment.body }),
+        body: JSON.stringify({ body: updatingComment.body }),
       })
       const data = await response.json()
       setComments((prev) => ({
@@ -270,7 +276,7 @@ const PostsManager = () => {
   }
 
   // 댓글 렌더링
-  const renderComments = (postId) => (
+  const renderComments = (postId: number) => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
@@ -378,112 +384,64 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <CustomDialog open={showAddDialog} onOpenChange={setShowAddDialog} title={"새 게시물 추가"}>
-        <>
-          <Input
-            placeholder="제목"
-            value={newPost.title}
-            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-          />
-          <Textarea
-            rows={30}
-            placeholder="내용"
-            value={newPost.body}
-            onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-          />
-          <Input
-            type="number"
-            placeholder="사용자 ID"
-            value={newPost.userId}
-            onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-          />
-          <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
-        </>
-      </CustomDialog>
+      <PostAddDialog
+        showAddDialog={showAddDialog}
+        setShowAddDialog={setShowAddDialog}
+        newPost={newPost}
+        setNewPost={setNewPost}
+        addPost={addPost}
+      />
 
       {/* 게시물 수정 대화상자 */}
-      <CustomDialog open={showEditDialog} onOpenChange={setShowEditDialog} title={"게시물 수정"}>
-        <>
-          <Input
-            placeholder="제목"
-            value={selectedPost?.title || ""}
-            onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-          />
-          <Textarea
-            rows={15}
-            placeholder="내용"
-            value={selectedPost?.body || ""}
-            onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-          />
-          <Button onClick={() => updatePost(selectedPost)}>게시물 업데이트</Button>
-        </>
-      </CustomDialog>
+      {selectedPost && (
+        <PostUpdateDialog
+          showEditDialog={showEditDialog}
+          setShowEditDialog={setShowEditDialog}
+          selectedPost={selectedPost}
+          setSelectedPost={setSelectedPost}
+          updatePost={updatePost}
+        />
+      )}
 
       {/* 댓글 추가 대화상자 */}
-      <CustomDialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog} title={"새 댓글 추가"}>
-        <>
-          <Textarea
-            placeholder="댓글 내용"
-            value={newComment.body}
-            onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-          />
-          <Button onClick={addComment}>댓글 추가</Button>
-        </>
-      </CustomDialog>
+      <CommentAddDialog
+        showAddCommentDialog={showAddCommentDialog}
+        setShowAddCommentDialog={setShowAddCommentDialog}
+        newComment={newComment}
+        setNewComment={setNewComment}
+        addComment={addComment}
+      />
 
       {/* 댓글 수정 대화상자 */}
-      <CustomDialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog} title={"댓글 수정"}>
-        <>
-          <Textarea
-            placeholder="댓글 내용"
-            value={selectedComment?.body || ""}
-            onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
-          />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
-        </>
-      </CustomDialog>
+      {selectedComment && (
+        <CommentUpdateDialog
+          showEditCommentDialog={showEditCommentDialog}
+          setShowEditCommentDialog={setShowEditCommentDialog}
+          selectedComment={selectedComment}
+          setSelectedComment={setSelectedComment}
+          updateComment={updateComment}
+        />
+      )}
 
       {/* 게시물 상세 보기 대화상자 */}
-      <CustomDialog
-        open={showPostDetailDialog}
-        onOpenChange={setShowPostDetailDialog}
-        className={"max-w-3xl"}
-        title={highlightText(selectedPost?.title, searchQuery)}
-      >
-        <>
-          <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-          {renderComments(selectedPost?.id)}
-        </>
-      </CustomDialog>
+      {selectedPost && (
+        <PostDetailDialog
+          showPostDetailDialog={showPostDetailDialog}
+          setShowPostDetailDialog={setShowPostDetailDialog}
+          selectedPost={selectedPost}
+          searchQuery={searchQuery}
+          renderComments={renderComments}
+        />
+      )}
 
       {/* 사용자 모달 */}
-      <CustomDialog open={showUserModal} onOpenChange={setShowUserModal} title={"사용자 정보"}>
-        <>
-          <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-          <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-          <div className="space-y-2">
-            <p>
-              <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-            </p>
-            <p>
-              <strong>나이:</strong> {selectedUser?.age}
-            </p>
-            <p>
-              <strong>이메일:</strong> {selectedUser?.email}
-            </p>
-            <p>
-              <strong>전화번호:</strong> {selectedUser?.phone}
-            </p>
-            <p>
-              <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-              {selectedUser?.address?.state}
-            </p>
-            <p>
-              <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-            </p>
-          </div>
-        </>
-      </CustomDialog>
+      {selectedUser && (
+        <UserDetailDialog
+          showUserModal={showUserModal}
+          setShowUserModal={setShowUserModal}
+          selectedUser={selectedUser}
+        />
+      )}
     </Card>
   )
 }
