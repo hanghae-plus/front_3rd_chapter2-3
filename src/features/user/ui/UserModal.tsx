@@ -12,6 +12,7 @@ export const UserModal = () => {
         <DialogHeader>
           <DialogTitle>사용자 정보</DialogTitle>
         </DialogHeader>
+
         <div className="space-y-4">
           <img src={userInfo?.image} alt={userInfo?.username} className="w-24 h-24 rounded-full mx-auto" />
           <h3 className="text-xl font-semibold text-center">{userInfo?.username}</h3>

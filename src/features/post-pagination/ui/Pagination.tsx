@@ -1,12 +1,10 @@
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { usePostParams } from "../../post/model/postParamsStore"
+import { usePosts } from "../../post/model/postStore"
 
-interface Props {
-  total: number
-}
-
-export const Pagination = ({ total }: Props) => {
+export const Pagination = () => {
   const { limit, setLimit, skip, setSkip } = usePostParams()
+  const { total } = usePosts()
 
   return (
     <div className="flex justify-between items-center">

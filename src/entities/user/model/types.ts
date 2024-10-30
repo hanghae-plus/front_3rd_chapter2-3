@@ -4,7 +4,7 @@ export interface User {
   image: string
 }
 
-export interface UserDTO {
+export interface UsersDTO {
   users: User[]
   total: number
   skip: number

@@ -1,9 +1,7 @@
-import { deletePostApi, fetchPostsApi } from "../../../entities/post/api"
-import { fetchUsersApi } from "../../../entities/user/api"
-import { Post } from "../../../entities/post/model/types"
-import { User } from "../../../entities/user/model/types"
-import { fetchPostsByTagApi, searchPostsApi } from "../../post-filter/api"
+import { NewPost, Post } from "../../../entities/post/model/types"
 import { atom, useAtom } from "jotai"
+import { useMutationPostAdd } from "../api/useMutationPostAdd"
+import { useMutationPostDelete } from "../api/useMutationPostDelete"
 
 const postsAtom = atom<Post[]>([])
 const showAddDialogAtom = atom(false)
@@ -20,42 +18,30 @@ export const usePosts = () => {
   const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
   const [total, setTotal] = useAtom(totalAtom)
 
+  const { mutate: addPostMutate } = useMutationPostAdd()
+  const addPost = (newPost: NewPost) => {
+    addPostMutate(newPost)
+    setShowAddDialog(false)
+  }
+
+  const { mutate: deletePostMutate } = useMutationPostDelete()
   const deletePost = (postId: number) => {
-    deletePostApi(postId)
-    setPosts(posts.filter((post) => post.id !== postId))
+    deletePostMutate(postId)
   }
 
-  const getPostsByTag = async (tag: string, limit: number, skip: number) => {
-    const postsData = await fetchPostsByTagApi(tag)
-    const usersData = await fetchUsersApi()
+  // const getPostsByTag = async (tag: string, limit: number, skip: number) => {
+  //   const postsData = await fetchPostsByTagApi(tag)
+  //   const usersData = await fetchUsersApi()
 
-    const paginatedPosts = postsData.posts.slice(skip, skip + limit)
-    const postsWithUsers = paginatedPosts.map((post: Post) => ({
-      ...post,
-      author: usersData.users.find((user: User) => user.id === post.userId),
-    }))
+  //   const paginatedPosts = postsData.posts.slice(skip, skip + limit)
+  //   const postsWithUsers = paginatedPosts.map((post: Post) => ({
+  //     ...post,
+  //     author: usersData.users.find((user: User) => user.id === post.userId),
+  //   }))
 
-    setPosts(postsWithUsers)
-    setTotal(postsData.posts.length)
-  }
-
-  const getSearchedPosts = async (searchQuery: string) => {
-    const data = await searchPostsApi(searchQuery)
-
-    setPosts(data.posts)
-    setTotal(data.total)
-  }
-
-  const getPosts = async (limit: number, skip: number, users: User[]) => {
-    const postsData = await fetchPostsApi(limit, skip)
-
-    const postsWithUsers = postsData.posts.map((post: Post) => ({
-      ...post,
-      author: users.find((user) => user.id === post.userId),
-    }))
-    setPosts(postsWithUsers)
-    setTotal(postsData.total)
-  }
+  //   setPosts(postsWithUsers)
+  //   setTotal(postsData.posts.length)
+  // }
 
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
 
@@ -74,11 +60,10 @@ export const usePosts = () => {
     showEditDialog,
     setShowEditDialog,
     total,
+    setTotal,
 
+    addPost,
     deletePost,
-    getPostsByTag,
-    getSearchedPosts,
-    getPosts,
 
     showPostDetailDialog,
     setShowPostDetailDialog,

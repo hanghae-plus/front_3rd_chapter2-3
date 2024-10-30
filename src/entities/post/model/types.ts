@@ -21,3 +21,10 @@ export interface Post {
     image: string
   }
 }
+
+export interface PostsDTO {
+  posts: Post[]
+  limit: number
+  skip: number
+  total: number
+}

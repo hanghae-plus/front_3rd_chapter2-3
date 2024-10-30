@@ -1,18 +1,14 @@
 import { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { createPostApi } from "../../../entities/post/api"
 import { usePosts } from "../../post/model/postStore"
 
 export const PostAddModal = () => {
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
 
-  const { posts, setPosts, showAddDialog, setShowAddDialog } = usePosts()
+  const { addPost, showAddDialog, setShowAddDialog } = usePosts()
 
-  const addPost = async () => {
-    const data = await createPostApi(newPost)
-
-    setPosts([data, ...posts])
-    setShowAddDialog(false)
+  const handleAddPost = async () => {
+    addPost(newPost)
     setNewPost({ title: "", body: "", userId: 1 })
   }
 
@@ -40,7 +36,7 @@ export const PostAddModal = () => {
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

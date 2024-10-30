@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle, Loader, SearchInput } from "../shared/ui"
-import { fetchUsersApi } from "../entities/user/api"
 import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
 import { UserModal } from "../features/user/ui/UserModal"
 import { PostAddModal } from "../features/post-add/ui/PostAddModal"
@@ -13,18 +12,13 @@ import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
 import { usePosts } from "../features/post/model/postStore"
 import { usePostParams } from "../features/post/model/postParamsStore"
+import { usePostQuery } from "../features/post/model/postQueryStore"
 
 const PostsManager = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
+  const [searchQueryInput, setSearchQueryInput] = useState("")
 
-  const {
-    setShowAddDialog,
-    total,
-
-    getPostsByTag,
-    getSearchedPosts,
-    getPosts,
-  } = usePosts()
+  const { setShowAddDialog } = usePosts()
   const {
     skip,
     limit,
@@ -36,48 +30,17 @@ const PostsManager = () => {
 
     updateURL,
   } = usePostParams()
-
-  // 게시물 가져오기
-  const fetchPosts = async () => {
-    setLoading(true)
-
-    const data = await fetchUsersApi()
-    getPosts(limit, skip, data.users)
-
-    setLoading(false)
-  }
+  const { setActiveQuery } = usePostQuery()
 
   // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    getSearchedPosts(searchQuery)
-    setLoading(false)
-  }
-
-  // 태그별 게시물 가져오기
-  const handleGetPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      fetchPosts()
-      return
-    }
-
-    setLoading(true)
-    await getPostsByTag(tag, limit, skip)
-    setLoading(false)
+  const handleSearchPosts = () => {
+    setActiveQuery("search")
+    setSearchQuery(searchQueryInput)
   }
 
   useEffect(() => {
-    if (selectedTag) {
-      handleGetPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
     updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
+  }, [skip, limit, sortBy, sortOrder, selectedTag, searchQuery])
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -96,13 +59,12 @@ const PostsManager = () => {
           {/* 검색 및 필터 컨트롤 */}
           <div className="flex gap-4">
             <SearchInput
-              value={searchQuery}
+              value={searchQueryInput}
               placeholder="게시물 검색..."
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+              onChange={(e) => setSearchQueryInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearchPosts()}
             />
-
-            <TagSelect handleGetPostsByTag={handleGetPostsByTag} />
+            <TagSelect />
             <SelectSortStandard />
             <SelectSortOrder />
           </div>
@@ -110,7 +72,7 @@ const PostsManager = () => {
           {/* 게시물 테이블 */}
           {loading ? <Loader /> : <PostTable />}
 
-          <Pagination total={total} />
+          <Pagination />
         </div>
       </CardContent>
 
