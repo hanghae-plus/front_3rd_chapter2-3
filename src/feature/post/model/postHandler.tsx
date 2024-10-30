@@ -13,7 +13,7 @@ export const usePostHandler = () => {
   const { updatePost, addPost } = usePost() // updatePost 함수 가져오기
 
   // 게시물 업데이트 모달 open
-  const handleOpenPostUpdate = async (selectedPost: Post) => {
+  const handleOpenPostUpdate = async (selectedPost: Post): Promise<void> => {
     if (!selectedPost) {
       return
     }
@@ -36,7 +36,7 @@ export const usePostHandler = () => {
   }
 
   // 게시물 업데이트
-  const handleUpdatePost = async (selectedPost) => {
+  const handleUpdatePost = async (selectedPost: Post): Promise<void> => {
     console.log("selectedPost >>> ", selectedPost)
     try {
       const updateResponse = await updatePost(selectedPost)
@@ -52,7 +52,7 @@ export const usePostHandler = () => {
     }
   }
 
-  const handleAddPost = async () => {
+  const handleAddPost = async (): Promise<void> => {
     const addResponse = await addPost(newPost)
     if (!addResponse) {
       return

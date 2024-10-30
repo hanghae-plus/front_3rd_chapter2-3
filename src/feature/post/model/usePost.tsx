@@ -3,6 +3,7 @@ import { Post } from "./postType"
 
 export const usePost = () => {
   // 게시물 추가
+
   const addPost = useCallback(async (newPost: Omit<Post, "id">): Promise<Post | null> => {
     try {
       const response = await fetch("/api/posts/add", {
@@ -20,7 +21,7 @@ export const usePost = () => {
   }, [])
 
   // 게시물 업데이트
-  const updatePost = useCallback(async (selectedPost: Post): Promise<Post | null> => {
+  const updatePost = useCallback(async (selectedPost: Post): Promise<Post | null | undefined> => {
     if (selectedPost) {
       try {
         const response = await fetch(`/api/posts/${selectedPost.id}`, {
