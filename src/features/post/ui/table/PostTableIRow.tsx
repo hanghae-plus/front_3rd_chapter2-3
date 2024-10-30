@@ -5,8 +5,8 @@ import PostTableRowTags from "@/features/post/ui/table/PostTableRowTags";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
 import { useQueryParams } from "@/shared/model/useQueryParams";
 
-import { highlightText } from "@/shared/lib/utils";
 import { Table } from "@/shared/ui";
+import HighlightText from "@/shared/ui/HighlightText";
 
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 
@@ -24,7 +24,9 @@ const PostTableIRow = ({ post }: PostTableItemProps) => {
       <Table.Cell>{post.id}</Table.Cell>
       <Table.Cell>
         <div className="space-y-1">
-          <div>{highlightText(post.title, search)}</div>
+          <div>
+            <HighlightText text={post.title} highlight={search} />
+          </div>
           <PostTableRowTags post={post} />
         </div>
       </Table.Cell>

@@ -1,7 +1,6 @@
 import { Post } from "@/entities/post/model/types";
 import Comments from "@/features/comment/ui/Comments";
-
-import { highlightText } from "@/shared/lib/utils";
+import HighlightText from "@/shared/ui/HighlightText";
 
 type PostDetailProps = {
   searchQuery: string;
@@ -11,7 +10,9 @@ type PostDetailProps = {
 const PostDetail = ({ searchQuery, post }: PostDetailProps) => {
   return (
     <div className="space-y-4">
-      <p>{highlightText(post?.body, searchQuery)}</p>
+      <p>
+        <HighlightText text={post?.body} highlight={searchQuery} />
+      </p>
       <Comments postId={post?.id || 0} />
     </div>
   );

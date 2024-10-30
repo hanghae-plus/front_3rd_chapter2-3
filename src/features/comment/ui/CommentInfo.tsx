@@ -1,6 +1,5 @@
 import { Comment } from "@/entities/comment/model/types";
-
-import { highlightText } from "@/shared/lib/utils";
+import HighlightText from "@/shared/ui/HighlightText";
 
 type CommentInfoProps = {
   comment: Comment;
@@ -11,7 +10,9 @@ const CommentInfo = ({ comment, search }: CommentInfoProps) => {
   return (
     <div className="flex items-center space-x-2 overflow-hidden">
       <span className="font-medium truncate">{comment.user.username}:</span>
-      <span className="truncate">{highlightText(comment.body, search)}</span>
+      <span className="truncate">
+        <HighlightText text={comment.body} highlight={search} />
+      </span>
     </div>
   );
 };

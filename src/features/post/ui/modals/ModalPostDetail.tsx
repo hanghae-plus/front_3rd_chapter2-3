@@ -2,9 +2,9 @@ import { Post } from "@/entities/post/model/types";
 
 import PostDetail from "@/features/post/ui/PostDetail";
 
-import { highlightText } from "@/shared/lib/utils";
 import { Button, Dialog } from "@/shared/ui";
 
+import HighlightText from "@/shared/ui/HighlightText";
 import { MessageSquare } from "lucide-react";
 import { useModalPostDetail } from "../../model/useModalPostDetail";
 
@@ -24,7 +24,9 @@ const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
       </Dialog.Trigger>
       <Dialog.Content className="max-w-3xl">
         <Dialog.Header>
-          <Dialog.Title>{highlightText(selectedPost?.title, searchQuery)}</Dialog.Title>
+          <Dialog.Title>
+            <HighlightText text={selectedPost?.title} highlight={searchQuery} />
+          </Dialog.Title>
         </Dialog.Header>
         <PostDetail searchQuery={searchQuery} post={selectedPost} />
       </Dialog.Content>

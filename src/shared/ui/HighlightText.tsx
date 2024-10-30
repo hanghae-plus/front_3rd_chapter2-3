@@ -1,8 +1,9 @@
-export const mixinClasses = (...classes: (string | undefined)[]) => {
-  return classes.filter(Boolean).join(" ");
+type HighlightTextProps = {
+  text?: string;
+  highlight?: string;
 };
 
-export const highlightText = (text?: string, highlight?: string) => {
+const HighlightText = ({ text, highlight }: HighlightTextProps) => {
   if (!text) return null;
   if (!highlight?.trim()) {
     return <span>{text}</span>;
@@ -15,3 +16,5 @@ export const highlightText = (text?: string, highlight?: string) => {
     </span>
   );
 };
+
+export default HighlightText;
