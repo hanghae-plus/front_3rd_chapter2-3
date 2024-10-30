@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 
 import { updateState } from "@/shared/model";
 import { useUpdateParams } from "./use-update-params";
-import { useSearchPostList } from "./use-search-post-list";
 import { SearchQueryType } from "./search-query-type";
 
 export const useSearchQuery = () => {
@@ -18,7 +17,6 @@ export const useSearchQuery = () => {
   });
   const prevKeywordRef = useRef(searchQuery.keyword);
 
-  const { searchPostList } = useSearchPostList();
   const { updateParams } = useUpdateParams();
 
   function handleChangeQuery<K extends keyof SearchQueryType>(key: K, value: SearchQueryType[K]) {
@@ -31,7 +29,6 @@ export const useSearchQuery = () => {
     }
 
     updateParams(searchQuery);
-    searchPostList();
   }
 
   useEffect(() => {

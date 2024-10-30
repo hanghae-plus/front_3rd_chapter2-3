@@ -6,17 +6,14 @@ import { PostType, PostWithAuthorType } from "../model/post-type";
 import { UserType } from "@/entities/user/model/user-type";
 import { SearchQueryType } from "@/features/searchPostList/model/search-query-type";
 
-const getBaseURL = (queryString: string, queryParams: SearchQueryType) => {
-  let baseURL = "";
-  if (queryString.includes("?keyword")) {
-    baseURL = "/api/posts/search";
-  } else if (queryString.includes("tag=") && queryParams.tag !== "all") {
-    baseURL = `/api/posts/tag/${queryParams.tag}`;
-  } else {
-    baseURL = "/api/posts";
+const getBaseURL = (queryParams: SearchQueryType) => {
+  if (queryParams.keyword !== undefined && queryParams.keyword !== "") {
+    return "/api/posts/search";
   }
-
-  return baseURL;
+  if (queryParams.tag !== undefined && queryParams.tag !== "all") {
+    return `/api/posts/tag/${queryParams.tag}`;
+  }
+  return "/api/posts";
 };
 
 const locationToObject = (queryString: string) => {
@@ -30,7 +27,7 @@ const locationToObject = (queryString: string) => {
 
 const fetchPostList = async (userList: UserType[]) => {
   const queryParams = locationToObject(location.search);
-  const baseURL = getBaseURL(location.search, queryParams);
+  const baseURL = getBaseURL(queryParams);
   const queryString = location.search.replace("?keyword", "?q");
 
   try {
