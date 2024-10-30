@@ -9,7 +9,6 @@ import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 const TablePosts = () => {
   const { queries } = useQueryParams();
   const { data, isLoading, isError } = useQueryPosts(queries);
-
   if (isError) {
     return <div>에러가 발생했습니다.</div>;
   }

@@ -1,10 +1,8 @@
-import { postQueries } from "@/entities/post/api/post-queries";
 import Tags from "@/entities/tag/ui/Tags";
 import useFetchTags from "@/features/filter/api/use-get-tags";
 
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Select } from "@/shared/ui/Select";
-import { useQueryClient } from "@tanstack/react-query";
 
 const FilterTag = () => {
   const {
@@ -12,11 +10,9 @@ const FilterTag = () => {
     handleUpdateQuery,
   } = useQueryParams();
   const { data: tags } = useFetchTags();
-  const queryClient = useQueryClient();
 
-  const handleChangeTag = (value: string) => {
-    handleUpdateQuery("tag", value);
-    queryClient.prefetchQuery(postQueries.tag({ tag }));
+  const handleChangeTag = (tag: string) => {
+    handleUpdateQuery("tag", tag);
   };
 
   return (

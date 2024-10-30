@@ -1,7 +1,5 @@
-import { postQueries } from "@/entities/post/api/post-queries";
 import { Post } from "@/entities/post/model/types";
 import { useQueryParams } from "@/shared/model/useQueryParams";
-import { useQueryClient } from "@tanstack/react-query";
 
 type PostTableRowTagsProps = {
   post: Post;
@@ -10,11 +8,9 @@ type PostTableRowTagsProps = {
 const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
   const { queries, handleUpdateQuery } = useQueryParams();
   const { tag: selectedTag } = queries;
-  const queryClient = useQueryClient();
 
   const handleTagClick = (tag: string) => {
     handleUpdateQuery("tag", tag);
-    queryClient.prefetchQuery(postQueries.tag({ tag }));
   };
 
   return (
