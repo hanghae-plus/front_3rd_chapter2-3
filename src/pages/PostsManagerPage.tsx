@@ -27,18 +27,11 @@ import { usePostDialog } from "../features/post/model/usePostDialog.ts"
 import PostTable from "../widgets/post/PostTable.tsx"
 import { usePostParams } from "../features/post/model/usePostParams.ts"
 import PostAddDialog from "../features/post/ui/PostAddDialog.tsx"
+import PostEditDialog from "../features/post/ui/PostEditDialog.tsx"
 
 const PostsManager = () => {
-  const { total, getPosts, updatePost, searchPostsWithQuery } = usePosts()
-  const {
-    selectedPost,
-    setSelectedPost,
-    setShowPostDetailDialog,
-    setShowAddDialog,
-    showEditDialog,
-    showPostDetailDialog,
-    setShowEditDialog,
-  } = usePostDialog()
+  const { total, getPosts, searchPostsWithQuery } = usePosts()
+  const { selectedPost, setShowPostDetailDialog, setShowAddDialog, showPostDetailDialog } = usePostDialog()
   const { showUserModal, setShowUserModal, selectedUser } = useUserModal()
   const { tags } = useTags()
   const { comments, addComment, updateComment, deleteComment, likeComment } = useComments()
@@ -95,13 +88,6 @@ const PostsManager = () => {
     setLoading(true)
     getPosts(limit, skip, tag)
     setLoading(false)
-  }
-
-  // 게시물 업데이트
-  const submitUpdatePostForm = async () => {
-    updatePost(selectedPost)
-
-    setShowEditDialog(false)
   }
 
   // 댓글 추가
@@ -277,30 +263,8 @@ const PostsManager = () => {
         </div>
       </CardContent>
 
-      {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-            />
-            <Button onClick={submitUpdatePostForm}>게시물 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       <PostAddDialog />
+      <PostEditDialog />
 
       {/* 댓글 추가 대화상자 */}
       <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
