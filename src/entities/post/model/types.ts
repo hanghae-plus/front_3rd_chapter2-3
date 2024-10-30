@@ -1,14 +1,4 @@
-export type Tag = {
-  slug: string
-  name: string
-  url: string
-}
-
-export type Author = {
-  id: number
-  username: string
-  image: string
-}
+import { UserDTO } from "../../user/model/types"
 
 export type PostDTO = {
   id: number
@@ -29,6 +19,19 @@ export type Post = PostDTO & {
 
 export type NewPost = Pick<PostDTO, "title" | "body" | "userId">
 
+export type Author = Pick<UserDTO, "id" | "username" | "image">
+
+export type Tag = {
+  slug: string
+  name: string
+  url: string
+}
+
+export type FetchPostsPayload = {
+  limit: number
+  skip: number
+}
+
 export type PostsResponse = {
   posts: PostDTO[]
   limit: number
@@ -36,7 +39,7 @@ export type PostsResponse = {
   total: number
 }
 
-export type UsersResponse = {
+export type AuthorsResponse = {
   users: Author[]
   limit: number
   skip: number

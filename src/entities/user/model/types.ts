@@ -1,4 +1,4 @@
-export type User = {
+export type UserDTO = {
   id: number
   firstName: string
   lastName: string
@@ -29,12 +29,12 @@ export type User = {
   role: string
 }
 
-export type Hair = {
+type Hair = {
   color: string
   type: string
 }
 
-export type Address = {
+type Address = {
   address: string
   city: string
   state: string
@@ -44,12 +44,12 @@ export type Address = {
   country: string
 }
 
-export type Coordinates = {
+type Coordinates = {
   lat: number
   lng: number
 }
 
-export type Bank = {
+type Bank = {
   cardExpire: string
   cardNumber: string
   cardType: string
@@ -57,14 +57,14 @@ export type Bank = {
   iban: string
 }
 
-export type Company = {
+type Company = {
   department: string
   name: string
   title: string
   address: Address2
 }
 
-export type Address2 = {
+type Address2 = {
   address: string
   city: string
   state: string
@@ -74,12 +74,12 @@ export type Address2 = {
   country: string
 }
 
-export type Coordinates2 = {
+type Coordinates2 = {
   lat: number
   lng: number
 }
 
-export type Crypto = {
+type Crypto = {
   coin: string
   wallet: string
   network: string

@@ -1,19 +1,33 @@
 import { safeFetch } from "../../../shared/lib"
-import { userApi } from "../../user/api/userApi"
-import { NewPost, Post, PostsResponse, Tag } from "../model/types"
-
-type FetchPostsPayload = {
-  limit: number
-  skip: number
-}
+import {
+  AuthorsResponse,
+  FetchPostsPayload,
+  NewPost,
+  Post,
+  PostsResponse,
+  Tag,
+} from "../model/types"
 
 export const postApi = {
+  /** 글쓴이 가져오기 */
+  fetchAuthors: async () => {
+    try {
+      const response = safeFetch<AuthorsResponse>(
+        "/api/users?limit=0&select=username,image",
+      )
+      return response
+    } catch (error) {
+      console.error("글쓴이 목록 가져오기 오류:", error)
+      throw error
+    }
+  },
+
   /** 게시물 가져오기 */
   fetchPosts: async ({ limit, skip }: FetchPostsPayload) => {
     try {
       const [postsData, usersData] = await Promise.all([
         safeFetch<PostsResponse>(`/api/posts?limit=${limit}&skip=${skip}`),
-        userApi.fetchUsers(),
+        postApi.fetchAuthors(),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -36,7 +50,7 @@ export const postApi = {
     try {
       const [postsData, usersData] = await Promise.all([
         safeFetch<PostsResponse>(`/api/posts/search?q=${searchQuery}`),
-        userApi.fetchUsers(),
+        postApi.fetchAuthors(),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -56,7 +70,7 @@ export const postApi = {
     try {
       const [postsData, usersData] = await Promise.all([
         safeFetch<PostsResponse>(`/api/posts/tag/${tag}`),
-        userApi.fetchUsers(),
+        postApi.fetchAuthors(),
       ])
 
       const postsWithUsers = postsData.posts.map((post) => ({

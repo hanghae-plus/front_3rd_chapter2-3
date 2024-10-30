@@ -14,7 +14,7 @@ import { SortOrder, usePostQueryParams } from "../entities/post"
 import { postApi } from "../entities/post/api/postApi"
 import { Author, NewPost, Post, Tag } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
-import { User } from "../entities/user/model/types"
+import { UserDTO } from "../entities/user/model/types"
 import {
   Button,
   Card,
@@ -79,7 +79,7 @@ const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [selectedUser, setSelectedUser] = useState<UserDTO | null>(null)
 
   // 게시물 가져오기
   const fetchPosts = async () => {
