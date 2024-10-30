@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../table"
+} from "../../table"
 
 export interface Column<T> {
   key: string

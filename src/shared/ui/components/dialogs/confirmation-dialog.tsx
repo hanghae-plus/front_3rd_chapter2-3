@@ -1,5 +1,5 @@
-import { Button } from "../button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../dialog"
+import { Button } from "../../button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../dialog"
 
 interface ConfirmationDialogProps {
   isOpen: boolean
