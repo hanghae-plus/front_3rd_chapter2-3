@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table"
@@ -8,6 +8,31 @@ import { Input } from "../shared/ui/Input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog"
 import { Textarea } from "../shared/ui/Textarea"
+import { useAtom } from "jotai"
+import {
+  postsAtom,
+  loadingAtom,
+  totalAtom,
+  commentsAtom,
+  skipAtom,
+  limitAtom,
+  searchQueryAtom,
+  selectedPostAtom,
+  sortByAtom,
+  sortOrderAtom,
+  showAddDialogAtom,
+  showEditDialogAtom,
+  newPostAtom,
+  tagsAtom,
+  selectedTagAtom,
+  selectedCommentAtom,
+  newCommentAtom,
+  showAddCommentDialogAtom,
+  showEditCommentDialogAtom,
+  showPostDetailDialogAtom,
+  showUserModalAtom,
+  selectedUserAtom,
+} from "../app/atom"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -15,28 +40,30 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
-  const [total, setTotal] = useState(0)
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState(null)
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+
+  const [posts, setPosts] = useAtom(postsAtom) // Jotai atom 사용
+  const [loading, setLoading] = useAtom(loadingAtom)
+  const [total, setTotal] = useAtom(totalAtom)
+  const [comments, setComments] = useAtom(commentsAtom)
+  // const [error, setError] = useAtom(errorAtom);
+  const [skip, setSkip] = useAtom(skipAtom)
+  const [limit, setLimit] = useAtom(limitAtom)
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
+  const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
+  const [sortBy, setSortBy] = useAtom(sortByAtom)
+  const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
+  const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
+  const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
+  const [newPost, setNewPost] = useAtom(newPostAtom)
+  const [tags, setTags] = useAtom(tagsAtom)
+  const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
+  const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
+  const [newComment, setNewComment] = useAtom(newCommentAtom)
+  const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
+  const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
+  const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
+  const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -50,34 +77,27 @@ const PostsManager = () => {
     navigate(`?${params.toString()}`)
   }
 
-  // 게시물 가져오기
-  const fetchPosts = () => {
+  const fetchPosts = async () => {
     setLoading(true)
-    let postsData
-    let usersData
+    try {
+      const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
+      const postsData = await response.json()
 
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then((response) => response.json())
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+      const usersResponse = await fetch("/api/users?limit=0&select=username,image")
+      const usersData = await usersResponse.json()
+
+      const postsWithUsers = postsData.posts.map((post) => ({
+        ...post,
+        author: usersData.users.find((user) => user.id === post.userId),
+      }))
+
+      setPosts(postsWithUsers)
+      setTotal(postsData.total)
+    } catch (error) {
+      console.error("게시물 가져오기 오류:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   // 태그 가져오기
@@ -97,6 +117,7 @@ const PostsManager = () => {
       fetchPosts()
       return
     }
+
     setLoading(true)
     try {
       const response = await fetch(`/api/posts/search?q=${searchQuery}`)
@@ -105,8 +126,9 @@ const PostsManager = () => {
       setTotal(data.total)
     } catch (error) {
       console.error("게시물 검색 오류:", error)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // 태그별 게시물 가져오기
@@ -115,12 +137,14 @@ const PostsManager = () => {
       fetchPosts()
       return
     }
+
     setLoading(true)
     try {
       const [postsResponse, usersResponse] = await Promise.all([
         fetch(`/api/posts/tag/${tag}`),
         fetch("/api/users?limit=0&select=username,image"),
       ])
+
       const postsData = await postsResponse.json()
       const usersData = await usersResponse.json()
 
@@ -133,8 +157,9 @@ const PostsManager = () => {
       setTotal(postsData.total)
     } catch (error) {
       console.error("태그별 게시물 가져오기 오류:", error)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // 게시물 추가
@@ -298,15 +323,16 @@ const PostsManager = () => {
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
+  // URL 파라미터로 초기화
   useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
+    const queryParams = new URLSearchParams(window.location.search)
+    setSkip(parseInt(queryParams.get("skip") || "0"))
+    setLimit(parseInt(queryParams.get("limit") || "10"))
+    setSearchQuery(queryParams.get("search") || "")
+    setSortBy(queryParams.get("sortBy") || "")
+    setSortOrder(queryParams.get("sortOrder") || "asc")
+    setSelectedTag(queryParams.get("tag") || "")
+  }, [])
 
   // 하이라이트 함수 추가
   const highlightText = (text: string, highlight: string) => {
