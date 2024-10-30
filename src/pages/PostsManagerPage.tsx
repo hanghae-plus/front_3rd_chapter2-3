@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "../shared/ui"
+import { newPost } from "../entities/posts/model/Post"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -46,7 +47,7 @@ const PostsManager = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const [newPost, setNewPost] = useState<newPost>({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")

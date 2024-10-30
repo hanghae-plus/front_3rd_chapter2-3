@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "../shared/ui"
+import PostTable from "../features/posts/components/PostTable"
 
 const PostsManager = () => {
   const location = useLocation()
@@ -215,10 +216,8 @@ const PostsManager = () => {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
+          {/* 게시물 추가 버튼 */}
+          {/* <PostAddButton setShowAddDialog={setShowAddDialog}> */}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -228,221 +227,47 @@ const PostsManager = () => {
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="게시물 검색..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && searchPosts()}
-                />
+                {/* 게시물 검색 버튼 */}
+                {/* <PostSearchInput  searchQuery={searchQuery} setSearchQuery={setSearchQuery} searchPosts={searchPosts}/> */}
               </div>
             </div>
 
-            <Select
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value)
-                fetchPostsByTag(value)
-                updateURL()
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="태그 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
-                  <SelectItem key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* 게시물 검색의 태그 선택 */}
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 기준" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">없음</SelectItem>
-                <SelectItem value="id">ID</SelectItem>
-                <SelectItem value="title">제목</SelectItem>
-                <SelectItem value="reactions">반응</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 순서" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">오름차순</SelectItem>
-                <SelectItem value="desc">내림차순</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* <PostSearchTagSelect selectedTag={selectedTag} setSelectedTag={setSelectedTag} tags={tags} fetchPostsByTag={fetchPostsByTag} updateURL={updateURL}/>*/}
+
+            {/*게시물 검색의 정렬 선택   */}
+            {/* <PostSearchSortSelect sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder}/>  */}
           </div>
 
-          {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {/* 게시물 테이블 renderPostTable()은 사용되는 컴포넌트에서 useEffect안에 추가 예정*/}
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <span>표시</span>
-              <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="10" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="30">30</SelectItem>
-                </SelectContent>
-              </Select>
+              {/* <PostPaginationSelectLimit limit={limit} setLimit={setLimit} > */}
               <span>항목</span>
             </div>
             <div className="flex gap-2">
-              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
-                이전
-              </Button>
-              <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
-                다음
-              </Button>
+              {/* <PostPaginationButton skip={skip} limit={limit} total={total} setSkip={setSkip} /> */}
             </div>
           </div>
         </div>
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-            />
-            <Button onClick={addPost}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* <PostAddDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} newPost={newPost} setNewPost={setNewPost} addPost={addPost}/> */}
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ""}
-              onChange={(e) =>
-                setSelectedPost((prev) =>
-                  prev
-                    ? { ...prev, title: e.target.value }
-                    : {
-                        id: 0,
-                        title: e.target.value,
-                        body: "",
-                        tags: [],
-                        reactions: { likes: 0, dislikes: 0 },
-                        userId: 0,
-                        views: 0,
-                        author: { id: 0, image: "", username: "" },
-                      },
-                )
-              }
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ""}
-              onChange={(e) =>
-                setSelectedPost((prev) =>
-                  prev
-                    ? { ...prev, body: e.target.value }
-                    : {
-                        id: 0,
-                        title: "",
-                        body: e.target.value,
-                        tags: [],
-                        reactions: { likes: 0, dislikes: 0 },
-                        userId: 0,
-                        views: 0,
-                        author: { id: 0, image: "", username: "" },
-                      },
-                )
-              }
-            />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* <PostEditDialog showEditCommentDialog={showEditCommentDialog} setShowEditCommentDialog={setShowEditCommentDialog} selectedComment={selectedComment} setSelectedComment={setSelectedComment} updateComment={updateComment}/> */}
 
       {/* 댓글 추가 대화상자 */}
-      <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-            />
-            <Button onClick={addComment}>댓글 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* <CommentsAddDialog showAddCommentDialog={showAddCommentDialog} setShowAddCommentDialog={setShowAddCommentDialog} newComment={newComment} setNewComment={setNewComment} addComment={addComment}/ > */}
 
       {/* 댓글 수정 대화상자 */}
-      <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) =>
-                setSelectedComment((prev) =>
-                  prev
-                    ? { ...prev, body: e.target.value }
-                    : {
-                        id: 0,
-                        body: e.target.value,
-                        likes: 0,
-                        postId: 0,
-                        user: {
-                          id: 0,
-                          image: "",
-                          username: "",
-                        },
-                      },
-                )
-              }
-            />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* <CommentsEditDialog showEditCommentDialog={showEditCommentDialog} setShowEditCommentDialog={setShowEditCommentDialog} selectedComment={selectedComment} setSelectedComment={setSelectedComment} updateComment={updateComment}/> */}
 
       {/* 게시물 상세 보기 대화상자 */}
       {/* <PostDetailDialog   showPostDetailDialog={showPostDetailDialog}
