@@ -1,8 +1,20 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
 import { usePostContext } from "../model/PostContext.tsx";
+import { putExistingPost } from "../../../entities/post/api";
 
 export const EditPostDialog = () => {
-  const { selectedPost, setSelectedPost, updatePost, showEditDialog, setShowEditDialog } = usePostContext();
+  const { selectedPost, setSelectedPost, setPosts, posts, showEditDialog, setShowEditDialog } = usePostContext();
+
+  const handleUpdatePost = async () => {
+    if (selectedPost) {
+      const data = await putExistingPost(selectedPost);
+
+      if (data) {
+        setPosts(posts.map((post) => (post.id === data.id ? data : post)));
+        setShowEditDialog(false);
+      }
+    }
+  };
 
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
@@ -23,7 +35,7 @@ export const EditPostDialog = () => {
               value={selectedPost.body || ""}
               onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={handleUpdatePost}>게시물 업데이트</Button>
           </div>
         )}
       </DialogContent>

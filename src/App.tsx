@@ -4,10 +4,11 @@ import Footer from "./widgets/common/ui/Footer.tsx";
 import PostsManagerPage from "./pages/PostsManagerPage.tsx";
 import { PostProvider } from "./feature/post/model/PostContext.tsx";
 import { CommentProvider } from "./feature/comment/model/CommentContext.tsx";
-import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
-  const queryClient = useQueryClient();
   return (
     <Router>
       <QueryClientProvider client={queryClient}>

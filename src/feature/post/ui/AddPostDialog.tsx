@@ -1,8 +1,19 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
 import { usePostContext } from "../model/PostContext.tsx";
+import { postNewPost } from "../../../entities/post/api";
 
 export const AddPostDialog = () => {
-  const { setNewPost, newPost, addPost, showAddDialog, setShowAddDialog } = usePostContext();
+  const { setNewPost, newPost, showAddDialog, setShowAddDialog, setPosts, posts } = usePostContext();
+
+  const handleAddPost = async () => {
+    const data = await postNewPost(newPost);
+
+    if (data) {
+      setPosts([data, ...posts]);
+      setShowAddDialog(false);
+      setNewPost({ title: "", body: "", userId: 1 });
+    }
+  };
 
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
@@ -28,7 +39,7 @@ export const AddPostDialog = () => {
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

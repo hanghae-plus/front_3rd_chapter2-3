@@ -1,14 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteExistingPost,
-  getPosts,
-  getPostsByTag,
-  getSearchPosts,
-  getTags,
-  postNewPost,
-  putExistingPost,
-} from "../../../entities/post/api";
+import { getPosts, getPostsByTag, getSearchPosts, getTags } from "../../../entities/post/api";
 import { NewPost, Post, Tag } from "../../../entities/post/model/types.ts";
 import { User } from "../../../entities/user/model/types.ts";
 
@@ -145,39 +137,12 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   };
 
-  const addPost = async () => {
-    const data = await postNewPost(newPost);
-
-    if (data) {
-      setPosts([data, ...posts]);
-      setShowAddDialog(false);
-      setNewPost({ title: "", body: "", userId: 1 });
-    }
-  };
-
   const fetchTags = async () => {
     const data = await getTags();
 
     if (data) {
       setTags(data);
     }
-  };
-
-  const updatePost = async () => {
-    if (selectedPost) {
-      const data = await putExistingPost(selectedPost);
-
-      if (data) {
-        setPosts(posts.map((post) => (post.id === data.id ? data : post)));
-        setShowEditDialog(false);
-      }
-    }
-  };
-
-  const deletePost = async (id: number) => {
-    await deleteExistingPost(id);
-
-    setPosts(posts.filter((post) => post?.id !== id));
   };
 
   useEffect(() => {
@@ -225,7 +190,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchPosts,
         fetchPostsByTag,
         fetchTags,
-        addPost,
+        setPosts,
         updatePost,
         deletePost,
         setSkip,
