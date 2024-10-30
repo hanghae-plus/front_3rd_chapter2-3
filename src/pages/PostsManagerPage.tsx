@@ -23,6 +23,7 @@ import { ContentControls } from "../widgets/ui/ContentControls"
 import { Contents } from "../widgets/ui/Contents"
 import { ContentFilter } from "../widgets/ui/ContentFilter"
 import { PostFilter } from "../features/post/ui/PostFilter"
+import { Pagination } from "../widgets/ui/Pagination"
 import { PostTable } from "../features/post/ui/PostTable"
 
 const initialNewPost = { title: "", body: "", userId: 1, tags: [] }
@@ -336,7 +337,7 @@ const PostsManager = () => {
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 getSearchedPosts={getSearchedPosts}
-                />
+              />
             </ContentSearch>
             <ContentFilter>
               <PostFilter
@@ -372,6 +373,7 @@ const PostsManager = () => {
           )}
 
           {/* 페이지네이션 */}
+          <Pagination skip={skip} limit={limit} total={total} setSkip={setSkip} setLimit={setLimit} />
         </Contents>
       </CardContent>
 
