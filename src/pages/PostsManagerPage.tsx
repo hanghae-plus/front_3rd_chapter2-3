@@ -30,6 +30,7 @@ import { fetchUsersApi } from "../entities/user/api"
 import { fecthPostsByTagApi, fetchPostsApi, searchPostsApi, createPostApi, updatePostApi, deletePostApi } from "../entities/post/api"
 import { fetchTagsApi } from "../entities/tag/api"
 import { Tag } from "../entities/tag/model/types"
+import { addToPosts, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
 
 const initialNewPost = { title: "", body: "", userId: 1, tags: [] };
 const PostsManager = () => {
@@ -78,10 +79,7 @@ const PostsManager = () => {
     setLoading(true)
     const usersData = await fetchUsersApi()
     const postsData = await fetchPostsApi({ limit, skip })
-    const postsWithUsers = postsData.posts.map((post) => ({
-      ...post,
-      author: usersData.users.find((user) => user.id === post.userId),
-    }))
+    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users);
     setPosts(postsWithUsers)
     setTotal(postsData.total)
     setLoading(false)
@@ -98,10 +96,7 @@ const PostsManager = () => {
     setLoading(true)
     const usersData = await fetchUsersApi()
     const postsData = await searchPostsApi(searchQuery);
-    const postsWithUsers = postsData.posts.map((post) => ({
-      ...post,
-      author: usersData.users.find((user) => user.id === post.userId),
-    }))
+    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users);
     setPosts(postsWithUsers)
     setTotal(postsData.total)
     setLoading(false)
@@ -116,10 +111,7 @@ const PostsManager = () => {
     setLoading(true)
     const usersData = await fetchUsersApi()
     const postsData = await fecthPostsByTagApi(tag);
-    const postsWithUsers = postsData.posts.map((post) => ({
-      ...post,
-      author: usersData.users.find((user) => user.id === post.userId),
-    }))
+    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users);
     setPosts(postsWithUsers)
     setTotal(postsData.total)
     setLoading(false)
@@ -128,7 +120,7 @@ const PostsManager = () => {
   // 게시물 추가
   const addPost = async (newPost : NewPost) => {
     const postData = await createPostApi(newPost);
-    setPosts([postData, ...posts])
+    setPosts(addToPosts(posts, postData))
     setShowAddDialog(false)
     setNewPost({ ...initialNewPost })
   }
@@ -137,14 +129,14 @@ const PostsManager = () => {
   const updatePost = async (updatingPost : Post | null) => {
     if (!updatingPost) return
     const postData = await updatePostApi(updatingPost);
-    setPosts(posts.map((post) => (post.id === postData.id ? postData : post)))
+    setPosts(updateInPosts(posts, postData))
     setShowEditDialog(false)
   }
 
   // 게시물 삭제
   const deletePost = async (id: number) => {
     await deletePostApi(id);
-    setPosts(posts.filter((post) => post.id !== id))
+    setPosts(removeFromPosts(posts, id))
   }
 
   // 댓글 가져오기
@@ -153,7 +145,6 @@ const PostsManager = () => {
     try {
       const response = await fetch(`/api/comments/post/${postId}`)
       const data = await response.json()
-      console.log(data)
       setComments((prev) => ({ ...prev, [postId]: data.comments }))
     } catch (error) {
       console.error("댓글 가져오기 오류:", error)
