@@ -1,9 +1,23 @@
-import { userListState } from "./../../user/model/user-state";
 import { useQuery } from "@tanstack/react-query";
 
 import apiRequest from "@/shared/api";
-import { UserType } from "@/entities/user/model/user-type";
+import { userListState } from "./../../user/model/user-state";
 import { PostType, PostWithAuthorType } from "../model/post-type";
+import { UserType } from "@/entities/user/model/user-type";
+import { SearchQueryType } from "@/features/searchPostList/model/search-query-type";
+
+const getBaseURL = (queryString: string, queryParams: SearchQueryType) => {
+  let baseURL = "";
+  if (queryString.includes("?keyword")) {
+    baseURL = "/api/posts/search";
+  } else if (queryString.includes("tag=") && queryParams.tag !== "all") {
+    baseURL = `/api/posts/tag/${queryParams.tag}`;
+  } else {
+    baseURL = "/api/posts";
+  }
+
+  return baseURL;
+};
 
 const locationToObject = (queryString: string) => {
   const queryArray = queryString
@@ -15,15 +29,12 @@ const locationToObject = (queryString: string) => {
 };
 
 const fetchPostList = async (userList: UserType[]) => {
-  const params = locationToObject(location.search);
+  const queryParams = locationToObject(location.search);
+  const baseURL = getBaseURL(location.search, queryParams);
+  const queryString = location.search.replace("?keyword", "?q");
 
   try {
-    const apiURL =
-      params.keyword === undefined
-        ? `/api/posts?limit=${params.limit ?? 10}&skip=${params.skip ?? 0}`
-        : `/api/posts/search?q=${params.keyword}`;
-
-    const res = await apiRequest.get(apiURL);
+    const res = await apiRequest.get(`${baseURL}${queryString}`);
     const postListWithAuthor = postListWithUser(res.data.posts, userList);
 
     return postListWithAuthor;
