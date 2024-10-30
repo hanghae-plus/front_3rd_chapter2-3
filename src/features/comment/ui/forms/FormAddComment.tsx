@@ -3,7 +3,7 @@ import { NewComment } from "@/entities/comment/model/types";
 import { Button, Textarea } from "@/shared/ui";
 
 import { useModalStore } from "@/shared/model/useModalStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAddComment } from "../../api/use-add-comment";
 
 type FormAddCommentProps = {
@@ -13,24 +13,19 @@ type FormAddCommentProps = {
 const initialNewComment: NewComment = { body: "", postId: 0, userId: 1 };
 
 const FormAddComment = ({ postId }: FormAddCommentProps) => {
-  const closeAll = useModalStore((state) => state.closeAll);
+  const close = useModalStore((state) => state.close);
   const { mutate: addComment } = useAddComment();
-  const [newComment, setNewComment] = useState<NewComment>(initialNewComment);
+  const [newComment, setNewComment] = useState<NewComment>(() => ({ ...initialNewComment, postId }));
 
   const handleAddComment = async () => {
     addComment(newComment);
     setNewComment(initialNewComment);
-    closeAll();
+    close({ type: "addComment" });
   };
 
   const handleChangeComment = (key: keyof NewComment, value: string | number) => {
     setNewComment((prev) => ({ ...prev, [key]: value }));
   };
-
-  useEffect(() => {
-    if (!postId) return;
-    setNewComment((prev) => ({ ...prev, postId }));
-  }, [postId]);
 
   return (
     <div className="space-y-4">

@@ -2,6 +2,7 @@ import { Comment } from "@/entities/comment/model/types";
 
 import { Button, Textarea } from "@/shared/ui";
 
+import { useModalStore } from "@/shared/model/useModalStore";
 import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 import { useUpdateComment } from "../../api/use-update-comment";
@@ -12,7 +13,7 @@ type FormEditCommentProps = {
 };
 
 const FormEditComment = ({ comment }: FormEditCommentProps) => {
-  // const closeAll = useModalStore((state) => state.closeAll);
+  const close = useModalStore((state) => state.close);
   const { mutate: updateComment } = useUpdateComment();
   const { handleSelectComment, selectedComment } = useCommentStore(
     useShallow((state) => ({
@@ -29,7 +30,7 @@ const FormEditComment = ({ comment }: FormEditCommentProps) => {
   const handleUpdateComment = () => {
     if (!selectedComment) return;
     updateComment(selectedComment);
-    // closeAll();
+    close({ type: "editComment", id: selectedComment.id });
   };
 
   useEffect(() => {
