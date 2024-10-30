@@ -4,6 +4,7 @@ import { NewPost, Post } from "../../../entities/post/model/types"
 import { fetchUsersApi } from "../../../entities/user/api"
 import { getPostsWithUsers } from "../../../entities/post/model"
 import { fetchPostsByTagApi, searchPostsApi } from "../api"
+import { useState } from "react"
 
 const postsAtom = atom<Post[]>([])
 const totalAtom = atom(0)

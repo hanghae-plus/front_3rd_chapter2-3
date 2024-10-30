@@ -8,7 +8,7 @@ const commentsAtom = atom<Record<Comment["postId"], Comment[]>>({})
 export const useComments = () => {
   const [comments, setComments] = useAtom(commentsAtom)
 
-  const getComments = async (postId: number) => {
+  const fetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     const data = await fetchCommentsApi(postId)
     setComments((prev) => ({ ...prev, [postId]: data.comments }))
@@ -54,7 +54,7 @@ export const useComments = () => {
 
   return {
     comments,
-    getComments,
+    fetchComments,
     addComment,
     deleteComment,
     updateComment,

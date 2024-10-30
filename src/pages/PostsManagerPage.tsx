@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Edit2, Plus, Search, ThumbsUp, Trash2 } from "lucide-react"
 import {
   Button,
   Card,
@@ -17,44 +16,50 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
   Textarea,
 } from "../shared/ui"
 import { highlightText } from "../shared/lib/highlightText.tsx"
-import { addCommentApi, deleteCommentApi, updateCommentApi } from "../entities/comment/api/index.ts"
 import { usePosts } from "../features/post/model/usePosts.ts"
-import { useUser } from "../features/user/model/useUser.ts"
+import { useUserModal } from "../features/user/model/useUserModal.ts"
 import { useTags } from "../features/tags/model/useTags.ts"
 import { useComments } from "../features/comment/model/useComment.ts"
+import { usePostDialog } from "../features/post/model/usePostDialog.ts"
+import PostTable from "../widgets/post/PostTable.tsx"
+import { usePostParams } from "../features/post/model/usePostParams.ts"
 
 const PostsManager = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
-
-  const { posts, total, getPosts, addPost, updatePost, deletePost, searchPostsWithQuery } = usePosts()
-  const { showUserModal, setShowUserModal, selectedUser, openUserModal } = useUser()
+  const { total, getPosts, addPost, updatePost, searchPostsWithQuery } = usePosts()
+  const {
+    selectedPost,
+    setSelectedPost,
+    setShowPostDetailDialog,
+    setShowAddDialog,
+    showEditDialog,
+    showPostDetailDialog,
+    showAddDialog,
+    setShowEditDialog,
+  } = usePostDialog()
+  const { showUserModal, setShowUserModal, selectedUser } = useUserModal()
   const { tags } = useTags()
-  const { comments, getComments, addComment, updateComment, deleteComment, likeComment } = useComments()
+  const { comments, addComment, updateComment, deleteComment, likeComment } = useComments()
+  const {
+    limit,
+    setLimit,
+    skip,
+    setSkip,
+    searchQuery,
+    setSearchQuery,
+    selectedTag,
+    setSelectedTag,
+    sortBy,
+    sortOrder,
+    setSortOrder,
+    setSortBy,
+    updateURL,
+  } = usePostParams()
 
   // 상태 관리
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState(null)
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
@@ -62,18 +67,6 @@ const PostsManager = () => {
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-
-  // URL 업데이트 함수
-  const updateURL = () => {
-    const params = new URLSearchParams()
-    if (skip) params.set("skip", skip.toString())
-    if (limit) params.set("limit", limit.toString())
-    if (searchQuery) params.set("search", searchQuery)
-    if (sortBy) params.set("sortBy", sortBy)
-    if (sortOrder) params.set("sortOrder", sortOrder)
-    if (selectedTag) params.set("tag", selectedTag)
-    navigate(`?${params.toString()}`)
-  }
 
   // 게시물 가져오기
   const fetchPosts = async () => {
@@ -136,11 +129,6 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post)
-    getComments(post.id)
-    setShowPostDetailDialog(true)
-  }
 
   useEffect(() => {
     if (selectedTag) {
@@ -150,96 +138,6 @@ const PostsManager = () => {
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
-
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">ID</TableHead>
-          <TableHead>제목</TableHead>
-          <TableHead className="w-[150px]">작성자</TableHead>
-          <TableHead className="w-[150px]">반응</TableHead>
-          <TableHead className="w-[150px]">작업</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {posts.map((post) => (
-          <TableRow key={post.id}>
-            <TableCell>{post.id}</TableCell>
-            <TableCell>
-              <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
-
-                <div className="flex flex-wrap gap-1">
-                  {post.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? "text-white bg-blue-500 hover:bg-blue-600"
-                          : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag)
-                        updateURL()
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post)
-                    setShowEditDialog(true)
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
 
   // 댓글 렌더링
   const renderComments = (postId) => (
@@ -359,7 +257,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
