@@ -9,11 +9,11 @@ import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 const TablePosts = () => {
   const { queries } = useNavigator();
   const { search, limit, skip } = queries;
-  const { data: posts, isLoading: loading } = useQueryPosts({ limit, skip });
+  const { data, isLoading } = useQueryPosts({ limit, skip });
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <div className="flex justify-center p-4">로딩 중...</div>
       ) : (
         <Table.Container>
@@ -27,11 +27,11 @@ const TablePosts = () => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {posts?.posts.map((post) => <PostTableIRow key={post.id} post={post} search={search} />)}
+            {data?.posts?.map((post) => <PostTableIRow key={post.id} post={post} search={search} />)}
           </Table.Body>
         </Table.Container>
       )}
-      <PostPagination total={posts?.total || 0} size={limit} skip={skip} />
+      <PostPagination total={data?.total || 0} size={limit} skip={skip} />
     </>
   );
 };

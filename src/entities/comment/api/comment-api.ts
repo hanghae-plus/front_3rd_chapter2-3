@@ -34,7 +34,7 @@ const deleteComment = async (id: number) => {
 //mutate
 const likeComment = async (comment: Comment) => {
   const response = await fetchApi<Comment>(
-    COMMENT_API_PATHS.like,
+    COMMENT_API_PATHS.byId(comment.id),
     createRequestOptions("PATCH", { likes: comment.likes + 1 }),
   );
   return response;

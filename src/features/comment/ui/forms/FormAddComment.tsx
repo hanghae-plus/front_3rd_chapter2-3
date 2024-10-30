@@ -13,11 +13,11 @@ type FormAddCommentProps = {
 const initialNewComment: NewComment = { body: "", postId: 0, userId: 1 };
 
 const FormAddComment = ({ close, postId }: FormAddCommentProps) => {
-  const { mutateAsync: addComment } = useAddComment();
+  const { mutate: addComment } = useAddComment();
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment);
 
   const handleAddComment = async () => {
-    await addComment(newComment);
+    addComment(newComment);
     setNewComment(initialNewComment);
     close();
   };

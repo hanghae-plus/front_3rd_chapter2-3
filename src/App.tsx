@@ -2,12 +2,11 @@ import { AppRouter } from "@/app/routes";
 import PostsManagerPage from "@/pages/post-manager/ui/PostsManagerPage";
 import Footer from "@/widgets/layout/ui/Footer.tsx";
 import Header from "@/widgets/layout/ui/Header.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppProviders } from "./app/providers";
 
 const App = () => {
-  const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
+    <AppProviders>
       <AppRouter>
         <div className="flex flex-col min-h-screen">
           <Header />
@@ -17,7 +16,7 @@ const App = () => {
           <Footer />
         </div>
       </AppRouter>
-    </QueryClientProvider>
+    </AppProviders>
   );
 };
 

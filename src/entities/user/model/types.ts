@@ -68,3 +68,7 @@ export type User = {
   };
   role: string;
 };
+
+export type FetchUsersProps = {
+  select?: (keyof User)[];
+};

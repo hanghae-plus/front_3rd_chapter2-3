@@ -1,6 +1,7 @@
 import { commentApi } from "@/entities/comment/api/comment-api";
 import { commentQueries } from "@/entities/comment/api/comment-quries";
 import { Comment } from "@/entities/comment/model/types";
+import { addItemInArray } from "@/shared/lib/array";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useAddComment = () => {
@@ -13,7 +14,7 @@ export const useAddComment = () => {
         commentQueries.list({ postId: data.postId }).queryKey,
         (oldData: Comment[] | undefined) => {
           if (!oldData) return undefined;
-          return [...oldData, data];
+          return addItemInArray(oldData, data);
         },
       );
     },

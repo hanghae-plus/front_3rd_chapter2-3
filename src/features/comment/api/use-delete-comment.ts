@@ -1,6 +1,7 @@
 import { commentApi } from "@/entities/comment/api/comment-api";
 import { commentQueries } from "@/entities/comment/api/comment-quries";
 import { Comment } from "@/entities/comment/model/types";
+import { filterByID } from "@/shared/lib/array";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useDeleteComment = () => {
@@ -10,7 +11,7 @@ export const useDeleteComment = () => {
     onSuccess: (_, { postId, id }) => {
       queryClient.setQueryData(commentQueries.list({ postId }).queryKey, (oldData: Comment[] | undefined) => {
         if (!oldData) return undefined;
-        return oldData.filter((comment) => comment.id !== id);
+        return filterByID(oldData, id);
       });
     },
   });

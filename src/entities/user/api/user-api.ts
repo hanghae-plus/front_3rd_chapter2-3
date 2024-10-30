@@ -1,8 +1,4 @@
-import { User } from "../model/types";
-
-type FetchUsersProps = {
-  select?: (keyof User)[];
-};
+import { FetchUsersProps, User } from "../model/types";
 
 const fetchUsers = async (props: FetchUsersProps = {}): Promise<User[]> => {
   const queries = props.select?.join(",");

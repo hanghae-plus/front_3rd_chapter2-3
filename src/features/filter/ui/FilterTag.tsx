@@ -1,4 +1,4 @@
-import useFetchTags from "@/features/filter/api/useFetchTags";
+import useFetchTags from "@/features/filter/api/use-get-tags";
 import { useFilterTagPosts } from "@/features/post/api/use-filter-tag-post";
 
 import { useNavigator } from "@/shared/model/useNavigator";
@@ -9,7 +9,7 @@ const FilterTag = () => {
     queries: { tag },
     handleUpdateQuery,
   } = useNavigator();
-  const { tags } = useFetchTags();
+  const { data: tags } = useFetchTags();
   const { mutate: filterTagPosts } = useFilterTagPosts();
 
   const handleChangeTag = (value: string) => {
@@ -24,7 +24,7 @@ const FilterTag = () => {
       </Select.Trigger>
       <Select.Content>
         <Select.Item value="all">모든 태그</Select.Item>
-        {tags.map((tag) => (
+        {tags?.map((tag) => (
           <Select.Item key={tag.url} value={tag.slug}>
             {tag.slug}
           </Select.Item>

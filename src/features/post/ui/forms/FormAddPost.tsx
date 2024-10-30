@@ -13,10 +13,10 @@ const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = ({ close }: FormAddPostProps) => {
   const [newPost, setNewPost] = useState(initialNewPost);
-  const { mutateAsync: addPost } = useAddPost();
+  const { mutate: addPost } = useAddPost();
 
-  const handleAddPost = async (newPost: NewPost) => {
-    await addPost(newPost);
+  const handleAddPost = (newPost: NewPost) => {
+    addPost(newPost);
     setNewPost(initialNewPost);
     close();
   };
