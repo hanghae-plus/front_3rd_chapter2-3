@@ -1,4 +1,4 @@
-import { Comment, CommentState } from '@entities/model/types'
+import { Comment, NewComment } from '@entities/model/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { commentApi } from '@features/comment/api'
 
@@ -11,7 +11,7 @@ interface MutationState {
 export function useCommentMutations(postId: number) {
   const queryClient = useQueryClient()
 
-  const createMutation = useMutation<Comment, Error, Omit<CommentState, 'id'>>({
+  const createMutation = useMutation<Comment, Error, Omit<NewComment, 'id'>>({
     mutationFn: commentApi.createComment,
     onSuccess: (newComment) => {
       queryClient.setQueryData<Comment[]>(['comments', postId], (old) => {

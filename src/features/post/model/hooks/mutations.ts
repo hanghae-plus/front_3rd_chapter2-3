@@ -1,4 +1,4 @@
-import { Post, PostState } from '@entities/model/types'
+import { Post, NewPost } from '@entities/model/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postApi, PostsResponse } from '@features/post/api'
 
@@ -11,7 +11,7 @@ interface MutationState {
 export function usePostMutations() {
   const queryClient = useQueryClient()
 
-  const createMutation = useMutation<Post, Error, PostState>({
+  const createMutation = useMutation<Post, Error, NewPost>({
     mutationFn: postApi.createPost,
     onSuccess: (newPost) => {
       queryClient.setQueriesData<PostsResponse>({ queryKey: ['posts'] }, (old) => {

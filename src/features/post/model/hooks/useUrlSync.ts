@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router-dom'
-import { useFilterStore } from '../stores'
+import { filterStore } from '../stores'
 import { useEffect } from 'react'
 
 export const useUrlSync = () => {
-  const { setSortBy, setSortOrder, setLimit, setSkip, setSearchQuery, setSelectedTag } = useFilterStore()
+  const { setSortBy, setSortOrder, setLimit, setSkip, setSearchQuery, setSelectedTag } = filterStore()
   const location = useLocation()
 
   useEffect(() => {
