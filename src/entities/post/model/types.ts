@@ -9,7 +9,7 @@ export interface Post {
   }
   views: number
   userId: number
-  author: Author | undefined
+  author: Author
 }
 
 export interface Author {

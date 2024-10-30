@@ -4,7 +4,7 @@ import { Post } from "./types"
 export function attachAuthorsFromUsers(posts: Post[], users: User[]): Post[] {
   return posts.map((post) => ({
     ...post,
-    author: users.find((user) => user.id === post.userId),
+    author: users.find((user) => user.id === post.userId) ?? { id: post.userId, username: "", image: "" },
   }))
 }
 
