@@ -1,14 +1,23 @@
+import { useAtom } from "jotai"
+import { limitAtom, searchQueryAtom, selectedTagAtom, skipAtom, sortByAtom, sortOrderAtom } from "./postAtoms"
+
 interface UpdateURLParams {
   navigate: (path: string) => void // navigate 함수를 위한 타입 정의
   skip?: number
-  limit?: number
   searchQuery?: string
   sortBy?: string
   sortOrder?: string
   selectedTag?: string
 }
 
-export const UpdateURL = ({ navigate, skip, limit, searchQuery, sortBy, sortOrder, selectedTag }: UpdateURLParams) => {
+export const UpdateURL = ({ navigate }: UpdateURLParams) => {
+  const [limit] = useAtom(limitAtom)
+  const [skip] = useAtom(skipAtom)
+  const [searchQuery] = useAtom(searchQueryAtom)
+  const [selectedTag] = useAtom(selectedTagAtom)
+  const [sortOrder] = useAtom(sortOrderAtom)
+  const [sortBy] = useAtom(sortByAtom)
+
   const params = new URLSearchParams()
 
   // 모든 파라미터를 조건부로 설정

@@ -14,26 +14,28 @@ import {
 
 import { useAtom } from "jotai"
 import { useUpdateURL } from "../../../shared/model/urlUtils"
-import { userFetch } from "../../../entities/model/userFetch"
+
 import { userAtom } from "../../../entities/model/atom"
 import { commentFetch } from "../../comment/model/commentFetch"
 import { commentsAtom } from "../../comment/model/commentAtom"
 import { usePost } from "../model/usePost"
+import { usePostHandler } from "../model/postHandler"
+import { userFetchData } from "../../../entities/model/userFetch"
 
+// 게시물 테이블
 export const RenderPostTable = () => {
-  const [user, setUser] = useAtom(userAtom)
+  const [, setUser] = useAtom(userAtom)
   const [posts, setPosts] = useAtom(postsAtom)
   const [searchQuery] = useAtom(searchQueryAtom)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
-  const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
-  const [comments, setComments] = useAtom(commentsAtom)
-  const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
-  const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
+  const [, setShowUserModal] = useAtom(showUserModalAtom)
+  const [, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
+  const [, setComments] = useAtom(commentsAtom)
+  const [, setSelectedPost] = useAtom(selectedPostAtom)
 
   const updateURL = useUpdateURL()
 
-  const { updatePost, deletePost } = usePost()
+  const { deletePost } = usePost()
 
   const handleTagClick = (tag) => {
     setSelectedTag(tag)
@@ -42,7 +44,7 @@ export const RenderPostTable = () => {
 
   const handleOpenUserModal = async (userId) => {
     try {
-      const userData = await userFetch(userId)
+      const userData = await userFetchData(userId)
 
       setUser(userData)
       setShowUserModal(true)
@@ -61,14 +63,7 @@ export const RenderPostTable = () => {
       console.error("댓글을 가져오는 중 오류 발생:", error)
     }
   }
-
-  // 게시물 업데이트
-  const handleOpenPostUpdateModal = async () => {
-    const updateResponse = await updatePost(selectedPost)
-
-    setPosts(posts.map((post) => (post.id === updateResponse.id ? updateResponse : post)))
-    setShowEditDialog(false)
-  }
+  const { handleOpenPostUpdate } = usePostHandler()
 
   const handleDeletePost = async (postId) => {
     try {
@@ -142,7 +137,7 @@ export const RenderPostTable = () => {
                 <Button variant="ghost" size="sm" onClick={() => handleOpenPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => handleOpenPostUpdateModal(post)}>
+                <Button variant="ghost" size="sm" onClick={() => handleOpenPostUpdate(post)}>
                   <Edit2 className="w-4 h-4" />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>

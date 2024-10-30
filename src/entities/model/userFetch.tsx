@@ -1,6 +1,6 @@
 import { User } from "./atom"
 
-export const userFetch = async (user: User) => {
+export const userFetchData = async (user: User) => {
   console.log("user", user)
 
   try {
@@ -13,4 +13,12 @@ export const userFetch = async (user: User) => {
   } catch (error) {
     console.error("사용자 정보 가져오기 오류:", error)
   }
+}
+
+export const userFetchDetail = async () => {
+  const response = await fetch("/api/users?limit=0&select=username,image")
+  if (!response.ok) {
+    throw new Error("사용자 데이터를 가져오는 데 실패했습니다.")
+  }
+  return response.json()
 }

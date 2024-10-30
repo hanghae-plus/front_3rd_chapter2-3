@@ -13,7 +13,8 @@ import {
 import { commentFetch } from "../model/commentFetch"
 import { useEffect } from "react"
 
-export const RenderComments = ({ postId }) => {
+// 댓글 렌더링
+export const CommentRender = ({ postId }) => {
   const [searchQuery] = useAtom(searchQueryAtom)
   const [comments, setComments] = useAtom(commentsAtom)
   const [, setSelectedComment] = useAtom(selectedCommentAtom)

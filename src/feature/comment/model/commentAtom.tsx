@@ -1,4 +1,3 @@
-// src/atoms.js
 import { atom } from "jotai"
 
 // 댓글 상태
