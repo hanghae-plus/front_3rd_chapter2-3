@@ -1,4 +1,4 @@
-import { User } from "../types"
+import { User } from "../model/types"
 
 export interface UsersData {
   users: User[]

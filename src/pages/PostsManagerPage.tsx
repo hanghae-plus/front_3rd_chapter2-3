@@ -25,11 +25,11 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import { NewPost, Post } from "../entities/post/types"
+import { NewPost, Post } from "../entities/post/model/types"
 import { fetchUsersApi } from "../entities/user/api"
 import { fecthPostsByTagApi, fetchPostsApi, searchPostsApi, createPostApi, updatePostApi, deletePostApi } from "../entities/post/api"
 import { fetchTagsApi } from "../entities/tag/api"
-import { Tag } from "../entities/tag/types"
+import { Tag } from "../entities/tag/model/types"
 
 const initialNewPost = { title: "", body: "", userId: 1, tags: [] };
 const PostsManager = () => {

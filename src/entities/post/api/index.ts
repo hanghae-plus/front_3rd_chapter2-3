@@ -1,4 +1,4 @@
-import { Post, Page, NewPost } from "../types"
+import { Post, Page, NewPost } from "../model/types"
 
 export interface PostsData {
   posts: Post[]

@@ -1,4 +1,4 @@
-import { Comment } from "../types"
+import { Comment } from "../model/types"
 
 export interface CommentsData {
   comments: Comment[]

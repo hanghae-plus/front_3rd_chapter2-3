@@ -1,4 +1,4 @@
-import { Tag } from "../types"
+import { Tag } from "../model/types"
 
 // 태그 가져오기
 export const fetchTagsApi = async (): Promise<Tag[]> => {
