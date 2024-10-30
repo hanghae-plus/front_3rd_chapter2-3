@@ -1,19 +1,23 @@
 import PostPagination from "@/features/post/ui/table/PostPagination";
 
 import { useQueryParams } from "@/shared/model/useQueryParams";
-import { Table } from "@/shared/ui";
+import { Loader, Table } from "@/shared/ui";
 
 import { useQueryPosts } from "@/features/post/api/use-get-post";
 import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 
 const TablePosts = () => {
   const { queries } = useQueryParams();
-  const { data, isLoading } = useQueryPosts(queries);
+  const { data, isLoading, isError } = useQueryPosts(queries);
+
+  if (isError) {
+    return <div>에러가 발생했습니다.</div>;
+  }
 
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center p-4">로딩 중...</div>
+        <Loader />
       ) : (
         <Table.Container>
           <Table.Header>

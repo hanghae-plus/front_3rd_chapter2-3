@@ -12,3 +12,5 @@ export { Select } from "./Select.tsx";
 export { Dialog } from "./Dialog.tsx";
 // 테이블 컴포넌트
 export { Table } from "./Table.tsx";
+// 로딩 컴포넌트
+export { Loader } from "./Loader.tsx";

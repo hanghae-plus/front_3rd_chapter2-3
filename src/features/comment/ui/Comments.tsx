@@ -4,6 +4,7 @@ import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useQueryComments } from "../api/use-get-comment";
+import { Loader } from "lucide-react";
 
 type CommentsProps = {
   postId: number;
@@ -14,7 +15,7 @@ const Comments = ({ postId }: CommentsProps) => {
   const { queries } = useQueryParams();
   const { search } = queries;
 
-  if (loading) return <div className="flex justify-center p-4">로딩 중...</div>;
+  if (loading) return <Loader />;
 
   return (
     <div className="mt-2">
