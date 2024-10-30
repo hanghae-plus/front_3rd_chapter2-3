@@ -33,6 +33,7 @@ import {
   TableRow,
   Textarea,
 } from "../shared"
+import { postsApi } from "../feature/posts/api/posts.api"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -84,34 +85,38 @@ const PostsManager = () => {
   }
 
   // 게시물 가져오기
-  const fetchPosts = () => {
-    setLoading(true)
-    let postsData
-    let usersData
+  postsApi.getPosts(limit, skip).then((data) => {
+    setPosts(data.posts)
+    setTotal(data.total)
+  })
+  // const fetchPosts = () => {
+  //   setLoading(true)
+  //   let postsData
+  //   let usersData
 
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then((response) => response.json())
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
+  //   fetch(`/api/posts?limit=${limit}&skip=${skip}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       postsData = data
+  //       return fetch("/api/users?limit=0&select=username,image")
+  //     })
+  //     .then((response) => response.json())
+  //     .then((users) => {
+  //       usersData = users.users
+  //       const postsWithUsers = postsData.posts.map((post) => ({
+  //         ...post,
+  //         author: usersData.find((user) => user.id === post.userId),
+  //       }))
+  //       setPosts(postsWithUsers)
+  //       setTotal(postsData.total)
+  //     })
+  //     .catch((error) => {
+  //       console.error("게시물 가져오기 오류:", error)
+  //     })
+  //     .finally(() => {
+  //       setLoading(false)
+  //     })
+  // }
 
   // 태그 가져오기
   const fetchTags = async () => {
@@ -127,7 +132,10 @@ const PostsManager = () => {
   // 게시물 검색
   const searchPosts = async () => {
     if (!searchQuery) {
-      fetchPosts()
+      postsApi.getPosts(limit, skip).then((data) => {
+        setPosts(data.posts)
+        setTotal(data.total)
+      })
       return
     }
     setLoading(true)
@@ -145,7 +153,10 @@ const PostsManager = () => {
   // 태그별 게시물 가져오기
   const fetchPostsByTag = async (tag) => {
     if (!tag || tag === "all") {
-      fetchPosts()
+      postsApi.getPosts(limit, skip).then((data) => {
+        setPosts(data.posts)
+        setTotal(data.total)
+      })
       return
     }
     setLoading(true)
@@ -332,7 +343,10 @@ const PostsManager = () => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag)
     } else {
-      fetchPosts()
+      postsApi.getPosts(limit, skip).then((data) => {
+        setPosts(data.posts)
+        setTotal(data.total)
+      })
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])

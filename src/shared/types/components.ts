@@ -4,7 +4,7 @@ import { cardContentVariants, cardHeaderVariants, cardTitleVariants, cardVariant
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { contentVariants, headerVariants, overlayVariants, titleVariants } from "../ui/dialog/dialog.variants";
 import inputVariants from "../ui/input/input.variants";
-import SelectPrimitive from "@radix-ui/react-select";
+import * as SelectPrimitive from "@radix-ui/react-select";
 import { itemVariants, selectContentVariants, triggerVariants } from "../ui/select/select.variants";
 import { tableBodyVariants, tableCellVariants, tableHeaderVariants, tableHeadVariants, tableRowVariants, tableVariants } from "../ui/table/table.variants";
 import textareaVariants from "../ui/textarea/textarea.variants";

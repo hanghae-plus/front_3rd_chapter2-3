@@ -1,4 +1,5 @@
-import { Button } from "../../button"
+
+import { Button } from "../../button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../dialog"
 
 interface ConfirmationDialogProps {

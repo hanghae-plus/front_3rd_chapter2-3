@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { CardContentProps } from "./model/types"
+import { CardContentProps } from "../../types/components"
 
 export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, ...props }, ref) => (
