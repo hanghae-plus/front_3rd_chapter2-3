@@ -1,56 +1,8 @@
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
-import { useNavigate } from "react-router-dom";
 import { usePostContext } from "../model/PostContext.tsx";
-import { useEffect } from "react";
 
 export const PostPagination = () => {
-  const navigate = useNavigate();
-
-  const {
-    skip,
-    limit,
-    setLimit,
-    setSkip,
-    searchQuery,
-    sortBy,
-    sortOrder,
-    selectedTag,
-    setSelectedTag,
-    setSearchQuery,
-    setSortBy,
-    setSortOrder,
-    total,
-  } = usePostContext();
-
-  // const updateURL = () => {
-  //   const params = new URLSearchParams();
-  //   if (skip) params.set("skip", skip.toString());
-  //   if (limit) params.set("limit", limit.toString());
-  //   if (searchQuery) params.set("search", searchQuery);
-  //   if (sortBy) params.set("sortBy", sortBy);
-  //   if (sortOrder) params.set("sortOrder", sortOrder);
-  //   if (selectedTag) params.set("tag", selectedTag);
-  //   navigate(`?${params.toString()}`);
-  // };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setSkip(parseInt(params.get("skip") || "0"));
-    setLimit(parseInt(params.get("limit") || "10"));
-    setSearchQuery(params.get("search") || "");
-    setSortBy(params.get("sortBy") || "");
-    setSortOrder(params.get("sortOrder") || "asc");
-    setSelectedTag(params.get("tag") || "");
-  }, [location.search]);
-  //
-  // useEffect(() => {
-  //   if (selectedTag) {
-  //     // fetchPostsByTag(selectedTag);
-  //   } else {
-  //     // fetchPosts();
-  //   }
-  //   updateURL();
-  // }, [skip, limit, sortBy, sortOrder, selectedTag]);
+  const { skip, limit, setLimit, setSkip, total } = usePostContext();
 
   return (
     <div className="flex justify-between items-center">
