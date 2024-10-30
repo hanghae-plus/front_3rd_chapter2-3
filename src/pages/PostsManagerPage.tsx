@@ -29,12 +29,22 @@ import PostAddDialog from "../features/post/ui/PostAddDialog.tsx"
 import PostEditDialog from "../features/post/ui/PostEditDialog.tsx"
 import PostDetailDialog from "../features/post/ui/PostDetailDialog.tsx"
 import UserDetailDialog from "../features/user/ui/UserDetailDialog.tsx"
+import CommentAddDialog from "../features/comment/ui/CommentAddDialog.tsx"
+import { useCommentDialog } from "../features/comment/model/useCommentDialog.ts"
 
 const PostsManager = () => {
   const { total, getPosts, searchPostsWithQuery } = usePosts()
   const { setShowAddDialog } = usePostDialog()
   const { tags } = useTags()
-  const { comments, addComment, updateComment, deleteComment, likeComment } = useComments()
+  const { comments, updateComment, deleteComment, likeComment } = useComments()
+  const {
+    selectedComment,
+    setSelectedComment,
+    setNewComment,
+    setShowAddCommentDialog,
+    showEditCommentDialog,
+    setShowEditCommentDialog,
+  } = useCommentDialog()
   const {
     limit,
     setLimit,
@@ -53,11 +63,6 @@ const PostsManager = () => {
 
   // 상태 관리
   const [loading, setLoading] = useState(false)
-
-  const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
 
   // 게시물 가져오기
   const fetchPosts = async () => {
@@ -88,14 +93,6 @@ const PostsManager = () => {
     setLoading(true)
     getPosts(limit, skip, tag)
     setLoading(false)
-  }
-
-  // 댓글 추가
-  const submitAddCommentForm = async () => {
-    addComment(newComment)
-
-    setShowAddCommentDialog(false)
-    setNewComment({ body: "", postId: null, userId: 1 })
   }
 
   // 댓글 업데이트
@@ -264,22 +261,7 @@ const PostsManager = () => {
       <PostAddDialog />
       <PostEditDialog />
 
-      {/* 댓글 추가 대화상자 */}
-      <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-            />
-            <Button onClick={submitAddCommentForm}>댓글 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CommentAddDialog />
 
       {/* 댓글 수정 대화상자 */}
       <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
