@@ -1,11 +1,11 @@
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Select } from "@/shared/ui/Select";
 
 const FilterOrder = () => {
   const {
     handleUpdateQuery,
     queries: { sortOrder },
-  } = useNavigator();
+  } = useQueryParams();
   return (
     <Select.Container value={sortOrder} onValueChange={(value) => handleUpdateQuery("sortOrder", value)}>
       <Select.Trigger className="w-[180px]">

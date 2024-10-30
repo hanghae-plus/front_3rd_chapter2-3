@@ -3,12 +3,12 @@ import { postQueries } from "@/entities/post/api/post-queries";
 import { PostsResponse } from "@/entities/post/model/types";
 import { filterByID } from "@/shared/lib/array";
 import { merge } from "@/shared/lib/object";
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useDeletePost = () => {
   const queryClient = useQueryClient();
-  const { queries } = useNavigator();
+  const { queries } = useQueryParams();
   return useMutation({
     mutationFn: postApi.deletePost,
     onSuccess: (_, id) => {

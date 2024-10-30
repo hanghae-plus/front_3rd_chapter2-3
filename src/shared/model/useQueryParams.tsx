@@ -4,14 +4,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 export type UpdatableQueryKey = "skip" | "limit" | "search" | "sortBy" | "sortOrder" | "tag";
 
 const controlQueryParams = (key: UpdatableQueryKey, value: string | number, params: URLSearchParams) => {
-  if (!value || (key === "skip" && value === "0") || (key === "limit" && value === "10") || key === "search") {
+  if (!value || (key === "skip" && value === "0") || (key === "limit" && value === "10")) {
     params.delete(key);
   } else {
     params.set(key, value.toString());
   }
 };
 
-export const useNavigator = () => {
+export const useQueryParams = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -23,7 +23,7 @@ export const useNavigator = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc");
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "");
 
-  const setQueryParams = (key: UpdatableQueryKey, value: string | number) => {
+  const setQueryParams = useCallback((key: UpdatableQueryKey, value: string | number) => {
     switch (key) {
       case "skip":
         setSkip(parseInt(value.toString()));
@@ -44,13 +44,15 @@ export const useNavigator = () => {
         setSelectedTag(value as string);
         break;
     }
-  };
+  }, []);
 
   const handleUpdateQuery = useCallback(
-    (key: UpdatableQueryKey, value: string | number) => {
+    (key: UpdatableQueryKey, value: string | number, skipSetParams = false) => {
       const params = new URLSearchParams(location.search);
       // 파라미터 제어
-      controlQueryParams(key, value, params);
+      if (!skipSetParams) {
+        controlQueryParams(key, value, params);
+      }
       // 상태 업데이트
       setQueryParams(key, value);
       // URL 업데이트

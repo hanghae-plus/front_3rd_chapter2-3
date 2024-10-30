@@ -50,7 +50,6 @@ export const postQueries = {
       queryFn: async () => {
         const data = await postApi.fetchPostsByTag(tag);
         const enrichedData = await mergePostsWithUsers(data);
-
         return merge<PostsResponse>(enrichedData, "posts", enrichedData.posts.map(pipePost));
       },
     }),

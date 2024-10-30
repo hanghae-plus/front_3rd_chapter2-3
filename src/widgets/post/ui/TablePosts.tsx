@@ -1,15 +1,15 @@
 import PostPagination from "@/features/post/ui/PostPagination";
 
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Table } from "@/shared/ui";
 
 import { useQueryPosts } from "@/features/post/api/use-get-post";
 import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 
 const TablePosts = () => {
-  const { queries } = useNavigator();
-  const { search, limit, skip } = queries;
-  const { data, isLoading } = useQueryPosts({ limit, skip });
+  const { queries } = useQueryParams();
+  const { search, limit, skip, tag } = queries;
+  const { data, isLoading } = useQueryPosts({ limit, skip, search, tag });
 
   return (
     <>

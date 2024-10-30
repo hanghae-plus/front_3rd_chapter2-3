@@ -1,14 +1,14 @@
 import useFetchTags from "@/features/filter/api/use-get-tags";
 import { useFilterTagPosts } from "@/features/post/api/use-filter-tag-post";
 
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Select } from "@/shared/ui/Select";
 
 const FilterTag = () => {
   const {
     queries: { tag },
     handleUpdateQuery,
-  } = useNavigator();
+  } = useQueryParams();
   const { data: tags } = useFetchTags();
   const { mutate: filterTagPosts } = useFilterTagPosts();
 

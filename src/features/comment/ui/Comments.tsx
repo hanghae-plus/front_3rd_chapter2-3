@@ -2,7 +2,7 @@ import CommentActions from "@/features/comment/ui/CommentActions";
 import CommentInfo from "@/features/comment/ui/CommentInfo";
 import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useQueryComments } from "../api/use-get-comment";
 
 type CommentsProps = {
@@ -11,7 +11,7 @@ type CommentsProps = {
 
 const Comments = ({ postId }: CommentsProps) => {
   const { data: comments, isLoading: loading } = useQueryComments({ postId });
-  const { queries } = useNavigator();
+  const { queries } = useQueryParams();
   const { search } = queries;
 
   if (loading) return <div className="flex justify-center p-4">로딩 중...</div>;

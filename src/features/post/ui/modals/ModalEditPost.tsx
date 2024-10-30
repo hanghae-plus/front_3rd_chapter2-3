@@ -1,25 +1,18 @@
 import { Post } from "@/entities/post/model/types";
 import FormEditPost from "@/features/post/ui/forms/FormEditPost";
 
-import useToggle from "@/shared/model/useToggle";
-
 import { Button, Dialog } from "@/shared/ui";
 
 import { Edit2 } from "lucide-react";
-import usePostsStore from "../../model/usePostsStore";
+import { useModalEditPost } from "../../model/useModalEditPost";
 
-type ModalEditPostProps = {
-  post: Post;
-};
-
-const ModalEditPost = ({ post }: ModalEditPostProps) => {
-  const { isOpen, toggle, close } = useToggle();
-  const handleSelectPost = usePostsStore((state) => state.handleSelectPost);
+const ModalEditPost = ({ post }: { post: Post }) => {
+  const { isOpen, toggle, close, openEditModal } = useModalEditPost(post);
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>
-        <Button variant="ghost" size="sm" onClick={() => handleSelectPost(post)}>
+        <Button variant="ghost" size="sm" onClick={openEditModal}>
           <Edit2 className="w-4 h-4" />
         </Button>
       </Dialog.Trigger>

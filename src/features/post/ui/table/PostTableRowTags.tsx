@@ -1,5 +1,5 @@
 import { Post } from "@/entities/post/model/types";
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useFilterTagPosts } from "../../api/use-filter-tag-post";
 
 type PostTableRowTagsProps = {
@@ -7,7 +7,7 @@ type PostTableRowTagsProps = {
 };
 
 const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
-  const { queries, handleUpdateQuery } = useNavigator();
+  const { queries, handleUpdateQuery } = useQueryParams();
   const { tag: selectedTag } = queries;
   const { mutate: filterTagPosts } = useFilterTagPosts();
 

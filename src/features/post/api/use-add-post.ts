@@ -5,12 +5,12 @@ import { PostsResponse } from "@/entities/post/model/types";
 import { addItemInArray } from "@/shared/lib/array";
 import { pipe } from "@/shared/lib/function";
 import { merge } from "@/shared/lib/object";
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useAddPost = () => {
   const queryClient = useQueryClient();
-  const { queries } = useNavigator();
+  const { queries } = useQueryParams();
   return useMutation({
     mutationFn: postApi.addPost,
     onSuccess: (data) => {

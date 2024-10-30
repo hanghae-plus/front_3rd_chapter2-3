@@ -1,4 +1,4 @@
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import Pagination from "@/shared/ui/Pagination";
 
 type PostPaginationProps = {
@@ -8,7 +8,7 @@ type PostPaginationProps = {
 };
 
 const PostPagination = ({ total, size, skip }: PostPaginationProps) => {
-  const { handleUpdateQuery } = useNavigator();
+  const { handleUpdateQuery } = useQueryParams();
 
   const handlePageChange = (page: number) => {
     handleUpdateQuery("skip", page.toString());

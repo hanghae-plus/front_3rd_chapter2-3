@@ -3,12 +3,12 @@ import { postQueries } from "@/entities/post/api/post-queries";
 import { PostsResponse } from "@/entities/post/model/types";
 import { findById, updateByID } from "@/shared/lib/array";
 import { merge, shallowMerge } from "@/shared/lib/object";
-import { useNavigator } from "@/shared/model/useNavigator";
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useUpdatePost = () => {
   const queryClient = useQueryClient();
-  const { queries } = useNavigator();
+  const { queries } = useQueryParams();
   return useMutation({
     mutationFn: postApi.updatePost,
     onSuccess: (selectedPost) => {

@@ -1,18 +1,16 @@
-import { useSearchPosts } from "@/features/post/api/use-search-post";
-
-import { useNavigator } from "@/shared/model/useNavigator";
-
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Input } from "@/shared/ui";
-
 import { Search } from "lucide-react";
 
 const SearchInput = () => {
   const {
     handleUpdateQuery,
     queries: { search },
-  } = useNavigator();
+  } = useQueryParams();
 
-  const { mutate: searchPosts, isPending } = useSearchPosts();
+  const handleSearch = (value: string) => {
+    handleUpdateQuery("search", value);
+  };
 
   return (
     <div className="flex-1">
@@ -22,9 +20,8 @@ const SearchInput = () => {
           placeholder="게시물 검색..."
           className="pl-8"
           value={search}
-          onChange={(e) => handleUpdateQuery("search", e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && searchPosts(search)}
-          disabled={isPending}
+          onChange={(e) => handleUpdateQuery("search", e.target.value, true)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch(search)}
         />
       </div>
     </div>

@@ -3,33 +3,17 @@ import { Post } from "@/entities/post/model/types";
 import PostDetail from "@/features/post/ui/PostDetail";
 
 import { highlightText } from "@/shared/lib/utils";
-import { useNavigator } from "@/shared/model/useNavigator";
-import useToggle from "@/shared/model/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 
 import { MessageSquare } from "lucide-react";
-import { useShallow } from "zustand/shallow";
-import usePostsStore from "../../model/usePostsStore";
+import { useModalPostDetail } from "../../model/useModalPostDetail";
 
 type ModalPostDetailProps = {
   post: Post;
 };
 
 const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
-  const { queries } = useNavigator();
-  const { search: searchQuery } = queries;
-  const { isOpen, toggle } = useToggle();
-
-  const { selectedPost, handleSelectPost } = usePostsStore(
-    useShallow((state) => ({
-      selectedPost: state.selectedPost,
-      handleSelectPost: state.handleSelectPost,
-    })),
-  );
-
-  const openPostDetail = (post: Post) => {
-    handleSelectPost(post);
-  };
+  const { isOpen, toggle, selectedPost, searchQuery, openPostDetail } = useModalPostDetail();
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
