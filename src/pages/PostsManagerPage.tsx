@@ -1,5 +1,5 @@
 // src/pages/PostsManagerPage
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../shared/ui/Card';
 import { Button } from '../shared/ui/Button/Button';
 import { Plus, Search } from 'lucide-react';
@@ -34,8 +34,12 @@ import {
 import { Input } from "../shared/ui/InputBox/InputBox";
 import CommentList from '../features/comment/ui/CommentList.tsx';
 import { selectedUserAtom, showUserModalAtom } from '../entities/user/model/userAtom.ts';
+import useUser from '../features/user/model/useUser.tsx';
+import useTags from '../features/post/model/useTags.tsx';
+import { FetchPostsParams } from '../entities/post/api/types.ts';
 
 const PostsManagerPage = () => {
+  console.log('PostsManagerPage')
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,7 +58,17 @@ const PostsManagerPage = () => {
   const [comments, setComments] = useAtom(commentAtom);
 
   // React Query Hooks
+  const params = useMemo(() => ({
+    limit,
+    skip,
+    tag: selectedTag,
+    search: searchQuery,
+    sortBy,
+    sortOrder,
+  }), [limit, skip, selectedTag, searchQuery, sortBy, sortOrder]);
+  
   const { data: postsData, isLoading: postsLoading } = usePosts({ limit, skip, tag: selectedTag, search: searchQuery, sortBy, sortOrder });
+  const { data: tagsData, isLoading: tagsLoading } = useTags();
   // const { data: tagsData, isLoading: tagsLoading } = usePosts({ limit: 0, skip: 0, tag: 'all', search: '', sortBy: '', sortOrder: 'asc' }); // fetchTags is handled in usePosts
   // const { data: usersData, isLoading: usersLoading } = usePosts({ limit: 0, skip: 0, tag: 'all', search: '', sortBy: '', sortOrder: 'asc' }); // fetchUsers is handled in usePosts
 
@@ -81,14 +95,14 @@ const PostsManagerPage = () => {
     setLimit(parseInt(params.get("limit") || "10"));
     setSearchQuery(params.get("search") || "");
     setSortBy(params.get("sortBy") || "");
-    setSortOrder(params.get("sortOrder") || "asc");
+    setSortOrder(params.get("sortOrder") as FetchPostsParams['sortOrder'] || "asc");
     setSelectedTag(params.get("tag") || "");
   }, [location.search, setSkip, setLimit, setSearchQuery, setSortBy, setSortOrder, setSelectedTag]);
- 
+
   // 게시물 데이터 로드 성공 시 태그 설정
   useEffect(() => {
     if (postsData) {
-      const uniqueTags = Array.from(new Set(postsData.flatMap(post => post.tags)));
+      const uniqueTags = Array.from(new Set(postsData.posts.flatMap(post => post.tags)));
       setTags(uniqueTags);
     }
   }, [postsData, setTags]);
@@ -132,7 +146,7 @@ const PostsManagerPage = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
+                {tagsData?.map((tag) => (
                   <SelectItem key={tag.url} value={tag.slug}>
                     {tag.slug}
                   </SelectItem>
@@ -166,7 +180,7 @@ const PostsManagerPage = () => {
             <div className="flex justify-center p-4">로딩 중...</div>
           ) : (
             <PostsTable
-              posts={postsData}
+              posts={postsData?.posts}
             />
           )}
 
@@ -245,7 +259,7 @@ const PostsManagerPage = () => {
           <div className="space-y-4">
             <p>{highlightText(postMutations.selectedPost?.body, searchQuery)}</p>
             {/* 댓글 렌더링 */}
-            {/* <CommentList comments={comments[postMutations.selectedPost.id] || []} searchQuery={searchQuery} /> */}
+            <CommentList comments={comments[postMutations.selectedPost.id] || []} searchQuery={searchQuery} />
           </div>
         </DialogContents>
       </Dialog>

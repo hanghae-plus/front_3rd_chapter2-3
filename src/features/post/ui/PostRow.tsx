@@ -13,6 +13,8 @@ import { useMutation } from "@tanstack/react-query"
 import { fetchComments } from "../../../entities/comment/api/commentApi"
 import { selectedUserAtom } from "../../../entities/user/model/userAtom"
 import useUser from "../../user/model/useUser"
+import useComments from "../../comment/model/useComments"
+import useCommentModal from "../../comment/model/useCommentModal"
 
 interface PostRowProps {
   post: Post
@@ -25,6 +27,7 @@ interface PostRowProps {
   // searchQuery: string
   // openUserModal: (user: User) => void
 }
+
 
 const PostRow: React.FC<PostRowProps> = ({
   post,
@@ -43,19 +46,23 @@ const PostRow: React.FC<PostRowProps> = ({
 
   const { deletePostMutation } = usePostMutations();
   const { openUserModal } = useUserModal();
-  // const openPostDetail = (post) => {
-  //   setSelectedPost(post);
-  //   setShowPostDetailDialog(true);
-  //   // 댓글을 불러오는 로직은 상위 컴포넌트에서 처리
-  // };
+  const { data: allUsersData, isLoading: allUserLoading } = useUser();
+  const {openCommentModal} = useCommentModal();
+  const getUserProfile = (postUsrId:number) => allUsersData?.users.find(item => item.id === post.userId)
+
+  const openPostDetail = (post) => {
+    setSelectedPost(post);
+    setShowPostDetailDialog(true);
+    // 댓글을 불러오는 로직은 상위 컴포넌트에서 처리
+  };
 
   // 댓글 데이터 패칭 Mutation
-  const fetchCommentsMutation = useMutation<Comment,Error>({
-    mutationFn: (postId) => fetchComments(postId),
-    onSuccess: (data, postId) => {
-      setComments((prev) => ({ ...prev, [postId]: data.comments }));
-    },
-  });
+  // const fetchCommentsMutation = useMutation<Comment,Error>({
+  //   mutationFn: (postId) => fetchComments(postId),
+  //   onSuccess: (data, postId) => {
+  //     setComments((prev) => ({ ...prev, [postId]: data.comments }));
+  //   },
+  // });
   
   return (
   <TableRow key={post.id}>
@@ -75,13 +82,12 @@ const PostRow: React.FC<PostRowProps> = ({
       className="flex items-center space-x-2 cursor-pointer"
       onClick={() => openUserModal(post.userId)}
     >
-      <img 
-        src={post.author?.image} 
-        alt={post.author?.username} 
-        className="w-8 h-8 rounded-full" 
-      />
+    <img
+      src={getUserProfile(post.userId)?.image}
+      alt={getUserProfile(post.userId)?.username}
+      className="w-8 h-8 rounded-full" />
+    <span>{getUserProfile(post.userId)?.username}</span>
 
-      <span>{post.author?.username}</span>
     </div>
   </TableCell>
   <TableCell>
@@ -95,19 +101,16 @@ const PostRow: React.FC<PostRowProps> = ({
   <TableCell>
     <div className="flex items-center gap-2">
       <Button variant="ghost" size="sm" onClick={() => {
-        setSelectedPost(post);
-        setShowPostDetailDialog(true);
-        if (!comments[post.id]) fetchCommentsMutation.mutate(post.id);
+        openPostDetail(post);
+        openCommentModal(post.id);
+        // if (!comments[post.id]) fetchCommentsMutation.mutate(post.id);
       }}>
         <MessageSquare className="w-4 h-4" />
       </Button>
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => {
-          setSelectedPost(post);
-          setShowEditDialog(true);
-        }}
+        onClick={() => {openPostDetail(post)}}
       >
         <Edit2 className="w-4 h-4" />
       </Button>

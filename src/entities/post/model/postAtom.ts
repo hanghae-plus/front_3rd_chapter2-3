@@ -5,7 +5,7 @@ export const skipAtom = atom(0);
 export const limitAtom = atom(10);
 export const searchQueryAtom = atom('');
 export const sortByAtom = atom('');
-export const sortOrderAtom = atom('asc');
+export const sortOrderAtom = atom<'asc' | 'desc'>('asc');
 export const showPostDetailDialogAtom = atom(false);
 
 // 게시물 상태

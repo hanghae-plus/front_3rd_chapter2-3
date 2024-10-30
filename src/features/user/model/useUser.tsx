@@ -3,13 +3,11 @@ import { fetchUsers } from '../../../entities/user/api/userApi.js';
 import { AllUsers } from '../../../entities/user/api/types.js';
 
 const useUser = () => {
-  // const fetchAllUser = useQuery<AllUsers,Error,undefined>({
-  //   queryKey: ['posts'],
-  //   queryFn: fetchUsers,
-  // });
+  return useQuery<AllUsers,Error>({
+    queryKey: ['user'],
+    queryFn: fetchUsers,
+  });
 
-
-  // return{fetchAllUser}
 };
 
 export default useUser;

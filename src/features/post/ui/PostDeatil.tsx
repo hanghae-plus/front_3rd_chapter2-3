@@ -1,10 +1,10 @@
-import { Button } from '../../../shared/ui/Button/Button.jsx';
+import { Button } from '../../../shared/ui/Button/Button';
 import { Plus } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { newCommentAtom, showAddCommentDialogAtom } from '../../../entities/comment/model/commentAtom.js';
-import CommentForm from '../../comments/components/CommentForm.jsx';
-import CommentsList from '../../comments/components/CommentsList.jsx';
-import { highlightText } from '../../../shared/utils/highlightText.js';
+import CommentForm from '../../comment/ui/CommentForm';
+import CommentList from '../../comment/ui/CommentList';
+import { highlightText } from '../../../shared/utils';
 
 const PostDetail = ({ post, comments }) => {
   const [newComment, setNewComment] = useAtom(newCommentAtom);
@@ -14,7 +14,7 @@ const PostDetail = ({ post, comments }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">{highlightText(post.title, newComment.body)}</h2>
       <p>{highlightText(post.body, newComment.body)}</p>
-      <CommentsList comments={comments} searchQuery={newComment.body} />
+      <CommentList comments={comments} searchQuery={newComment.body} />
       <Button
         size="sm"
         onClick={() => {

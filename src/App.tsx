@@ -3,7 +3,7 @@ import Header from "./widgets/layout/ui/Header.tsx"
 import Footer from "./widgets/layout/ui/Footer.tsx"
 import PostsManagerPage from "./pages/PostsManagerPage.tsx"
 import OriginC from "./pages/origin copy.tsx"
-import Origin from "./pages/origin.tsx"
+// import Origin from "./pages/origin.tsx"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Provider as JotaiProvider } from 'jotai';
 
@@ -19,7 +19,7 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
               <Routes>
                 <Route path="/" element={<PostsManagerPage />} />
-                <Route path="/origin" element={<Origin />} />
+                <Route path="/origin" element={<OriginC/>} />
               </Routes>
             </QueryClientProvider>
           </JotaiProvider>

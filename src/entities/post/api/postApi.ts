@@ -8,7 +8,6 @@ export const fetchPosts = async (params:FetchPostsParams): Promise<Posts>=> {
   if (tag && tag !== 'all') url += `&tag=${tag}`;
   if (search) url += `&search=${search}`;
   if (sortBy) url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
-
   return await apiInstance(url);
 };
 
