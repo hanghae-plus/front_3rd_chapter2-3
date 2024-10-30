@@ -1,5 +1,5 @@
 import { atom } from "jotai"
-import { Comments, Post, User } from "./type"
+import { Comments, Post, User, Comment } from "./type"
 
 // export interface Post {
 //   id: string

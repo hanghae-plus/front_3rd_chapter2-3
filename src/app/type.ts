@@ -42,7 +42,7 @@ export interface Post {
   title: string
   body: string
   author: User
-  tags: string[]
+  tags: PostsManagerProps
   reactions: Reactions
 }
 
