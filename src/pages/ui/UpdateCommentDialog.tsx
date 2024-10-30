@@ -1,5 +1,4 @@
 // 댓글 수정 대화상자
-import React from "react"
 import { Button } from "../../shared/ui/button/Button"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
