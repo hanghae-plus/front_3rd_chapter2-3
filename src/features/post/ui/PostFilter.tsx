@@ -23,7 +23,7 @@ export const PostFilter: React.FC<{
         }}
         placeHolder={"태그 선택"}
         hasDefault={true}
-        defaultItem={{ value: "all", text: "모든 태그" }}
+        defaultItem={{ key: "all", value: "all", text: "모든 태그" }}
         optionItems={tags.map((tag) => ({ value: tag.slug, text: tag.slug, key: tag.url }))}
       />
       <Selector
@@ -31,10 +31,10 @@ export const PostFilter: React.FC<{
         onValueChange={setSortBy}
         placeHolder={"정렬 기준"}
         optionItems={[
-          { value: "none", text: "없음" },
-          { value: "id", text: "ID" },
-          { value: "title", text: "제목" },
-          { value: "reactions", text: "반응" },
+          { key: "none", value: "none", text: "없음" },
+          { key: "id", value: "id", text: "ID" },
+          { key: "title", value: "title", text: "제목" },
+          { key: "reactions", value: "reactions", text: "반응" },
         ]}
       />
       <Selector
@@ -42,8 +42,8 @@ export const PostFilter: React.FC<{
         onValueChange={setSortOrder}
         placeHolder={"정렬 순서"}
         optionItems={[
-          { value: "asc", text: "오름차순" },
-          { value: "desc", text: "내림차순" },
+          { key: "asc", value: "asc", text: "오름차순" },
+          { key: "desc", value: "desc", text: "내림차순" },
         ]}
       />
     </>

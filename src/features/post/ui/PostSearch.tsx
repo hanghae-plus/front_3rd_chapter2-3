@@ -1,3 +1,4 @@
+import { ChangeEvent, KeyboardEvent } from "react"
 import { Input } from "../../../shared/ui"
 
 export const PostSearch: React.FC<{
@@ -10,8 +11,8 @@ export const PostSearch: React.FC<{
       placeholder="게시물 검색..."
       className="pl-8"
       value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      onKeyPress={(e) => e.key === "Enter" && getSearchedPosts(searchQuery)}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+      onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && getSearchedPosts(searchQuery)}
     />
   )
 }
