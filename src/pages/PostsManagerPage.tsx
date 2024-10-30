@@ -13,6 +13,7 @@ import { Comment, NewComment } from "../entities/comment/model/types"
 import { SortOrder, usePostQueryParams } from "../entities/post"
 import { postApi } from "../entities/post/api/postApi"
 import { Author, NewPost, Post, Tag } from "../entities/post/model/types"
+import { userApi } from "../entities/user/api/userApi"
 import { User } from "../entities/user/model/types"
 import {
   Button,
@@ -225,13 +226,10 @@ const PostsManager = () => {
 
   // 사용자 모달 열기
   const openUserModal = async (user: Author) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
+    const userData = await userApi.fetchUser(user.id)
+    if (userData) {
       setSelectedUser(userData)
       setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
     }
   }
 
