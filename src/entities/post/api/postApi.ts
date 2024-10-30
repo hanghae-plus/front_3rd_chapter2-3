@@ -1,6 +1,6 @@
 import { apiClient } from '~/shared/api/base';
 
-import { PostRequestDto, PostResponseDto, PostsResponseDto } from './type';
+import { PostRequestDto, PostResponseDto, PostsResponseDto } from '../model/types';
 
 // 게시물 가져오기
 export const fetchAllPosts = async ({ limit = 10, skip = 0 }: { limit?: number; skip?: number }) => {

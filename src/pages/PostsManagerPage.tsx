@@ -15,7 +15,7 @@ import {
   fetchAllPosts,
   updatePost as updatePostApi,
 } from '~/entities/post/api/postApi';
-import { PostResponseDto } from '~/entities/post/api/type';
+import { PostResponseDto } from '~/entities/post/model/types';
 import { fetchAllPostTags, fetchPostsByTag as fetchPostsByTagApi } from '~/entities/tag/api/tagApi';
 import { TagResponseDto } from '~/entities/tag/api/type';
 import { fetchAllUser } from '~/entities/user/api/userApi';

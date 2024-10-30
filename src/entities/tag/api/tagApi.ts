@@ -1,4 +1,4 @@
-import { PostsResponseDto } from '~/entities/post/api/type';
+import { PostsResponseDto } from '~/entities/post/model/types';
 
 import { apiClient } from '~/shared/api/base';
 

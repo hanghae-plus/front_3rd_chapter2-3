@@ -25,3 +25,15 @@ export interface Reactions {
   likes: number;
   dislikes: number;
 }
+
+export type Post = {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+  tags: string[];
+  reactions: Reactions;
+  views: number;
+  // TODO: user type 변경
+  author: any;
+};
