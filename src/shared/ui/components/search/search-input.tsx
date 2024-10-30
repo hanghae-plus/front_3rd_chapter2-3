@@ -1,5 +1,5 @@
 import { Search } from "lucide-react"
-import { Input } from "../input"
+import { Input } from "../../input"
 
 interface SearchInputProps {
   value: string
