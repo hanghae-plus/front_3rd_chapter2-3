@@ -5,11 +5,14 @@ import { userListState } from "@/entities/user/model/user-state";
 
 export function useAddNewUser() {
   const { setNewUserList } = userListState();
-  const { data: userList } = useQueryUserList();
+  const { refetch } = useQueryUserList();
+
+  const searchTagList = async () => {
+    const userList = await refetch();
+    setNewUserList(userList.data ?? []);
+  };
 
   useEffect(() => {
-    if (userList !== undefined) {
-      setNewUserList(userList);
-    }
+    searchTagList();
   }, []);
 }

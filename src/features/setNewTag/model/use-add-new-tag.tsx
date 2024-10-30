@@ -4,11 +4,14 @@ import { useEffect } from "react";
 
 export function useAddNewTag() {
   const { setNewTagList } = tagListState();
-  const { data: tagList } = useQueryTagList();
+  const { refetch } = useQueryTagList();
+
+  const searchTagList = async () => {
+    const tagList = await refetch();
+    setNewTagList(tagList.data ?? []);
+  };
 
   useEffect(() => {
-    if (tagList !== undefined) {
-      setNewTagList(tagList);
-    }
+    searchTagList();
   }, []);
 }
