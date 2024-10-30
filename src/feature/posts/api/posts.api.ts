@@ -19,12 +19,20 @@ class PostsApi extends BaseApi {
     return this.get<PostsResponse>(`/posts/tag/${tag}`)
   }
 
-  async getTags(): Promise<TagsResponse> {
-    return this.get<TagsResponse>("/posts/tags")
+  async getTags(): Promise<TagsResponse[]> {
+    return this.get<TagsResponse[]>(`/posts/tags`)
   }
 
-  async addPost(post: Omit<Post, "id">): Promise<Omit<Post, "id">> {
-    return this.post<Omit<Post, "id">>("/posts/add", post)
+  async addPost({
+    title,
+    body,
+    userId,
+  }: {
+    title: string
+    body: string
+    userId: number
+  }): Promise<{ title; body; userId }> {
+    return this.post("/posts/add", { title, body, userId })
   }
 
   async updatePost(id: number, post: Partial<Post>): Promise<Post> {

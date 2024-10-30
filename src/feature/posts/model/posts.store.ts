@@ -1,8 +1,10 @@
 import { commentsApi } from "../api/comments.api"
 import { postsApi } from "../api/posts.api"
 import { usersApi } from "../api/userApi"
-import { Comment, Post, User } from "./types"
 import { create } from "zustand"
+import { Post } from "./types"
+import { User } from "../../users/model/types"
+import { Comment } from "../../comments/model/types"
 
 interface PostsStore {
   posts: Post[]

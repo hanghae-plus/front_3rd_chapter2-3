@@ -1,4 +1,5 @@
-import { Comment, Post } from "../model/types"
+import { Comment } from "../../comments/model/types"
+import { Post } from "../model/types"
 
 export interface PostsResponse {
   posts: Post[]
@@ -11,10 +12,9 @@ export interface PostsSearchResponse {
 }
 
 export interface TagsResponse {
-  tags: Array<{
-    url: string
-    slug: string
-  }>
+  name: string
+  slug: string
+  url: string
 }
 
 export interface CommentsResponse {

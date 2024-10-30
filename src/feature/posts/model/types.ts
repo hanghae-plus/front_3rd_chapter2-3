@@ -1,3 +1,5 @@
+import { User } from "../../users/model/types"
+
 export interface Post {
   id: number
   title: string
@@ -11,31 +13,7 @@ export interface Post {
   author?: User
 }
 
-export interface Comment {
+export interface UpdatePostData {
   id: number
-  body: string
-  postId: number
-  userId: number
-  likes: number
-  user: User
-}
-
-export interface User {
-  id: number
-  username: string
-  image: string
-  firstName?: string
-  lastName?: string
-  age?: number
-  email?: string
-  phone?: string
-  address?: {
-    address: string
-    city: string
-    state: string
-  }
-  company?: {
-    name: string
-    title: string
-  }
+  data: Partial<Post>
 }
