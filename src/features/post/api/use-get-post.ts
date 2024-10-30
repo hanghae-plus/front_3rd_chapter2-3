@@ -7,15 +7,9 @@ import { UseQueryPosts } from "../model/types";
 export const useQueryPosts = (queries: UseQueryPosts) => {
   const queryConfig = getQueryConfig(queries);
 
-  const postsQuery = useQuery({
-    ...queryConfig,
-    staleTime: 0,
-  });
+  const postsQuery = useQuery(queryConfig);
 
-  const usersQuery = useQuery({
-    ...userQueries.list({ select: ["username", "image"] }),
-    staleTime: 0,
-  });
+  const usersQuery = useQuery(userQueries.list({ select: ["username", "image"] }));
 
   if (!postsQuery.data || !usersQuery.data) {
     return {

@@ -16,8 +16,6 @@ export const commentQueries = {
           throw error;
         }
       },
-      select: (data) => {
-        return data.map(withDefaultLikes);
-      },
+      select: (data) => data.map(withDefaultLikes),
     }),
 };

@@ -146,6 +146,10 @@ describe("PostsManager", () => {
     const user = userEvent.setup();
     renderPostsManager();
 
+    // 셀렉트 박스 클릭
+    const selectBox = screen.getByRole("button", { name: /태그 선택/i });
+    await user.click(selectBox);
+
     // 초기 게시물들이 로드될 때까지 대기
     await waitFor(() => {
       TEST_POSTS.posts.forEach((post) => {

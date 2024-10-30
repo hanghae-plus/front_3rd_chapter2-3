@@ -3,8 +3,8 @@ import CommentInfo from "@/features/comment/ui/CommentInfo";
 import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
 import { useQueryParams } from "@/shared/model/useQueryParams";
+import { Loader } from "@/shared/ui";
 import { useQueryComments } from "../api/use-get-comment";
-import { Loader } from "lucide-react";
 
 type CommentsProps = {
   postId: number;
