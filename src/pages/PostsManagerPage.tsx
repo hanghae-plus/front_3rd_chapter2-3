@@ -357,35 +357,49 @@ const PostsManager = () => {
     </Table>
   );
 
+  const PostCommentButton = postId => {
+    const onClickPostCommentButton = () => {
+      setNewComment(prev => ({ ...prev, postId }));
+      setShowAddCommentDialog(true);
+    };
+    return (
+      <Button size="sm" onClick={() => onClickPostCommentButton}>
+        <Plus className="w-3 h-3 mr-1" />
+        댓글 추가
+      </Button>
+    );
+  };
+
   // 댓글 렌더링
   const renderComments = postId => (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
-        <Button
-          size="sm"
-          onClick={() => {
-            setNewComment(prev => ({ ...prev, postId }));
-            setShowAddCommentDialog(true);
-          }}
-        >
-          <Plus className="w-3 h-3 mr-1" />
-          댓글 추가
-        </Button>
+        <PostCommentButton postId={postId} />
       </div>
       <div className="space-y-1">{comments[postId]?.map(Comment)}</div>
     </div>
   );
+
+  const AddPostButton = () => {
+    const onClickAddPostButton = () => {
+      setShowAddDialog(true);
+    };
+
+    return (
+      <Button onClick={onClickAddPostButton}>
+        <Plus className="w-4 h-4 mr-2" />
+        게시물 추가
+      </Button>
+    );
+  };
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
+          <AddPostButton />
         </CardTitle>
       </CardHeader>
       <CardContent>
