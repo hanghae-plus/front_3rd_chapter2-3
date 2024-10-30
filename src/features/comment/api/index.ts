@@ -1,4 +1,4 @@
-import { Comment, CommentState } from '@entities/model/types'
+import { Comment, NewComment } from '@entities/model/types'
 import { api } from '@app/api'
 
 export const commentApi = {
@@ -7,7 +7,7 @@ export const commentApi = {
     return response
   },
 
-  createComment: async (comment: Omit<CommentState, 'id'>) => {
+  createComment: async (comment: Omit<NewComment, 'id'>) => {
     const response = await api.post<Comment>('/comments/add', comment)
     return response
   },
