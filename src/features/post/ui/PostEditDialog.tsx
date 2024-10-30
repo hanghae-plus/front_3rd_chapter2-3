@@ -7,9 +7,10 @@ export default function PostEditDialog() {
   const { selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePostDialog()
 
   const submitUpdatePostForm = async () => {
-    updatePost(selectedPost)
-
-    setShowEditDialog(false)
+    if (selectedPost) {
+      updatePost(selectedPost)
+      setShowEditDialog(false)
+    }
   }
 
   return (

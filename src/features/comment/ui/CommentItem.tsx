@@ -4,6 +4,7 @@ import { Edit2, ThumbsUp, Trash2 } from "lucide-react"
 import { useComments } from "../model/useComment.ts"
 import { usePostParams } from "../../post/model/usePostParams.ts"
 import { useCommentDialog } from "../model/useCommentDialog.ts"
+import { Comment } from "../../../entities/comment/model/types.ts"
 
 interface Props {
   comment: Comment

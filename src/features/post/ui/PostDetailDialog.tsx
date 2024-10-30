@@ -8,6 +8,8 @@ export default function PostDetailDialog() {
   const { selectedPost, showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
   const { searchQuery } = usePostParams()
 
+  if (!selectedPost) return
+
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
       <DialogContent className="max-w-3xl">

@@ -24,7 +24,8 @@ export const useComments = () => {
   }
 
   const likeComment = async (id: number, postId: number) => {
-    const likes = comments[postId].find((c) => c.id === id).likes + 1
+    const comment = comments[postId].find((c) => c.id === id)
+    const likes = comment ? comment.likes + 1 : 1
 
     const data = await likeCommentApi(id, likes)
 

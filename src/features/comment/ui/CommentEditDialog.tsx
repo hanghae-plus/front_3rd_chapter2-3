@@ -7,8 +7,10 @@ export default function CommentEditDialog() {
   const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } = useCommentDialog()
 
   const submitUpdateCommentForm = async () => {
-    updateComment(selectedComment)
-    setShowEditCommentDialog(false)
+    if (selectedComment) {
+      updateComment(selectedComment)
+      setShowEditCommentDialog(false)
+    }
   }
 
   return (

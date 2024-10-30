@@ -1,4 +1,4 @@
-import { NewComment } from "../model/types"
+import { NewComment, Comment } from "../model/types"
 
 export const addCommentApi = async (newComment: NewComment) => {
   try {
