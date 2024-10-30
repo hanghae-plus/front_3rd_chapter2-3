@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
+import { Edit2, Plus, Search, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "../shared/ui/button/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/Card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/Dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/Select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table/Table"
 import { Input, Textarea } from "../shared/ui/input/Text"
 import { postFetch } from "../feature/post/model/postFetch"
 import { postFetchTags } from "../entities/model/postFetchTags"
@@ -22,6 +21,7 @@ import {
   selectedPostAtom,
   searchQueryAtom,
   selectedTagAtom,
+  showUserModalAtom,
 } from "../feature/post/model/postAtoms"
 
 import {
@@ -32,11 +32,11 @@ import {
   showEditCommentDialogAtom,
 } from "../feature/comment/model/commentAtom"
 
-import { userFetch } from "../entities/model/userFetch"
 import { commentFetch } from "../feature/comment/model/commentFetch"
 import { User } from "../entities/ui/User"
 import { userAtom } from "../entities/model/atom"
-import { RenderPostTable, renderPostTable } from "../feature/post/ui/RenderPostTable"
+import { RenderPostTable } from "../feature/post/ui/RenderPostTable"
+import { RenderComments } from "../feature/comment/ui/renderingComments"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -53,11 +53,7 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState([])
 
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
-
   // jotai
-  const [user, setUser] = useAtom(userAtom)
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
   const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
   const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
@@ -71,6 +67,7 @@ const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
   const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
+  const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -192,41 +189,43 @@ const PostsManager = () => {
     }
   }
 
-  // 댓글 삭제
-  const deleteComment = async (id, postId) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
-  }
+  // // 댓글 삭제
+  // const deleteComment = async (id, postId) => {
+  //   try {
+  //     await fetch(`/api/comments/${id}`, {
+  //       method: "DELETE",
+  //     })
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [postId]: prev[postId].filter((comment) => comment.id !== id),
+  //     }))
+  //   } catch (error) {
+  //     console.error("댓글 삭제 오류:", error)
+  //   }
+  // }
 
-  // 댓글 좋아요
-  const likeComment = async (id, postId) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
-    }
-  }
+  // // 댓글 좋아요
+  // const likeComment = async (id, postId) => {
+  //   try {
+  //     const response = await fetch(`/api/comments/${id}`, {
+  //       method: "PATCH",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
+  //     })
+  //     const data = await response.json()
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+  //     }))
+  //   } catch (error) {
+  //     console.error("댓글 좋아요 오류:", error)
+  //   }
+  // }
 
   // 게시물 상세 보기
   const openPostDetail = (post) => {
+    openPostDetail
+
     setSelectedPost(post)
 
     const getComment = commentFetch(post.id)
@@ -234,15 +233,6 @@ const PostsManager = () => {
     setComments((prev) => ({ ...prev, [postId]: getComment.comments }))
     setShowPostDetailDialog(true)
   }
-
-  // 사용자 모달 열기
-  // const handleOpenUserModal = async (user) => {
-  //   const userData = await userFetch(user)
-  //   setUser(userData)
-  //   // setSelectedUser(userData)
-  //   setShowUserModal(true)
-  //   console.log("userData", userData)
-  // }
 
   // 게시물 추가
   const { addPost, updatePost, deletePost } = usePost()
@@ -263,19 +253,6 @@ const PostsManager = () => {
 
     setPosts(posts.map((post) => (post.id === updateResponse.id ? updateResponse : post)))
     setShowEditDialog(false)
-  }
-
-  // 게시물 삭제
-  const handleDeletePost = async (postId) => {
-    const deleteResponse = await deletePost(postId)
-    setPosts(posts.filter((post) => post.id !== postId))
-
-    if (!deleteResponse) {
-      alert("삭제 오류")
-      return
-    }
-
-    alert("삭제 완료")
   }
 
   useEffect(() => {
@@ -320,89 +297,6 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
-
-  // 게시물 테이블 렌더링
-  // const renderPostTable = () => (
-  //   <Table>
-  //     <TableHeader>
-  //       <TableRow>
-  //         <TableHead className="w-[50px]">ID</TableHead>
-  //         <TableHead>제목</TableHead>
-  //         <TableHead className="w-[150px]">작성자</TableHead>
-  //         <TableHead className="w-[150px]">반응</TableHead>
-  //         <TableHead className="w-[150px]">작업</TableHead>
-  //       </TableRow>
-  //     </TableHeader>
-  //     <TableBody>
-  //       {posts.map((post) => (
-  //         <TableRow key={post.id}>
-  //           <TableCell>{post.id}</TableCell>
-  //           <TableCell>
-  //             <div className="space-y-1">
-  //               <div>{highlightText(post.title, searchQuery)}</div>
-
-  //               <div className="flex flex-wrap gap-1">
-  //                 {post.tags.map((tag) => (
-  //                   <span
-  //                     key={tag}
-  //                     className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-  //                       selectedTag === tag
-  //                         ? "text-white bg-blue-500 hover:bg-blue-600"
-  //                         : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-  //                     }`}
-  //                     onClick={() => {
-  //                       setSelectedTag(tag)
-  //                       updateURL()
-  //                     }}
-  //                   >
-  //                     {tag}
-  //                   </span>
-  //                 ))}
-  //               </div>
-  //             </div>
-  //           </TableCell>
-  //           <TableCell>
-  //             <div
-  //               className="flex items-center space-x-2 cursor-pointer"
-  //               onClick={() => handleOpenUserModal(post.author)}
-  //             >
-  //               <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-  //               <span>{post.author?.username}</span>
-  //             </div>
-  //           </TableCell>
-  //           <TableCell>
-  //             <div className="flex items-center gap-2">
-  //               <ThumbsUp className="w-4 h-4" />
-  //               <span>{post.reactions?.likes || 0}</span>
-  //               <ThumbsDown className="w-4 h-4" />
-  //               <span>{post.reactions?.dislikes || 0}</span>
-  //             </div>
-  //           </TableCell>
-  //           <TableCell>
-  //             <div className="flex items-center gap-2">
-  //               <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-  //                 <MessageSquare className="w-4 h-4" />
-  //               </Button>
-  //               <Button
-  //                 variant="ghost"
-  //                 size="sm"
-  //                 onClick={() => {
-  //                   setSelectedPost(post)
-  //                   setShowEditDialog(true)
-  //                 }}
-  //               >
-  //                 <Edit2 className="w-4 h-4" />
-  //               </Button>
-  //               <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
-  //                 <Trash2 className="w-4 h-4" />
-  //               </Button>
-  //             </div>
-  //           </TableCell>
-  //         </TableRow>
-  //       ))}
-  //     </TableBody>
-  //   </Table>
-  // )
 
   // 댓글 렌더링
   const renderComments = (postId) => (
@@ -648,7 +542,7 @@ const PostsManager = () => {
           </DialogHeader>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
+            {<RenderComments postId={selectedPost?.id} />}
           </div>
         </DialogContent>
       </Dialog>

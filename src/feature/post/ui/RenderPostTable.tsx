@@ -11,6 +11,7 @@ import {
   showPostDetailDialogAtom,
   showUserModalAtom,
 } from "../model/postAtoms"
+
 import { useAtom } from "jotai"
 import { useUpdateURL } from "../../../shared/model/urlUtils"
 import { userFetch } from "../../../entities/model/userFetch"
@@ -32,7 +33,7 @@ export const RenderPostTable = () => {
 
   const updateURL = useUpdateURL()
 
-  const { addPost, updatePost, deletePost } = usePost()
+  const { updatePost, deletePost } = usePost()
 
   const handleTagClick = (tag) => {
     setSelectedTag(tag)
@@ -42,6 +43,7 @@ export const RenderPostTable = () => {
   const handleOpenUserModal = async (userId) => {
     try {
       const userData = await userFetch(userId)
+
       setUser(userData)
       setShowUserModal(true)
     } catch (error) {
@@ -60,14 +62,12 @@ export const RenderPostTable = () => {
     }
   }
 
-  const handleOpenPostUpdate = async (post) => {
-    try {
-      const updateResponse = await updatePost(post)
-      setSelectedPost(updateResponse)
-      setShowEditDialog(true)
-    } catch (error) {
-      console.error("게시글 업데이트 중 오류 발생:", error)
-    }
+  // 게시물 업데이트
+  const handleOpenPostUpdateModal = async () => {
+    const updateResponse = await updatePost(selectedPost)
+
+    setPosts(posts.map((post) => (post.id === updateResponse.id ? updateResponse : post)))
+    setShowEditDialog(false)
   }
 
   const handleDeletePost = async (postId) => {
@@ -123,7 +123,7 @@ export const RenderPostTable = () => {
             <TableCell>
               <div
                 className="flex items-center space-x-2 cursor-pointer"
-                onClick={() => handleOpenUserModal(post.author.id)} // user가 아니라 user.id로 변경
+                onClick={() => handleOpenUserModal(post.author.id)}
               >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
@@ -142,7 +142,7 @@ export const RenderPostTable = () => {
                 <Button variant="ghost" size="sm" onClick={() => handleOpenPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => handleOpenPostUpdate(post)}>
+                <Button variant="ghost" size="sm" onClick={() => handleOpenPostUpdateModal(post)}>
                   <Edit2 className="w-4 h-4" />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>

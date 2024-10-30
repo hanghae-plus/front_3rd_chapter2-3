@@ -1,6 +1,5 @@
 import { useCallback } from "react"
 import { Post } from "./postType"
-import { commentFetch } from "../../comment/model/commentFetch"
 
 export const usePost = () => {
   // 게시물 추가
