@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 import {
   Button,
@@ -24,11 +23,13 @@ import {
   TableRow,
   Textarea,
 } from '../shared/ui'
-import { Comment, CommentState, Post, User } from '@entities/model/types'
+import { Post, User } from '@entities/model/types'
 import { usePosts, useUrlSync } from '@features/post/model/hooks'
 import { useTags } from '@features/tag/model/hooks'
 import { useComments } from '@features/comment/model/hooks'
-import { useFilterStore } from '@features/post/model/stores'
+import { filterStore, postStore } from '@features/post/model/stores'
+import { commentStore } from '@features/comment/model/stores'
+import { userStore } from '@features/user/model/stores'
 
 const PostsManager = () => {
   const {
@@ -44,20 +45,34 @@ const PostsManager = () => {
     setSkip,
     setSearchQuery,
     setSelectedTag,
-  } = useFilterStore()
+  } = filterStore()
   useUrlSync()
 
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: '', body: '', userId: 1 })
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [newComment, setNewComment] = useState<CommentState>({ body: '', postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const {
+    newPost,
+    selectedPost,
+    showAddDialog,
+    showEditDialog,
+    showPostDetailDialog,
+    setNewPost,
+    setSelectedPost,
+    setShowAddDialog,
+    setShowEditDialog,
+    setShowPostDetailDialog,
+  } = postStore()
+
+  const {
+    newComment,
+    showAddCommentDialog,
+    showEditCommentDialog,
+    selectedComment,
+    setNewComment,
+    setShowAddCommentDialog,
+    setShowEditCommentDialog,
+    setSelectedComment,
+  } = commentStore()
+
+  const { selectedUser, showUserModal, setSelectedUser, setShowUserModal } = userStore()
 
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {
@@ -228,7 +243,7 @@ const PostsManager = () => {
         <Button
           size="sm"
           onClick={() => {
-            setNewComment((prev) => ({ ...prev, postId }))
+            setNewComment({ ...newComment, postId })
             setShowAddCommentDialog(true)
           }}
         >

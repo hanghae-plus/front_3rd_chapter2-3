@@ -16,11 +16,10 @@ interface FilterAction {
   setSkip: (skip: number) => void
   setSearchQuery: (query: string) => void
   setSelectedTag: (tag: string) => void
-  initializeFromURL: (searchParams: URLSearchParams) => void
   updateURL: (navigate: (path: string) => void) => void
 }
 
-export const useFilterStore = create<FilterState & FilterAction>((set, get) => ({
+export const filterStore = create<FilterState & FilterAction>((set, get) => ({
   sortBy: '',
   sortOrder: 'asc',
   limit: 10,
@@ -35,16 +34,6 @@ export const useFilterStore = create<FilterState & FilterAction>((set, get) => (
   setSkip: (skip) => set({ skip }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
   setSelectedTag: (selectedTag) => set({ selectedTag }),
-  initializeFromURL: (searchParams) => {
-    set({
-      sortBy: searchParams.get('sortBy') || '',
-      sortOrder: (searchParams.get('sortOrder') || 'asc') as 'asc' | 'desc',
-      limit: parseInt(searchParams.get('limit') || '10'),
-      skip: parseInt(searchParams.get('skip') || '0'),
-      searchQuery: searchParams.get('search') || '',
-      selectedTag: searchParams.get('tag') || '',
-    })
-  },
 
   updateURL: (navigate) => {
     const state = get()

@@ -51,17 +51,11 @@ export interface Comment {
   user: User
 }
 
-export interface PostState {
-  title: string
-  body: string
-  userId: number
-}
-
 export interface CommentsState {
   [key: number]: Comment[]
 }
 
-export interface CommentState {
+export interface NewComment {
   body: string
   postId: number | null
   userId: number
@@ -73,20 +67,11 @@ export interface Tag {
   url: string
 }
 
-export interface PostState {
+export interface NewPost {
   title: string
   body: string
   userId: number
 }
-
-// export interface FilterState {
-//   sortBy?: string
-//   sortOrder?: string
-//   limit: number
-//   skip: number
-//   tag: string
-//   searchQuery?: string
-// }
 
 export interface FilterState {
   sortBy: string

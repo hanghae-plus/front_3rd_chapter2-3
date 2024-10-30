@@ -1,4 +1,4 @@
-import { Post, PostState, Tag, User } from '@entities/model/types'
+import { Post, NewPost, Tag, User } from '@entities/model/types'
 import { api } from '@app/api'
 
 export interface PostsResponse {
@@ -21,7 +21,7 @@ export const postApi = {
     return await api.get<PostsResponse>(`/posts/search?q=${query}`)
   },
 
-  createPost: async (post: PostState) => {
+  createPost: async (post: NewPost) => {
     return await api.post<Post>('/posts/add', post)
   },
 
