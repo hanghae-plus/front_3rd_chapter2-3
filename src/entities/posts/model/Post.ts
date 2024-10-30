@@ -43,3 +43,9 @@ export interface SelectedPost {
   views: number
   author?: Author
 }
+
+export interface NewPost {
+  title: string
+  body: string
+  userId: number
+}
