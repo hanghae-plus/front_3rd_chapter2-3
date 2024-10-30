@@ -28,6 +28,7 @@ import PostTable from "../widgets/post/PostTable.tsx"
 import { usePostParams } from "../features/post/model/usePostParams.ts"
 import PostAddDialog from "../features/post/ui/PostAddDialog.tsx"
 import PostEditDialog from "../features/post/ui/PostEditDialog.tsx"
+import PostDetailDialog from "../features/post/ui/PostDetailDialog.tsx"
 
 const PostsManager = () => {
   const { total, getPosts, searchPostsWithQuery } = usePosts()
@@ -103,8 +104,6 @@ const PostsManager = () => {
     updateComment(selectedComment)
     setShowEditCommentDialog(false)
   }
-
-  // 게시물 상세 보기
 
   useEffect(() => {
     if (selectedTag) {
@@ -300,18 +299,7 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <PostDetailDialog />
 
       {/* 사용자 모달 */}
       <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
