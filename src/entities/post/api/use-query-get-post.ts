@@ -36,7 +36,7 @@ const fetchPostList = async (userList: UserType[]) => {
 const postListWithUser = (postList: PostType[], userList: UserType[]) => {
   return postList.map(post => ({
     ...post,
-    author: userList.find(user => user.id === post.userId) ?? {
+    author: (userList ?? []).find(user => user.id === post.userId) ?? {
       id: 0,
       image: "",
       username: "",

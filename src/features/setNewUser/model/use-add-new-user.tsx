@@ -9,7 +9,7 @@ export function useAddNewUser() {
 
   const searchTagList = async () => {
     const userList = await refetch();
-    setNewUserList(userList.data ?? []);
+    setNewUserList(userList.data?.users ?? []);
   };
 
   useEffect(() => {

@@ -2,6 +2,13 @@ import apiRequest from "@/shared/api";
 import { useQuery } from "@tanstack/react-query";
 import { UserType } from "../model/user-type";
 
+interface FetchUserType {
+  limit: number;
+  skip: number;
+  total: number;
+  users: UserType[];
+}
+
 const fetchUserList = async () => {
   try {
     const res = await apiRequest.get("/api/users?limit=0&select=username,image");
@@ -13,7 +20,7 @@ const fetchUserList = async () => {
 };
 
 export const useQueryUserList = () => {
-  return useQuery<UserType[]>({
+  return useQuery<FetchUserType>({
     queryKey: ["get-user-list"],
     queryFn: () => fetchUserList(),
   });
