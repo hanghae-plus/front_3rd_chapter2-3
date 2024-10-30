@@ -1,5 +1,5 @@
-import { commentsApi } from "../api/commentsApi"
-import { postsApi } from "../api/postsApi"
+import { commentsApi } from "../api/comments.api"
+import { postsApi } from "../api/posts.api"
 import { usersApi } from "../api/userApi"
 import { Comment, Post, User } from "./types"
 import { create } from "zustand"

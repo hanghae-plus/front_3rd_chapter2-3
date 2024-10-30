@@ -1,2 +1,2 @@
-export * from "./model/store"
+export * from "./model/posts.store"
 export * from "./model/types"
