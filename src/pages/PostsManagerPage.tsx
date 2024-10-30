@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/Card";
 import { Button } from "../shared/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/Table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/Select";
+import { highlightText } from "../shared/lib/highlightText";
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -321,25 +322,6 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc");
     setSelectedTag(params.get("tag") || "");
   }, [location.search]);
-
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) {
-      return null;
-    }
-    if (!highlight.trim()) {
-      return <span>{text}</span>;
-    }
-    const regex = new RegExp(`(${highlight})`, "gi");
-    const parts = text.split(regex);
-    return (
-      <span>
-        {parts.map((part, i) =>
-          regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>,
-        )}
-      </span>
-    );
-  };
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
