@@ -1,6 +1,12 @@
 import { userQueries } from "@/entities/user/api/user-queries";
-import { useQuery } from "@tanstack/react-query";
+import { User } from "@/entities/user/model/types";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
-export const useGetUser = (id: number) => {
-  return useQuery(userQueries.detail({ id }));
+type UseGetUserProps = {
+  id: number;
+  options?: Omit<UseQueryOptions<User>, "queryKey" | "queryFn">;
+};
+
+export const useGetUser = ({ id, options }: UseGetUserProps) => {
+  return useQuery(userQueries.detail({ id, options }));
 };

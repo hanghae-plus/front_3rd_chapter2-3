@@ -1,7 +1,7 @@
 import { User } from "@/entities/user/model/types";
 
 type UserInfoProps = {
-  selectedUser: User | null;
+  selectedUser?: User;
 };
 
 const UserInfo = ({ selectedUser }: UserInfoProps) => {
