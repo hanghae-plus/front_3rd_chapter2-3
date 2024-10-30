@@ -1,27 +1,16 @@
-import { postCommentFetch } from "../../entities/comment/api"
+import useMutationAddComment from "../../features/comment/api/useMutationAddComment"
 import { useComment } from "../../features/comment/model/useComment"
-import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
 import { Button } from "../../shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { Textarea } from "../../shared/ui/textarea/Textarea"
 
 const AddCommentDialog = () => {
-  const { setComments, newComment, setNewComment } = useComment()
-  const { showAddCommentDialog, setShowAddCommentDialog } = useCommentDialog()
+  const { newComment, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useComment()
+  const { mutate: mutateAddComment } = useMutationAddComment()
 
   // 댓글 추가
-  const addComment = async () => {
-    try {
-      const data = await postCommentFetch(newComment)
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-      setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
-    } catch (error) {
-      console.error("댓글 추가 오류:", error)
-    }
+  const handleAddComment = () => {
+    mutateAddComment()
   }
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
@@ -35,7 +24,7 @@ const AddCommentDialog = () => {
             value={newComment.body}
             onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
           />
-          <Button onClick={addComment}>댓글 추가</Button>
+          <Button onClick={handleAddComment}>댓글 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

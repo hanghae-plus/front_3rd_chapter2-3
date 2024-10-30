@@ -33,6 +33,7 @@ const PostTable = ({
   const { selectedTag, setSelectedTag } = useTag()
 
   // 게시물 상세 보기
+  //? openPostDetail에서 useQuery 를 사용해 jotai에 업데이트를 하려고 할때 문제가 생김. 일단 이곳은 패치로 해놓을 예정
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     fetchComments({ postId: post.id, comments, setComments })

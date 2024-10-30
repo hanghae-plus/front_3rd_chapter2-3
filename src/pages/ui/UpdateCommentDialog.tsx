@@ -4,12 +4,11 @@ import { Textarea } from "../../shared/ui/textarea/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { useComment } from "../../features/comment/model/useComment"
 import { Comment } from "../../features/comment/model/types"
-import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
 import { putCommentFetch } from "../../entities/comment/api"
 
 const UpdateCommentDialog = () => {
-  const { setComments, selectedComment, setSelectedComment } = useComment()
-  const { showEditCommentDialog, setShowEditCommentDialog } = useCommentDialog()
+  const { setComments, selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } =
+    useComment()
 
   // 댓글 업데이트
   const updateComment = async () => {

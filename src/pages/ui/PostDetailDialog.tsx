@@ -4,7 +4,6 @@ import { Button } from "../../shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
 import { usePost } from "../../features/post/model/usePost"
 import { useComment } from "../../features/comment/model/useComment"
-import { useCommentDialog } from "../../features/comment/model/useCommentDialog"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
 import { deleteCommentFetch, patchCommentFetch } from "../../entities/comment/api"
 
@@ -14,8 +13,14 @@ interface Props {
 
 const PostDetailDialog = ({ searchQuery }: Props) => {
   const { selectedPost } = usePost()
-  const { comments, setComments, setSelectedComment, setNewComment } = useComment()
-  const { setShowAddCommentDialog, setShowEditCommentDialog } = useCommentDialog()
+  const {
+    comments,
+    setComments,
+    setSelectedComment,
+    setNewComment,
+    setShowAddCommentDialog,
+    setShowEditCommentDialog,
+  } = useComment()
   const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
 
   // 댓글 삭제
