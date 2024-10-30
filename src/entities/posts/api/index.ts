@@ -12,7 +12,7 @@ export const searchPosts = async (keyword: string) => {
   return response.data
 }
 
-export const fetchPostsByTag = async (tag: string) => {
+export const fetchPostsByTag = async (tag: string): Promise<ListResponse<Post, "posts">> => {
   const response = await instance.get(`/posts/tag/${tag}`)
   return response.data
 }

@@ -1,4 +1,5 @@
-export interface ListResponse<T, K extends string> {
-  K: T[]
+export type ListResponse<T, K extends string> = {
+  [key in K]: T[]
+} & {
   total: number
 }

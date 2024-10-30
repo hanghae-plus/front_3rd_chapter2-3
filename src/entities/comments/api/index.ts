@@ -1,7 +1,8 @@
 import { instance } from "../../../shared/api"
+import { ListResponse } from "../../../shared/model/types"
 import { Comment, CommentLikeUpdate, CommentPayload } from "../model/types"
 
-export const fetchComments = async (postId: number) => {
+export const fetchComments = async (postId: number): Promise<ListResponse<Comment, "comments">> => {
   const response = await instance.get(`/comments/post/${postId}`)
   return response.data
 }
@@ -21,7 +22,7 @@ export const deleteComment = async (id: number) => {
   return response.data
 }
 
-export const likeComment = async (id: number, payload: CommentLikeUpdate) => {
-  const response = await instance.patch(`/comments/${id}`, payload)
+export const likeComment = async (payload: CommentLikeUpdate) => {
+  const response = await instance.patch(`/comments/${payload.id}`, payload)
   return response.data
 }
