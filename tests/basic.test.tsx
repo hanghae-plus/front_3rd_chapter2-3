@@ -9,7 +9,6 @@ import "@testing-library/jest-dom";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
 import PostsManager from "../src/pages/PostsManagerPage";
 import { PostProvider } from "../src/feature/post/model/PostContext";
-import { CommentProvider } from "../src/feature/comment/model/CommentContext";
 
 // MSW 서버 설정
 const server = setupServer(
@@ -50,9 +49,7 @@ const renderPostsManager = () => {
   return render(
     <MemoryRouter>
       <PostProvider>
-        <CommentProvider>
-          <PostsManager />
-        </CommentProvider>
+        <PostsManager />
       </PostProvider>
     </MemoryRouter>,
   );

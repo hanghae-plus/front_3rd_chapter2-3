@@ -1,10 +1,10 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
-import { useCommentContext } from "../model/CommentContext.tsx";
 import { putExistingComment } from "../../../entities/comment/api";
+import { useComment } from "../model";
 
 export const EditCommentDialog = () => {
   const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog, setComments } =
-    useCommentContext();
+    useComment();
 
   const updateComment = async () => {
     if (selectedComment) {

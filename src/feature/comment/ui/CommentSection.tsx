@@ -1,9 +1,9 @@
 import { Button, HighlightText } from "../../../shared/ui";
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
-import { useCommentContext } from "../model/CommentContext.tsx";
 import { usePostContext } from "../../post/model/PostContext.tsx";
 import { Comments } from "../../../entities/comment/model/types.ts";
 import { deleteExistingComment, patchLikeComment } from "../../../entities/comment/api";
+import { useComment } from "../model";
 
 interface CommentSectionProps {
   postId: number;
@@ -17,7 +17,7 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
     setShowAddCommentDialog,
     setShowEditCommentDialog,
     setComments,
-  } = useCommentContext();
+  } = useComment();
 
   const { searchQuery } = usePostContext();
 

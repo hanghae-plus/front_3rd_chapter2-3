@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
-import { useCommentContext } from "../model/CommentContext.tsx";
 import { postNewComment } from "../../../entities/comment/api";
+import { useComment } from "../model";
 
 export const AddCommentDialog = () => {
-  const { newComment, setComments, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useCommentContext();
+  const { newComment, setComments, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useComment();
 
   const handeAddComment = async () => {
     const data = await postNewComment(newComment);

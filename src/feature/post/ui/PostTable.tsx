@@ -14,10 +14,10 @@ import { Post } from "../../../entities/post/model/types.ts";
 import { deleteExistingPost } from "../../../entities/post/api";
 import { User } from "../../../entities/user/model/types.ts";
 import { getUserInfo } from "../../../entities/user/api";
-import { useCommentContext } from "../../comment/model/CommentContext.tsx";
 import { getComments } from "../../../entities/comment/api";
 import { usePostContext } from "../model/PostContext.tsx";
 import { useQueryParams } from "../model";
+import { useComment } from "../../comment/model";
 
 export const PostTable = () => {
   const {
@@ -31,7 +31,7 @@ export const PostTable = () => {
     setPosts,
   } = usePostContext();
 
-  const { comments, setComments } = useCommentContext();
+  const { comments, setComments } = useComment();
   const { setQueryParams } = useQueryParams();
 
   const { setShowUserModal, setSelectedUser } = useUser();
