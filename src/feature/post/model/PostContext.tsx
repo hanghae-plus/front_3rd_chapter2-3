@@ -1,7 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { getPosts, getPostsByTag, getSearchPosts, getTags } from "../../../entities/post/api";
+import React, { createContext, useContext, useState } from "react";
 import { NewPost, Post, Tag } from "../../../entities/post/model/types.ts";
-import { User } from "../../../entities/user/model/types.ts";
 import { useQueryParams } from "./useQueryParams.ts";
 
 interface PostContextProps {
@@ -19,9 +17,9 @@ interface PostContextProps {
   searchQuery: string;
   sortBy: string;
   sortOrder: string;
-  fetchPosts: () => void;
-  fetchPostsByTag: (tag: string) => void;
-  fetchTags: () => void;
+  setLoading: (loading: boolean) => void;
+  setTags: (tags: Tag[]) => void;
+  setTotal: (total: number) => void;
   setPosts: (post: Post[]) => void;
   setSkip: (value: number) => void;
   setLimit: (value: number) => void;
@@ -33,7 +31,6 @@ interface PostContextProps {
   setNewPost: (post: NewPost) => void;
   setShowAddDialog: (value: boolean) => void;
   setShowEditDialog: (value: boolean) => void;
-  searchPosts: () => void;
   showPostDetailDialog: boolean;
   setShowPostDetailDialog: (showPostDetailDialog: boolean) => void;
 }
@@ -53,93 +50,15 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [tags, setTags] = useState<Tag[]>([]);
   const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false);
 
-  const fetchPosts = async () => {
-    setLoading(true);
-
-    const response = await getPosts(queryParams.limit, queryParams.skip);
-
-    if (response) {
-      const { postsData, usersData } = response;
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }));
-
-      setPosts(postsWithUsers);
-      setTotal(postsData.total);
-    }
-
-    setLoading(false);
-  };
-
-  const searchPosts = async () => {
-    if (!queryParams.searchQuery) {
-      await fetchPosts();
-      return;
-    }
-
-    setLoading(true);
-
-    const data = await getSearchPosts(queryParams.searchQuery);
-
-    if (data) {
-      setPosts(data.posts);
-      setTotal(data.total);
-    }
-
-    setLoading(false);
-  };
-
-  const fetchPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      await fetchPosts();
-      return;
-    }
-
-    setLoading(true);
-
-    const data = await getPostsByTag(tag);
-
-    if (data) {
-      const { postsData, usersData } = data;
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }));
-
-      setPosts(postsWithUsers);
-      setTotal(postsData.total);
-    }
-
-    setLoading(false);
-  };
-
-  const fetchTags = async () => {
-    const data = await getTags();
-    if (data) setTags(data);
-  };
-
-  useEffect(() => {
-    fetchTags();
-  }, []);
-
-  useEffect(() => {
-    if (queryParams.selectedTag) {
-      fetchPostsByTag(queryParams.selectedTag);
-    } else {
-      fetchPosts();
-    }
-  }, [queryParams.skip, queryParams.limit, queryParams.sortBy, queryParams.sortOrder, queryParams.selectedTag]);
-
   return (
     <PostContext.Provider
       value={{
         posts,
         total,
         loading,
+        setLoading,
         tags,
+        setTags,
         selectedTag: queryParams.selectedTag,
         selectedPost,
         newPost,
@@ -152,9 +71,6 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sortOrder: queryParams.sortOrder,
         showPostDetailDialog,
         setShowPostDetailDialog,
-        fetchPosts,
-        fetchPostsByTag,
-        fetchTags,
         setPosts,
         setSkip: (value) => setQueryParams({ skip: value }),
         setLimit: (value) => setQueryParams({ limit: value }),
@@ -166,7 +82,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setNewPost,
         setShowAddDialog,
         setShowEditDialog,
-        searchPosts,
+        setTotal,
       }}
     >
       {children}

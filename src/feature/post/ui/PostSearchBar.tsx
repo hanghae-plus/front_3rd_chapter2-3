@@ -2,23 +2,99 @@ import { Search } from "lucide-react";
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
 import { usePostContext } from "../model/PostContext.tsx";
 import { useQueryParams } from "../model";
+import { getPosts, getPostsByTag, getSearchPosts } from "../../../entities/post/api";
+import { Post } from "../../../entities/post/model/types.ts";
+import { User } from "../../../entities/user/model/types.ts";
+import { useEffect } from "react";
 
 export const PostSearchBar = () => {
   const {
     selectedTag,
     tags,
     setSelectedTag,
-    fetchPostsByTag,
     sortBy,
     sortOrder,
     setSortOrder,
     setSortBy,
     searchQuery,
     setSearchQuery,
-    searchPosts,
+    setPosts,
+    setTotal,
+    setLoading,
   } = usePostContext();
 
-  const { setQueryParams } = useQueryParams();
+  const { setQueryParams, queryParams } = useQueryParams();
+
+  const fetchPostsByTag = async (tag: string) => {
+    if (!tag || tag === "all") {
+      await fetchPosts();
+      return;
+    }
+
+    setLoading(true);
+
+    const data = await getPostsByTag(tag);
+
+    if (data) {
+      const { postsData, usersData } = data;
+
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
+        ...post,
+        author: usersData.users.find((user: User) => user.id === post.userId),
+      }));
+
+      setPosts(postsWithUsers);
+      setTotal(postsData.total);
+    }
+
+    setLoading(false);
+  };
+
+  const fetchPosts = async () => {
+    setLoading(true);
+
+    const response = await getPosts(queryParams.limit, queryParams.skip);
+
+    if (response) {
+      const { postsData, usersData } = response;
+
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
+        ...post,
+        author: usersData.users.find((user: User) => user.id === post.userId),
+      }));
+
+      setPosts(postsWithUsers);
+      setTotal(postsData.total);
+    }
+
+    setLoading(false);
+  };
+
+  const handleEnterKeyPress = async () => {
+    if (!queryParams.searchQuery) {
+      fetchPosts();
+      return;
+    }
+
+    setLoading(true);
+
+    const data = await getSearchPosts(queryParams.searchQuery);
+
+    if (data) {
+      setPosts(data.posts);
+      setTotal(data.total);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (queryParams.selectedTag) {
+      fetchPostsByTag(queryParams.selectedTag);
+    } else {
+      fetchPosts();
+    }
+  }, [queryParams.skip, queryParams.limit, queryParams.sortBy, queryParams.sortOrder, queryParams.selectedTag]);
 
   return (
     <div className="flex gap-4">
@@ -30,7 +106,7 @@ export const PostSearchBar = () => {
             className="pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+            onKeyPress={(e) => e.key === "Enter" && handleEnterKeyPress()}
           />
         </div>
       </div>
