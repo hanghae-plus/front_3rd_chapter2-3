@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table"
 import { Button } from "../shared/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
@@ -33,11 +33,10 @@ import {
   showUserModalAtom,
   selectedUserAtom,
 } from "../app/atom"
+import { Post, User } from "../app/type"
 
 const PostsManager = () => {
   const navigate = useNavigate()
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
 
@@ -45,7 +44,6 @@ const PostsManager = () => {
   const [loading, setLoading] = useAtom(loadingAtom)
   const [total, setTotal] = useAtom(totalAtom)
   const [comments, setComments] = useAtom(commentsAtom)
-  // const [error, setError] = useAtom(errorAtom);
   const [skip, setSkip] = useAtom(skipAtom)
   const [limit, setLimit] = useAtom(limitAtom)
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
@@ -86,9 +84,9 @@ const PostsManager = () => {
       const usersResponse = await fetch("/api/users?limit=0&select=username,image")
       const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post) => ({
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.users.find((user: User) => user.id === post.userId),
       }))
 
       setPosts(postsWithUsers)
@@ -132,7 +130,7 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
+  const fetchPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
       fetchPosts()
       return
@@ -148,9 +146,9 @@ const PostsManager = () => {
       const postsData = await postsResponse.json()
       const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post) => ({
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.users.find((user: User) => user.id === post.userId),
       }))
 
       setPosts(postsWithUsers)
@@ -179,15 +177,33 @@ const PostsManager = () => {
     }
   }
 
+  // // 게시물 업데이트
+  // const updatePost = async () => {
+  //   try {
+  //     const response = await fetch(`/api/posts/${selectedPost.id}`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(selectedPost),
+  //     })
+  //     const data = await response.json()
+  //     setPosts(posts.map((post) => (post.id === data.id ? data : post)))
+  //     setShowEditDialog(false)
+  //   } catch (error) {
+  //     console.error("게시물 업데이트 오류:", error)
+  //   }
+  // }
+
   // 게시물 업데이트
   const updatePost = async () => {
+    if (!selectedPost) return // Ensure selectedPost is not null
+
     try {
       const response = await fetch(`/api/posts/${selectedPost.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(selectedPost),
       })
-      const data = await response.json()
+      const data: Post = await response.json()
       setPosts(posts.map((post) => (post.id === data.id ? data : post)))
       setShowEditDialog(false)
     } catch (error) {
@@ -196,7 +212,7 @@ const PostsManager = () => {
   }
 
   // 게시물 삭제
-  const deletePost = async (id) => {
+  const deletePost = async (id: number) => {
     try {
       await fetch(`/api/posts/${id}`, {
         method: "DELETE",
@@ -208,7 +224,7 @@ const PostsManager = () => {
   }
 
   // 댓글 가져오기
-  const fetchComments = async (postId) => {
+  const fetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
       const response = await fetch(`/api/comments/post/${postId}`)
@@ -241,6 +257,8 @@ const PostsManager = () => {
 
   // 댓글 업데이트
   const updateComment = async () => {
+    if (!selectedComment) return
+
     try {
       const response = await fetch(`/api/comments/${selectedComment.id}`, {
         method: "PUT",
@@ -259,7 +277,7 @@ const PostsManager = () => {
   }
 
   // 댓글 삭제
-  const deleteComment = async (id, postId) => {
+  const deleteComment = async (id: number, postId: number) => {
     try {
       await fetch(`/api/comments/${id}`, {
         method: "DELETE",
@@ -274,17 +292,24 @@ const PostsManager = () => {
   }
 
   // 댓글 좋아요
-  const likeComment = async (id, postId) => {
+  const likeComment = async (id: number, postId: number) => {
     try {
+      const comment = comments[postId]?.find((c) => c.id === id)
+      if (!comment) {
+        console.error("댓글을 찾을 수 없습니다.")
+        return
+      }
+
       const response = await fetch(`/api/comments/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
+        body: JSON.stringify({ likes: comment.likes + 1 }),
       })
+
       const data = await response.json()
       setComments((prev) => ({
         ...prev,
-        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+        [postId]: prev[postId]?.map((comment) => (comment.id === data.id ? data : comment)) || [],
       }))
     } catch (error) {
       console.error("댓글 좋아요 오류:", error)
@@ -292,14 +317,14 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
+  const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
+  const openUserModal = async (user: User) => {
     try {
       const response = await fetch(`/api/users/${user.id}`)
       const userData = await response.json()

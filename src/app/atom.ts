@@ -1,41 +1,44 @@
 import { atom } from "jotai"
+import { Comments, Post, User } from "./type"
 
-export interface Post {
-  id: string
-  title: string
-  content: string
-  author: string
-  createdAt: Date
-}
+// export interface Post {
+//   id: string
+//   title: string
+//   content: string
+//   author: string
+//   createdAt: Date
+// }
 
-interface UserAddress {
-  address: string
-  city: string
-  state: string
-}
+// interface UserAddress {
+//   address: string
+//   city: string
+//   state: string
+// }
 
-interface UserCompany {
-  name: string
-  title: string
-}
+// interface UserCompany {
+//   name: string
+//   title: string
+// }
 
-interface User {
-  image: string
-  username: string
-  firstName: string
-  lastName: string
-  age: number
-  email: string
-  phone: string
-  address: UserAddress
-  company: UserCompany
-}
+// interface User {
+//   image: string
+//   username: string
+//   firstName: string
+//   lastName: string
+//   age: number
+//   email: string
+//   phone: string
+//   address: UserAddress
+//   company: UserCompany
+// }
 
 // 게시물 상태
-export const postsAtom = atom([])
+// export const postsAtom = atom([])
+export const postsAtom = atom<Post[]>([])
 export const loadingAtom = atom(false)
 export const totalAtom = atom(0)
-export const commentsAtom = atom({})
+// export const commentsAtom = atom({})
+export const commentsAtom = atom<Comments>({})
 export const errorAtom = atom<string | null>(null)
 export const skipAtom = atom<number>(0)
 export const limitAtom = atom<number>(10)
