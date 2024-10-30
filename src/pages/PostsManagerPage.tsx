@@ -31,20 +31,14 @@ import PostDetailDialog from "../features/post/ui/PostDetailDialog.tsx"
 import UserDetailDialog from "../features/user/ui/UserDetailDialog.tsx"
 import CommentAddDialog from "../features/comment/ui/CommentAddDialog.tsx"
 import { useCommentDialog } from "../features/comment/model/useCommentDialog.ts"
+import CommentEditDialog from "../features/comment/ui/CommentEditDialog.tsx"
 
 const PostsManager = () => {
   const { total, getPosts, searchPostsWithQuery } = usePosts()
   const { setShowAddDialog } = usePostDialog()
   const { tags } = useTags()
-  const { comments, updateComment, deleteComment, likeComment } = useComments()
-  const {
-    selectedComment,
-    setSelectedComment,
-    setNewComment,
-    setShowAddCommentDialog,
-    showEditCommentDialog,
-    setShowEditCommentDialog,
-  } = useCommentDialog()
+  const { comments, deleteComment, likeComment } = useComments()
+  const { setSelectedComment, setNewComment, setShowAddCommentDialog, setShowEditCommentDialog } = useCommentDialog()
   const {
     limit,
     setLimit,
@@ -93,12 +87,6 @@ const PostsManager = () => {
     setLoading(true)
     getPosts(limit, skip, tag)
     setLoading(false)
-  }
-
-  // 댓글 업데이트
-  const submitUpdateCommentForm = async () => {
-    updateComment(selectedComment)
-    setShowEditCommentDialog(false)
   }
 
   useEffect(() => {
@@ -260,27 +248,11 @@ const PostsManager = () => {
 
       <PostAddDialog />
       <PostEditDialog />
+      <PostDetailDialog />
 
       <CommentAddDialog />
+      <CommentEditDialog />
 
-      {/* 댓글 수정 대화상자 */}
-      <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
-            />
-            <Button onClick={submitUpdateCommentForm}>댓글 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <PostDetailDialog />
       <UserDetailDialog />
     </Card>
   )
