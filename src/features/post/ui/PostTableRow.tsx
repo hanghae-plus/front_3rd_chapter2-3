@@ -1,8 +1,8 @@
-import { Post } from "../../../entities/post/model/types"
-import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
+import { Button, TableCell, TableRow } from "../../../shared/ui"
+import { Post } from "../../../entities/post/model/types"
 
-export const PostTableBodyRow: React.FC<{
+export const PostTableRow: React.FC<{
   post: Post
   searchQuery: string
   selectedTag: string
@@ -25,6 +25,7 @@ export const PostTableBodyRow: React.FC<{
   openPostDetail,
   deletePost,
 }) => {
+
   // 하이라이트 함수 추가
   const highlightText = (text: string, highlight: string) => {
     if (!text) return null
@@ -39,9 +40,9 @@ export const PostTableBodyRow: React.FC<{
       </span>
     )
   }
-
+  
   return (
-    <TableRow>
+    <TableRow key={post.id}>
       <TableCell>{post.id}</TableCell>
       <TableCell>
         <div className="space-y-1">
@@ -68,7 +69,7 @@ export const PostTableBodyRow: React.FC<{
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author.id)}>
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
           <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
           <span>{post.author?.username}</span>
         </div>

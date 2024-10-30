@@ -30,7 +30,7 @@ import { Tag } from "../entities/tag/model/types"
 import { addToPosts, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
 import { User } from "../entities/user/model/types"
 import { CustomDialog } from "../widgets/ui/CustomDialog"
-import { PostTable } from "../entities/post/ui/PostTable"
+import { PostTable } from "../features/post/ui/PostTable"
 
 const initialNewPost = { title: "", body: "", userId: 1, tags: [] }
 const PostsManager = () => {
@@ -275,22 +275,6 @@ const PostsManager = () => {
     )
   }
 
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <PostTable
-      posts={posts}
-      searchQuery={searchQuery}
-      selectedTag={selectedTag}
-      updateURL={updateURL}
-      setSelectedTag={setSelectedTag}
-      openPostDetail={openPostDetail}
-      setSelectedPost={setSelectedPost}
-      openUserModal={openUserModal}
-      setShowEditDialog={setShowEditDialog}
-      deletePost={deletePost}
-    />
-  )
-
   // 댓글 렌더링
   const renderComments = (postId) => (
     <div className="mt-2">
@@ -409,7 +393,22 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? (
+            <div className="flex justify-center p-4">로딩 중...</div>
+          ) : (
+            <PostTable
+              posts={posts}
+              searchQuery={searchQuery}
+              selectedTag={selectedTag}
+              updateURL={updateURL}
+              setSelectedTag={setSelectedTag}
+              setSelectedPost={setSelectedPost}
+              openUserModal={openUserModal}
+              setShowEditDialog={setShowEditDialog}
+              openPostDetail={openPostDetail}
+              deletePost={deletePost}
+            />
+          )}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
