@@ -3,10 +3,14 @@ import { User } from "../../user/model/type"
 
 export type Comment = {
   id: number
-  user: User
   body: string
-  likes: number
   postId: number
+  likes: number
+  user: {
+    id: number
+    username: string
+    fullName: string
+  }
 }
 export type NewComment = {
   body: string

@@ -1,20 +1,10 @@
-import { Key, useEffect, useState } from "react"
-import { fetchTagsApi } from "../../entities/tag/api"
+import { Key } from "react"
 import { SelectContent, SelectItem } from "../../shared/ui"
 import { Tag } from "../../entities/tag/model/type"
+import { useTag } from "../../features/tag/model/store"
 
 export const TagSelect = () => {
-  const [tags, setTags] = useState<Tag[]>([])
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    const data = await fetchTagsApi()
-    setTags(data)
-  }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
+  const { tags } = useTag()
   return (
     <SelectContent>
       <SelectItem value="all">모든 태그</SelectItem>
