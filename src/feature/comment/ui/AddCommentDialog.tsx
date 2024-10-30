@@ -3,6 +3,7 @@ import { useCommentContext } from "../model/CommentContext.tsx";
 
 export const AddCommentDialog = () => {
   const { newComment, setNewComment, addComment, showAddCommentDialog, setShowAddCommentDialog } = useCommentContext();
+
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
       <DialogContent>
