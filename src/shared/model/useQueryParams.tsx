@@ -23,12 +23,15 @@ export const useQueryParams = () => {
     },
   );
 
-  const handleUpdateQuery = useCallback((key: UpdatableQueryKey, value: string | number) => {
-    setQueries({
-      [key]: value || null,
-      priorityKey: key,
-    });
-  }, []);
+  const handleUpdateQuery = useCallback(
+    (key: UpdatableQueryKey, value: string | number) => {
+      setQueries({
+        [key]: value || null,
+        priorityKey: key,
+      });
+    },
+    [setQueries],
+  );
 
   return {
     queries,

@@ -37,7 +37,11 @@ export const useModalStore = create<ModalState & ModalActions>()((set, get) => (
     }),
 
   toggle: (modal, isOpen) => {
-    isOpen ? get().open(modal) : get().close(modal);
+    if (isOpen) {
+      get().open(modal);
+    } else {
+      get().close(modal);
+    }
   },
 
   closeAll: () => set({ activeModals: new Set() }),

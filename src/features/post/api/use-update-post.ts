@@ -1,10 +1,10 @@
 import { postApi } from "@/entities/post/api/post-api";
-import { postQueries } from "@/entities/post/api/post-queries";
 import { PostsResponse } from "@/entities/post/model/types";
 import { findById, updateByID } from "@/shared/lib/array";
 import { merge, shallowMerge } from "@/shared/lib/object";
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { postQueryKey } from "../lib/queryConfig";
 
 export const useUpdatePost = () => {
   const queryClient = useQueryClient();
@@ -12,16 +12,13 @@ export const useUpdatePost = () => {
   return useMutation({
     mutationFn: postApi.updatePost,
     onSuccess: (selectedPost) => {
-      queryClient.setQueryData(
-        postQueries.list({ limit: queries.limit, skip: queries.skip }).queryKey,
-        (oldData: PostsResponse | undefined) => {
-          if (!oldData) return undefined;
-          const prevPost = findById(oldData.posts, selectedPost?.id);
-          const updatedPost = shallowMerge(prevPost, selectedPost);
-          if (!updatedPost) return oldData;
-          return merge<PostsResponse>(oldData, "posts", updateByID(oldData.posts, updatedPost));
-        },
-      );
+      queryClient.setQueryData(postQueryKey(queries), (oldData: PostsResponse | undefined) => {
+        if (!oldData) return undefined;
+        const prevPost = findById(oldData.posts, selectedPost?.id);
+        const updatedPost = shallowMerge(prevPost, selectedPost);
+        if (!updatedPost) return oldData;
+        return merge<PostsResponse>(oldData, "posts", updateByID(oldData.posts, updatedPost));
+      });
     },
     onError: (error) => {
       console.error("게시물 수정 오류:", error);

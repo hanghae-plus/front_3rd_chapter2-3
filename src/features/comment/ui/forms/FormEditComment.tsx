@@ -35,7 +35,7 @@ const FormEditComment = ({ comment }: FormEditCommentProps) => {
   useEffect(() => {
     if (!comment) return;
     handleSelectComment(comment);
-  }, [comment]);
+  }, [comment, handleSelectComment]);
 
   return (
     <div className="space-y-4">

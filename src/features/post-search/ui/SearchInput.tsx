@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { useSearchDebounce } from "../model/useSearchDebounce";
 
 const SearchInput = () => {
-  const { search, handleSearch, debouncedSearch, handleKeyDown } = useSearchDebounce();
+  const { search, handleSearch, handleKeyDown } = useSearchDebounce();
 
   return (
     <div className="flex-1">
@@ -14,7 +14,7 @@ const SearchInput = () => {
           className="pl-8"
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
-          onKeyDown={handleKeyDown(debouncedSearch)}
+          onKeyDown={handleKeyDown(search)}
         />
       </div>
     </div>

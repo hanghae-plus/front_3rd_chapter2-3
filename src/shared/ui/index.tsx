@@ -1,14 +1,14 @@
 // 버튼 컴포넌트
-export * from "./Button.tsx";
+export { Button } from "./Button.tsx";
 // 입력 컴포넌트
-export * from "./Input.tsx";
+export { Input } from "./Input.tsx";
 // 카드 컴포넌트
-export * from "./Card.tsx";
+export { Card } from "./Card.tsx";
 // 텍스트 영역 컴포넌트
-export * from "./Textarea.tsx";
+export { Textarea } from "./Textarea.tsx";
 // 선택 컴포넌트
-export * from "./Select.tsx";
+export { Select } from "./Select.tsx";
 // 대화상자 컴포넌트
-export * from "./Dialog.tsx";
+export { Dialog } from "./Dialog.tsx";
 // 테이블 컴포넌트
-export * from "./Table.tsx";
+export { Table } from "./Table.tsx";

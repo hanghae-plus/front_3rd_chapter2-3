@@ -8,27 +8,15 @@ export const useQueryPosts = ({ limit, skip, search, tag, priorityKey }: UseQuer
   const isSearch = !!search && priorityKey === "search";
   const isTag = !!tag && tag !== "all" && priorityKey === "tag";
 
+  const listQuery = { ...postQueries.list({ limit, skip }), enabled: !isSearch && !isTag };
+  const searchQuery = { ...postQueries.search({ searchQuery: search ?? "" }), enabled: isSearch };
+  const tagQuery = { ...postQueries.tag({ tag: tag ?? "" }), enabled: isTag };
+
   const results = useQueries({
-    queries: [
-      {
-        ...postQueries.search({ searchQuery: search ?? "" }),
-        enabled: isSearch,
-      },
-      {
-        ...postQueries.tag({ tag: tag ?? "" }),
-        enabled: isTag,
-      },
-      {
-        ...postQueries.list({ limit, skip }),
-        enabled: !isSearch && !isTag,
-      },
-    ],
-  });
-  const users = useQuery({
-    ...userQueries.list({ select: ["username", "image"] }),
+    queries: [searchQuery, tagQuery, listQuery],
   });
 
-  // 활성화된 쿼리 찾기
+  const users = useQuery(userQueries.list({ select: ["username", "image"] }));
   const activeQuery = results.find((result) => result.isSuccess && result.data) ?? results[0];
 
   if (!activeQuery.data || !users.data) {
@@ -39,5 +27,6 @@ export const useQueryPosts = ({ limit, skip, search, tag, priorityKey }: UseQuer
     ...activeQuery,
     data: mergePostsWithUsers(activeQuery.data, users.data),
     isLoading: results.some((result) => result.isLoading),
+    isError: results.some((result) => result.isError),
   };
 };

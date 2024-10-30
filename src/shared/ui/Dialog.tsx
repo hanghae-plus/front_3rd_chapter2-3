@@ -63,7 +63,7 @@ const DialogTrigger = DialogPrimitive.Trigger;
 const DialogPortal = DialogPrimitive.Portal;
 const DialogOverlay = DialogPrimitive.Overlay;
 
-export const Dialog = {
+export const Dialog = Object.assign({
   Container: DialogContainer,
   Trigger: DialogTrigger,
   Portal: DialogPortal,
@@ -71,4 +71,4 @@ export const Dialog = {
   Content: DialogContent,
   Header: DialogHeader,
   Title: DialogTitle,
-};
+});

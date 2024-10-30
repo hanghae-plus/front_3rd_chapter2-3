@@ -82,11 +82,11 @@ const SelectContainer = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 
-export const Select = {
+export const Select = Object.assign({
   Container: SelectContainer,
   Trigger: SelectTrigger,
   Content: SelectContent,
   Item: SelectItem,
   Group: SelectGroup,
   Value: SelectValue,
-};
+});

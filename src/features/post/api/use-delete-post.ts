@@ -1,10 +1,10 @@
 import { postApi } from "@/entities/post/api/post-api";
-import { postQueries } from "@/entities/post/api/post-queries";
 import { PostsResponse } from "@/entities/post/model/types";
 import { filterByID } from "@/shared/lib/array";
 import { merge } from "@/shared/lib/object";
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { postQueryKey } from "../lib/queryConfig";
 
 export const useDeletePost = () => {
   const queryClient = useQueryClient();
@@ -12,13 +12,10 @@ export const useDeletePost = () => {
   return useMutation({
     mutationFn: postApi.deletePost,
     onSuccess: (_, id) => {
-      queryClient.setQueryData(
-        postQueries.list({ limit: queries.limit, skip: queries.skip }).queryKey,
-        (oldData: PostsResponse | undefined) => {
-          if (!oldData) return undefined;
-          return merge<PostsResponse>(oldData, "posts", filterByID(oldData.posts, id));
-        },
-      );
+      queryClient.setQueryData(postQueryKey(queries), (oldData: PostsResponse | undefined) => {
+        if (!oldData) return undefined;
+        return merge<PostsResponse>(oldData, "posts", filterByID(oldData.posts, id));
+      });
     },
     onError: (error) => {
       console.error("게시물 삭제 오류:", error);

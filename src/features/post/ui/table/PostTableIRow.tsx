@@ -12,7 +12,6 @@ import { ThumbsDown, ThumbsUp } from "lucide-react";
 
 type PostTableItemProps = {
   post: Post;
-  search: string;
 };
 
 const PostTableIRow = ({ post }: PostTableItemProps) => {

@@ -1,4 +1,4 @@
-import { userApi } from "@/entities/user/api/user-api";
+import { User } from "@/entities/user/model/types";
 import { findById } from "@/shared/lib/array";
 import { pipe } from "@/shared/lib/function";
 import { merge } from "@/shared/lib/object";
@@ -19,13 +19,11 @@ export const withDefaultReactions = (post: Post) => ({
   reactions: post.reactions ?? { likes: 0, dislikes: 0 },
 });
 
-export const mergePostsWithUsers = async (data: PostsResponse) => {
-  const users = await userApi.getUsers({ select: ["username", "image"] });
+export const mergePostsWithUsers = (data: PostsResponse, users: User[]) => {
   const withUsers = data.posts.map((post) => ({
     ...post,
     author: findById(users, post.userId),
   }));
-
   return merge<PostsResponse>(data, "posts", withUsers);
 };
 

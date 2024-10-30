@@ -53,9 +53,9 @@ const CardContent = forwardRef<HTMLDivElement, CardContentProps>(({ className, .
 ));
 CardContent.displayName = "CardContent";
 
-export const Card = {
+export const Card = Object.assign({
   Container: CardContainer,
   Header: CardHeader,
   Title: CardTitle,
   Content: CardContent,
-};
+});

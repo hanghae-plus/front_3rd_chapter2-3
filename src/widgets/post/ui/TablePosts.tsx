@@ -1,4 +1,4 @@
-import PostPagination from "@/features/post/ui/PostPagination";
+import PostPagination from "@/features/post/ui/table/PostPagination";
 
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Table } from "@/shared/ui";
@@ -8,8 +8,7 @@ import PostTableIRow from "@/features/post/ui/table/PostTableIRow";
 
 const TablePosts = () => {
   const { queries } = useQueryParams();
-  const { search, limit, skip, tag, priorityKey } = queries;
-  const { data, isLoading } = useQueryPosts({ limit, skip, search, tag, priorityKey });
+  const { data, isLoading } = useQueryPosts(queries);
 
   return (
     <>
@@ -26,12 +25,10 @@ const TablePosts = () => {
               <Table.Head className="w-[150px]">작업</Table.Head>
             </Table.Row>
           </Table.Header>
-          <Table.Body>
-            {data?.posts?.map((post) => <PostTableIRow key={post.id} post={post} search={search} />)}
-          </Table.Body>
+          <Table.Body>{data?.posts?.map((post) => <PostTableIRow key={post.id} post={post} />)}</Table.Body>
         </Table.Container>
       )}
-      <PostPagination total={data?.total || 0} size={limit} skip={skip} />
+      <PostPagination total={data?.total || 0} size={queries.limit} skip={queries.skip} />
     </>
   );
 };
