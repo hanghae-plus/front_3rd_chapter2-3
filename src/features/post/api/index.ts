@@ -1,4 +1,4 @@
-import { Post, PostState, User } from '@entities/model/types'
+import { Post, PostState, Tag, User } from '@entities/model/types'
 import { api } from '@app/api'
 
 export interface PostsResponse {
@@ -35,6 +35,6 @@ export const postApi = {
   },
 
   getTags: async () => {
-    return await api.get<string[]>('/posts/tags')
+    return await api.get<Tag[]>('/posts/tags')
   },
 }

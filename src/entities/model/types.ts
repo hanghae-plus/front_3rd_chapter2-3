@@ -78,3 +78,21 @@ export interface PostState {
   body: string
   userId: number
 }
+
+// export interface FilterState {
+//   sortBy?: string
+//   sortOrder?: string
+//   limit: number
+//   skip: number
+//   tag: string
+//   searchQuery?: string
+// }
+
+export interface FilterState {
+  sortBy: string
+  sortOrder: 'asc' | 'desc'
+  limit: number
+  skip: number
+  searchQuery: string
+  selectedTag: string
+}
