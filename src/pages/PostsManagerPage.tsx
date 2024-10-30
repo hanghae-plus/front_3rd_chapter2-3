@@ -9,6 +9,7 @@ import { Button } from "../shared/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/Table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/Select";
 import { highlightText } from "../shared/lib/highlightText";
+// import { TableBodyRow } from "../features/posts/ui/PostTableRow";
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -335,11 +336,15 @@ const PostsManager = () => {
           <TableHead className="w-[150px]">작업</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>{posts.map(TableBodyRow)}</TableBody>
+      <TableBody>
+        {posts.map(post => (
+          <TableBodyRow post={post} />
+        ))}
+      </TableBody>
     </Table>
   );
 
-  const PostCommentButton = postId => {
+  function PostCommentButton(postId) {
     const onClickPostCommentButton = () => {
       setNewComment(prev => ({ ...prev, postId }));
       setShowAddCommentDialog(true);
@@ -350,7 +355,7 @@ const PostsManager = () => {
         댓글 추가
       </Button>
     );
-  };
+  }
 
   // 댓글 렌더링
   const renderComments = postId => (
@@ -359,11 +364,13 @@ const PostsManager = () => {
         <h3 className="text-sm font-semibold">댓글</h3>
         <PostCommentButton postId={postId} />
       </div>
-      <div className="space-y-1">{comments[postId]?.map(Comment)}</div>
+      <div className="space-y-1">
+        {comments[postId]?.map(comment => <Comment comment={comment} postId={postId} />)}
+      </div>
     </div>
   );
 
-  const AddPostButton = () => {
+  function AddPostButton() {
     const onClickAddPostButton = () => {
       setShowAddDialog(true);
     };
@@ -374,7 +381,7 @@ const PostsManager = () => {
         게시물 추가
       </Button>
     );
-  };
+  }
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -632,7 +639,7 @@ const PostsManager = () => {
     );
   }
 
-  function TableBodyRow(post) {
+  function TableBodyRow({ post }) {
     return (
       <TableRow key={post.id}>
         <TableCell>{post.id}</TableCell>
@@ -688,7 +695,19 @@ const PostsManager = () => {
     );
   }
 
-  function Comment(comment) {
+  function LikeCommentButton(comment, postId) {
+    const onClickLikeCommentButton = () => {
+      likeComment(comment.id, postId);
+    };
+    return (
+      <Button variant="ghost" size="sm" onClick={onClickLikeCommentButton}>
+        <ThumbsUp className="w-3 h-3" />
+        <span className="ml-1 text-xs">{comment.likes}</span>
+      </Button>
+    );
+  }
+
+  function Comment({ comment, postId }) {
     return (
       <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
         <div className="flex items-center space-x-2 overflow-hidden">
@@ -696,10 +715,7 @@ const PostsManager = () => {
           <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
         </div>
         <div className="flex items-center space-x-1">
-          <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
-            <ThumbsUp className="w-3 h-3" />
-            <span className="ml-1 text-xs">{comment.likes}</span>
-          </Button>
+          <LikeCommentButton comment={comment} postId={postId} />
           <Button
             variant="ghost"
             size="sm"
