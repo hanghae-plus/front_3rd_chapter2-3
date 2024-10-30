@@ -2,9 +2,9 @@ import { Post } from "@/entities/post/model/types";
 
 import PostDetail from "@/features/post/ui/PostDetail";
 
-import { useNavigator } from "@/shared/lib/useNavigator";
-import useToggle from "@/shared/lib/useToggle";
 import { highlightText } from "@/shared/lib/utils";
+import { useNavigator } from "@/shared/model/useNavigator";
+import useToggle from "@/shared/model/useToggle";
 import { Button, Dialog } from "@/shared/ui";
 
 import { MessageSquare } from "lucide-react";

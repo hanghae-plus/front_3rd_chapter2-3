@@ -1,4 +1,4 @@
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 import { Select } from "@/shared/ui/Select";
 
 const FilterOrder = () => {

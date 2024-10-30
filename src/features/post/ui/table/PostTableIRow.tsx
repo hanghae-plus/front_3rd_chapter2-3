@@ -3,7 +3,7 @@ import { Post } from "@/entities/post/model/types";
 import PostTableRowActions from "@/features/post/ui/table/PostTableRowActions";
 import PostTableRowTags from "@/features/post/ui/table/PostTableRowTags";
 import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 
 import { highlightText } from "@/shared/lib/utils";
 import { Table } from "@/shared/ui";

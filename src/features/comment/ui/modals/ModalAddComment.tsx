@@ -1,6 +1,6 @@
 import FormAddComment from "@/features/comment/ui/forms/FormAddComment";
 
-import useToggle from "@/shared/lib/useToggle";
+import useToggle from "@/shared/model/useToggle";
 
 import { Button, Dialog } from "@/shared/ui";
 

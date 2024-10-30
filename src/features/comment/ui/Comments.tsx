@@ -2,7 +2,7 @@ import CommentActions from "@/features/comment/ui/CommentActions";
 import CommentInfo from "@/features/comment/ui/CommentInfo";
 import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 import { useQueryComments } from "../api/use-get-comment";
 
 type CommentsProps = {

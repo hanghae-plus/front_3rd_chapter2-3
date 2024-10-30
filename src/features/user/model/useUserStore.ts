@@ -1,4 +1,4 @@
-import { userApi } from "@/entities/user/api/userApi";
+import { userApi } from "@/entities/user/api/user-api";
 import { User } from "@/entities/user/model/types";
 import { apiHandler } from "@/shared/api/apiHandler";
 import { create } from "zustand";

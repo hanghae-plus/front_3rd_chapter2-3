@@ -1,6 +1,6 @@
-import { postQueries } from "@/entities/post/api/post.queries";
-import { postApi } from "@/entities/post/api/postApi";
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { postApi } from "@/entities/post/api/post-api";
+import { postQueries } from "@/entities/post/api/post-queries";
+import { useNavigator } from "@/shared/model/useNavigator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useFilterTagPosts = () => {

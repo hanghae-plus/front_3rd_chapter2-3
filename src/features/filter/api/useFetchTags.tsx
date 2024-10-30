@@ -1,4 +1,4 @@
-import { tagApi } from "@/entities/tag/api/tagApi";
+import { tagApi } from "@/entities/tag/api/tag-api";
 import { Tag } from "@/entities/tag/model/types";
 
 import { apiHandler } from "@/shared/api/apiHandler";

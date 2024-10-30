@@ -1,6 +1,6 @@
 import { useSearchPosts } from "@/features/post/api/use-search-post";
 
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 
 import { Input } from "@/shared/ui";
 

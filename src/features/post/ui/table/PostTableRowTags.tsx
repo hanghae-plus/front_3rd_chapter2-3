@@ -1,5 +1,5 @@
 import { Post } from "@/entities/post/model/types";
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 import { useFilterTagPosts } from "../../api/use-filter-tag-post";
 
 type PostTableRowTagsProps = {

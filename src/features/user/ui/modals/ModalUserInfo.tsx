@@ -3,7 +3,7 @@ import { User } from "@/entities/user/model/types";
 
 import UserInfo from "@/features/user/ui/UserInfo";
 
-import useToggle from "@/shared/lib/useToggle";
+import useToggle from "@/shared/model/useToggle";
 import { Dialog } from "@/shared/ui";
 import { useShallow } from "zustand/shallow";
 import useUserStore from "../../model/useUserStore";

@@ -1,6 +1,6 @@
 import FormAddPost from "@/features/post/ui/forms/FormAddPost";
 
-import useToggle from "@/shared/lib/useToggle";
+import useToggle from "@/shared/model/useToggle";
 
 import { Button, Dialog } from "@/shared/ui";
 

@@ -1,5 +1,5 @@
-import { postQueries } from "@/entities/post/api/post.queries";
-import { postApi } from "@/entities/post/api/postApi";
+import { postApi } from "@/entities/post/api/post-api";
+import { postQueries } from "@/entities/post/api/post-queries";
 import { PostsResponse } from "@/entities/post/model/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

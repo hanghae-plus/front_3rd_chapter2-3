@@ -1,4 +1,4 @@
-import { commentApi } from "@/entities/comment/api/commentApi";
+import { commentApi } from "@/entities/comment/api/comment-api";
 import { Comment } from "@/entities/comment/model/types";
 import { apiHandler } from "@/shared/api/apiHandler";
 import { addItemInArray, filterByID, updateByID } from "@/shared/lib/array";

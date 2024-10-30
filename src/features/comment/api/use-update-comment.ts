@@ -1,5 +1,5 @@
-import { commentQueries } from "@/entities/comment/api/comment.quries";
-import { commentApi } from "@/entities/comment/api/commentApi";
+import { commentApi } from "@/entities/comment/api/comment-api";
+import { commentQueries } from "@/entities/comment/api/comment-quries";
 import { Comment } from "@/entities/comment/model/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

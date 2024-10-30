@@ -1,7 +1,7 @@
-import { postQueries } from "@/entities/post/api/post.queries";
-import { postApi } from "@/entities/post/api/postApi";
+import { postApi } from "@/entities/post/api/post-api";
+import { postQueries } from "@/entities/post/api/post-queries";
 import { PostsResponse } from "@/entities/post/model/types";
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useUpdatePost = () => {

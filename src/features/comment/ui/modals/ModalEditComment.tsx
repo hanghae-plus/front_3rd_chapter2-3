@@ -2,7 +2,7 @@ import { Comment } from "@/entities/comment/model/types";
 
 import FormEditComment from "@/features/comment/ui/forms/FormEditComment";
 
-import useToggle from "@/shared/lib/useToggle";
+import useToggle from "@/shared/model/useToggle";
 
 import { Button, Dialog } from "@/shared/ui";
 

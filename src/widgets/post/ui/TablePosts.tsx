@@ -1,6 +1,6 @@
 import PostPagination from "@/features/post/ui/PostPagination";
 
-import { useNavigator } from "@/shared/lib/useNavigator";
+import { useNavigator } from "@/shared/model/useNavigator";
 import { Table } from "@/shared/ui";
 
 import { useQueryPosts } from "@/features/post/api/use-get-post";

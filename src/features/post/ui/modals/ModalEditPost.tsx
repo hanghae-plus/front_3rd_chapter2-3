@@ -1,7 +1,7 @@
 import { Post } from "@/entities/post/model/types";
 import FormEditPost from "@/features/post/ui/forms/FormEditPost";
 
-import useToggle from "@/shared/lib/useToggle";
+import useToggle from "@/shared/model/useToggle";
 
 import { Button, Dialog } from "@/shared/ui";
 
