@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Button, Card, Dialog, Input, Select, Table, Textarea } from "../shared/ui"
+import { highlightText, createQueryString } from "../shared/lib"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -34,14 +35,17 @@ const PostsManager = () => {
 
   // URL 업데이트 함수
   const updateURL = () => {
-    const params = new URLSearchParams()
-    if (skip) params.set("skip", skip.toString())
-    if (limit) params.set("limit", limit.toString())
-    if (searchQuery) params.set("search", searchQuery)
-    if (sortBy) params.set("sortBy", sortBy)
-    if (sortOrder) params.set("sortOrder", sortOrder)
-    if (selectedTag) params.set("tag", selectedTag)
-    navigate(`?${params.toString()}`)
+    const params = {
+      skip: skip.toString(),
+      limit: limit.toString(),
+      search: searchQuery,
+      sortBy,
+      sortOrder,
+      tag: selectedTag,
+    }
+
+    const queryString = createQueryString(params)
+    navigate(`?${queryString}`)
   }
 
   // 게시물 가져오기
@@ -301,21 +305,6 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
-
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
