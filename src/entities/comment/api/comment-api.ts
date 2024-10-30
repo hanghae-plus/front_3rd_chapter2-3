@@ -1,5 +1,4 @@
-import { Comment, CommentResponse } from "@/entities/comment/model/types";
-import { NewComment } from "@/features/comment/model/types";
+import { Comment, CommentResponse, NewComment } from "@/entities/comment/model/types";
 import { createRequestOptions, fetchApi } from "@/shared/lib/api";
 import { COMMENT_API_PATHS } from "../config/comment-api-paths";
 

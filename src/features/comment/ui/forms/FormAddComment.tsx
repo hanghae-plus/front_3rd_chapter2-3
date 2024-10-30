@@ -1,4 +1,4 @@
-import { NewComment } from "@/features/comment/model/types";
+import { NewComment } from "@/entities/comment/model/types";
 
 import { Button, Textarea } from "@/shared/ui";
 

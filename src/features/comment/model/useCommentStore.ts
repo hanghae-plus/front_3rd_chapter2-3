@@ -1,10 +1,11 @@
 import { commentApi } from "@/entities/comment/api/comment-api";
-import { Comment } from "@/entities/comment/model/types";
+import { Comment, NewComment } from "@/entities/comment/model/types";
+
 import { apiHandler } from "@/shared/api/apiHandler";
 import { addItemInArray, filterByID, updateByID } from "@/shared/lib/array";
 import { addItemInObject } from "@/shared/lib/object";
+
 import { create } from "zustand";
-import { NewComment } from "./types";
 
 type CommentStates = {
   comments: Record<number, Comment[]>;
