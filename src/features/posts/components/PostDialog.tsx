@@ -7,7 +7,7 @@ import {
   Textarea,
   Button
 } from '../../../shared/ui'
-import { Post } from '../../../entity/post/model'
+import { Post } from '../../../entities/post/model'
 import { useState } from "react"
 
 interface PostDialogProps {

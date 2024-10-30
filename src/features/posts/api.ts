@@ -1,8 +1,8 @@
-import { Post } from "../../entity/post/model";
-import { NewPost } from "../../entity/post/model";
+import { Post } from "../../entities/post/model";
+import { NewPost } from "../../entities/post/model";
 import { PaginatedResponse } from "../../types/index";
-import { Tag } from "../../entity/tag/model";
-import { User } from "../../entity/user/model";
+import { Tag } from "../../entities/tag/model";
+import { User } from "../../entities/user/model";
 
 export const postsApi = {
   fetchPosts: async (limit: number, skip: number): Promise<PaginatedResponse<Post>> => {

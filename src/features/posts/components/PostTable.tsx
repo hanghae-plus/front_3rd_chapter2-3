@@ -1,5 +1,5 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, Button } from '../../../shared/ui'
-import { Post } from '../../../entity/post/model'
+import { Post } from '../../../entities/post/model'
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 interface PostTableProps {
   posts: Post[]

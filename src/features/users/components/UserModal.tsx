@@ -4,7 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../../shared/ui'
-import { User } from '../../../entity/user/model'
+import { User } from '../../../entities/user/model'
 
 interface UserModalProps {
   isOpen: boolean

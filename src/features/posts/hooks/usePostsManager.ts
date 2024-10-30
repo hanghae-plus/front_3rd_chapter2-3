@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Post, NewPost } from '../../../entity/post/model'
-import { Tag } from '../../../entity/tag/model'
+import { Post, NewPost } from '../../../entities/post/model'
+import { Tag } from '../../../entities/tag/model'
 import { postsApi } from '../api'
 import { useQueryParams } from '../../../shared/lib/hooks/useQueryParams'
 

@@ -5,8 +5,8 @@ import {
   DialogTitle,
   Button
 } from '../../../shared/ui'
-import { Post } from "../../../entity/post/model"
-import { Comment } from "../../../entity/comment/model"
+import { Post } from "../../../entities/post/model"
+import { Comment } from "../../../entities/comment/model"
 import { CommentsList } from '../../../features/comments/components/CommentsList'
 
 interface PostDetailDialogProps {

@@ -9,9 +9,9 @@ import {
   Loading,
   Pagination,
 } from "../shared/ui"
-import { Post } from "../entity/post/model"
-import { User } from "../entity/user/model"
-import { Comment } from "../entity/comment/model"
+import { Post } from "../entities/post/model"
+import { User } from "../entities/user/model"
+import { Comment } from "../entities/comment/model"
 import { PostTable } from "../features/posts/components/PostTable"
 import { PostFilters } from "../features/posts/components/PostFilters"
 import { PostDialog } from "../features/posts/components/PostDialog"

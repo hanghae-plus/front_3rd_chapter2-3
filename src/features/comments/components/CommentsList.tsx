@@ -1,5 +1,5 @@
 import { Button } from '../../../shared/ui'
-import { Comment } from '../../../entity/comment/model'
+import { Comment } from '../../../entities/comment/model'
 import { Edit2, Trash2 } from 'lucide-react'
 
 interface CommentsListProps {

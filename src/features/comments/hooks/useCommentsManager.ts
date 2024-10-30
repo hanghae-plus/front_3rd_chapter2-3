@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Comment, NewComment } from '../../../entity/comment/model'
+import { Comment, NewComment } from '../../../entities/comment/model'
 import { commentsApi } from '../api'
 
 export const useCommentsManager = () => {

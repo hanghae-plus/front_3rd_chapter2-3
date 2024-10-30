@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '../../../shared/ui/dialog'
-import { Comment, NewComment } from '../../../entity/comment/model'
+import { Comment, NewComment } from '../../../entities/comment/model'
 
 interface CommentDialogProps {
   isOpen: boolean
