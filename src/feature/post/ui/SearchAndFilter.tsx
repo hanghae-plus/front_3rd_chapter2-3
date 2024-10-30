@@ -19,6 +19,8 @@ import { postFetchTags } from "../../../entities/model/postFetchTags"
 import { useLocation } from "react-router-dom"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/select/Select"
 import { SearchPost } from "./Search"
+import { Post } from "../model/postType"
+import { User } from "../../../entities/model/atom"
 
 export const SearchAndFilter: React.FC = () => {
   const location = useLocation()
@@ -40,7 +42,7 @@ export const SearchAndFilter: React.FC = () => {
     const fetchData = async () => {
       const tags = await postFetchTags()
 
-      setTags(tags)
+      setTags(tags || [])
     }
     fetchData()
   }, [setTags])
@@ -56,7 +58,7 @@ export const SearchAndFilter: React.FC = () => {
   }, [location.search])
 
   // 게시물과 사용자를 결합하는 함수
-  const processPosts = (posts: any[], users: any[]) => {
+  const processPosts = (posts: Post[], users: User[]) => {
     return posts.map((post) => ({
       ...post,
       author: users.find((user) => user.id === post.userId),
@@ -76,6 +78,7 @@ export const SearchAndFilter: React.FC = () => {
       const usersData = await userFetchDetail()
 
       const postsWithUsers = processPosts(postsData.posts, usersData.users)
+      console.log("postsWithUsers", postsWithUsers)
 
       setPosts(postsWithUsers)
       setTotal(postsData.total)

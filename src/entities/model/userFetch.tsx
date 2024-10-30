@@ -1,13 +1,7 @@
-import { User } from "./atom"
-
-export const userFetchData = async (user: User) => {
-  console.log("user", user)
-
+export const userFetchData = async (userId: number) => {
   try {
-    const response = await fetch(`/api/users/${user}`)
+    const response = await fetch(`/api/users/${userId}`)
     const userData = await response.json()
-
-    console.log("userData", userData)
 
     return userData
   } catch (error) {

@@ -1,13 +1,16 @@
 import { userAtom } from "../model/atom"
 import { useAtom } from "jotai"
 
-// User 컴포넌트 수정
-export const User = ({ showUserModal }) => {
+interface UserProps {
+  showUserModal: boolean
+}
+
+export const User: React.FC<UserProps> = ({ showUserModal }) => {
   const [selectedUser] = useAtom(userAtom)
 
   if (!selectedUser) return null
 
-  return showUserModal ? ( // showUserModal을 boolean으로 확인
+  return showUserModal ? (
     <div className="space-y-4">
       <img src={selectedUser.image} alt={selectedUser.username} className="w-24 h-24 rounded-full mx-auto" />
       <h3 className="text-xl font-semibold text-center">{selectedUser.username}</h3>
@@ -33,5 +36,5 @@ export const User = ({ showUserModal }) => {
         </p>
       </div>
     </div>
-  ) : null // false인 경우 null 반환
+  ) : null
 }

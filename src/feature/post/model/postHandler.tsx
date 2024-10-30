@@ -36,8 +36,12 @@ export const usePostHandler = () => {
   }
 
   // 게시물 업데이트
-  const handleUpdatePost = async (selectedPost: Post): Promise<void> => {
-    console.log("selectedPost >>> ", selectedPost)
+  const handleUpdatePost = async (selectedPost: Post | null): Promise<void> => {
+    if (!selectedPost) {
+      console.error("No selected post to update.")
+      return
+    }
+
     try {
       const updateResponse = await updatePost(selectedPost)
 

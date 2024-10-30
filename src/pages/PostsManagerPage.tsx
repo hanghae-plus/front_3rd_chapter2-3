@@ -9,6 +9,15 @@ import { Input, Textarea } from "../shared/ui/input/Text"
 import { postFetch } from "../feature/post/model/postFetch"
 import { postFetchTags } from "../entities/model/postFetchTags"
 import { highlightText } from "../shared/utils/highlightText"
+import { useUpdateURL } from "../shared/model/urlUtils"
+import { User } from "../entities/ui/User"
+import { UserData } from "../entities/model/types"
+import { RenderPostTable } from "../feature/post/ui/RenderPostTable"
+import { CommentRender } from "../feature/comment/ui/CommentRender"
+import { usePostHandler } from "../feature/post/model/postHandler"
+import { SearchAndFilter } from "../feature/post/ui/SearchAndFilter"
+import { Post } from "../feature/post/model/postType"
+
 import { useAtom } from "jotai"
 
 import {
@@ -37,14 +46,6 @@ import {
   showEditCommentDialogAtom,
 } from "../feature/comment/model/commentAtom"
 
-import { User } from "../entities/ui/User"
-import { RenderPostTable } from "../feature/post/ui/RenderPostTable"
-import { CommentRender } from "../feature/comment/ui/CommentRender"
-import { usePostHandler } from "../feature/post/model/postHandler"
-import { SearchPost } from "../feature/post/ui/Search"
-import { SearchAndFilter } from "../feature/post/ui/SearchAndFilter"
-import { useUpdateURL } from "../shared/model/urlUtils"
-
 const PostsManager = () => {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
@@ -53,7 +54,7 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false)
 
   // jotai
-  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
+  const [searchQuery] = useAtom(searchQueryAtom)
   const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
   const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
   const [, setPosts] = useAtom(postsAtom)
@@ -65,15 +66,15 @@ const PostsManager = () => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
   const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
-  const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
+  const [selectedTag] = useAtom(selectedTagAtom)
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
   const [total, setTotal] = useAtom(totalAtom)
   const [skip, setSkip] = useAtom(skipAtom)
   const [limit, setLimit] = useAtom(limitAtom)
 
-  const [sortBy, setSortBy] = useAtom(sortByAtom)
-  const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
-  const [tags, setTags] = useAtom(tagsAtom)
+  const [sortBy] = useAtom(sortByAtom)
+  const [sortOrder] = useAtom(sortOrderAtom)
+  const [, setTags] = useAtom(tagsAtom)
 
   const { handleAddPost, handleUpdatePost } = usePostHandler()
 
@@ -124,8 +125,8 @@ const PostsManager = () => {
         fetch(`/api/posts/tag/${tag}`),
         fetch("/api/users?limit=0&select=username,image"),
       ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
+      const postsData: { posts: Post[] } = await postsResponse.json()
+      const usersData: { users: UserData[] } = await usersResponse.json()
 
       const postsWithUsers = postsData.posts.map((post) => ({
         ...post,
@@ -182,7 +183,7 @@ const PostsManager = () => {
   useEffect(() => {
     const fetchData = async () => {
       const tags = await postFetchTags()
-      setTags(tags)
+      setTags(tags || [])
     }
     fetchData()
   }, [])
@@ -197,7 +198,6 @@ const PostsManager = () => {
         const { posts, total, error } = await postFetch({ limit, skip })
 
         if (!error) {
-          console.log("posts > > >", posts)
           setPosts(posts)
           setTotal(total)
         } else {
@@ -299,13 +299,13 @@ const PostsManager = () => {
             <Input
               placeholder="제목"
               value={selectedPost?.title || ""}
-              onChange={(e) => setSelectedPost((prev) => ({ ...prev, title: e.target.value }))}
+              onChange={(e) => setSelectedPost((prev) => ({ ...(prev as Post), title: e.target.value }))}
             />
             <Textarea
               rows={15}
               placeholder="내용"
               value={selectedPost?.body || ""}
-              onChange={(e) => setSelectedPost((prev) => ({ ...prev, body: e.target.value }))}
+              onChange={(e) => setSelectedPost((prev) => ({ ...(prev as Post), body: e.target.value }))}
             />
             <Button onClick={() => handleUpdatePost(selectedPost)}>게시물 업데이트</Button>
           </div>

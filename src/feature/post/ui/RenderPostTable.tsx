@@ -7,7 +7,6 @@ import {
   searchQueryAtom,
   selectedPostAtom,
   selectedTagAtom,
-  showEditDialogAtom,
   showPostDetailDialogAtom,
   showUserModalAtom,
 } from "../model/postAtoms"
@@ -21,6 +20,7 @@ import { commentsAtom } from "../../comment/model/commentAtom"
 import { usePost } from "../model/usePost"
 import { usePostHandler } from "../model/postHandler"
 import { userFetchData } from "../../../entities/model/userFetch"
+import { Post } from "../model/postType"
 
 // 게시물 테이블
 export const RenderPostTable = () => {
@@ -37,12 +37,12 @@ export const RenderPostTable = () => {
 
   const { deletePost } = usePost()
 
-  const handleTagClick = (tag) => {
+  const handleTagClick = (tag: string) => {
     setSelectedTag(tag)
     updateURL()
   }
 
-  const handleOpenUserModal = async (userId) => {
+  const handleOpenUserModal = async (userId: number) => {
     try {
       const userData = await userFetchData(userId)
 
@@ -53,7 +53,7 @@ export const RenderPostTable = () => {
     }
   }
 
-  const handleOpenPostDetail = async (post) => {
+  const handleOpenPostDetail = async (post: Post) => {
     setSelectedPost(post)
     try {
       const getComment = await commentFetch(post.id)
@@ -65,7 +65,7 @@ export const RenderPostTable = () => {
   }
   const { handleOpenPostUpdate } = usePostHandler()
 
-  const handleDeletePost = async (postId) => {
+  const handleDeletePost = async (postId: number) => {
     try {
       const deleteResponse = await deletePost(postId)
       if (deleteResponse) {
@@ -118,7 +118,7 @@ export const RenderPostTable = () => {
             <TableCell>
               <div
                 className="flex items-center space-x-2 cursor-pointer"
-                onClick={() => handleOpenUserModal(post.author.id)}
+                onClick={() => post.author?.id && handleOpenUserModal(post.author.id)}
               >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>

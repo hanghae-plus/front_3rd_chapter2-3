@@ -1,9 +1,9 @@
-export const postFetchTags = async () => {
+import { Tag } from "../../feature/post/model/postType"
+
+export const postFetchTags = async (): Promise<Tag[] | undefined> => {
   try {
     const response = await fetch("/api/posts/tags")
     const data = await response.json()
-
-    console.log(">>>data", data)
 
     return data
   } catch (error) {

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react"
 import { Input } from "../../../shared/ui/input/Text"
-import { limitAtom, postsAtom, searchQueryAtom } from "../model/postAtoms"
+import { limitAtom, postsAtom, searchQueryAtom, skipAtom } from "../model/postAtoms"
 import { useAtom } from "jotai"
 import { useState } from "react"
 import { postFetch } from "../model/postFetch"
@@ -12,6 +12,7 @@ export const SearchPost: React.FC = () => {
   const [, setTotal] = useState(0)
   const [, setLoading] = useState(false)
   const [limit] = useAtom(limitAtom)
+  const [skip] = useAtom(skipAtom)
 
   // 게시물 검색
   const searchPosts = async () => {

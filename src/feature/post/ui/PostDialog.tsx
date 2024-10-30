@@ -5,6 +5,7 @@ import { Button } from "../../../shared/ui/button/Button"
 import { usePostHandler } from "../model/postHandler"
 import { newPostAtom, selectedPostAtom, showAddDialogAtom, showEditDialogAtom } from "../model/postAtoms"
 import { useAtom } from "jotai"
+import { Post } from "../model/postType"
 
 // 게시물 추가 대화상자
 export const AddPostDialog = () => {
@@ -59,13 +60,13 @@ export const EditPostDialog = () => {
           <Input
             placeholder="제목"
             value={selectedPost?.title || ""}
-            onChange={(e) => setSelectedPost((prev) => ({ ...prev, title: e.target.value }))}
+            onChange={(e) => setSelectedPost((prev) => ({ ...(prev as Post), title: e.target.value }))}
           />
           <Textarea
             rows={15}
             placeholder="내용"
             value={selectedPost?.body || ""}
-            onChange={(e) => setSelectedPost((prev) => ({ ...prev, body: e.target.value }))}
+            onChange={(e) => setSelectedPost((prev) => ({ ...(prev as Post), body: e.target.value }))}
           />
           <Button onClick={() => handleUpdatePost(selectedPost)}>게시물 업데이트</Button>
         </div>

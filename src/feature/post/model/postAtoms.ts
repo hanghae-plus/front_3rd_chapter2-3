@@ -1,5 +1,5 @@
 import { atom } from "jotai"
-import { Post } from "./postType"
+import { Post, Tag } from "./postType"
 
 // 게시물 리스트 상태
 export const postsAtom = atom<Post[]>([]) // 초기값은 빈 배열
@@ -28,5 +28,5 @@ export const skipAtom = atom<number>(parseInt(queryParams.get("skip") || "0"))
 export const limitAtom = atom<number>(parseInt(queryParams.get("limit") || "10"))
 export const sortByAtom = atom<string>(queryParams.get("sortBy") || "")
 export const sortOrderAtom = atom<string>(queryParams.get("sortOrder") || "asc")
-export const tagsAtom = atom<string[]>([]) // 태그 배열 상태
+export const tagsAtom = atom<Tag[]>([]) // 태그 배열 상태
 export const showUserModalAtom = atom<boolean>(false)
