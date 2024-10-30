@@ -1,6 +1,5 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../shared/ui/table/Table"
-import { User } from "../model/User"
 import HighlightText from "./HighlightText"
 import { Button } from "../../shared/ui/button/Button"
 import { deletePost } from "../api/deletePost"
@@ -10,6 +9,7 @@ import { usePost } from "../../features/post/model/usePost"
 import { Post } from "../../features/post/model/types"
 import { useComment } from "../../features/comment/model/useComment"
 import { useTag } from "../../features/tags/model/useTag"
+import { User } from "../../features/user/model/types"
 
 interface Props {
   searchQuery: string

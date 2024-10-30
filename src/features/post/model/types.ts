@@ -1,4 +1,4 @@
-import { User } from "../../../pages/model/User"
+import { User } from "../../user/model/types"
 
 export interface Post {
   id: number

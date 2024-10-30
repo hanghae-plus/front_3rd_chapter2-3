@@ -1,5 +1,5 @@
 import { Post } from "../../features/post/model/types"
-import { User } from "../model/User"
+import { User } from "../../features/user/model/types"
 
 interface PostsData {
   posts: Post[]

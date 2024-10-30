@@ -1,4 +1,4 @@
-import { User } from "../model/User"
+import { User } from "../../features/user/model/types"
 
 interface Props {
   user: User
