@@ -1,3 +1,4 @@
+import { User } from '@entities/model/types'
 import { create } from 'zustand'
 
 interface UserState {
