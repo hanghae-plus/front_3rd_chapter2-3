@@ -1,5 +1,25 @@
+import { UserType } from "@/entities/user/model/user-type";
+
 export interface PostType {
+  id: number;
+  userId: number;
   title: string;
   body: string;
-  userId: number;
+  tags: string[];
+  reactions: {
+    likes: number;
+    dislikes: number;
+  };
+  views: number;
+}
+
+export interface PostWithAuthorType extends PostType {
+  author: UserType;
+}
+
+export interface PostListType {
+  limit: number;
+  skip: number;
+  total: number;
+  posts: PostType[];
 }
