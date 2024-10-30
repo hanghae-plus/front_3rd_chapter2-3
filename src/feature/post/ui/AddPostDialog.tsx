@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
-import { usePostContext } from "../model/PostContext.tsx";
 import { postNewPost } from "../../../entities/post/api";
+import { usePost } from "../model";
 
 export const AddPostDialog = () => {
-  const { setNewPost, newPost, showAddDialog, setShowAddDialog, setPosts, posts } = usePostContext();
+  const { setNewPost, newPost, showAddDialog, setShowAddDialog, setPosts, posts } = usePost();
 
   const handleAddPost = async () => {
     const data = await postNewPost(newPost);

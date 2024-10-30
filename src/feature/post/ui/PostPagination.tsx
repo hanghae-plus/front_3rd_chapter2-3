@@ -1,8 +1,8 @@
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
-import { usePostContext } from "../model/PostContext.tsx";
+import { usePost } from "../model";
 
 export const PostPagination = () => {
-  const { skip, limit, setLimit, setSkip, total } = usePostContext();
+  const { skip, limit, setLimit, setSkip, total } = usePost();
 
   return (
     <div className="flex justify-between items-center">

@@ -15,8 +15,7 @@ import { deleteExistingPost } from "../../../entities/post/api";
 import { User } from "../../../entities/user/model/types.ts";
 import { getUserInfo } from "../../../entities/user/api";
 import { getComments } from "../../../entities/comment/api";
-import { usePostContext } from "../model/PostContext.tsx";
-import { useQueryParams } from "../model";
+import { usePost, useQueryParams } from "../model";
 import { useComment } from "../../comment/model";
 
 export const PostTable = () => {
@@ -29,7 +28,7 @@ export const PostTable = () => {
     setSelectedPost,
     setShowEditDialog,
     setPosts,
-  } = usePostContext();
+  } = usePost();
 
   const { comments, setComments } = useComment();
   const { setQueryParams } = useQueryParams();

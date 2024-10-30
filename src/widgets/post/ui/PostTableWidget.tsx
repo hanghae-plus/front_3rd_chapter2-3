@@ -1,10 +1,10 @@
 import { PostTable } from "../../../feature/post/ui";
-import { usePostContext } from "../../../feature/post/model/PostContext.tsx";
 import { getTags } from "../../../entities/post/api";
 import { useEffect } from "react";
+import { usePost } from "../../../feature/post/model";
 
 export const PostTableWidget = () => {
-  const { loading, setTags } = usePostContext();
+  const { loading, setTags } = usePost();
 
   const fetchTags = async () => {
     const data = await getTags();

@@ -8,7 +8,6 @@ import * as React from "react";
 import "@testing-library/jest-dom";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
 import PostsManager from "../src/pages/PostsManagerPage";
-import { PostProvider } from "../src/feature/post/model/PostContext";
 
 // MSW 서버 설정
 const server = setupServer(
@@ -48,9 +47,7 @@ afterAll(() => server.close());
 const renderPostsManager = () => {
   return render(
     <MemoryRouter>
-      <PostProvider>
-        <PostsManager />
-      </PostProvider>
+      <PostsManager />
     </MemoryRouter>,
   );
 };

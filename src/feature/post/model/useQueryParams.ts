@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface QueryParams {
+export interface QueryParams {
   skip: number;
   limit: number;
   searchQuery: string;

@@ -1,7 +1,6 @@
 import { Search } from "lucide-react";
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
-import { usePostContext } from "../model/PostContext.tsx";
-import { useQueryParams } from "../model";
+import { usePost, useQueryParams } from "../model";
 import { getPosts, getPostsByTag, getSearchPosts } from "../../../entities/post/api";
 import { Post } from "../../../entities/post/model/types.ts";
 import { User } from "../../../entities/user/model/types.ts";
@@ -21,7 +20,7 @@ export const PostSearchBar = () => {
     setPosts,
     setTotal,
     setLoading,
-  } = usePostContext();
+  } = usePost();
 
   const { setQueryParams, queryParams } = useQueryParams();
 

@@ -1,9 +1,9 @@
 import { Button, CardHeader, CardTitle } from "../../../shared/ui";
 import { Plus } from "lucide-react";
-import { usePostContext } from "../model/PostContext.tsx";
+import { usePost } from "../model";
 
 export const PostHeader = () => {
-  const { setShowAddDialog } = usePostContext();
+  const { setShowAddDialog } = usePost();
 
   return (
     <CardHeader>

@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
-import { usePostContext } from "../model/PostContext.tsx";
 import { putExistingPost } from "../../../entities/post/api";
+import { usePost } from "../model";
 
 export const EditPostDialog = () => {
-  const { selectedPost, setSelectedPost, setPosts, posts, showEditDialog, setShowEditDialog } = usePostContext();
+  const { selectedPost, setSelectedPost, setPosts, posts, showEditDialog, setShowEditDialog } = usePost();
 
   const handleUpdatePost = async () => {
     if (selectedPost) {
