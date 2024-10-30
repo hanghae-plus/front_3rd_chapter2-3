@@ -26,11 +26,19 @@ import {
   Textarea,
 } from "../shared/ui"
 import { NewPost, Post } from "../entities/post/model/types"
-import { fetchUsersApi } from "../entities/user/api"
-import { fecthPostsByTagApi, fetchPostsApi, searchPostsApi, createPostApi, updatePostApi, deletePostApi } from "../entities/post/api"
+import { fetchUserApi, fetchUsersApi } from "../entities/user/api"
+import {
+  fecthPostsByTagApi,
+  fetchPostsApi,
+  searchPostsApi,
+  createPostApi,
+  updatePostApi,
+  deletePostApi,
+} from "../entities/post/api"
 import { fetchTagsApi } from "../entities/tag/api"
 import { Tag } from "../entities/tag/model/types"
 import { addToPosts, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
+import { User } from "../entities/user/model/types"
 
 const initialNewPost = { title: "", body: "", userId: 1, tags: [] };
 const PostsManager = () => {
@@ -60,7 +68,7 @@ const PostsManager = () => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -231,15 +239,10 @@ const PostsManager = () => {
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
+  const openUserModal = async (userId: number) => {
+    const userData = await fetchUserApi(userId)
       setSelectedUser(userData)
       setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
   }
 
   useEffect(() => {
