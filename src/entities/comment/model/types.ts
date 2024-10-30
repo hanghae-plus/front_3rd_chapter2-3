@@ -9,3 +9,9 @@ export interface Comment {
     fullName: string
   }
 }
+
+export interface NewComment {
+  body: string
+  postId: number | null
+  userId: number
+}

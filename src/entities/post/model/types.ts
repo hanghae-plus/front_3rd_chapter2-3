@@ -28,4 +28,8 @@ export interface NewPost {
   body: string
   userId: number
   tags: string[]
+  reactions: {
+    likes: number
+    dislikes: number
+  }
 }
