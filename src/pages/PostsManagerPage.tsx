@@ -23,6 +23,7 @@ import { usePostsManager } from "../features/posts/hooks/usePostsManager"
 import { useCommentsManager } from "../features/comments/hooks/useCommentsManager"
 import { useQueryParams } from "../shared/lib/hooks/useQueryParams"
 import { highlightText } from "../shared/lib/utils/text"
+import { useModal } from '../shared/lib/hooks/useModal'
 
 const PostsManager = () => {
   const { updateURL } = useQueryParams()
@@ -63,26 +64,27 @@ const PostsManager = () => {
     deleteComment,
   } = useCommentsManager()
 
-  // Dialog 상태 관리
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
+  // Dialog 상태 관리를 useModal로 통일
+  const addPostModal = useModal()
+  const editPostModal = useModal()
+  const postDetailModal = useModal()
+  const commentAddModal = useModal()
+  const commentEditModal = useModal()
+  const userModal = useModal()
+
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   const openUserModal = async (userId: number): Promise<void> => {
     try {
-      const response = await fetch(`/api/users/${userId}`);
-      const userData: User = await response.json();
-      setSelectedUser(userData);
-      setShowUserModal(true);
+      const response = await fetch(`/api/users/${userId}`)
+      const userData: User = await response.json()
+      setSelectedUser(userData)
+      userModal.open()
     } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error);
+      console.error("사용자 정보 가져오기 오류:", error)
     }
-  };
+  }
 
   useEffect(() => {
     fetchPosts()
@@ -117,7 +119,7 @@ const PostsManager = () => {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
+          <Button onClick={addPostModal.open}>
             <Plus className="w-4 h-4 mr-2" />
             게시물 추가
           </Button>
@@ -149,29 +151,18 @@ const PostsManager = () => {
               searchQuery={searchQuery}
               selectedTag={selectedTag}
               onOpenDetail={(post) => {
-                setSelectedPost(post);
-                fetchComments(post.id);
-                setShowPostDetailDialog(true);
+                setSelectedPost(post)
+                fetchComments(post.id)
+                postDetailModal.open()
               }}
               onEdit={(post) => {
-                setSelectedPost(post);
-                setShowEditDialog(true);
+                setSelectedPost(post)
+                editPostModal.open()
               }}
               onDelete={deletePost}
               highlightText={highlightText}
               onUserClick={openUserModal}
-              onTagSelect={(tag) => {
-                setSelectedTag(tag);
-                fetchPostsByTag(tag);
-                updateURL({
-                  skip: skip.toString(),
-                  limit: limit.toString(),
-                  search: searchQuery,
-                  sortBy,
-                  sortOrder,
-                  tag
-                });
-              }}
+              onTagSelect={handleTagChange}
             />
           )}
 
@@ -186,25 +177,25 @@ const PostsManager = () => {
       </CardContent>
 
       <PostDialog
-        isOpen={showAddDialog}
-        onOpenChange={setShowAddDialog}
+        isOpen={addPostModal.isOpen}
+        onOpenChange={addPostModal.toggle}
         onSubmit={addPost}
         mode="add"
       />
 
       <PostDialog
-        isOpen={showEditDialog}
-        onOpenChange={setShowEditDialog}
+        isOpen={editPostModal.isOpen}
+        onOpenChange={editPostModal.toggle}
         post={selectedPost}
         onSubmit={updatePost}
         mode="edit"
       />
 
       <PostDetailDialog
-        isOpen={showPostDetailDialog}
-        onOpenChange={setShowPostDetailDialog}
+        isOpen={postDetailModal.isOpen}
+        onOpenChange={postDetailModal.toggle}
         post={selectedPost}
-        comments={selectedPost ? comments[selectedPost.id] || [] : []}
+        comments={comments[selectedPost?.id ?? 0] || []}
         searchQuery={searchQuery}
         onAddComment={() => {
           if (selectedPost?.id) {
@@ -212,54 +203,47 @@ const PostsManager = () => {
               body: "",
               postId: selectedPost.id,
               userId: 1
-            });
-            setShowAddCommentDialog(true);
+            })
+            postDetailModal.close()
+            commentAddModal.open()
           }
         }}
         onEditComment={(comment) => {
-          setSelectedComment(comment);
-          setShowEditCommentDialog(true);
+          setSelectedComment(comment)
+          postDetailModal.close()
+          commentEditModal.open()
         }}
         onDeleteComment={(commentId) => {
           if (selectedPost?.id) {
-            deleteComment(commentId, selectedPost.id);
+            deleteComment(commentId, selectedPost.id)
           }
         }}
         highlightText={highlightText}
       />
 
       <CommentDialog
-        isOpen={showAddCommentDialog}
-        onOpenChange={setShowAddCommentDialog}
+        isOpen={commentAddModal.isOpen}
+        onOpenChange={commentAddModal.toggle}
         postId={selectedPost?.id}
-        onSubmit={(commentData) => {
-          if (selectedPost?.id) {
-            const commentWithPostId = {
-              ...commentData,
-              postId: selectedPost.id
-            };
-            addComment(commentWithPostId);
-            setShowAddCommentDialog(false);
-          }
-        }}
+        onSubmit={addComment}
         mode="add"
       />
 
       <CommentDialog
-        isOpen={showEditCommentDialog}
-        onOpenChange={setShowEditCommentDialog}
+        isOpen={commentEditModal.isOpen}
+        onOpenChange={commentEditModal.toggle}
         comment={selectedComment || undefined}
         onSubmit={async (comment) => {
           if ('id' in comment) {
-            await updateComment(comment as Comment);
+            await updateComment(comment as Comment)
           }
         }}
         mode="edit"
       />
 
       <UserModal
-        isOpen={showUserModal}
-        onOpenChange={setShowUserModal}
+        isOpen={userModal.isOpen}
+        onOpenChange={userModal.toggle}
         user={selectedUser}
       />
     </Card>

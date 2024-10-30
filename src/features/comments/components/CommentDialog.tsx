@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
   Textarea,
   Button
 } from '../../../shared/ui'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from '../../../shared/ui/dialog'
 import { Comment, NewComment } from '../../../entity/comment/model'
 
 interface CommentDialogProps {
