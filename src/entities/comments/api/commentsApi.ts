@@ -1,6 +1,6 @@
 import useComment from "../../../features/comments/hooks/useComments"
 
-export const useFetchComments = () => {
+export const useCommentsApi = () => {
   const {
     comments,
     setComments,
@@ -100,5 +100,5 @@ export const useFetchComments = () => {
     }
   }
 
-  //return { fetchComments, addComment, updateComment, deleteComment, likeComment }
+  return { fetchComments, addComment, updateComment, deleteComment, likeComment }
 }
