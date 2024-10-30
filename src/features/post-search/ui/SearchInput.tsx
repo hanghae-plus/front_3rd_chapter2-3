@@ -1,16 +1,9 @@
-import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Input } from "@/shared/ui";
 import { Search } from "lucide-react";
+import { useSearchDebounce } from "../model/useSearchDebounce";
 
 const SearchInput = () => {
-  const {
-    handleUpdateQuery,
-    queries: { search },
-  } = useQueryParams();
-
-  const handleSearch = (value: string) => {
-    handleUpdateQuery("search", value);
-  };
+  const { search, handleSearch, debouncedSearch, handleKeyDown } = useSearchDebounce();
 
   return (
     <div className="flex-1">
@@ -20,8 +13,8 @@ const SearchInput = () => {
           placeholder="게시물 검색..."
           className="pl-8"
           value={search}
-          onChange={(e) => handleUpdateQuery("search", e.target.value, true)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch(search)}
+          onChange={(e) => handleSearch(e.target.value)}
+          onKeyDown={handleKeyDown(debouncedSearch)}
         />
       </div>
     </div>
