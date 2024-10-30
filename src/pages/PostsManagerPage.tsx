@@ -26,38 +26,46 @@ import {
   Textarea,
 } from "../shared/ui"
 import { addPostApi, deletePostApi, fetchPostsApi, fetchPostsByTagApi, searchPostsApi, updatePostApi } from "../entities/post/api/postApi"
-import { fetchUsersApi } from "../entities/user/api/userApi"
+import { fetchUsersApi, fetchUsersById } from "../entities/user/api/userApi"
 import { fetchTagsApi } from "../entities/tag/api/tagApi"
 import { addCommentApi, deleteCommentApi, fetchCommentsApi, likeCommentApi, updateCommentApi } from "../entities/comment/api/commentApi"
+import { User } from "../entities/user/model/types"
+import { NewPost, Post } from "../entities/post/model/types"
+import { NewComment } from "../entities/comment/model/types"
+import { Tag } from "../entities/tag/model/types"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { usePostStore } from "../features/postManagement/model/store"
 
 const PostsManager = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const queryClient = useQueryClient();
+  const { selectedPost, setSelectedPost } = usePostStore();
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
-  const [total, setTotal] = useState(0)
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState(null)
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
+  const [posts, setPosts] = useState<Post []>([]);
+  const [total, setTotal] = useState(0);
+  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"));
+  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"));
+  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "");
+  // const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "");
+  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 });
+  const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState<Tag []>([]);
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [comments, setComments] = useState<Record<number, Comment[]>>({});
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
+  const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 });
+  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false);
+  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false);
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -261,10 +269,10 @@ const PostsManager = () => {
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
+  const openUserModal = async (user: User) => {
     try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
+      const userData = await fetchUsersById(user.id);
+      
       setSelectedUser(userData)
       setShowUserModal(true)
     } catch (error) {
