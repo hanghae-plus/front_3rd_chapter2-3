@@ -4,10 +4,10 @@ import { CommentType } from "@/entities/comment/model/comment-type";
 export const useLikeComment = (commentList: CommentType[], commentId: number) => {
   const mutation = useMutationLikeComment(commentList, commentId);
 
-  async function likeComment(updateComment: (newComment: CommentType) => void) {
+  async function hanldeLikeComment(updateComment: (newComment: CommentType) => void) {
     const newCommentData = await mutation.mutateAsync();
     updateComment(newCommentData);
   }
 
-  return { likeComment };
+  return { hanldeLikeComment };
 };

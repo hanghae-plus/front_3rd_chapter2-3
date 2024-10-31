@@ -10,11 +10,16 @@ export const useComment = (id: number) => {
     return prev.map(comment => (comment.id === newComment.id ? newComment : comment));
   };
 
+  const exceptComment = (prev: CommentType[], commentId: number) => {
+    return prev.filter(comment => comment.id !== commentId);
+  };
+
   const commentHandler = {
     addNewComment: (newComment: CommentType) => setCommentList(prev => [...prev, newComment]),
     updateComment: (newComment: CommentType) => {
       setCommentList(prev => updateCommentById(prev, newComment));
     },
+    deleteComment: (commentId: number) => setCommentList(prev => exceptComment(prev, commentId)),
   };
 
   useEffect(() => {

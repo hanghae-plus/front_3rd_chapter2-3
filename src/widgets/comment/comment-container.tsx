@@ -1,16 +1,27 @@
+import { PostWithAuthorType } from "@/entities/post/model/post-type";
 import { useComment } from "@/entities/comment/model/use-comment";
 import { CommentType } from "@/entities/comment/model/comment-type";
-import { PostWithAuthorType } from "@/entities/post/model/post-type";
-import { AddCommentButton } from "@/features/addComment/ui/add-comment-button";
 import { CommentItemContent } from "@/entities/comment/ui/comment-item-content";
+import { AddCommentButton } from "@/features/addComment/ui/add-comment-button";
 import { CommentControl } from "@/features/commentControl/ui/comment-control";
 
 interface CommentContainer {
   post: PostWithAuthorType;
 }
 
+export interface CommentItemProps {
+  comment: CommentType;
+  commentList: CommentType[];
+  commenthandler: {
+    addNewComment: (newComment: CommentType) => void;
+    updateComment: (newComment: CommentType) => void;
+    deleteComment: (commentId: number) => void;
+  };
+}
+
 export const CommentContainer = ({ post }: CommentContainer) => {
-  const { commentList, addNewComment } = useComment(post.id);
+  const { commentList, commentHandler } = useComment(post.id);
+  const { addNewComment } = commentHandler;
 
   return (
     <div className="mt-2">
@@ -20,18 +31,23 @@ export const CommentContainer = ({ post }: CommentContainer) => {
       </div>
       <div className="space-y-1">
         {commentList.map((comment, index) => (
-          <CommentItem comment={comment} key={index} />
+          <CommentItem
+            comment={comment}
+            commentList={commentList}
+            commenthandler={commentHandler}
+            key={index}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-const CommentItem = ({ comment }: { comment: CommentType }) => {
+const CommentItem = ({ comment, commentList, commenthandler }: CommentItemProps) => {
   return (
     <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
       <CommentItemContent comment={comment} />
-      <CommentControl comment={comment} />
+      <CommentControl comment={comment} commentList={commentList} commenthandler={commenthandler} />
     </div>
   );
 };
