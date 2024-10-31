@@ -1,15 +1,18 @@
-import { useState } from "react"
-import { Dialog } from "../../../shared/ui" // Adjust the path as necessary
+import { useEffect, useState } from "react"
 
 import UserModalDiallogContent from "../../../entities/users/ui/UserModalDialogContent"
-import { SelectedUser } from "../../../entities/users/model/User"
+import useUser from "../hooks/useUser"
+import { Dialog } from "../../../shared/ui"
 
-interface UserModalDialog {
-  selectedUser?: SelectedUser
-}
-
-const UserDialog = ({ selectedUser }: UserModalDialog) => {
+const UserModalDialog = () => {
   const [showUserModal, setShowUserModal] = useState(false)
+  const { selectedUser } = useUser()
+
+  useEffect(() => {
+    if (selectedUser?.id) {
+      setShowUserModal(true)
+    }
+  }, [selectedUser])
 
   return (
     <>
@@ -20,4 +23,4 @@ const UserDialog = ({ selectedUser }: UserModalDialog) => {
   )
 }
 
-export default UserDialog
+export default UserModalDialog

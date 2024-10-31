@@ -1,4 +1,4 @@
-import { DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/"
 import { SelectedUser } from "../model/User"
 
 interface UserModalDialogContentProps {
