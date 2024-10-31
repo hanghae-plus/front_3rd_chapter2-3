@@ -16,9 +16,11 @@ import { usePostTagsQuery } from "../entities/post/api/usePostTagsQuery"
 import { Author, NewPost, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
-import { useAddPostMutation } from "../features/post/api/useAddPostMutation"
-import { useDeletePostMutation } from "../features/post/api/useDeletePostMutation"
-import { useUpdatePostMutation } from "../features/post/api/useUpdatePostMutation"
+import {
+  useAddPostMutation,
+  useDeletePostMutation,
+  useUpdatePostMutation,
+} from "../features/post"
 import {
   Button,
   Card,
