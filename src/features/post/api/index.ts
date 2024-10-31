@@ -1,17 +1,28 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { postApis } from "../../../entities/post/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { userApis } from "../../../entities/user/api";
 
-export function usePostListQuery(skip: number, limit: number) {
+export const usePostListQuery = (skip = 0, limit = 10) => {
   return useQuery({
-    queryKey: ["posts", skip, limit],
-    queryFn: () => postApis.fetchPostList(skip, limit),
+    queryKey: ["postList", limit, skip],
+    queryFn: async () => {
+      const resPostList = await postApis.fetchPostList(skip, limit);
+      const resUserList = await userApis.fetchUserList();
+      const postsWithUsers = resPostList.posts.map((post) => ({
+        ...post,
+        author: resUserList.users.find((user) => {
+          return user.id === post.userId;
+        }),
+      }));
+      return { posts: postsWithUsers, total: resPostList.total, limit };
+    },
   });
-}
+};
 
 export function useSearchPostListQuery(query: string) {
   return useQuery({
-    queryKey: ["posts", query],
-    queryFn: () => postApis.searchPostList(query),
+    queryKey: ["postList", query],
+    queryFn: () => postApis.fetchSearchPostList(query),
   });
 }
 
