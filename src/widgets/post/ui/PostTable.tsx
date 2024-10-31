@@ -7,7 +7,11 @@ import { useEffect } from "react"
 import { usePostTotalStore } from "../../../features/post/model/postTotalStore"
 
 export const PostTable = () => {
-  const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = usePostParamsStore()
+  const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery, updateURL } = usePostParamsStore()
+
+  useEffect(() => {
+    updateURL()
+  }, [skip, limit, sortBy, sortOrder, selectedTag, searchQuery])
   const { setTotal } = usePostTotalStore()
 
   const { data: usersDTO, isLoading: isLoadingUser } = useQueryUsers()
