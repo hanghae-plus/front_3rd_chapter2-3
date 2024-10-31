@@ -31,7 +31,7 @@ export const useRouterQueries = () => {
     setSortBy(params.get("sortBy") || "")
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
-  }, [location.search, setSkip, setLimit, setSearchQuery, setSortBy, setSortOrder, setSelectedTag])
+  }, [location.search])
 
   // URL 업데이트 함수
   const updateURL = () => {

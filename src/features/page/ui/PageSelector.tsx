@@ -1,9 +1,13 @@
 import { Selector } from "../../../shared/ui/Selector"
+import { useRouterQueries } from "../../post/model/routerStore";
 
-export const PageSelector: React.FC<{
-  limit: number
-  setLimit: (value: number) => void
-}> = ({ limit, setLimit }) => {
+export const PageSelector = () => {
+
+  const {
+    limit,
+    setLimit,
+  } = useRouterQueries();
+
   return (
     <div className="flex items-center gap-2">
       <span>표시</span>

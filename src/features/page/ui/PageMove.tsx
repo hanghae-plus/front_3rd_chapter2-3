@@ -1,11 +1,12 @@
 import { Button } from "../../../shared/ui"
+import { useRouterQueries } from "../../post/model/routerStore"
 
 export const PageMove: React.FC<{
-  skip: number
-  limit: number
   total: number
-  setSkip: (value: number) => void
-}> = ({ skip, limit, total, setSkip }) => {
+}> = ({ total }) => {
+
+  const { skip, limit, setSkip } = useRouterQueries();
+
   return (
     <div className="flex gap-2">
       <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>

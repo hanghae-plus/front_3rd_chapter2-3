@@ -217,16 +217,6 @@ const PostsManager = () => {
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
@@ -283,7 +273,7 @@ const PostsManager = () => {
           )}
 
           {/* 페이지네이션 */}
-          <Pagination skip={skip} limit={limit} total={total} setSkip={setSkip} setLimit={setLimit} />
+          <Pagination total={total} />
         </Contents>
       </CardContent>
 
