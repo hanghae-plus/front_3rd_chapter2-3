@@ -6,7 +6,7 @@ interface UpdateCommentDialogProps {
   isOpen: boolean;
   close: () => void;
   comment: CommentType;
-  updateComment: (newComment: CommentType) => void;
+  updateComment: (_newComment: CommentType) => void;
 }
 
 export const UpdateCommentDialog = ({

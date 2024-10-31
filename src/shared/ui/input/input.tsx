@@ -5,8 +5,8 @@ interface InputProps {
   type?: string;
   placeholder?: string;
   value?: string | number;
-  onKeyPress?: (e: KeyboardEvent<HTMLInputElement>) => void;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyPress?: (_e: KeyboardEvent<HTMLInputElement>) => void;
+  onChange?: (_e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {

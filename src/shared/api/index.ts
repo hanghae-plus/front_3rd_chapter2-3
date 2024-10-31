@@ -3,7 +3,7 @@ import axios from "axios";
 interface AxiosRequestConfig<T> {
   method: string;
   url: string;
-  headers: any;
+  headers: headers;
   data?: T;
 }
 

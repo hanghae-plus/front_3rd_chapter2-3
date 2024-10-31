@@ -13,11 +13,20 @@ export interface CommentItemProps {
   comment: CommentType;
   commentList: CommentType[];
   commenthandler: {
-    addNewComment: (newComment: CommentType) => void;
-    updateComment: (newComment: CommentType) => void;
-    deleteComment: (commentId: number) => void;
+    addNewComment: (_newComment: CommentType) => void;
+    updateComment: (_newComment: CommentType) => void;
+    deleteComment: (_commentId: number) => void;
   };
 }
+
+const CommentItem = ({ comment, commentList, commenthandler }: CommentItemProps) => {
+  return (
+    <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
+      <CommentItemContent comment={comment} />
+      <CommentControl comment={comment} commentList={commentList} commenthandler={commenthandler} />
+    </div>
+  );
+};
 
 export const CommentContainer = ({ post }: CommentContainer) => {
   const { commentList, commentHandler } = useComment(post.id);
@@ -40,15 +49,6 @@ export const CommentContainer = ({ post }: CommentContainer) => {
           />
         ))}
       </div>
-    </div>
-  );
-};
-
-const CommentItem = ({ comment, commentList, commenthandler }: CommentItemProps) => {
-  return (
-    <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-      <CommentItemContent comment={comment} />
-      <CommentControl comment={comment} commentList={commentList} commenthandler={commenthandler} />
     </div>
   );
 };

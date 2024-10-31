@@ -8,7 +8,7 @@ export const useUpdateComment = (comment: CommentType) => {
   const mutation = useMutationUpdateComment(newContent, comment.id);
 
   async function handleUpdateComment(
-    updateComment: (newComment: CommentType) => void,
+    updateComment: (_newComment: CommentType) => void,
     close: () => void,
   ) {
     const newCommentData = await mutation.mutateAsync();

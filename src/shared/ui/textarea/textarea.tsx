@@ -5,7 +5,7 @@ interface TextareaProps {
   rows?: number;
   placeholder?: string;
   value?: string;
-  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (_e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(

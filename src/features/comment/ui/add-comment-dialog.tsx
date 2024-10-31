@@ -7,7 +7,7 @@ interface AddCommentDialogProps {
   isOpen: boolean;
   close: () => void;
   post: PostWithAuthorType;
-  addNewComment: (newComment: CommentType) => void;
+  addNewComment: (_newComment: CommentType) => void;
 }
 
 export const AddCommentDialog = ({ isOpen, close, post, addNewComment }: AddCommentDialogProps) => {

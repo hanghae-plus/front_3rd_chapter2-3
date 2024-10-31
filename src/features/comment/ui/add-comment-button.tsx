@@ -8,7 +8,7 @@ import { Plus } from "lucide-react";
 
 interface AddCommmentButtonProps {
   post: PostWithAuthorType;
-  addNewComment: (newComment: CommentType) => void;
+  addNewComment: (_newComment: CommentType) => void;
 }
 
 export const AddCommentButton = ({ post, addNewComment }: AddCommmentButtonProps) => {
