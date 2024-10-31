@@ -13,7 +13,7 @@ import {
 } from "../entities/post/api"
 import { fetchTagsApi } from "../entities/tag/api"
 import { Tag } from "../entities/tag/model/types"
-import { addToPosts, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
+import { addToPosts, attachAuthorFromUser, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
 import { User } from "../entities/user/model/types"
 import { PostSearch } from "../features/post/ui/PostSearch"
 import { ContentSearch } from "../widgets/ui/ContentSearch"
@@ -120,20 +120,23 @@ const PostsManager = () => {
   // 게시물 추가
   const addPost = async (newPost: NewPost) => {
     const postData = await createPostApi(newPost)
-    setPosts(addToPosts(posts, postData))
+    const userData = await fetchUserApi(postData.userId)
+    const postWithUser = attachAuthorFromUser(postData, userData)
+    setPosts(addToPosts(posts, postWithUser))
   }
 
   // 게시물 업데이트
   const updatePost = async (updatingPost: Post) => {
     const postData = await updatePostApi(updatingPost)
-    setPosts(updateInPosts(posts, postData))
-    setShowPostUpdateDialog(false)
+    const userData = await fetchUserApi(postData.userId)
+    const postWithUser = attachAuthorFromUser(postData, userData)
+    setPosts(updateInPosts(posts, postWithUser))
   }
 
   // 게시물 삭제
-  const deletePost = async (id: number) => {
-    await deletePostApi(id)
-    setPosts(removeFromPosts(posts, id))
+  const deletePost = async (postId: number) => {
+    await deletePostApi(postId)
+    setPosts(removeFromPosts(posts, postId))
   }
 
   // 댓글 가져오기
@@ -276,7 +279,7 @@ const PostsManager = () => {
 
       {/* 게시물 수정 대화상자 */}
       {selectedPost && (
-        <PostUpdateDialog selectedPost={selectedPost} setSelectedPost={setSelectedPost} updatePost={updatePost} />
+        <PostUpdateDialog selectedPost={selectedPost} updatePost={updatePost} />
       )}
 
       {/* 댓글 추가 대화상자 */}
