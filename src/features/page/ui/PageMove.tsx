@@ -1,4 +1,4 @@
-import { Button } from "../../shared/ui"
+import { Button } from "../../../shared/ui"
 
 export const PageMove: React.FC<{
   skip: number

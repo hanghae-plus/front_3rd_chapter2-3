@@ -1,4 +1,4 @@
-import { Selector } from "../../shared/ui/Selector"
+import { Selector } from "../../../shared/ui/Selector"
 
 export const PageSelector: React.FC<{
   limit: number
