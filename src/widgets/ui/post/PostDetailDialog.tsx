@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { CommentList } from "../comment/CommentList"
 import { highlightText } from "../../../shared/lib/highlight"
 import { usePost } from "../../../shared/model/usePost"
-import { useURLParams } from "../../../shared/model/useURLParams"
+import { useURLParams } from "../../../features/model/url/useURLParams"
 import { useComment } from "../../../features/model/comment/useComment"
 
 export const PostDetailDialog = () => {

@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts, fetchUserDetail } from "../api/post"
 import type { NewPost, Post, URLParams, User } from "../types"
 import { useComment } from "../../features/model/comment/useComment"
-import { useURLParams } from "./useURLParams"
+import { useURLParams } from "../../features/model/url/useURLParams"
 import { atom, useAtom } from "jotai"
 
 interface UsePostProps {

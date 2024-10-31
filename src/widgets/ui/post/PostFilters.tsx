@@ -1,7 +1,7 @@
 import { PostSearchInput } from "./PostSearchInput"
 import { PostTagSelect } from "./PostTagSelect"
 import { PostSortSelect } from "./PostSortSelect"
-import { useURLParams } from "../../../shared/model/useURLParams"
+import { useURLParams } from "../../../features/model/url/useURLParams"
 import { usePost } from "../../../shared/model/usePost"
 import { useTag } from "../../../features/model/tag/useTag"
 

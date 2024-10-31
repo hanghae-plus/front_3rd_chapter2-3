@@ -3,7 +3,7 @@ import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react
 import { highlightText } from "../../../shared/lib/highlight"
 import type { URLParams } from "../../../shared/types"
 import { usePost } from "../../../shared/model/usePost"
-import { useURLParams } from "../../../shared/model/useURLParams"
+import { useURLParams } from "../../../features/model/url/useURLParams"
 
 export const PostTable = () => {
   const { posts, isLoading, openUserModal, openPostDetail, setSelectedPost, setShowEditDialog, handleDeletePost } =

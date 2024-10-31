@@ -1,5 +1,5 @@
 import { usePost } from "../../../shared/model/usePost"
-import { useURLParams } from "../../../shared/model/useURLParams"
+import { useURLParams } from "../../../features/model/url/useURLParams"
 import { URLParams } from "../../../shared/types"
 import { PostItemsPerPage } from "./PostItemsPerPage"
 import { PostPaginationButtons } from "./PostPaginationButtons"
