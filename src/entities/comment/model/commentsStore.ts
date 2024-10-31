@@ -8,18 +8,21 @@ import { Comment, CommentResponseDto } from './type';
 type State = {
   comments: Record<string, Comment[]>;
   selectedComment: Comment | null;
+  newComment: Comment | null;
 };
 type Action = {
   addComments: (postId: number, newComments: Comment[]) => void;
   addComment: (postId: number, newComment: Comment) => void;
   updateCommentAction: (updatedComment: Comment) => void;
   deleteCommentAction: (id: number, postId: number) => void;
+  setNewComment: (postId: number, newComment: Comment) => void;
 };
 
 const useCommentsStoreBase = create<State & Action>()(
   immer((set) => ({
     comments: {},
     selectedComment: null,
+    newComment: null,
     addComment: (postId: number, newComment: Comment) =>
       set((state) => {
         if (!state.comments?.[postId]) {
@@ -42,6 +45,8 @@ const useCommentsStoreBase = create<State & Action>()(
         state.comments?.[postId].filter((comment) => comment.id !== id);
       }),
     selectComment: (selectedComment: CommentResponseDto) => set(() => ({ selectedComment: selectedComment })),
+    setNewComment: (postId: number, newComment: Comment) =>
+      set((state) => ({ newComment: { ...state.newComment, postId } })),
   }))
 );
 

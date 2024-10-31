@@ -10,6 +10,7 @@ export const Comment = (postId?: number) => {
   const deleteCommentAction = useCommentsStore.use.deleteCommentAction();
   const updateCommentAction = useCommentsStore.use.updateCommentAction();
   const comments = useCommentsStore.use.comments();
+  const setNewComment = useCommentsStore.use.setNewComment();
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
     try {
