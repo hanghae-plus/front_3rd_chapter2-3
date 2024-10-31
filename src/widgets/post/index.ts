@@ -1,1 +1,2 @@
-export * from "./ui/PostDetailDialog/PostDetailDialog"
+export * from "./ui/PostDetailDialog"
+export * from "./ui/PostEditDialog"

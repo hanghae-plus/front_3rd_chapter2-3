@@ -14,11 +14,7 @@ import { usePostTagsQuery } from "../entities/post/api/usePostTagsQuery"
 import { Author, NewPost, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
-import {
-  useAddPostMutation,
-  useDeletePostMutation,
-  useUpdatePostMutation,
-} from "../features/post"
+import { useAddPostMutation, useDeletePostMutation } from "../features/post"
 import {
   Button,
   Card,
@@ -44,7 +40,7 @@ import {
   Textarea,
   TextHighlighter,
 } from "../shared/ui"
-import { PostDetailDialog } from "../widgets/post"
+import { PostDetailDialog, PostEditDialog } from "../widgets/post"
 import { UserModal } from "../widgets/user"
 
 const PostsManager = () => {
@@ -86,7 +82,6 @@ const PostsManager = () => {
   } = usePostsQuery(payload)
 
   const { mutate: addPostMutate } = useAddPostMutation()
-  const { mutate: updatePostMutate } = useUpdatePostMutation()
   const { mutate: deletePostMutate } = useDeletePostMutation()
 
   const addPost = (newPost: NewPost) => {
@@ -94,16 +89,6 @@ const PostsManager = () => {
       onSuccess: () => {
         setShowAddDialog(false)
         setNewPost({ title: "", body: "", userId: 1 })
-      },
-    })
-  }
-
-  const updatePost = (selectedPost: Post | null) => {
-    if (!selectedPost) return
-
-    updatePostMutate(selectedPost, {
-      onSuccess: () => {
-        setShowEditDialog(false)
       },
     })
   }
@@ -379,37 +364,12 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ""}
-              onChange={(e) => {
-                if (selectedPost) {
-                  setSelectedPost({ ...selectedPost, title: e.target.value })
-                }
-              }}
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ""}
-              onChange={(e) => {
-                if (selectedPost) {
-                  setSelectedPost({ ...selectedPost, body: e.target.value })
-                }
-              }}
-            />
-            <Button onClick={() => updatePost(selectedPost)}>
-              게시물 업데이트
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <PostEditDialog
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        selectedPost={selectedPost}
+        setSelectedPost={setSelectedPost}
+      />
 
       {/* 게시물 상세 보기 대화상자 */}
       <PostDetailDialog

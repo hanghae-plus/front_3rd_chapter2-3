@@ -1,13 +1,13 @@
 import { DialogProps } from "@radix-ui/react-dialog"
-import { Post } from "../../../../entities/post/model/types"
+import { Post } from "../../../entities/post/model/types"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   TextHighlighter,
-} from "../../../../shared/ui"
-import { Comments } from "../../../comment"
+} from "../../../shared/ui"
+import { Comments } from "../../comment"
 
 type Props = Pick<DialogProps, "open" | "onOpenChange"> & {
   selectedPost: Post | null
