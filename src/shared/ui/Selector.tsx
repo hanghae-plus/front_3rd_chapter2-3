@@ -1,7 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "."
 
 interface OptionItem {
-  value: string | undefined
+  value: string
   text: string
   key?: string
 }
@@ -20,7 +20,7 @@ export const Selector: React.FC<{
         <SelectValue placeholder={placeHolder} />
       </SelectTrigger>
       <SelectContent>
-        {hasDefault && <SelectItem key={defaultItem?.key ?? defaultItem?.value} value={defaultItem?.value}>{defaultItem?.text}</SelectItem>}
+        {hasDefault && <SelectItem key={defaultItem?.key ?? "없음"} value={defaultItem?.value ?? "없음"}>{defaultItem?.text ?? "없음"}</SelectItem>}
         {optionItems.map((item) => (
           <SelectItem key={item.key ?? item.value} value={item.value}>{item.text}</SelectItem>
         ))}
