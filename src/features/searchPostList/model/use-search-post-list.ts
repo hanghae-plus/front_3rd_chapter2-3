@@ -2,10 +2,12 @@ import { useEffect } from "react";
 
 import { useQueryGetPost } from "@/entities/post/api";
 import { postListState } from "@/entities/post/model/post-state";
+import { useLocation } from "react-router-dom";
 
 export function useSearchPostList() {
+  const location = useLocation();
   const { setNewPostList } = postListState();
-  const { refetch } = useQueryGetPost();
+  const { isLoading, refetch } = useQueryGetPost();
 
   const searchPostList = async () => {
     const postList = await refetch();
@@ -17,5 +19,5 @@ export function useSearchPostList() {
     searchPostList();
   }, [location.search]);
 
-  return { searchPostList };
+  return { isLoading, searchPostList };
 }
