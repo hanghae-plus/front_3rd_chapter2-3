@@ -5,6 +5,7 @@ import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Input } from "../../../shared/ui/input"
 import { Textarea } from "../../../shared/ui/textarea"
+import { useUpdatePost } from "../api/query"
 
 interface EditPostFormData {
   title: string
@@ -16,6 +17,7 @@ interface EditPostDialogProps extends ModalProps {
 }
 
 const EditPostDialog = ({ isOpen, close, post }: EditPostDialogProps) => {
+  const { mutate: updatePost } = useUpdatePost()
   const { register, handleSubmit } = useForm<EditPostFormData>({
     defaultValues: {
       title: post.title,
@@ -24,9 +26,19 @@ const EditPostDialog = ({ isOpen, close, post }: EditPostDialogProps) => {
   })
 
   const onSubmit = (data: EditPostFormData) => {
-    // TODO: updatePost 함수 구현 필요
-    console.log(data)
-    close()
+    console.log("update", data)
+    updatePost(
+      {
+        id: post.id,
+        title: data.title,
+        body: data.body,
+      },
+      {
+        onSuccess: () => {
+          close()
+        },
+      },
+    )
   }
 
   return (

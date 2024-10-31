@@ -7,20 +7,17 @@ import { openModals } from "../../../shared/lib/modal/openModals"
 import { Button } from "../../../shared/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/table"
 import { useUsers } from "../../user/api/query"
-import { usePostsByTag } from "../api/query"
+import { useDeletePost, usePostsByTag } from "../api/query"
 
 const PostingTable = () => {
   const {
     user,
-    post: { openDetailDialog, openEditDialog,openAddDialog },
+    post: { openDetailDialog, openEditDialog },
   } = openModals
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "all")
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-
-  const [showEditDialog, setShowEditDialog] = useState(false)
 
   const { data: posts, isLoading } = usePostsByTag({ tag: selectedTag })
   const { data: users } = useUsers()
@@ -28,9 +25,14 @@ const PostingTable = () => {
     ...post,
     author: users?.users.find((user) => user.id === post.userId),
   }))
+  const { mutate: deletePost } = useDeletePost()
 
   const openPostDetail = (post: Post) => {
     openDetailDialog(post)
+  }
+
+  const handleDeletePost = (id: number) => {
+    deletePost(id)
   }
 
   return (
@@ -102,7 +104,7 @@ const PostingTable = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>

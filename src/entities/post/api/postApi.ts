@@ -1,5 +1,5 @@
 import { baseApi } from "../../../shared/api/base"
-import { NewPostDto, PostsResponse } from "../model/type"
+import { NewPostDto, PostsResponse, UpdatePostDto } from "../model/type"
 
 export const postApi = {
   get: {
@@ -32,7 +32,12 @@ export const postApi = {
     },
   },
 
-  put: {},
+  put: {
+    updatePost: async (post: UpdatePostDto) => {
+      const response = await baseApi.put(`/posts/${post.id}`, post)
+      return response.data
+    },
+  },
 
   delete: {
     post: async (id: number): Promise<void> => {

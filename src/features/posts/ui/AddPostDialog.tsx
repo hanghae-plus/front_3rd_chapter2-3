@@ -4,6 +4,7 @@ import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Input } from "../../../shared/ui/input"
 import { Textarea } from "../../../shared/ui/textarea"
+import { useAddPost } from "../api/query"
 
 interface AddPostFormData {
   title: string
@@ -14,6 +15,7 @@ interface AddPostFormData {
 interface AddPostDialogProps extends ModalProps {}
 
 const AddPostDialog = ({ isOpen, close }: AddPostDialogProps) => {
+  const { mutate: addPost } = useAddPost()
   const { register, handleSubmit } = useForm<AddPostFormData>({
     defaultValues: {
       title: "",
@@ -23,8 +25,11 @@ const AddPostDialog = ({ isOpen, close }: AddPostDialogProps) => {
   })
 
   const onSubmit = (data: AddPostFormData) => {
-    // TODO: addPost 함수 구현 필요
-    console.log(data)
+    addPost(data, {
+      onSuccess: () => {
+        close()
+      },
+    })
   }
 
   return (

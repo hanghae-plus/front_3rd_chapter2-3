@@ -25,3 +25,5 @@ export interface NewPostDto {
   body: string
   userId: number
 }
+
+export type UpdatePostDto = Pick<Post, "id" | "title" | "body">

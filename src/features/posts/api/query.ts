@@ -1,11 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { postApi } from "../../../entities/post/api/postApi"
-import { NewPostDto } from "../../../entities/post/model/type"
+import { NewPostDto, UpdatePostDto } from "../../../entities/post/model/type"
 
 export const postKeys = {
   all: ["posts"] as const,
   byTag: (tag: string) => [...postKeys.all, "tag", tag] as const,
   search: (query: string) => [...postKeys.all, "search", query] as const,
+  byId: (id: number) => [...postKeys.all, "id", id] as const,
 }
 
 export const usePosts = ({ limit = 10, skip = 0 }: { limit: number; skip: number }) => {
@@ -23,24 +24,18 @@ export const usePostsByTag = ({ tag, limit = 10, skip = 0 }: { tag: string; limi
 }
 
 export const useAddPost = () => {
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: postKeys.all,
     mutationFn: (newPost: NewPostDto) => postApi.post.addPost(newPost),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.all })
-    },
   })
 }
 
 export const useDeletePost = () => {
-  const queryClient = useQueryClient()
-
   return useMutation({
+    mutationKey: postKeys.all,
     mutationFn: (id: number) => postApi.delete.post(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.all })
-    },
   })
 }
 
@@ -50,5 +45,12 @@ export const useSearchPosts = (searchQuery: string) => {
     queryFn: () => postApi.get.searchPosts(searchQuery),
     enabled: !!searchQuery,
     staleTime: 1000 * 60 * 5,
+  })
+}
+
+export const useUpdatePost = () => {
+  return useMutation({
+    mutationFn: (post: UpdatePostDto) => postApi.put.updatePost(post),
+    mutationKey: postKeys.all,
   })
 }

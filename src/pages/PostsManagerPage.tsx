@@ -2,7 +2,6 @@ import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Post } from "../entities/post/model/type"
-import { useComments } from "../features/comments/api/queries"
 import { usePostsByTag } from "../features/posts/api/query"
 import PostingTable from "../features/posts/ui/PostingTable"
 import { useTags } from "../features/tag/api/query"
@@ -61,18 +60,6 @@ const PostsManager = () => {
       console.error("게시물 검색 오류:", error)
     }
   }
-
-  // 게시물 추가
-  const addPost = async () => {}
-
-  // 게시물 업데이트
-  const updatePost = async () => {}
-
-  // 게시물 삭제
-  const deletePost = async (id) => {}
-
-  // 댓글 가져오기
-  const { data: comments } = useComments(selectedPost?.id ?? 1)
 
   // 댓글 추가
   const addComment = async () => {}
