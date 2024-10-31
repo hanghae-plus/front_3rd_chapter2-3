@@ -22,7 +22,7 @@ export const PostSearchBar = () => {
 
   useEffect(() => {
     setLoading(postDataLoading);
-  }, [postDataLoading]);
+  }, [postDataLoading, setLoading]);
 
   useEffect(() => {
     if (postsData) {
@@ -34,14 +34,14 @@ export const PostSearchBar = () => {
       setPosts(postsWithUsers);
       setTotal(postsData.postsData.total);
     }
-  }, [postsData]);
+  }, [postsData, setPosts, setTotal]);
 
   useEffect(() => {
     if (searchQuery && searchData) {
       setPosts(searchData.posts);
       setTotal(searchData.total);
     }
-  }, [searchData, searchQuery]);
+  }, [searchData, searchQuery, setPosts, setTotal]);
 
   const handleEnterKeyPress = () => {
     if (!searchQuery) {

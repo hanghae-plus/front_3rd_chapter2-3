@@ -9,14 +9,13 @@ export const PostSearchBarTagSelectBox = () => {
   const { setQueryParams } = useQueryParams();
 
   const { data: tagsData } = useGetTags();
+  const { data: postByTagData } = useGetPostByTag(selectedTag || "all");
 
   useEffect(() => {
     if (tagsData) {
       setTags(tagsData);
     }
-  }, [tagsData]);
-
-  const { data: postByTagData } = useGetPostByTag(selectedTag || "all");
+  }, [tagsData, setTags]);
 
   useEffect(() => {
     if (postByTagData) {
@@ -28,7 +27,7 @@ export const PostSearchBarTagSelectBox = () => {
       setPosts(postsWithUsers);
       setTotal(postByTagData.postsData.total);
     }
-  }, [postByTagData]);
+  }, [postByTagData, setPosts, setTotal]);
 
   const handleSelectTag = (tag: string) => {
     setSelectedTag(tag);
