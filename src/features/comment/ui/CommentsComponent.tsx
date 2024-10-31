@@ -15,14 +15,14 @@ const CommentsComponent = ({ postId, searchQuery }: Props) => {
   const { data, error } = useQueryComments(postId)
 
   useEffect(() => {
-    if (error) {
-      console.error("댓글 가져오기 오류:", error)
-      return
-    }
     if (!data || comments?.[postId]) return
     setComments((prev) => ({ ...prev, [postId]: data.comments }))
   }, [data])
 
+  if (error) {
+    console.error("댓글 가져오기 오류:", error)
+    return
+  }
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">

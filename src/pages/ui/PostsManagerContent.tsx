@@ -10,11 +10,11 @@ import { useUser } from "../../features/user/model/useUser"
 import { useUserDialog } from "../../features/user/model/useUserDialog"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { fetchTags } from "../api/fetchTags"
 import { fetchPostsBySearchFetch, fetchPostsByTagFetch, fetchPostsFetch } from "../../entities/post/api"
 import { fetchUsersFetch } from "../../entities/user/api"
 import { Post } from "../../entities/post/model/types"
 import { User } from "../../entities/user/model/types"
+import useQueryTags from "../../features/tags/api/useQueryTags"
 
 interface PostsData {
   posts: Post[]
@@ -46,6 +46,12 @@ const PostsManagerContent = () => {
   const { setShowUserModal } = useUserDialog()
 
   const [loading, setLoading] = useState(false)
+  const { data, error } = useQueryTags()
+
+  useEffect(() => {
+    if (!data) return
+    setTags(data)
+  }, [data])
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -58,10 +64,6 @@ const PostsManagerContent = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
-
-  useEffect(() => {
-    fetchTags(setTags)
-  }, [])
 
   useEffect(() => {
     if (selectedTag) {
@@ -144,6 +146,11 @@ const PostsManagerContent = () => {
       .finally(() => {
         setLoading(false)
       })
+  }
+
+  if (error) {
+    console.error("태그 가져오기 오류:", error)
+    return
   }
 
   return (
