@@ -10,19 +10,69 @@ import { usePost } from "../../features/post/model/usePost"
 import { useTag } from "../../features/tags/model/useTag"
 import { useUser } from "../../features/user/model/useUser"
 import { useUserDialog } from "../../features/user/model/useUserDialog"
+import { useEffect, useState } from "react"
+import { fetchPosts } from "../api/fetchPosts"
+import { useLocation, useNavigate } from "react-router-dom"
+import { fetchTags } from "../api/fetchTags"
 
-interface Props {
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  updateURL: () => void
-  loading: boolean
-}
+const PostsManagerContent = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
 
-const PostsManagerContent = ({ setLoading, updateURL, loading }: Props) => {
-  const { setPosts, setTotal, skip, limit, searchQuery, setSearchQuery, sortBy, setSortBy, sortOrder, setSortOrder } =
-    usePost()
-  const { tags, selectedTag, setSelectedTag } = useTag()
+  const {
+    setPosts,
+    setTotal,
+    skip,
+    limit,
+    searchQuery,
+    setSearchQuery,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    setSkip,
+    setLimit,
+  } = usePost()
+  const { tags, setTags, selectedTag, setSelectedTag } = useTag()
   const { setSelectedUser } = useUser()
   const { setShowUserModal } = useUserDialog()
+
+  const [loading, setLoading] = useState(false)
+
+  // URL 업데이트 함수
+  const updateURL = () => {
+    const params = new URLSearchParams()
+    if (skip) params.set("skip", skip.toString())
+    if (limit) params.set("limit", limit.toString())
+    if (searchQuery) params.set("search", searchQuery)
+    if (sortBy) params.set("sortBy", sortBy)
+    if (sortOrder) params.set("sortOrder", sortOrder)
+    if (selectedTag) params.set("tag", selectedTag)
+    navigate(`?${params.toString()}`)
+  }
+
+  useEffect(() => {
+    fetchTags(setTags)
+  }, [])
+
+  useEffect(() => {
+    if (selectedTag) {
+      fetchPostsByTag({ tag: selectedTag, setLoading, limit, skip, setPosts, setTotal })
+    } else {
+      fetchPosts({ setLoading, limit, skip, setPosts, setTotal })
+    }
+    updateURL()
+  }, [skip, limit, sortBy, sortOrder, selectedTag])
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    setSkip(parseInt(params.get("skip") || "0"))
+    setLimit(parseInt(params.get("limit") || "10"))
+    setSearchQuery(params.get("search") || "")
+    setSortBy(params.get("sortBy") || "")
+    setSortOrder(params.get("sortOrder") || "asc")
+    setSelectedTag(params.get("tag") || "")
+  }, [location.search])
 
   return (
     <CardContent>
