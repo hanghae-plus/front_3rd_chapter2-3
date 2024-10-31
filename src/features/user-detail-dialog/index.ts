@@ -1,2 +1,2 @@
-export { default as UserDetailDialog } from "./ui/UserDetailDialog"
-export { default as UserDetailDialogOpenButton } from "./ui/UserDetailDialogOpenButton"
+export { default as UserDetailDialog } from "./UserDetailDialog"
+export { default as UserDetailDialogOpenButton } from "./UserDetailDialogOpenButton"

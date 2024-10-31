@@ -19,18 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui"
-import {
-  Author,
-  Comment,
-  CommentId,
-  NewComment,
-  NewPost,
-  Post,
-  PostComments,
-  PostId,
-  User,
-  UserId,
-} from "@/shared/types"
+import { Author, Comment, CommentId, NewComment, NewPost, Post, PostComments, PostId } from "@/shared/types"
 import { PostAddDialog, PostAddDialogOpenButton } from "@/features/post-add-dialog"
 import { CommentEditDialog, CommentEditDialogOpenButton } from "@/features/comment-edit-dialog"
 import { CommentAddDialog, CommentAddDialogOpenButton } from "@/features/comment-add-dialog"
@@ -71,14 +60,11 @@ const PostsManagerPage = () => {
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
 
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
-
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -282,18 +268,6 @@ const PostsManagerPage = () => {
     setShowPostDetailDialog(true)
   }
 
-  // 사용자 모달 열기
-  const openUserModal = async (userId: UserId) => {
-    try {
-      const response = await fetch(`/api/users/${userId}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
-
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
     <Table>
@@ -335,7 +309,7 @@ const PostsManagerPage = () => {
               </div>
             </TableCell>
             <TableCell>
-              <UserDetailDialogOpenButton post={post} onClick={() => openUserModal(post.author.id)} />
+              <UserDetailDialogOpenButton post={post} />
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
@@ -506,7 +480,7 @@ const PostsManagerPage = () => {
         />
 
         {/* 사용자 모달 */}
-        <UserDetailDialog open={showUserModal} onOpenChange={setShowUserModal} selectedUser={selectedUser} />
+        <UserDetailDialog />
       </Card>
     </QueryProvider>
   )
