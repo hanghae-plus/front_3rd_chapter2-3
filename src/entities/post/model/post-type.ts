@@ -17,6 +17,11 @@ export interface PostWithAuthorType extends PostType {
   author: UserType;
 }
 
+export interface PostListTotal {
+  postList: PostWithAuthorType[];
+  total: number;
+}
+
 export interface PostListType {
   limit: number;
   skip: number;

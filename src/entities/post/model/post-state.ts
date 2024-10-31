@@ -5,10 +5,12 @@ import { PostWithAuthorType } from "./post-type";
 
 interface PostListState {
   postList: PostWithAuthorType[];
+  total: number;
   addNewPost: (post: NewPostType) => void;
   setNewPostList: (newPostList: PostWithAuthorType[]) => void;
   deletePost: (postId: number) => void;
   updatePost: (newPost: PostWithAuthorType) => void;
+  setTotal: (num: number) => void;
 }
 
 const postDetail = (newPost: NewPostType): PostWithAuthorType => {
@@ -48,6 +50,7 @@ const updatePostList = (prev: PostWithAuthorType[], newPost: PostWithAuthorType)
 
 export const postListState = create<PostListState>(set => ({
   postList: [],
+  total: 0,
   addNewPost: newPost => {
     set(prev => ({
       postList: [postDetail(newPost), ...updateIndexList(prev.postList)],
@@ -62,4 +65,5 @@ export const postListState = create<PostListState>(set => ({
   updatePost: newPost => {
     set(prev => ({ postList: updatePostList(prev.postList, newPost) }));
   },
+  setTotal: num => set(() => ({ total: num })),
 }));
