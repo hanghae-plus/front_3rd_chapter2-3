@@ -8,7 +8,7 @@ interface PostFormProps {
   onCancel: () => void
 }
 
-export const PostForm = ({ post, onSubmit, onCancel }: PostFormProps) => {
+export const PostForm = ({ post, onSubmit }: PostFormProps) => {
   const { formData, setFormData, handleSubmit } = usePostForm(post)
 
   return (
@@ -31,12 +31,13 @@ export const PostForm = ({ post, onSubmit, onCancel }: PostFormProps) => {
         value={formData.body}
         onChange={(e) => setFormData((prev) => ({ ...prev, body: e.target.value }))}
       />
-      <div className="flex justify-end gap-2">
-        <Button variant="outline" onClick={onCancel}>
-          취소
-        </Button>
-        <Button type="submit">{post ? "수정" : "추가"}</Button>
-      </div>
+      <Input
+        type="number"
+        placeholder="사용자 ID"
+        value={formData.userId}
+        onChange={(e) => setFormData((prev) => ({ ...prev, body: e.target.value }))}
+      />
+      <Button type="submit">게시물 추가</Button>
     </form>
   )
 }
