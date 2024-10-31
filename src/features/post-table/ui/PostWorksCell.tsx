@@ -2,6 +2,7 @@ import { Edit2, MessageSquare, Trash2 } from 'lucide-react';
 
 import { fetchAllCommentsByPostId } from '~/entities/comment/api/commentApi';
 import { useCommentsStore } from '~/entities/comment/model/commentsStore';
+import { useModalStore } from '~/entities/modal/model/modalStore';
 import { deletePost as deletePostApi } from '~/entities/post/api/postApi';
 import { usePostStore } from '~/entities/post/model/store';
 import { Post } from '~/entities/post/model/types';
@@ -16,6 +17,10 @@ export const PostWorksCell = ({ post }: { post: Post }) => {
   // post store
   const selectPost = usePostStore.use.selectPost();
   const deletePostAction = usePostStore.use.deletePostAction();
+
+  // modal store
+  const selectModalType = useModalStore.use.selectModalType();
+  const changeOpen = useModalStore.use.changeOpen();
 
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {
@@ -35,7 +40,7 @@ export const PostWorksCell = ({ post }: { post: Post }) => {
     }
     selectPost(post);
     fetchComments(post.id);
-    // setShowPostDetailDialog(true);
+    changeOpen(true);
   };
 
   // 게시물 삭제
@@ -48,19 +53,17 @@ export const PostWorksCell = ({ post }: { post: Post }) => {
     }
   };
 
+  const handleClickUpdatePostButton = () => {
+    selectPost(post);
+    selectModalType('updatePost');
+    changeOpen(true);
+  };
   return (
     <div className="flex items-center gap-2">
       <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
         <MessageSquare className="w-4 h-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => {
-          selectPost(post);
-          // setShowEditDialog(true);
-        }}
-      >
+      <Button variant="ghost" size="sm" onClick={handleClickUpdatePostButton}>
         <Edit2 className="w-4 h-4" />
       </Button>
       <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>

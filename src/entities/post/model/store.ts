@@ -3,13 +3,13 @@ import { immer } from 'zustand/middleware/immer';
 
 import { createSelectors } from '~/shared/lib/zustandUtil';
 
-import { Post } from './types';
+import { Post, PostRequestDto } from './types';
 
 type PostsState = { posts: Post[]; selectedPost: Post | null; totalPost: number };
 
 type PostsAction = {
   fetchPostsAction: ({ posts, total }: { posts: Post[]; total: number }) => void;
-  addNewPostAction: (post: Post) => void;
+  addNewPostAction: (post: PostRequestDto) => void;
   updatePostAction: (updatedPost: Post) => void;
   deletePostAction: (id: number) => void;
   selectPost: (selectedPost: Post) => void;

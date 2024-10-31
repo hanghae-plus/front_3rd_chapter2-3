@@ -10,5 +10,9 @@ export const useOwnSearchParams = () => {
   const sortOrder = searchParams.get('sortOrder') || 'asc';
   const selectedTag = searchParams.get('tag') || '';
 
-  return { searchQuery, skip, limit, sortBy, sortOrder, selectedTag, setSearchParams };
+  const updateSearchParams = (key: string, value: string) => {
+    setSearchParams({ ...searchParams, [key]: value });
+  };
+
+  return { searchQuery, skip, limit, sortBy, sortOrder, selectedTag, updateSearchParams };
 };

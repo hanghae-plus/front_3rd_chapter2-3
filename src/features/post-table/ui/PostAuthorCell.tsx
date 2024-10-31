@@ -1,12 +1,11 @@
-import { useModalStore } from '~/features/user-modal/model/userModalStore';
-
+import { useModalStore } from '~/entities/modal/model/modalStore';
 import { fetchUserById } from '~/entities/user/api/userApi';
 import { User } from '~/entities/user/model/types';
 import { useUserStore } from '~/entities/user/model/userStore';
 
 export const PostAuthorCell = ({ author }: { author?: User }) => {
   // modal store
-  const setShowUserModal = useModalStore.use.setShowUserModal();
+  const changeOpen = useModalStore.use.changeOpen();
 
   // user store
   const selectUser = useUserStore.use.selectUser();
@@ -19,7 +18,7 @@ export const PostAuthorCell = ({ author }: { author?: User }) => {
     try {
       const userData = await fetchUserById(user.id);
       selectUser(userData);
-      setShowUserModal(true);
+      changeOpen(true);
     } catch (error) {
       console.error('사용자 정보 가져오기 오류:', error);
     }

@@ -1,6 +1,6 @@
 // where are you located in?
 
-export const HighlightText = ({ text, highlight }: { text: string; highlight: string | null }) => {
+export const HighlightText = ({ text, highlight }: { text?: string; highlight: string | null }) => {
   if (!text) return null;
   if (!highlight?.trim()) {
     return <span>{text}</span>;
