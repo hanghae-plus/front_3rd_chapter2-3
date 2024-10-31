@@ -1,16 +1,10 @@
-import {
-  Edit2,
-  MessageSquare,
-  ThumbsDown,
-  ThumbsUp,
-  Trash2,
-} from "lucide-react"
+import { Edit2, MessageSquare, ThumbsDown, ThumbsUp } from "lucide-react"
 import { useState } from "react"
 import { UpdateQueryParam } from "../../../entities/post"
 import { Author, Post } from "../../../entities/post/model/types"
 import { userApi } from "../../../entities/user/api/userApi"
 import { UserDTO } from "../../../entities/user/model/types"
-import { useDeletePostMutation } from "../../../features/post"
+import { PostDeleteButton } from "../../../features/post"
 import {
   Button,
   Table,
@@ -51,8 +45,8 @@ export const PostTable = ({
     }
   }
 
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   // 게시물 상세 보기
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     setShowPostDetailDialog(true)
@@ -61,8 +55,6 @@ export const PostTable = ({
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
 
   const [showEditDialog, setShowEditDialog] = useState(false)
-
-  const { mutate: deletePostMutate } = useDeletePostMutation()
 
   return (
     <>
@@ -148,13 +140,8 @@ export const PostTable = ({
                   >
                     <Edit2 className="w-4 h-4" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => deletePostMutate(post.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+
+                  <PostDeleteButton postId={post.id} />
                 </div>
               </TableCell>
             </TableRow>
