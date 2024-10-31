@@ -11,7 +11,6 @@ export const PostFilterTag = () => {
       value={selectedTag}
       onValueChange={(value) => {
         setSelectedTag(value)
-        // fetchPostsByTag(value)
         updatePostFilter({ tag: value })
       }}
     >
