@@ -11,20 +11,16 @@ import { useState } from "react"
 import { SortOrder, usePostQueryParams, usePostsQuery } from "../entities/post"
 import { usePostsQueryProps } from "../entities/post/api/usePostsQuery"
 import { usePostTagsQuery } from "../entities/post/api/usePostTagsQuery"
-import { Author, NewPost, Post } from "../entities/post/model/types"
+import { Author, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
-import { useAddPostMutation, useDeletePostMutation } from "../features/post"
+import { useDeletePostMutation } from "../features/post"
 import {
   Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
   Input,
   Select,
   SelectContent,
@@ -37,10 +33,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Textarea,
   TextHighlighter,
 } from "../shared/ui"
-import { PostDetailDialog, PostEditDialog } from "../widgets/post"
+import {
+  PostAddDialog,
+  PostDetailDialog,
+  PostEditDialog,
+} from "../widgets/post"
 import { UserModal } from "../widgets/user"
 
 const PostsManager = () => {
@@ -51,11 +50,6 @@ const PostsManager = () => {
 
   // 상태 관리
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [newPost, setNewPost] = useState<NewPost>({
-    title: "",
-    body: "",
-    userId: 1,
-  })
 
   const [searchQuery, setSearchQuery] = useState(search)
 
@@ -81,17 +75,7 @@ const PostsManager = () => {
     isLoading,
   } = usePostsQuery(payload)
 
-  const { mutate: addPostMutate } = useAddPostMutation()
   const { mutate: deletePostMutate } = useDeletePostMutation()
-
-  const addPost = (newPost: NewPost) => {
-    addPostMutate(newPost, {
-      onSuccess: () => {
-        setShowAddDialog(false)
-        setNewPost({ title: "", body: "", userId: 1 })
-      },
-    })
-  }
 
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {
@@ -331,37 +315,7 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) =>
-                setNewPost({ ...newPost, title: e.target.value })
-              }
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) =>
-                setNewPost({ ...newPost, userId: Number(e.target.value) })
-              }
-            />
-            <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <PostAddDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
 
       {/* 게시물 수정 대화상자 */}
       <PostEditDialog
