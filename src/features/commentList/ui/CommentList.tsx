@@ -1,17 +1,17 @@
-import { Edit2, ThumbsUp, Trash2 } from "lucide-react"
+import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { Comment } from "../../../entities/comment"
 import { Button } from "../../../shared/ui"
 import { useCommentsList } from "../model/useCommentList"
 
 interface CommentsListProps {
   postId: number
-  searchQuery?: string
+  onAddComment: () => void // 추가
   onEdit: (comment: Comment) => void
   onDelete: (id: number) => void
   onLike: (id: number) => void
 }
 
-export const CommentsList = ({ postId, searchQuery = "", onEdit, onDelete, onLike }: CommentsListProps) => {
+export const CommentsList = ({ postId, onAddComment, onEdit, onDelete, onLike }: CommentsListProps) => {
   const { comments, isLoading } = useCommentsList(postId)
 
   if (isLoading) {
@@ -19,7 +19,14 @@ export const CommentsList = ({ postId, searchQuery = "", onEdit, onDelete, onLik
   }
 
   return (
-    <div className="space-y-1">
+    <div className="mt-2">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-semibold">댓글</h3>
+        <Button size="sm" onClick={onAddComment}>
+          <Plus className="w-3 h-3 mr-1" />
+          댓글 추가
+        </Button>
+      </div>
       {comments.map((comment) => (
         <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
           <div className="flex items-center space-x-2 overflow-hidden">

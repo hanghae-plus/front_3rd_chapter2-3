@@ -16,7 +16,7 @@ interface PostsState {
   selectedTag: string
   sortBy: string
   sortOrder: "asc" | "desc"
-  modalType: "add" | "edit" | "comment" | null
+  modalType: "add" | "edit" | "comment" | "add-comment" | "edit-comment" | null
   selectedPost: Post | null
 
   // computed value를 위한 getter
