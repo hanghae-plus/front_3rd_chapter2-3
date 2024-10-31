@@ -2,8 +2,6 @@ import { Search } from "lucide-react"
 import { Input } from "../../shared/ui/Input"
 import { CardContent } from "../../shared/ui/Card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/Select"
-import { fetchPostsByTag } from "../api/fetchPostsByTag"
-import { searchPosts } from "../api/searchPosts"
 import PostTable from "./PostTable"
 import Pagination from "./Pagination"
 import { usePost } from "../../features/post/model/usePost"
@@ -11,9 +9,19 @@ import { useTag } from "../../features/tags/model/useTag"
 import { useUser } from "../../features/user/model/useUser"
 import { useUserDialog } from "../../features/user/model/useUserDialog"
 import { useEffect, useState } from "react"
-import { fetchPosts } from "../api/fetchPosts"
 import { useLocation, useNavigate } from "react-router-dom"
 import { fetchTags } from "../api/fetchTags"
+import { fetchPostsBySearchFetch, fetchPostsByTagFetch, fetchPostsFetch } from "../../entities/post/api"
+import { fetchUsersFetch } from "../../entities/user/api"
+import { Post } from "../../entities/post/model/types"
+import { User } from "../../entities/user/model/types"
+
+interface PostsData {
+  posts: Post[]
+  total: number
+  skip: number
+  limit: number
+}
 
 const PostsManagerContent = () => {
   const navigate = useNavigate()
@@ -57,9 +65,9 @@ const PostsManagerContent = () => {
 
   useEffect(() => {
     if (selectedTag) {
-      fetchPostsByTag({ tag: selectedTag, setLoading, limit, skip, setPosts, setTotal })
+      fetchPostsByTag(selectedTag)
     } else {
-      fetchPosts({ setLoading, limit, skip, setPosts, setTotal })
+      fetchPosts()
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
@@ -74,6 +82,70 @@ const PostsManagerContent = () => {
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
 
+  const searchPosts = async () => {
+    if (!searchQuery) {
+      fetchPosts()
+      return
+    }
+    setLoading(true)
+    try {
+      const data = await fetchPostsBySearchFetch(searchQuery)
+      setPosts(data.posts)
+      setTotal(data.total)
+    } catch (error) {
+      console.error("게시물 검색 오류:", error)
+    }
+    setLoading(false)
+  }
+
+  const fetchPostsByTag = async (tag: string) => {
+    if (!tag || tag === "all") {
+      fetchPosts()
+      return
+    }
+    setLoading(true)
+    try {
+      const [postsData, usersData] = await Promise.all([fetchPostsByTagFetch(tag), fetchUsersFetch()])
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
+        ...post,
+        author: usersData.users.find((user: User) => user.id === post.userId),
+      }))
+
+      setPosts(postsWithUsers)
+      setTotal(postsData.total)
+    } catch (error) {
+      console.error("태그별 게시물 가져오기 오류:", error)
+    }
+    setLoading(false)
+  }
+
+  const fetchPosts = () => {
+    setLoading(true)
+    let postsData: PostsData
+    let usersData: User[]
+
+    fetchPostsFetch(limit, skip)
+      .then((data) => {
+        postsData = data
+        return fetchUsersFetch()
+      })
+      .then((users) => {
+        usersData = users.users
+        const postsWithUsers = postsData.posts.map((post) => ({
+          ...post,
+          author: usersData.find((user) => user.id === post.userId),
+        }))
+        setPosts(postsWithUsers)
+        setTotal(postsData.total)
+      })
+      .catch((error) => {
+        console.error("게시물 가져오기 오류:", error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
   return (
     <CardContent>
       <div className="flex flex-col gap-4">
@@ -87,9 +159,7 @@ const PostsManagerContent = () => {
                 className="pl-8"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) =>
-                  e.key === "Enter" && searchPosts({ searchQuery, setLoading, limit, skip, setPosts, setTotal })
-                }
+                onKeyPress={(e) => e.key === "Enter" && searchPosts()}
               />
             </div>
           </div>
@@ -97,7 +167,7 @@ const PostsManagerContent = () => {
             value={selectedTag}
             onValueChange={(value) => {
               setSelectedTag(value)
-              fetchPostsByTag({ tag: value, setLoading, limit, skip, setPosts, setTotal })
+              fetchPostsByTag(value)
               updateURL()
             }}
           >
