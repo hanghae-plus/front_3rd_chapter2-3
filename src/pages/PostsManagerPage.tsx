@@ -25,23 +25,20 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import { fetchUser } from "../entities/user/api/userApi"
 import { highlightText } from "../shared/lib/text"
 import UserInfoDialog from "../entities/user/components/UserInfoDialog"
 import CommentAddDialog from "../features/comment/components/CommentAddDialog"
 import CommentModifyDialog from "../features/comment/components/CommentModifyDialog"
 import { AddCommentBody, Comment } from "../entities/comment/model/types"
-import { addComment, deleteComment, likeComment, updateComment } from "../features/comment/api/fetch"
-import { fetchComments } from "../entities/comment/api/commentApi"
 import CommentItem from "../features/comment/components/CommentItem"
 import Loading from "../shared/ui/Loading"
 import { useAddComment } from "../features/comment/api/create-comment"
 import { useComments } from "../entities/comment/api/get-comment"
-import { useQueryClient } from "@tanstack/react-query"
 import { useUser, useUsers } from "../entities/user/api/get-user"
 import { useUpdateComment } from "../features/comment/api/update-comment"
 import { useDeleteComment } from "../features/comment/api/delete-comment"
 import { useUpdateLike } from "../features/like/api/update-like"
+import { useTags } from "../entities/tag/api/get-tag"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -61,9 +58,7 @@ const PostsManager = () => {
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
@@ -81,6 +76,8 @@ const PostsManager = () => {
     data: { users },
   } = useUsers()
   const { data: user } = useUser({ userId })
+
+  const { data: tags } = useTags()
 
   // Comments
   const {
@@ -133,17 +130,6 @@ const PostsManager = () => {
       .finally(() => {
         setLoading(false)
       })
-  }
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags")
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
   }
 
   // 게시물 검색
@@ -305,10 +291,6 @@ const PostsManager = () => {
     setUserId(user.id)
     setShowUserModal(true)
   }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
 
   useEffect(() => {
     if (selectedTag) {
