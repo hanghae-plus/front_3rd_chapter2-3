@@ -2,29 +2,23 @@ import { Comment } from "@/entities/comment/model/types";
 
 import { useGlobalModal } from "@/shared/model/useGlobalModal";
 import { Button, Textarea } from "@/shared/ui";
-import { useEffect } from "react";
-import { useShallow } from "zustand/shallow";
+import { useEffect, useState } from "react";
 import { useUpdateComment } from "../../api/use-update-comment";
-import useCommentStore from "../../model/useCommentStore";
 
 type FormEditCommentProps = {
   comment: Comment | null;
 };
 
 const FormEditComment = ({ comment }: FormEditCommentProps) => {
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
   const { close } = useGlobalModal("editComment", comment?.id);
   const { mutate: updateComment } = useUpdateComment();
 
-  const { selectedComment, handleSelectComment } = useCommentStore(
-    useShallow((state) => ({
-      selectedComment: state.selectedComment,
-      handleSelectComment: state.handleSelectComment,
-    })),
-  );
-
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!selectedComment) return;
-    handleSelectComment({ ...selectedComment, body: e.target.value });
+    setSelectedComment((prev) => {
+      if (!prev) return null;
+      return { ...prev, body: e.target.value };
+    });
   };
 
   const handleUpdateComment = () => {
@@ -35,8 +29,8 @@ const FormEditComment = ({ comment }: FormEditCommentProps) => {
 
   useEffect(() => {
     if (!comment) return;
-    handleSelectComment(comment);
-  }, [comment, handleSelectComment]);
+    setSelectedComment(comment);
+  }, [comment]);
 
   return (
     <div className="space-y-4">
