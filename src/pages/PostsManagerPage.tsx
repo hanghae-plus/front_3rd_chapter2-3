@@ -12,7 +12,8 @@ import { commentApi } from "../entities/comment/api/commentApi"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { SortOrder, usePostQueryParams, usePostsQuery } from "../entities/post"
 import { postApi } from "../entities/post/api/postApi"
-import { Author, NewPost, Post, Tag } from "../entities/post/model/types"
+import { usePostTagsQuery } from "../entities/post/api/usePostTagsQuery"
+import { Author, NewPost, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
 import {
@@ -62,8 +63,6 @@ const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
 
-  const [tags, setTags] = useState<Tag[]>([])
-
   const [comments, setComments] = useState<Record<string, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
@@ -78,6 +77,8 @@ const PostsManager = () => {
 
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserDTO | null>(null)
+
+  const { data: tags = [] } = usePostTagsQuery()
 
   const { data, isLoading } = usePostsQuery({
     limit,
@@ -94,14 +95,6 @@ const PostsManager = () => {
       setTotal(total)
     }
   }, [data])
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    const data = await postApi.fetchTags()
-    if (data) {
-      setTags(data)
-    }
-  }
 
   // 게시물 추가
   const addPost = async () => {
@@ -215,10 +208,6 @@ const PostsManager = () => {
       setShowUserModal(true)
     }
   }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (

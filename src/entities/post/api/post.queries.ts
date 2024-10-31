@@ -5,4 +5,6 @@ export const postQueryKeys = {
 
   list: (payload: usePostsQueryProps) =>
     [...postQueryKeys.all(), "list", payload] as const,
+
+  tags: () => [...postQueryKeys.all(), "tags"] as const,
 } as const
