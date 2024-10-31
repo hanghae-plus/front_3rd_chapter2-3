@@ -1,9 +1,11 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { updatePostApi } from "../../../entities/post/api"
 import { usePostsStore } from "../../post/model/postStore"
+import { usePostEditModalStore } from "../../post/model/postEditModalStore"
 
 export const PostEditModal = () => {
-  const { posts, setPosts, showEditDialog, setShowEditDialog, selectedPost, setSelectedPost } = usePostsStore()
+  const { posts, setPosts, selectedPost, setSelectedPost } = usePostsStore()
+  const { showPostEditModal, setShowPostEditModal } = usePostEditModalStore()
 
   const updatePost = async () => {
     if (!selectedPost) return
@@ -11,11 +13,11 @@ export const PostEditModal = () => {
     const data = await updatePostApi(selectedPost)
 
     setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-    setShowEditDialog(false)
+    setShowPostEditModal(false)
   }
 
   return (
-    <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+    <Dialog open={showPostEditModal} onOpenChange={setShowPostEditModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>

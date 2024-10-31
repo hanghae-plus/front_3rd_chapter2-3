@@ -5,15 +5,17 @@ import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { usePostsStore } from "../../post/model/postStore"
 import { useUserStore } from "../../user/model/userStore"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
+import { usePostEditModalStore } from "../../post/model/postEditModalStore"
 
 interface Props {
   post: Post
 }
 
 export const PostItem = ({ post }: Props) => {
-  const { openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePostsStore()
+  const { openPostDetail, setSelectedPost, deletePost } = usePostsStore()
   const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsStore()
   const { openUserModal } = useUserStore()
+  const { setShowPostEditModal } = usePostEditModalStore()
 
   return (
     <TableRow key={post.id}>
@@ -66,7 +68,7 @@ export const PostItem = ({ post }: Props) => {
             size="sm"
             onClick={() => {
               setSelectedPost(post)
-              setShowEditDialog(true)
+              setShowPostEditModal(true)
             }}
           >
             <Edit2 className="w-4 h-4" />

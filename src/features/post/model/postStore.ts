@@ -6,18 +6,16 @@ import { useMutationPostDelete } from "../api/useMutationPostDelete"
 const postsAtom = atom<Post[]>([])
 const showAddDialogAtom = atom(false)
 const selectedPostAtom = atom<Post | null>(null)
-const showEditDialogAtom = atom(false)
 const totalAtom = atom(0)
 
 const showPostDetailDialogAtom = atom(false)
 
 export const usePostsStore = () => {
   const [posts, setPosts] = useAtom(postsAtom)
-  const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
   const [selectedPost, setSelectedPost] = useAtom<Post | null>(selectedPostAtom)
-  const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
   const [total, setTotal] = useAtom(totalAtom)
 
+  const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
   const { mutate: addPostMutate } = useMutationPostAdd()
   const addPost = (newPost: NewPost) => {
     addPostMutate(newPost)
@@ -43,8 +41,6 @@ export const usePostsStore = () => {
     setShowAddDialog,
     selectedPost,
     setSelectedPost,
-    showEditDialog,
-    setShowEditDialog,
     total,
     setTotal,
 
