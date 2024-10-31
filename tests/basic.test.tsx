@@ -65,21 +65,21 @@ describe("PostsManager", () => {
     expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument();
 
     // 게시물이 로드되었는지 확인
-    // await waitFor(() => {
-    //   TEST_POSTS.posts.forEach((post) => {
-    //     expect(screen.getByText(post.title)).toBeInTheDocument();
-    //   });
-    // });
+    await waitFor(() => {
+      TEST_POSTS.posts.forEach((post) => {
+        expect(screen.getByText(post.title)).toBeInTheDocument();
+      });
+    });
 
     // 검색 기능 테스트
     const searchInput = screen.getByPlaceholderText(/게시물 검색.../i);
     await user.type(searchInput, "His mother had always taught him");
     await user.keyboard("{Enter}");
 
-    // await waitFor(() => {
-    //   expect(screen.getByText("His mother had always taught him")).toBeInTheDocument();
-    //   expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument();
-    // });
+    await waitFor(() => {
+      expect(screen.getByText("His mother had always taught him")).toBeInTheDocument();
+      expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument();
+    });
   });
 
   it("새 게시물 추가를 허용합니다", async () => {

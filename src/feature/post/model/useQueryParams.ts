@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
+import { queryParamsAtom, setQueryParamsAtom } from "./usePost.ts";
 
 export interface QueryParams {
   skip: number;
@@ -11,43 +13,21 @@ export interface QueryParams {
 }
 
 export const useQueryParams = () => {
+  const [queryParams] = useAtom(queryParamsAtom);
+  const [, updateQueryParams] = useAtom(setQueryParamsAtom);
   const navigate = useNavigate();
 
-  const [queryParams, setQueryParamsState] = useState<QueryParams>({
-    skip: parseInt(new URLSearchParams(window.location.search).get("skip") || "0"),
-    limit: parseInt(new URLSearchParams(window.location.search).get("limit") || "10"),
-    searchQuery: new URLSearchParams(window.location.search).get("search") || "",
-    sortBy: new URLSearchParams(window.location.search).get("sortBy") || "",
-    sortOrder: new URLSearchParams(window.location.search).get("sortOrder") || "asc",
-    selectedTag: new URLSearchParams(window.location.search).get("tag") || "",
-  });
-
-  const setQueryParams = (newParams: Partial<QueryParams>) => {
-    const updatedParams = { ...queryParams, ...newParams };
-    setQueryParamsState(updatedParams);
-
+  useEffect(() => {
     const searchParams = new URLSearchParams();
-    if (updatedParams.skip) searchParams.set("skip", updatedParams.skip.toString());
-    if (updatedParams.limit) searchParams.set("limit", updatedParams.limit.toString());
-    if (updatedParams.searchQuery) searchParams.set("search", updatedParams.searchQuery);
-    if (updatedParams.sortBy) searchParams.set("sortBy", updatedParams.sortBy);
-    if (updatedParams.sortOrder) searchParams.set("sortOrder", updatedParams.sortOrder);
-    if (updatedParams.selectedTag) searchParams.set("tag", updatedParams.selectedTag);
+    if (queryParams.skip) searchParams.set("skip", queryParams.skip.toString());
+    if (queryParams.limit) searchParams.set("limit", queryParams.limit.toString());
+    if (queryParams.searchQuery) searchParams.set("search", queryParams.searchQuery);
+    if (queryParams.sortBy) searchParams.set("sortBy", queryParams.sortBy);
+    if (queryParams.sortOrder) searchParams.set("sortOrder", queryParams.sortOrder);
+    if (queryParams.selectedTag) searchParams.set("tag", queryParams.selectedTag);
 
     navigate(`?${searchParams.toString()}`);
-  };
+  }, [navigate, queryParams.skip, queryParams.limit]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setQueryParamsState({
-      skip: parseInt(params.get("skip") || "0"),
-      limit: parseInt(params.get("limit") || "10"),
-      searchQuery: params.get("search") || "",
-      sortBy: params.get("sortBy") || "",
-      sortOrder: params.get("sortOrder") || "asc",
-      selectedTag: params.get("tag") || "",
-    });
-  }, [location.search]);
-
-  return { queryParams, setQueryParams };
+  return { queryParams, setQueryParams: updateQueryParams };
 };

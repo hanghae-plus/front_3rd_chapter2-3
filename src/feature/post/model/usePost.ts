@@ -2,7 +2,6 @@ import { NewPost, Post, Tag } from "../../../entities/post/model/types.ts";
 import { atom } from "jotai/index";
 import { useAtom } from "jotai";
 import { QueryParams } from "./useQueryParams.ts";
-import { useEffect } from "react";
 
 interface PostAtomState {
   posts: Post[];
@@ -52,7 +51,7 @@ export const queryParamsAtom = atom<QueryParams>({
   limit: 10,
   searchQuery: "",
   sortBy: "",
-  sortOrder: "",
+  sortOrder: "asc",
   selectedTag: "",
 });
 
@@ -73,12 +72,8 @@ export const usePost = (): PostAtomState => {
   const [tags, setTags] = useAtom(tagsAtom);
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom);
 
-  const [queryParams, setQueryParams] = useAtom(queryParamsAtom);
+  const [queryParams] = useAtom(queryParamsAtom);
   const [, updateQueryParams] = useAtom(setQueryParamsAtom);
-
-  useEffect(() => {
-    setQueryParams(queryParams);
-  }, [queryParams.sortBy, queryParams.sortOrder]);
 
   return {
     posts,
@@ -87,7 +82,6 @@ export const usePost = (): PostAtomState => {
     setLoading,
     tags,
     setTags,
-
     selectedTag: queryParams.selectedTag,
     selectedPost,
     newPost,

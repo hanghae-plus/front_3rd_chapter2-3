@@ -10,16 +10,23 @@ import {
 import { NewPost, Post } from "../../../entities/post/model/types.ts";
 import { useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 
-export const useGetPosts = (limit: number, skip: number, sortBy: string, sortOrder: string) => {
-  return useQuery({ queryKey: ["post", { limit, skip, sortBy, sortOrder }], queryFn: () => getPosts(limit, skip) });
+export const useGetPosts = (limit: number, skip: number) => {
+  return useQuery({
+    queryKey: ["post", { limit, skip }],
+    queryFn: () => getPosts(limit, skip),
+  });
 };
 
 export const useGetPostByTag = (tag: string) => {
-  return useQuery({ queryKey: ["post", "tag"], queryFn: () => getPostsByTag(tag) });
+  return useQuery({ queryKey: ["post", "tag"], queryFn: () => getPostsByTag(tag), enabled: Boolean(tag) });
 };
 
 export const useGetSearchPosts = (searchQuery: string) => {
-  return useQuery({ queryKey: ["post", searchQuery], queryFn: () => getSearchPosts(searchQuery) });
+  return useQuery({
+    queryKey: ["post", "search", searchQuery],
+    queryFn: () => getSearchPosts(searchQuery),
+    enabled: Boolean(searchQuery),
+  });
 };
 
 export const usePostNewPost = (options?: UseMutationOptions<Post | undefined, Error, NewPost>) => {
@@ -44,5 +51,5 @@ export const useDeletePost = (options?: UseMutationOptions<unknown, Error, { id:
 };
 
 export const useGetTags = () => {
-  return useQuery({ queryKey: ["tag"], queryFn: () => getTags() });
+  return useQuery({ queryKey: ["tag"], queryFn: getTags });
 };

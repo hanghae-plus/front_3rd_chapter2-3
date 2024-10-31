@@ -1,24 +1,23 @@
+import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
 import { useGetPosts, useGetSearchPosts, usePost, useQueryParams } from "../model";
-import { Post } from "../../../entities/post/model/types.ts";
-import { User } from "../../../entities/user/model/types.ts";
-import { useEffect } from "react";
 import { PostSearchBarTagSelectBox } from "./PostSearchBarTagSelectBox.tsx";
 
 export const PostSearchBar = () => {
-  const { sortBy, sortOrder, setSortOrder, setSortBy, searchQuery, setSearchQuery, setPosts, setTotal, setLoading } =
-    usePost();
+  const [keyword, setKeyword] = useState<string>("");
 
-  const { queryParams } = useQueryParams();
+  const { sortBy, sortOrder, setSortOrder, setSortBy, setSearchQuery, setPosts, setTotal, setLoading } = usePost();
+  const { queryParams, setQueryParams } = useQueryParams();
 
-  const { data: postsData, isLoading: postDataLoading } = useGetPosts(
-    queryParams.limit,
-    queryParams.skip,
-    sortBy,
-    sortOrder,
-  );
-  const { data: searchData } = useGetSearchPosts(searchQuery);
+  useEffect(() => {
+    setSortBy(queryParams.sortBy);
+    setSortOrder(queryParams.sortOrder);
+    setSearchQuery(queryParams.searchQuery);
+  }, [queryParams, setSortBy, setSortOrder, setSearchQuery]);
+
+  const { data: postsData, isLoading: postDataLoading } = useGetPosts(queryParams.limit, queryParams.skip);
+  const { data: searchData } = useGetSearchPosts(queryParams.searchQuery);
 
   useEffect(() => {
     setLoading(postDataLoading);
@@ -26,9 +25,9 @@ export const PostSearchBar = () => {
 
   useEffect(() => {
     if (postsData) {
-      const postsWithUsers = postsData.postsData.posts.map((post: Post) => ({
+      const postsWithUsers = postsData.postsData.posts.map((post) => ({
         ...post,
-        author: postsData.usersData.users.find((user: User) => user.id === post.userId),
+        author: postsData.usersData.users.find((user) => user.id === post.userId),
       }));
 
       setPosts(postsWithUsers);
@@ -37,15 +36,15 @@ export const PostSearchBar = () => {
   }, [postsData, setPosts, setTotal]);
 
   useEffect(() => {
-    if (searchQuery && searchData) {
+    if (queryParams.searchQuery && searchData) {
       setPosts(searchData.posts);
       setTotal(searchData.total);
     }
-  }, [searchData, searchQuery, setPosts, setTotal]);
+  }, [searchData, queryParams.searchQuery, setPosts, setTotal]);
 
   const handleEnterKeyPress = () => {
-    if (!searchQuery) {
-      return;
+    if (keyword) {
+      setQueryParams({ searchQuery: keyword });
     }
   };
 
@@ -57,14 +56,20 @@ export const PostSearchBar = () => {
           <Input
             placeholder="게시물 검색..."
             className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={keyword || ""}
+            onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleEnterKeyPress()}
           />
         </div>
       </div>
       <PostSearchBarTagSelectBox />
-      <Select value={sortBy} onValueChange={setSortBy}>
+      <Select
+        value={sortBy}
+        onValueChange={(value) => {
+          setSortBy(value);
+          setQueryParams({ sortBy: value });
+        }}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />
         </SelectTrigger>
@@ -75,7 +80,13 @@ export const PostSearchBar = () => {
           <SelectItem value="reactions">반응</SelectItem>
         </SelectContent>
       </Select>
-      <Select value={sortOrder} onValueChange={setSortOrder}>
+      <Select
+        value={sortOrder}
+        onValueChange={(value) => {
+          setSortOrder(value);
+          setQueryParams({ sortOrder: value });
+        }}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 순서" />
         </SelectTrigger>
