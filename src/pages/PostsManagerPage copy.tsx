@@ -25,8 +25,8 @@ import {
   TableRow,
 } from "../shared/ui"
 import PostTable from "../features/posts/components/PostTable"
-import PostSearchBar from "./PostSearchBar"
-import PostPagination from "./PostPagination"
+import PostSearchBar from "../widgets/ui/searchBar/PostSearchBar"
+import PostPagination from "../widgets/ui/pagination/PostPagination"
 import PostAddButton from "../features/posts/components/PostAddButton"
 import UserModalDialog from "../features/users/components/UserModalDialog"
 import PostDetailDialog from "../entities/posts/ui/PostDetailDialog"
