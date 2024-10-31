@@ -1,11 +1,14 @@
 import { NewPost, Post, PostsResponse } from "@/entities/post/model/types";
+import { UseQueryPosts } from "@/features/post/model/types";
 import { createRequestOptions, fetchApi } from "@/shared/lib/api";
 import { POST_API_PATHS } from "../config/post-api-paths";
 
 //query
-const fetchPosts = async ({ limit, skip }: { limit: number; skip: number }): Promise<PostsResponse> => {
+
+const fetchPosts = async (queries: UseQueryPosts): Promise<PostsResponse> => {
+  const { limit, skip, sortBy, sortOrder } = queries;
   const postsResponse = await fetchApi<PostsResponse>(POST_API_PATHS.base, {
-    searchParams: { limit, skip },
+    searchParams: { limit, skip, sortBy: sortBy, order: sortOrder },
   });
   return postsResponse;
 };

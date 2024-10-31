@@ -1,15 +1,16 @@
+import { UseQueryPosts } from "@/features/post/model/types";
 import { createQueryKey } from "@/shared/lib/api";
 import { queryOptions } from "@tanstack/react-query";
 import { postApi } from "./post-api";
 
 export const postQueries = {
   all: () => ["posts"],
-  list: ({ limit, skip }: { limit: number; skip: number }) =>
+  list: (queries: UseQueryPosts) =>
     queryOptions({
-      queryKey: createQueryKey(postQueries.all(), "list", limit, skip),
+      queryKey: createQueryKey(postQueries.all(), "list", queries),
       queryFn: async () => {
         try {
-          const data = await postApi.getPosts({ limit, skip });
+          const data = await postApi.getPosts(queries);
           return data;
         } catch (error) {
           console.error("게시물 가져오기 오류:", error);

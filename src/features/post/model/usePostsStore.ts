@@ -4,6 +4,7 @@ import { userApi } from "@/entities/user/api/user-api";
 import { apiHandler } from "@/shared/api/apiHandler";
 import { addItemInArray, filterByID, findById, updateByID } from "@/shared/lib/array";
 import { create } from "zustand";
+import { UseQueryPosts } from "./types";
 
 type PostsStates = {
   posts: Post[];
@@ -21,7 +22,7 @@ type PostApiActions = {
   addPost: (newPost: NewPost) => void;
   updatePost: (post: Post) => void;
   deletePost: (id: number) => void;
-  fetchPosts: (props?: { limit: number; skip: number }) => void;
+  fetchPosts: (queries: UseQueryPosts) => void;
   fetchPostsByTag: (tag: string) => void;
   searchPosts: (props: useQuerySearchPostsProps) => void;
 };
@@ -65,7 +66,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
     set({ loading: true });
 
     const result = await apiHandler(
-      () => postApi.getPosts(props || { limit: 10, skip: 0 }),
+      () => postApi.getPosts(props || { limit: 10, skip: 0, sortBy: "", sortOrder: "", search: "", tag: "" }),
       (error) => console.error("게시물 가져오기 오류:", error),
     );
     if (!result) return;
@@ -109,7 +110,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
   },
   searchPosts: async ({ searchQuery, limit, skip }) => {
     if (!searchQuery) {
-      get().fetchPosts({ limit, skip });
+      get().fetchPosts({ limit, skip, search: searchQuery, sortBy: "", sortOrder: "", tag: "" });
       return;
     }
     set({ loading: true });
