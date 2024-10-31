@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts, fetchUserDetail } from "../api/post"
 import type { NewPost, Post, URLParams, User } from "../types"
 import { useComment } from "./useComment"
 import { useURLParams } from "./useURLParams"
+import { atom, useAtom } from "jotai"
 
 interface UsePostProps {
   posts: Post[]
@@ -33,21 +34,32 @@ interface UsePostProps {
   handleSearchPosts: (query: string) => Promise<void>
 }
 
+const postsAtom = atom<Post[]>([])
+const totalAtom = atom<number>(0)
+const isLoadingAtom = atom<boolean>(false)
+const selectedPostAtom = atom<Post | null>(null)
+const showPostDetailDialogAtom = atom<boolean>(false)
+const selectedUserAtom = atom<User | null>(null)
+const showUserModalAtom = atom<boolean>(false)
+const showAddDialogAtom = atom<boolean>(false)
+const showEditDialogAtom = atom<boolean>(false)
+const newPostAtom = atom<NewPost>({
+  title: "",
+  body: "",
+  userId: 0,
+})
+
 export const usePost = (): UsePostProps => {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [total, setTotal] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState<NewPost>({
-    title: "",
-    body: "",
-    userId: 0,
-  })
+  const [posts, setPosts] = useAtom(postsAtom)
+  const [total, setTotal] = useAtom(totalAtom)
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
+  const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
+  const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom)
+  const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
+  const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
+  const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
+  const [newPost, setNewPost] = useAtom(newPostAtom)
 
   const { handleFetchComments } = useComment()
   const { params, updateURL } = useURLParams()

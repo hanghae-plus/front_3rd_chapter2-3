@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { fetchComments, addComment, updateComment, deleteComment, likeComment } from "../api/comment"
 import type { Comment, NewComment } from "../types"
-
+import { atom, useAtom } from "jotai"
 interface UseCommentProps {
   comments: Record<number, Comment[]>
   newComment: NewComment
@@ -19,16 +19,22 @@ interface UseCommentProps {
   handleLikeComment: (id: number, postId: number) => Promise<void>
 }
 
+const commentsAtom = atom<Record<number, Comment[]>>({})
+const newCommentAtom = atom<NewComment>({
+  body: "",
+  postId: null,
+  userId: 1,
+})
+const showAddCommentDialogAtom = atom<boolean>(false)
+const showEditCommentDialogAtom = atom<boolean>(false)
+const selectedCommentAtom = atom<Comment | null>(null)
+
 export const useComment = (): UseCommentProps => {
-  const [comments, setComments] = useState<Record<number, Comment[]>>({})
-  const [newComment, setNewComment] = useState<NewComment>({
-    body: "",
-    postId: null,
-    userId: 1,
-  })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
+  const [comments, setComments] = useAtom(commentsAtom)
+  const [newComment, setNewComment] = useAtom(newCommentAtom)
+  const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
+  const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
 
   const handleFetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
