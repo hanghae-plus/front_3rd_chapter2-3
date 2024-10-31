@@ -1,6 +1,6 @@
 import { ThumbsUp, Edit2, Trash2 } from "lucide-react"
 import { Button } from "../../../shared/ui"
-import { HighlightedText } from "../../../widgets/ui/HighlightedText"
+import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { Comment } from "../model/types"
 
 export const CommentView: React.FC<{

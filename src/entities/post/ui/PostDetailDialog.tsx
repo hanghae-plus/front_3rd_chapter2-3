@@ -1,5 +1,5 @@
 import { CustomDialog } from "../../../widgets/ui/CustomDialog"
-import { HighlightedText } from "../../../widgets/ui/HighlightedText"
+import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { NewComment, Comment } from "../../comment/model/types"
 import { Comments } from "../../comment/ui/Comments"
 import { Post } from "../model/types"

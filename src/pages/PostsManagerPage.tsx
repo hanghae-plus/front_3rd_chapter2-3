@@ -31,7 +31,6 @@ import { CommentAddDialog } from "../features/comment/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
 import { UserDetailDialog } from "../entities/user/ui/UserDetailDialog"
-import { HighlightedText } from "../widgets/ui/HighlightedText"
 import {
   createCommentApi,
   deleteCommentApi,

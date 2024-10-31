@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
-import { HighlightedText } from "./HighlightedText"
+import { HighlightedText } from "../../shared/ui/HighlightedText"
 
 export const CustomDialog: React.FC<{
   open: boolean

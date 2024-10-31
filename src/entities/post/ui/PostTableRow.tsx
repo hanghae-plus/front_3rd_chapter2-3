@@ -1,7 +1,7 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { Post } from "../model/types"
-import { HighlightedText } from "../../../widgets/ui/HighlightedText"
+import { HighlightedText } from "../../../shared/ui/HighlightedText"
 
 export const PostTableRow: React.FC<{
   post: Post
