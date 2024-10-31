@@ -3,7 +3,7 @@ import { postsApi, PostsResponse } from "../api"
 import { queryKeys } from "../../../lib/query/queryKeys"
 import { queryClient } from "../../../lib/query/queryClient"
 import { Post } from "../../../entities/post/model/types"
-import { removeFromPosts, updateInPosts } from "../../../entities/post/model/utils"
+import { addToPosts, removeFromPosts, updateInPosts } from "../../../entities/post/model/utils"
 import { atom, useAtom } from "jotai"
 
 export interface PostsQueryFilters {
@@ -38,7 +38,7 @@ export const usePostMutations = () => {
       queryClient.setQueriesData<PostsResponse>(queryKeys.posts.lists(), (prev) => {
         if (!prev) return prev
         return {
-          posts: [newPost, ...prev.posts],
+          posts: addToPosts(prev.posts, newPost),
           total: prev.total + 1,
         }
       })
