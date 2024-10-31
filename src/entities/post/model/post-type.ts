@@ -23,3 +23,7 @@ export interface PostListType {
   total: number;
   posts: PostType[];
 }
+
+export interface PostItemType {
+  post: PostWithAuthorType;
+}

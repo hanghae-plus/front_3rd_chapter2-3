@@ -1,43 +1,53 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-
-import { updateState } from "@/shared/model";
-import { useUpdateParams } from "./use-update-params";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { SearchQueryType } from "./search-query-type";
+import { useSearchPostList } from "./use-search-post-list";
 
 export const useSearchQuery = () => {
-  const params = useParams();
-  const [searchQuery, setSearchQuery] = useState<SearchQueryType>({
-    skip: params.skip || "0",
-    limit: params.limit || "10",
-    keyword: params.keyword || "",
-    sortBy: params.sortBy || "",
-    sortOrder: params.sortOrder || "asc",
-    tag: params.tag || "",
-  });
-  const prevKeywordRef = useRef(searchQuery.keyword);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { searchPostList } = useSearchPostList();
 
-  const { updateParams } = useUpdateParams();
+  const initialQuery = {
+    skip: "0",
+    limit: "10",
+    keyword: "",
+    sortBy: "",
+    sortOrder: "asc",
+    tag: "",
+  };
 
-  function handleChangeQuery<K extends keyof SearchQueryType>(key: K, value: SearchQueryType[K]) {
-    setSearchQuery(prev => updateState(prev, key, value));
+  const searchQuery: SearchQueryType = {
+    ...initialQuery,
+    ...Object.fromEntries([...searchParams.entries()]),
+  };
+
+  function updateParams(searchQuery: SearchQueryType) {
+    const params = Object.entries(searchQuery)
+      .filter(([, value]) => value !== "")
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+
+    navigate("?" + params, { replace: true });
   }
 
-  function handleSearchPostList(key: string) {
+  const handleChangeQuery = <K extends keyof SearchQueryType>(
+    key: K,
+    value: SearchQueryType[K],
+  ) => {
+    searchQuery[key] = value;
+    updateParams(searchQuery);
+
+    if (key !== "keyword") {
+      searchPostList();
+    }
+  };
+
+  const handleSearchPostList = (key: string) => {
     if (key !== "Enter") {
       return;
     }
-
-    updateParams(searchQuery);
-  }
-
-  useEffect(() => {
-    if (prevKeywordRef.current === searchQuery.keyword) {
-      updateParams(searchQuery);
-    } else {
-      prevKeywordRef.current = searchQuery.keyword;
-    }
-  }, [searchQuery]);
+    searchPostList();
+  };
 
   return { searchQuery, handleChangeQuery, handleSearchPostList };
 };

@@ -1,12 +1,12 @@
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
-import apiRequest from "@/shared/api";
-import { userListState } from "./../../user/model/user-state";
-import { PostType, PostWithAuthorType } from "../model/post-type";
+import { userListState } from "@/entities/user/model/user-state";
 import { UserType } from "@/entities/user/model/user-type";
-import { SearchQueryType } from "@/features/searchPostList/model/search-query-type";
+import { PostType, PostWithAuthorType } from "../model/post-type";
+import apiRequest from "@/shared/api";
 
-const getBaseURL = (queryParams: SearchQueryType) => {
+const getBaseURL = (queryParams: { [key: string]: string }) => {
   if (queryParams.keyword !== undefined && queryParams.keyword !== "") {
     return "/api/posts/search";
   }
@@ -16,18 +16,9 @@ const getBaseURL = (queryParams: SearchQueryType) => {
   return "/api/posts";
 };
 
-const locationToObject = (queryString: string) => {
-  const queryArray = queryString
-    .replace("?", "")
-    .split("&")
-    .map(query => query.split("="));
-
-  return Object.fromEntries(queryArray);
-};
-
-const fetchPostList = async (userList: UserType[]) => {
-  const queryParams = locationToObject(location.search);
-  const baseURL = getBaseURL(queryParams);
+const fetchPostList = async (userList: UserType[], searchParams: URLSearchParams) => {
+  const searchQuery = Object.fromEntries([...searchParams.entries()]);
+  const baseURL = getBaseURL(searchQuery);
   const queryString = location.search.replace("?keyword", "?q");
 
   try {
@@ -54,8 +45,10 @@ const postListWithUser = (postList: PostType[], userList: UserType[]) => {
 
 export const useQueryGetPost = () => {
   const { userList } = userListState();
+  const [searchParams] = useSearchParams();
   return useQuery<PostWithAuthorType[]>({
     queryKey: ["search-post"],
-    queryFn: () => fetchPostList(userList),
+    queryFn: () => fetchPostList(userList, searchParams),
+    enabled: false,
   });
 };
