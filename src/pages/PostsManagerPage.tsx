@@ -12,8 +12,8 @@ import { PostPagination } from "../widgets/ui/post/PostPagination"
 import { PostAddDialog } from "../widgets/ui/post/PostAddDialog"
 import { PostEditDialog } from "../widgets/ui/post/PostEditDialog"
 import { PostDetailDialog } from "../widgets/ui/post/PostDetailDialog"
-import { CommentAddDialog } from "../widgets/ui/comment/CommentAddDialog"
-import { CommentEditDialog } from "../widgets/ui/comment/CommentEditDialog"
+import { CommentAddDialog } from "../features/ui/comment/CommentAddDialog"
+import { CommentEditDialog } from "../features/ui/comment/CommentEditDialog"
 import { UserDetailDialog } from "../widgets/ui/user/UserDetailDialog"
 
 const PostsManager = () => {
