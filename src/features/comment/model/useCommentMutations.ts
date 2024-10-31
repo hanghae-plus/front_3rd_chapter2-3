@@ -5,7 +5,7 @@ import { Comment } from '../../../entities/comment/api/types.js';
 const useCommentMutations = () => {
   const queryClient = useQueryClient();
 
-  const addCommentMutation = useMutation<Comment,Error,Omit<Comment, 'id' | 'likes' | 'user'>>({
+  const addCommentMutation = useMutation<Comment,Error,{ body: string; postId: number | null; userId: number; }>({
     mutationFn: addComment,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['comments']});
