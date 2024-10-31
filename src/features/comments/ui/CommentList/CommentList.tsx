@@ -1,6 +1,6 @@
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { useParams } from "react-router-dom"
-import { useComments, useLikeComment } from "../../../../features/comments/api/queries"
+import { useComments, useDeleteComment, useLikeComment } from "../../../../features/comments/api/queries"
 import { highlightText } from "../../../../shared"
 import { openModals } from "../../../../shared/lib/modal/openModals"
 import { Button } from "../../../../shared/ui/button"
@@ -12,6 +12,7 @@ const CommentList = ({ postId }: { postId: number }) => {
   const { searchQuery } = useParams()
   const { data: comments, isSuccess } = useComments(postId)
   const { mutate: likeComment } = useLikeComment()
+  const { mutate: deleteComment } = useDeleteComment()
 
   return (
     <div className="mt-2">
@@ -20,7 +21,7 @@ const CommentList = ({ postId }: { postId: number }) => {
         <Button
           size="sm"
           onClick={() => {
-            openAddDialog()
+            openAddDialog(postId)
           }}
         >
           <Plus className="w-3 h-3 mr-1" />
@@ -53,7 +54,7 @@ const CommentList = ({ postId }: { postId: number }) => {
                 >
                   <Edit2 className="w-3 h-3" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+                <Button variant="ghost" size="sm" onClick={() => deleteComment({ id: comment.id, postId })}>
                   <Trash2 className="w-3 h-3" />
                 </Button>
               </div>

@@ -44,7 +44,6 @@ export const useSearchPosts = (searchQuery: string) => {
     queryKey: postKeys.search(searchQuery),
     queryFn: () => postApi.get.searchPosts(searchQuery),
     enabled: !!searchQuery,
-    staleTime: 1000 * 60 * 5,
   })
 }
 

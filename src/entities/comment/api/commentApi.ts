@@ -32,7 +32,7 @@ export const commentApi = {
     },
   },
   put: {
-    updateComment: async (id: number, body: string) => {
+    updateComment: async ({ id, body }: { id: number; body: string }) => {
       const response = await baseApi.put(`/comments/${id}`, {
         body,
       })

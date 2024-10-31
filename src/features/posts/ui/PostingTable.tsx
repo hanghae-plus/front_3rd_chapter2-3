@@ -1,13 +1,15 @@
+import { useAtomValue } from "jotai"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Post } from "../../../entities/post/model/type"
 import { highlightText } from "../../../shared"
 import { openModals } from "../../../shared/lib/modal/openModals"
+import { searchQueryAtom } from "../../../shared/model/atom"
 import { Button } from "../../../shared/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/table"
-import { useUsers } from "../../user/api/query"
-import { useDeletePost, usePostsByTag } from "../api/query"
+import { useDeletePost } from "../api/query"
+import { useFilteredPosts } from "../model/hook/hook"
 
 const PostingTable = () => {
   const {
@@ -16,15 +18,13 @@ const PostingTable = () => {
   } = openModals
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
+  const searchQuery = useAtomValue(searchQueryAtom)
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "all")
 
-  const { data: posts, isLoading } = usePostsByTag({ tag: selectedTag })
-  const { data: users } = useUsers()
-  const postsWithUsers = posts?.posts.map((post) => ({
-    ...post,
-    author: users?.users.find((user) => user.id === post.userId),
-  }))
+  const { posts: postsWithUsers } = useFilteredPosts({
+    tag: selectedTag,
+    searchQuery,
+  })
   const { mutate: deletePost } = useDeletePost()
 
   const openPostDetail = (post: Post) => {

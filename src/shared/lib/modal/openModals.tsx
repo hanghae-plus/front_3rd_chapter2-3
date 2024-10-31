@@ -10,8 +10,8 @@ import UserInfoModal from "../../../features/user/ui/UserInfoModal"
 
 export const openModals = {
   comment: {
-    openAddDialog: () => {
-      overlay.open(({ isOpen, close }) => <AddCommentDialog isOpen={isOpen} close={close} />)
+    openAddDialog: (postId: number) => {
+      overlay.open(({ isOpen, close }) => <AddCommentDialog isOpen={isOpen} close={close} postId={postId} />)
     },
     openEditDialog: ({ comment }: { comment: Comment }) => {
       overlay.open(({ isOpen, close }) => <EditCommentDialog isOpen={isOpen} close={close} comment={comment} />)

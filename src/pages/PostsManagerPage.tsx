@@ -1,16 +1,16 @@
+import { useAtom } from "jotai"
 import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Post } from "../entities/post/model/type"
 import { usePostsByTag } from "../features/posts/api/query"
 import PostingTable from "../features/posts/ui/PostingTable"
 import { useTags } from "../features/tag/api/query"
-import { useUsers } from "../features/user/api/query"
 import { openModals } from "../shared/lib/modal/openModals"
 import { Button } from "../shared/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
 import { Input } from "../shared/ui/input"
 import { Select } from "../shared/ui/select"
+import { searchQueryAtom } from "../shared/model/atom"
 
 const PostsManager = () => {
   const { post } = openModals
@@ -19,17 +19,12 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "all")
   const { data: posts, isLoading } = usePostsByTag({ tag: selectedTag })
-  const { data: users } = useUsers()
-  const postsWithUsers = posts?.posts.map((post) => ({
-    ...post,
-    author: users?.users.find((user) => user.id === post.userId),
-  }))
+
   const total = posts?.total
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
 
@@ -60,18 +55,6 @@ const PostsManager = () => {
       console.error("게시물 검색 오류:", error)
     }
   }
-
-  // 댓글 추가
-  const addComment = async () => {}
-
-  // 댓글 업데이트
-  const updateComment = async () => {}
-
-  // 댓글 삭제
-  const deleteComment = async (id, postId) => {}
-
-  // 댓글 좋아요
-  const likeComment = async (id, postId) => {}
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -144,10 +127,8 @@ const PostsManager = () => {
             />
           </div>
 
-          {/* 게시물 테이블 */}
           {isLoading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostingTable />}
 
-          {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <span>표시</span>

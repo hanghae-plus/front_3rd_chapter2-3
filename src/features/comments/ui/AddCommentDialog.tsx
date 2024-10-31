@@ -7,9 +7,10 @@ import { useAddComment } from "../api/queries"
 interface AddCommentDialogProps {
   isOpen: boolean
   close: () => void
+  postId: number
 }
 
-const AddCommentDialog = ({ isOpen, close }: AddCommentDialogProps) => {
+const AddCommentDialog = ({ isOpen, close, postId }: AddCommentDialogProps) => {
   const [body, setBody] = useState("")
   const { mutate: addComment } = useAddComment()
   return (
