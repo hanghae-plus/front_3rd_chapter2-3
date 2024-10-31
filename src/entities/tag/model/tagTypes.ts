@@ -5,5 +5,11 @@ export interface Tag {
 }
 
 export interface TagsResponse {
-  tags: string[]
+  tags: Tag[]
+}
+
+export interface TagState {
+  tags: Tag[]
+  setTags: (tags: Tag[]) => void
+  addTag: (tag: Tag) => void
 }
