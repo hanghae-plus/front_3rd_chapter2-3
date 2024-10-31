@@ -1,21 +1,16 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 import { CommentPayload } from "../../../entities/comments/model/types"
+import { useState } from "react"
 
 interface CommentAddDialogProps {
   isShow: boolean
   handleDialog: () => void
-  newComment: CommentPayload
-  setNewComment: (comment: CommentPayload) => void
-  addComment: () => void
+  addComment: (newComment: CommentPayload) => void
 }
 
-export const CommentAddDialog = ({
-  isShow,
-  handleDialog,
-  newComment,
-  setNewComment,
-  addComment,
-}: CommentAddDialogProps) => {
+export const CommentAddDialog = ({ isShow, handleDialog, addComment }: CommentAddDialogProps) => {
+  const [newComment, setNewComment] = useState<CommentPayload>({ body: "", postId: 1, userId: 1, likes: 0 })
+
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>
       <DialogContent>
@@ -28,7 +23,14 @@ export const CommentAddDialog = ({
             value={newComment.body}
             onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
           />
-          <Button onClick={addComment}>댓글 추가</Button>
+          <Button
+            onClick={() => {
+              addComment(newComment)
+              setNewComment({ body: "", postId: 1, userId: 1, likes: 0 })
+            }}
+          >
+            댓글 추가
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

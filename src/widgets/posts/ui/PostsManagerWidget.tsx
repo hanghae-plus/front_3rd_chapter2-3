@@ -14,15 +14,7 @@ import { CommentAddDialog } from "../../../features/comments/ui/CommentAddDialog
 import { CommentUpdateDialog } from "../../../features/comments/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "./PostDetailDialog"
 import { UserDialog } from "../../../entities/user/ui/UserDialog"
-import {
-  addPostMutation,
-  getPosts,
-  getPostsByTag,
-  getSearchPosts,
-  updatePostMutation,
-  deletePostMutation,
-} from "../../../features/posts/api"
-import { getUsers } from "../../../features/users/api"
+import { addPostMutation, updatePostMutation, deletePostMutation } from "../../../features/posts/api"
 import {
   addCommentMutation,
   deleteCommentMutation,
@@ -33,6 +25,7 @@ import { fetchUser } from "../../../entities/user/api"
 import { usePostDialogs } from "../../../features/posts/model/usePostDialogs"
 import { useCommentDialogs } from "../../../features/comments/model/useCommentDialogs"
 import { useUserDialogs } from "../../../features/users/model/useUserDialogs"
+import { usePostManager } from "../../../features/posts/model/usePostManager"
 
 const PostsManagerWidget = () => {
   // useFilter 훅 사용
@@ -62,21 +55,19 @@ const PostsManagerWidget = () => {
   const { showDetailDialog, handlers: userDialogHandlers } = useUserDialogs()
 
   // 선택된 항목 상태
-  const [newPost, setNewPost] = useState<PostPayload>({ title: "", body: "", userId: 1 })
-  const [newComment, setNewComment] = useState<CommentPayload>({ body: "", postId: 1, userId: 1, likes: 0 })
+
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
 
   // Queries
 
-  const { data: posts, isLoading: postsLoading } = getPosts(limit, skip, searchQuery, selectedTag)
-
-  const { data: searchResults } = getSearchPosts(searchQuery)
-
-  const { data: taggedPosts } = getPostsByTag(selectedTag)
-
-  const { data: users } = getUsers()
+  const { posts, postsLoading, searchResults, taggedPosts, users } = usePostManager({
+    skip,
+    limit,
+    searchQuery,
+    selectedTag,
+  })
 
   const { mutate: addPostMutate } = addPostMutation()
 
@@ -125,7 +116,6 @@ const PostsManagerWidget = () => {
   const addComment = (newComment: CommentPayload) => {
     addCommentMutate(newComment)
     commentDialogHandlers.handleAddDialog()
-    setNewComment({ body: "", postId: 1, userId: 1, likes: 0 })
   }
 
   // 핸들러 함수들
@@ -194,13 +184,7 @@ const PostsManagerWidget = () => {
         setShowEditCommentDialog={commentDialogHandlers.handleEditDialog}
         handleAddComment={commentDialogHandlers.handleAddDialog}
       />
-      <PostAddDialog
-        isShow={showAddDialog}
-        handleDialog={dialogHandlers.handleAddDialog}
-        newPost={newPost}
-        setNewPost={setNewPost}
-        addPost={addPost}
-      />
+      <PostAddDialog isShow={showAddDialog} handleDialog={dialogHandlers.handleAddDialog} addPost={addPost} />
       <PostUpdateDialog
         isShow={showEditDialog}
         handleDialog={dialogHandlers.handleEditDialog}
@@ -211,9 +195,7 @@ const PostsManagerWidget = () => {
       <CommentAddDialog
         isShow={showAddCommentDialog}
         handleDialog={commentDialogHandlers.handleAddDialog}
-        newComment={newComment}
-        setNewComment={setNewComment}
-        addComment={() => addComment(newComment)}
+        addComment={(newComment: CommentPayload) => addComment(newComment)}
       />
       <CommentUpdateDialog
         isShow={showEditCommentDialog}
