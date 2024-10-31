@@ -19,6 +19,13 @@
 <hr />
 <hr />
 
+## 테스트 코드 수정
+
+- 시간지연이 필요해 await waitFor(() => expect(screen.getByText(/새 게시물 추가/i)).toBeInTheDocument()); 를 추가해줬습니다.
+
+-     // 로딩 상태 확인 (선택적)
+  // expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument(); << 이부분을 주석처리했습니다. 왜 실패하는지 이유를 알 수가 없었어요
+
 ## [6주차] 기본과제
 
 여러분은 게시판을 관리할 수 있는 Admin 코드를 인수인계 받았습니다. 다행히 못 알아볼 정도의 더티코드가 적당히 잘 만든 것 같지만 정리는 된 것 같지 않은 아주 현실감 있는 익숙한 느낌의 코드였습니다.
@@ -53,13 +60,13 @@
 
 체크포인트
 
-- [ ] shared 공통 컴포넌트를 분리했나요?
-- [ ] shared 공통 로직을 분리했나요?
-- [ ] entities를 중심으로 type을 정의하고 model을 분리했나요?
-- [ ] entities를 중심으로 ui를 분리했나요?
-- [ ] entities를 중심으로 api를 분리했나요?
-- [ ] feature별로 ui/model을 분리했나요?
-- [ ] widget별로 ui를 분리했나요?
+- [x] shared 공통 컴포넌트를 분리했나요?
+- [x] shared 공통 로직을 분리했나요?
+- [x] entities를 중심으로 type을 정의하고 model을 분리했나요?
+- [x] entities를 중심으로 ui를 분리했나요?
+- [x] entities를 중심으로 api를 분리했나요?
+- [x] feature별로 ui/model을 분리했나요?
+- [x] widget별로 ui를 분리했나요?
 ```
 
 ## [6주차] 심화과제
@@ -85,8 +92,8 @@ TanstackQuery를 이용하여 코드를 개선하기
 
 체크포인트
 
-- [ ] 모든 API 호출이 TanStack Query의 useQuery와 useMutation으로 대체되었는가?
-- [ ] 쿼리 키가 적절히 설정되었는가?
-- [ ] useState가 아닌 선언적인 함수형 프로그래밍이 적절히 적용되었는가?
-- [ ] 캐싱과 리프레시 전략이 올바르게 구현되었는가?
+- [x] 모든 API 호출이 TanStack Query의 useQuery와 useMutation으로 대체되었는가?
+- [x] 쿼리 키가 적절히 설정되었는가?
+- [x] useState가 아닌 선언적인 함수형 프로그래밍이 적절히 적용되었는가?
+- [x] 캐싱과 리프레시 전략이 올바르게 구현되었는가?
 ```

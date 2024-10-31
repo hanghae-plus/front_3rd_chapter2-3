@@ -50,6 +50,6 @@ export const useQueryGetPost = () => {
   return useQuery<PostListTotal>({
     queryKey: ["search-post", { ...searchParams }],
     queryFn: () => fetchPostList(userList, searchParams),
-    enabled: false,
+    enabled: userList.length > 0,
   });
 };
