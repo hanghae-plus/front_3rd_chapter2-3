@@ -1,10 +1,11 @@
-import { UserDto } from '~/entities/user/model/types';
+import { useUserStore } from '~/entities/user/model/userStore';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/shared/ui/Dialog';
 
 import { useModalStore } from '../model/userModalStore';
 
-export const UserModal = ({ selectedUser }: { selectedUser: UserDto }) => {
+export const UserModal = () => {
+  const selectedUser = useUserStore.use.user();
   const showUserModal = useModalStore.use.showUserModal();
   const setShowUserModal = useModalStore.use.setShowUserModal();
 

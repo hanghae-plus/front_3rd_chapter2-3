@@ -3,7 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 
 import { useModalStore } from '~/features/user-modal/model/userModalStore';
 
+import { fetchAllCommentsByPostId } from '~/entities/comment/api/commentApi';
+import { useCommentsStore } from '~/entities/comment/model/commentsStore';
 import { deletePost } from '~/entities/post/api/postApi';
+import { usePostStore } from '~/entities/post/model/store';
 import { Post } from '~/entities/post/model/types';
 import { fetchUserById } from '~/entities/user/api/userApi';
 import { User } from '~/entities/user/model/types';
@@ -25,6 +28,13 @@ export const PostTableRow = ({ post }: { post: Post }) => {
   // user store
   const selectUser = useUserStore.use.selectUser();
 
+  // comments store
+  const comments = useCommentsStore.use.comments();
+  const addComments = useCommentsStore.use.addComments();
+
+  // post store
+  const selectPost = usePostStore.use.selectPost();
+
   // 사용자 모달 열기
   const openUserModal = async (user: User) => {
     try {
@@ -40,19 +50,19 @@ export const PostTableRow = ({ post }: { post: Post }) => {
   const fetchComments = async (postId: number) => {
     if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
-      const data = await fetchAllCommentsByPostId(postId);
+      const { comments } = await fetchAllCommentsByPostId(postId);
 
-      setComments((prev) => ({ ...prev, [postId]: data.comments }));
+      addComments(postId, comments);
     } catch (error) {
       console.error('댓글 가져오기 오류:', error);
     }
   };
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post);
+  const openPostDetail = (post: Post) => {
+    selectPost(post);
     fetchComments(post.id);
-    setShowPostDetailDialog(true);
+    // setShowPostDetailDialog(true);
   };
 
   return (
@@ -106,8 +116,8 @@ export const PostTableRow = ({ post }: { post: Post }) => {
             variant="ghost"
             size="sm"
             onClick={() => {
-              setSelectedPost(post);
-              setShowEditDialog(true);
+              selectPost(post);
+              // setShowEditDialog(true);
             }}
           >
             <Edit2 className="w-4 h-4" />

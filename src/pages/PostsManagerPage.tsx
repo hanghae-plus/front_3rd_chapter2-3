@@ -1,8 +1,10 @@
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { Edit2, Plus, Search, ThumbsUp, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
+import { PostTableRow } from '~/features/post-table/ui/PostTableRow';
 import { useModalStore } from '~/features/user-modal/model/userModalStore';
+import { UserModal } from '~/features/user-modal/ui/UserModal';
 
 import {
   addComment as addCommentApi,
@@ -10,7 +12,7 @@ import {
   fetchAllCommentsByPostId,
   updateComment as updateCommentApi,
 } from '~/entities/comment/api/commentApi';
-import { CommentResponseDto } from '~/entities/comment/api/type';
+import { CommentResponseDto } from '~/entities/comment/model/type';
 import {
   addPost as addPostApi,
   deletePost as deletePostApi,
@@ -27,7 +29,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '~/shared/ui/Card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/shared/ui/Dialog';
 import { Input } from '~/shared/ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/ui/Select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/ui/Table';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '~/shared/ui/Table';
 import { Textarea } from '~/shared/ui/Textarea';
 
 const PostsManager = () => {
@@ -336,67 +338,68 @@ const PostsManager = () => {
       </TableHeader>
       <TableBody>
         {posts.map((post) => (
-          <TableRow key={post.id}>
-            <TableCell>{post.id}</TableCell>
-            <TableCell>
-              <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
+          <PostTableRow key={post.id} post={post} />
+          // <TableRow key={post.id}>
+          //   <TableCell>{post.id}</TableCell>
+          //   <TableCell>
+          //     <div className="space-y-1">
+          //       <div>{highlightText(post.title, searchQuery)}</div>
 
-                <div className="flex flex-wrap gap-1">
-                  {post.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? 'text-white bg-blue-500 hover:bg-blue-600'
-                          : 'text-blue-800 bg-blue-100 hover:bg-blue-200'
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag);
-                        updateURL();
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post);
-                    setShowEditDialog(true);
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
+          //       <div className="flex flex-wrap gap-1">
+          //         {post.tags?.map((tag) => (
+          //           <span
+          //             key={tag}
+          //             className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
+          //               selectedTag === tag
+          //                 ? 'text-white bg-blue-500 hover:bg-blue-600'
+          //                 : 'text-blue-800 bg-blue-100 hover:bg-blue-200'
+          //             }`}
+          //             onClick={() => {
+          //               setSelectedTag(tag);
+          //               updateURL();
+          //             }}
+          //           >
+          //             {tag}
+          //           </span>
+          //         ))}
+          //       </div>
+          //     </div>
+          //   </TableCell>
+          //   <TableCell>
+          //     <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+          //       <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
+          //       <span>{post.author?.username}</span>
+          //     </div>
+          //   </TableCell>
+          //   <TableCell>
+          //     <div className="flex items-center gap-2">
+          //       <ThumbsUp className="w-4 h-4" />
+          //       <span>{post.reactions?.likes || 0}</span>
+          //       <ThumbsDown className="w-4 h-4" />
+          //       <span>{post.reactions?.dislikes || 0}</span>
+          //     </div>
+          //   </TableCell>
+          //   <TableCell>
+          //     <div className="flex items-center gap-2">
+          //       <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+          //         <MessageSquare className="w-4 h-4" />
+          //       </Button>
+          //       <Button
+          //         variant="ghost"
+          //         size="sm"
+          //         onClick={() => {
+          //           setSelectedPost(post);
+          //           setShowEditDialog(true);
+          //         }}
+          //       >
+          //         <Edit2 className="w-4 h-4" />
+          //       </Button>
+          //       <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+          //         <Trash2 className="w-4 h-4" />
+          //       </Button>
+          //     </div>
+          //   </TableCell>
+          // </TableRow>
         ))}
       </TableBody>
     </Table>
@@ -650,7 +653,8 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
+      <UserModal />
+      {/* <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>사용자 정보</DialogTitle>
@@ -681,7 +685,7 @@ const PostsManager = () => {
             </div>
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </Card>
   );
 };
