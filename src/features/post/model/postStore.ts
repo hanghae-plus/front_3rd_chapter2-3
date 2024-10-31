@@ -29,20 +29,6 @@ export const usePostsStore = () => {
     deletePostMutate(postId)
   }
 
-  // const getPostsByTag = async (tag: string, limit: number, skip: number) => {
-  //   const postsData = await fetchPostsByTagApi(tag)
-  //   const usersData = await fetchUsersApi()
-
-  //   const paginatedPosts = postsData.posts.slice(skip, skip + limit)
-  //   const postsWithUsers = paginatedPosts.map((post: Post) => ({
-  //     ...post,
-  //     author: usersData.users.find((user: User) => user.id === post.userId),
-  //   }))
-
-  //   setPosts(postsWithUsers)
-  //   setTotal(postsData.posts.length)
-  // }
-
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom)
 
   const openPostDetail = (post: Post) => {
