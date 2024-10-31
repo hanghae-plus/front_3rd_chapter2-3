@@ -1,16 +1,11 @@
 import { useQueryParams } from "@/shared/model";
+import { Input } from "@/shared/ui";
+import { Search } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-type UseSearchDebounceProps = {
-  delay?: number;
-};
-
-export const useSearchDebounce = ({ delay = 500 }: UseSearchDebounceProps = {}) => {
-  const { queries } = useQueryParams();
-  const { search: currentSearch } = queries;
-  const [search, setSearch] = useState(currentSearch);
-
+const PostSearchInput = () => {
+  const [search, setSearch] = useState("");
   const { handleUpdateQuery } = useQueryParams();
 
   const handleSearch = useCallback((value: string) => {
@@ -19,7 +14,7 @@ export const useSearchDebounce = ({ delay = 500 }: UseSearchDebounceProps = {}) 
 
   const debouncedSearch = useDebouncedCallback((value) => {
     handleUpdateQuery("search", value);
-  }, delay);
+  }, 500);
 
   const handleKeyDown = useCallback(
     (value: string) => (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -30,9 +25,20 @@ export const useSearchDebounce = ({ delay = 500 }: UseSearchDebounceProps = {}) 
     [debouncedSearch],
   );
 
-  return {
-    search,
-    handleSearch,
-    handleKeyDown,
-  };
+  return (
+    <div className="flex-1">
+      <div className="relative">
+        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="게시물 검색..."
+          className="pl-8"
+          value={search}
+          onChange={(e) => handleSearch(e.target.value)}
+          onKeyDown={handleKeyDown(search)}
+        />
+      </div>
+    </div>
+  );
 };
+
+export default PostSearchInput;
