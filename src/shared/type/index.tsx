@@ -106,17 +106,12 @@ interface CommentsResponseType {
 }
 
 interface CommentType {
-  id: number
-  body: string
-  postId: number
-  likes?: number
-  user: UserType
-}
-
-interface NewCommentType {
-  body: string
+  id?: number
+  body?: string
   postId: number | null
-  userId: number
+  likes?: number
+  user?: UserType
+  userId?: number
 }
 
 //tag
@@ -125,13 +120,4 @@ interface TagType {
   slug: string
 }
 
-export type {
-  PostType,
-  PostsResponseType,
-  CommentsResponseType,
-  CommentType,
-  UserType,
-  SelectUserType,
-  NewCommentType,
-  TagType,
-}
+export type { PostType, PostsResponseType, CommentsResponseType, CommentType, UserType, SelectUserType, TagType }

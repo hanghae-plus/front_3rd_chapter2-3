@@ -1,18 +1,20 @@
 import { Plus } from "lucide-react"
 import { Button } from "../../../shared/ui/button"
+import useCommentStore from "../../../entities/comment/model/useCommentStore"
 
 interface Props {
-  setNewComment: any
-  setShowAddCommentDialog: any
   postId: any
 }
 
-const CommentAddButton = ({ setNewComment, setShowAddCommentDialog, postId }: Props) => {
+const CommentAddButton = ({ postId }: Props) => {
+  const { showAddCommentDialog, newComment, setNewComment, setShowAddCommentDialog } = useCommentStore.getState()
+  console.log(showAddCommentDialog)
   return (
     <Button
       size="sm"
       onClick={() => {
-        setNewComment((prev: any) => ({ ...prev, postId }))
+        console.log("dd")
+        setNewComment({ ...newComment, postId })
         setShowAddCommentDialog(true)
       }}
     >

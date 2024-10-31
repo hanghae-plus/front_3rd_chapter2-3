@@ -1,23 +1,17 @@
+import { useEffect } from "react"
+import updateComment from "../../../entities/comment/model/updateComment"
+import useCommentStore from "../../../entities/comment/model/useCommentStore"
 import { CommentType } from "../../../shared/type"
 import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Textarea } from "../../../shared/ui/textarea"
 
-interface Props {
-  showEditCommentDialog: any
-  setShowEditCommentDialog: any
-  selectedComment: any
-  setSelectedComment: any
-  updateComment: any
-}
+const CommentEditModal = () => {
+  const { showEditCommentDialog, setShowEditCommentDialog, selectedComment, setSelectedComment } =
+    useCommentStore.getState()
 
-const CommentEditModal = ({
-  showEditCommentDialog,
-  setShowEditCommentDialog,
-  selectedComment,
-  setSelectedComment,
-  updateComment,
-}: Props) => {
+  useEffect(() => {}, [showEditCommentDialog])
+
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
       <DialogContent>

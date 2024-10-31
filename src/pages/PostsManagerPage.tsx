@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import {
-  CommentType,
-  CommentsResponseType,
-  NewCommentType,
-  PostType,
-  PostsResponseType,
-  UserType,
-} from "../shared/type"
+import { PostType, PostsResponseType, UserType } from "../shared/type"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog"
 import UserModal from "../features/user/ui/UserModal"
@@ -21,13 +14,26 @@ import SearchInput from "../features/post-search/ui/SearchInput"
 import TagSelect from "../features/post-search/ui/TagSelect"
 import SortBySelect from "../features/post-search/ui/SortBySelect"
 import SortOrderSelect from "../features/post-search/ui/SortOrderSelect"
-import CommentAddButton from "../features/comment-management/ui/CommentAddButton"
-import CommentLikeButton from "../features/comment-management/ui/CommentLikeButton"
-import CommentEditButton from "../features/comment-management/ui/CommentEditButton"
-import CommentDeleteButton from "../features/comment-management/ui/CommentDeleteButton"
 
 import PostTable from "../entities/post-table/ui/PostTable"
+import fetchComments from "../entities/comment/model/fetchComments"
+import RenderComments from "../entities/comment/ui/renderComments"
 // import CardHeader from "../features/post-header/ui/PostHeader"
+
+// 하이라이트 함수 추가
+export const highlightText = (text: string, highlight: string) => {
+  if (!text) return null
+  if (!highlight.trim()) {
+    return <span>{text}</span>
+  }
+  const regex = new RegExp(`(${highlight})`, "gi")
+  const parts = text.split(regex)
+  return (
+    <span>
+      {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
+    </span>
+  )
+}
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -49,11 +55,7 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState<CommentsResponseType>({})
-  const [selectedComment, setSelectedComment] = useState<CommentType | null>(null)
-  const [newComment, setNewComment] = useState<NewCommentType>({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
+
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   // URL 업데이트 함수
@@ -204,88 +206,89 @@ const PostsManager = () => {
   }
 
   // 댓글 가져오기
-  const fetchComments = async (postId: number) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
-    }
-  }
+  // const fetchComments = async (postId: number) => {
+  //   if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+  //   try {
+  //     const response = await fetch(`/api/comments/post/${postId}`)
+  //     const data = await response.json()
+  //     setComments((prev) => ({ ...prev, [postId]: data.comments }))
+  //     console.log(data.comments)
+  //   } catch (error) {
+  //     console.error("댓글 가져오기 오류:", error)
+  //   }
+  // }
 
   // 댓글 추가
-  const addComment = async () => {
-    try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-      setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
-    } catch (error) {
-      console.error("댓글 추가 오류:", error)
-    }
-  }
+  // const addComment = async () => {
+  //   try {
+  //     const response = await fetch("/api/comments/add", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(newComment),
+  //     })
+  //     const data = await response.json()
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [data.postId]: [...(prev[data.postId] || []), data],
+  //     }))
+  //     setShowAddCommentDialog(false)
+  //     setNewComment({ body: "", postId: null, userId: 1 })
+  //   } catch (error) {
+  //     console.error("댓글 추가 오류:", error)
+  //   }
+  // }
 
   // 댓글 업데이트
-  const updateComment = async () => {
-    try {
-      const response = await fetch(`/api/comments/${selectedComment?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment?.body }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-      setShowEditCommentDialog(false)
-    } catch (error) {
-      console.error("댓글 업데이트 오류:", error)
-    }
-  }
+  // const updateComment = async () => {
+  //   try {
+  //     const response = await fetch(`/api/comments/${selectedComment?.id}`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ body: selectedComment?.body }),
+  //     })
+  //     const data = await response.json()
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
+  //     }))
+  //     setShowEditCommentDialog(false)
+  //   } catch (error) {
+  //     console.error("댓글 업데이트 오류:", error)
+  //   }
+  // }
 
   // 댓글 삭제
-  const deleteComment = async (id: number, postId: number) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
-  }
+  // const deleteComment = async (id: number, postId: number) => {
+  //   try {
+  //     await fetch(`/api/comments/${id}`, {
+  //       method: "DELETE",
+  //     })
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [postId]: prev[postId].filter((comment) => comment.id !== id),
+  //     }))
+  //   } catch (error) {
+  //     console.error("댓글 삭제 오류:", error)
+  //   }
+  // }
 
-  // 댓글 좋아요
-  const likeComment = async (id: number, postId: number) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: (comments[postId].find((c) => c.id === id)?.likes as number) + 1 }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
-    }
-  }
+  // // 댓글 좋아요
+  // const likeComment = async (id: number, postId: number) => {
+  //   try {
+  //     const response = await fetch(`/api/comments/${id}`, {
+  //       method: "PATCH",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ likes: (comments[postId].find((c) => c.id === id)?.likes as number) + 1 }),
+  //     })
+  //     const data = await response.json()
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
+  //     }))
+  //   } catch (error) {
+  //     console.error("댓글 좋아요 오류:", error)
+  //   }
+  // }
 
   // 게시물 상세 보기
   const openPostDetail = (post: PostType) => {
@@ -330,21 +333,6 @@ const PostsManager = () => {
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
 
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
-
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
     <PostTable
@@ -362,37 +350,33 @@ const PostsManager = () => {
   )
 
   // 댓글 렌더링
-  const renderComments = (postId: number) => (
-    <div className="mt-2">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold">댓글</h3>
-        <CommentAddButton
-          setNewComment={setNewComment}
-          setShowAddCommentDialog={setShowAddCommentDialog}
-          postId={postId}
-        />
-      </div>
-      <div className="space-y-1">
-        {comments[postId]?.map((comment) => (
-          <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-            <div className="flex items-center space-x-2 overflow-hidden">
-              <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <CommentLikeButton likeComment={likeComment} comment={comment} postId={postId} />
-              <CommentEditButton
-                setSelectedComment={setSelectedComment}
-                setShowEditCommentDialog={setShowEditCommentDialog}
-                comment={comment}
-              />
-              <CommentDeleteButton deleteComment={deleteComment} comment={comment} postId={postId} />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  // const renderComments = (postId: number) => (
+  //   <div className="mt-2">
+  //     <div className="flex items-center justify-between mb-2">
+  //       <h3 className="text-sm font-semibold">댓글</h3>
+  //       <CommentAddButton
+  //         setNewComment={setNewComment}
+  //         setShowAddCommentDialog={setShowAddCommentDialog}
+  //         postId={postId}
+  //       />
+  //     </div>
+  //     <div className="space-y-1">
+  //       {comments[postId]?.map((comment) => (
+  //         <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
+  //           <div className="flex items-center space-x-2 overflow-hidden">
+  //             <span className="font-medium truncate">{comment.user?.username}:</span>
+  //             <span className="truncate">{highlightText(comment.body as string, searchQuery)}</span>
+  //           </div>
+  //           <div className="flex items-center space-x-1">
+  //             <CommentLikeButton comment={comment} postId={postId} />
+  //             <CommentEditButton comment={comment} />
+  //             <CommentDeleteButton comment={comment} postId={postId} />
+  //           </div>
+  //         </div>
+  //       ))}
+  //     </div>
+  //   </div>
+  // )
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -445,21 +429,9 @@ const PostsManager = () => {
       />
 
       {/* 댓글 추가 대화상자 */}
-      <CommentAddModal
-        showAddCommentDialog={showAddCommentDialog}
-        setShowAddCommentDialog={setShowAddCommentDialog}
-        newComment={newComment}
-        setNewComment={setNewComment}
-        addComment={addComment}
-      />
+      <CommentAddModal />
       {/* 댓글 수정 대화상자 */}
-      <CommentEditModal
-        showEditCommentDialog={showEditCommentDialog}
-        setShowEditCommentDialog={setShowEditCommentDialog}
-        selectedComment={selectedComment}
-        setSelectedComment={setSelectedComment}
-        updateComment={updateComment}
-      />
+      <CommentEditModal />
 
       {/* 게시물 상세 보기 대화상자 */}
       <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
@@ -469,7 +441,8 @@ const PostsManager = () => {
           </DialogHeader>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body as string, searchQuery)}</p>
-            {renderComments(selectedPost?.id as number)}
+            {/* {renderComments()} */}
+            <RenderComments postId={selectedPost?.id as number} searchQuery={searchQuery} />
           </div>
         </DialogContent>
       </Dialog>

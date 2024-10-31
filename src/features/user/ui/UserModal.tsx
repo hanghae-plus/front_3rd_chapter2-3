@@ -1,12 +1,6 @@
 import useUserStore from "../../../entities/user/model/useUserStore"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 
-interface Props {
-  showUserModal: any
-  setShowUserModal: any
-  selectedUser: any
-}
-
 //사용자 정보 모달창
 const UserModal = () => {
   const { showUserModal, setShowUserModal, selectedUser } = useUserStore()

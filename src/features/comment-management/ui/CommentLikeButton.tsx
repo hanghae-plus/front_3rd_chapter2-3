@@ -1,13 +1,13 @@
 import { ThumbsUp } from "lucide-react"
 import { Button } from "../../../shared/ui/button"
+import likeComment from "../../../entities/comment/model/likeComment"
 
 interface Props {
-  likeComment: any
   comment: any
   postId: any
 }
 
-const CommentLikeButton = ({ likeComment, comment, postId }: Props) => {
+const CommentLikeButton = ({ comment, postId }: Props) => {
   return (
     <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
       <ThumbsUp className="w-3 h-3" />

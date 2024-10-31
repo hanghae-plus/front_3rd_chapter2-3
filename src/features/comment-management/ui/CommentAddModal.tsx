@@ -1,23 +1,15 @@
+import { useEffect } from "react"
+import addComment from "../../../entities/comment/model/addComment"
+import useCommentStore from "../../../entities/comment/model/useCommentStore"
 import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Textarea } from "../../../shared/ui/textarea"
 
-interface Props {
-  addComment: any
-  showAddCommentDialog: any
-  setShowAddCommentDialog: any
-  newComment: any
-  setNewComment: any
-}
-
 //댓글 추가 모달
-const CommentAddModal = ({
-  showAddCommentDialog,
-  setShowAddCommentDialog,
-  newComment,
-  setNewComment,
-  addComment,
-}: Props) => {
+const CommentAddModal = () => {
+  const { showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment } = useCommentStore.getState()
+  console.log(showAddCommentDialog)
+  useEffect(() => {}, [showAddCommentDialog])
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
       <DialogContent>
@@ -27,7 +19,7 @@ const CommentAddModal = ({
         <div className="space-y-4">
           <Textarea
             placeholder="댓글 내용"
-            value={newComment.body}
+            value={newComment.body as string}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
               setNewComment({ ...newComment, body: e.target.value })
             }
