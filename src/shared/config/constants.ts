@@ -1,12 +1,14 @@
-export const API_ENDPOINTS = {
-  POSTS: "/posts",
-  COMMENTS: "/comments",
-  USERS: "/users",
-  TAGS: "/posts/tags",
-} as const
 
-export const PAGINATION = {
-  DEFAULT_LIMIT: 10,
-  DEFAULT_SKIP: 0,
-  PAGE_SIZE_OPTIONS: [10, 20, 30],
-} as const
+type TableHeader = {
+  id: string
+  label: string
+  width?: string
+}
+
+export const TABLE_HEADERS: TableHeader[] = [
+  { id: "id", label: "ID", width: "w-[50px]" },
+  { id: "title", label: "제목" },
+  { id: "author", label: "작성자", width: "w-[150px]" },
+  { id: "reactions", label: "반응", width: "w-[150px]" },
+  { id: "actions", label: "작업", width: "w-[150px]" },
+]
