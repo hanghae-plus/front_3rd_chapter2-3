@@ -1,13 +1,13 @@
 import { useAtom } from "jotai"
 import { useCallback } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { 
-  searchQueryAtom, 
-  selectedTagAtom, 
-  sortByAtom, 
-  sortOrderAtom,
+import {
+  limitAtom,
+  searchQueryAtom,
+  selectedTagAtom,
   skipAtom,
-  limitAtom 
+  sortByAtom,
+  sortOrderAtom,
 } from "../../../../shared/model/atom"
 
 export const usePostsFilter = () => {
@@ -77,7 +77,7 @@ export const usePostsFilter = () => {
   const handleLimitChange = useCallback(
     (value: number) => {
       setLimit(value)
-      setSkip(0) // 페이지 크기 변경 시 첫 페이지로 이동
+      setSkip(0)
       updateURL({ limit: value.toString(), skip: "0" })
     },
     [setLimit, setSkip, updateURL],

@@ -1,23 +1,12 @@
-import { Button } from "../button"
-import { Select } from "../select"
+import { Button } from "../../../../shared/ui/button"
+import { Select } from "../../../../shared/ui/select"
+import { useFilteredPosts } from "../../model/hooks/useFilteredPosts"
+import { usePostsFilter } from "../../model/hooks/usePostsFilter"
 
-interface PaginationProps {
-  limit: number
-  onNext: () => void
-  onPrev: () => void
-  onLimitChange: (limit: number) => void
-  isNextDisabled: boolean
-  isPrevDisabled: boolean
-}
+export const PostsPagination = () => {
+  const { skip, limit, onSkipChange, onLimitChange } = usePostsFilter()
+  const { total } = useFilteredPosts()
 
-export const Pagination = ({
-  limit,
-  onNext,
-  onPrev,
-  onLimitChange,
-  isNextDisabled,
-  isPrevDisabled,
-}: PaginationProps) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
@@ -35,10 +24,10 @@ export const Pagination = ({
         <span>항목</span>
       </div>
       <div className="flex gap-2">
-        <Button disabled={isPrevDisabled} onClick={onPrev}>
+        <Button disabled={skip === 0} onClick={() => onSkipChange(Math.max(0, skip - limit))}>
           이전
         </Button>
-        <Button disabled={isNextDisabled} onClick={onNext}>
+        <Button disabled={skip + limit >= (total ?? 0)} onClick={() => onSkipChange(skip + limit)}>
           다음
         </Button>
       </div>

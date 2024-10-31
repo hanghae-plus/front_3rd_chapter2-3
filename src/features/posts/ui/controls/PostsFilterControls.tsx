@@ -1,8 +1,8 @@
 import { Search } from "lucide-react"
-import { Input } from "../../../shared/ui/input"
-import { Select } from "../../../shared/ui/select"
-import { useTags } from "../../tag/api/query"
-import { usePostsFilter } from "../model/hooks/usePostsFilter"
+import { Input } from "../../../../shared/ui/input"
+import { Select } from "../../../../shared/ui/select"
+import { useTags } from "../../../tag/api/query"
+import { usePostsFilter } from "../../model/hooks/usePostsFilter"
 
 export const PostsFilterControls = () => {
   const { data: tags } = useTags()

@@ -17,9 +17,8 @@ export const usePosts = ({ limit = 10, skip = 0 }: { limit: number; skip: number
 }
 
 export const usePostsByTag = ({ tag, limit = 10, skip = 0 }: { tag: string; limit?: number; skip?: number }) => {
-  console.log("🚀 ~ usePostsByTag ~ limit:", limit)
   return useQuery({
-    queryKey: postKeys.byTag(tag),
+    queryKey: [...postKeys.byTag(tag), limit, skip],
     queryFn: () => postApi.get.postsByTag({ tag, limit, skip }),
   })
 }

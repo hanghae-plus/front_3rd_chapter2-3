@@ -3,9 +3,9 @@ import { Comment } from "../../../entities/comment/model/type"
 import { Post } from "../../../entities/post/model/type"
 import AddCommentDialog from "../../../features/comments/ui/AddCommentDialog"
 import EditCommentDialog from "../../../features/comments/ui/EditCommentDialog"
-import AddPostDialog from "../../../features/posts/ui/AddPostDialog"
-import EditPostDialog from "../../../features/posts/ui/EditPostDialog"
-import PostDetailDialog from "../../../features/posts/ui/PostDetailDialog"
+import AddPostDialog from "../../../features/posts/ui/dialogs/AddPostDialog"
+import EditPostDialog from "../../../features/posts/ui/dialogs/EditPostDialog"
+import PostDetailDialog from "../../../features/posts/ui/dialogs/PostDetailDialog"
 import UserInfoModal from "../../../features/user/ui/UserInfoModal"
 
 export const openModals = {

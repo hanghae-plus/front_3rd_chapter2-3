@@ -4,9 +4,6 @@ import { UserInfoModalProps } from "../model/types"
 
 const UserInfoModal = ({ isOpen, close, userId }: UserInfoModalProps) => {
   const { data: user, isSuccess } = useUserById(userId)
-  console.log("🚀 ~ UserInfoModal ~ userId:", userId)
-  console.log("🚀 ~ UserInfoModal ~ user:", user)
-
   return (
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent>
