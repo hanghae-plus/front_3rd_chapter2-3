@@ -10,7 +10,7 @@ export const commentQueries = {
       queryKey: createQueryKey(commentQueries.all(), "list", postId),
       queryFn: async () => {
         try {
-          return await commentApi.fetchComments(postId);
+          return await commentApi.getComments(postId);
         } catch (error) {
           console.error("댓글 조회 오류:", error);
           throw error;

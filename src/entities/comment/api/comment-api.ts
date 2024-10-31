@@ -3,7 +3,7 @@ import { createRequestOptions, fetchApi } from "@/shared/lib/api";
 import { COMMENT_API_PATHS } from "../config/comment-api-paths";
 
 //query
-const fetchComments = async (postId: number) => {
+const getComments = async (postId: number) => {
   const response = await fetchApi<CommentResponse>(COMMENT_API_PATHS.byPostId(postId));
   return response.comments;
 };
@@ -45,7 +45,7 @@ const likeComment = async (comment: Comment) => {
 // total
 
 export const commentApi = Object.freeze({
-  fetchComments,
+  getComments,
   addComment,
   updateComment,
   deleteComment,

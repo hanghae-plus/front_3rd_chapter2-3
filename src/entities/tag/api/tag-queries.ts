@@ -9,7 +9,7 @@ export const tagQueries = {
       queryKey: createQueryKey(tagQueries.all()),
       queryFn: async () => {
         try {
-          const data = await tagApi.fetchTags();
+          const data = await tagApi.getTags();
           return data;
         } catch (error) {
           console.error("태그 가져오기 오류:", error);

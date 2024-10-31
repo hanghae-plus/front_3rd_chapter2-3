@@ -3,7 +3,7 @@ import { TAG_API_PATHS } from "../config/tag-api-paths";
 import { Tag } from "../model/types";
 
 // query
-const fetchTags = async () => {
+const getTags = async () => {
   const response = await fetchApi<Tag[]>(TAG_API_PATHS.base);
   return response;
 };
@@ -11,4 +11,4 @@ const fetchTags = async () => {
 // ======================================================
 
 // total
-export const tagApi = Object.freeze({ fetchTags });
+export const tagApi = Object.freeze({ getTags });

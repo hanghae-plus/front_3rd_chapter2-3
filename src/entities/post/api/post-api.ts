@@ -5,7 +5,7 @@ import { POST_API_PATHS } from "../config/post-api-paths";
 
 //query
 
-const fetchPosts = async (queries: UseQueryPosts): Promise<PostsResponse> => {
+const getPosts = async (queries: UseQueryPosts): Promise<PostsResponse> => {
   const { limit, skip, sortBy, sortOrder } = queries;
   const postsResponse = await fetchApi<PostsResponse>(POST_API_PATHS.base, {
     searchParams: { limit, skip, sortBy: sortBy, order: sortOrder },
@@ -22,7 +22,7 @@ const searchPosts = async (search: string) => {
 };
 
 //query
-const fetchPostsByTag = async (tag: string) => {
+const getPostsByTag = async (tag: string) => {
   const response = await fetchApi<PostsResponse>(POST_API_PATHS.byTag(tag));
   return response;
 };
@@ -54,10 +54,10 @@ const deletePost = async (id: number) => {
 
 // total
 export const postApi = Object.freeze({
-  getPosts: fetchPosts,
-  addPost: addPost,
-  updatePost: updatePost,
-  deletePost: deletePost,
-  searchPosts: searchPosts,
-  fetchPostsByTag: fetchPostsByTag,
+  getPosts,
+  addPost,
+  updatePost,
+  deletePost,
+  searchPosts,
+  getPostsByTag,
 });

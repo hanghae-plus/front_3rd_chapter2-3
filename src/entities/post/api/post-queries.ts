@@ -38,7 +38,7 @@ export const postQueries = {
       queryKey: createQueryKey(postQueries.all(), "tag", tag),
       queryFn: async () => {
         try {
-          const data = await postApi.fetchPostsByTag(tag);
+          const data = await postApi.getPostsByTag(tag);
           return data;
         } catch (error) {
           console.error("게시물 태그 가져오기 오류:", error);

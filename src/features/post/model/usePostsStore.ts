@@ -96,7 +96,7 @@ const usePostsStore = create<PostStore>()((set, get) => ({
   fetchPostsByTag: async (tag) => {
     set({ loading: true });
     const result = await apiHandler(
-      () => postApi.fetchPostsByTag(tag),
+      () => postApi.getPostsByTag(tag),
       (error) => console.error("게시물 태그 가져오기 오류:", error),
     );
     if (!result) return;
