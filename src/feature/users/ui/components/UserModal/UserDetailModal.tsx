@@ -1,5 +1,10 @@
 import { UserDetailsView } from "../../../../../entities/user/ui/components/User/UserDetailView"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../../../shared"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../../../../shared"
 import { useUserQuery } from "../../../lib/hooks/useUserQuery"
 
 interface UserDetailModalProps {
@@ -8,8 +13,12 @@ interface UserDetailModalProps {
   onOpenChange: (open: boolean) => void
 }
 
-export const UserDetailModal = ({ userId, open, onOpenChange }: UserDetailModalProps) => {
-  const { data: user, isPending } = useUserQuery(userId)
+export const UserDetailModal = ({
+  userId,
+  open,
+  onOpenChange,
+}: UserDetailModalProps) => {
+  const { data: user, isPending } = useUserQuery(userId ?? 0)
   if (isPending) {
     return <div>로딩 중...</div>
   }

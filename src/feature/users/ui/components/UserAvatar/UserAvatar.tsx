@@ -10,6 +10,7 @@ export const UserAvatar = ({
 }) => {
   const { data: userInfo, isPending } = useUserQuery(user)
 
+  if (!userInfo) return
   if (isPending) {
     return <div>로딩 중...</div>
   }

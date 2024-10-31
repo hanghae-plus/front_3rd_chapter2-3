@@ -39,12 +39,13 @@ const PostsManager = () => {
     setSelectedPost,
   } = usePostsModalStore()
 
+  const userModal = useUserModal()
   const {
-    isOpen: showUserModal,
+    isOpen: showUserModal = false,
     userId: selectedUserId,
     openModal: openUserModal,
     onOpenChange: setShowUserModal,
-  } = useUserModal()
+  } = userModal || {}
 
   if (postsPending) {
     return <div className="flex justify-center p-4">로딩 중...</div>
@@ -78,7 +79,7 @@ const PostsManager = () => {
           setSelectedPost(post)
           setShowEditDialog(true)
         }}
-        onUserClick={openUserModal}
+        onUserClick={openUserModal ?? (() => {})}
       />
 
       {/* 게시물 추가 대화상자 */}
@@ -106,9 +107,9 @@ const PostsManager = () => {
 
       {/* 사용자 모달 */}
       <UserDetailModal
-        userId={selectedUserId}
+        userId={selectedUserId ?? null}
         open={showUserModal}
-        onOpenChange={setShowUserModal}
+        onOpenChange={setShowUserModal ?? (() => {})}
       />
     </Card>
   )

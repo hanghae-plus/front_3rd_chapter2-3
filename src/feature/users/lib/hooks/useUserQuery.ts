@@ -6,7 +6,7 @@ export const userKeys = {
   detail: (id: number) => [...userKeys.all, "detail", id] as const,
 }
 
-export const useUserQuery = (id: number | null) => {
+export const useUserQuery = (id: number) => {
   return useQuery({
     queryKey: userKeys.detail(id),
     queryFn: () => usersApi.getUser(id),

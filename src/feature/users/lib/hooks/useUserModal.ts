@@ -1,8 +1,9 @@
-import { useUserQuery } from './useUserQuery'
-import { useUserModalStore } from '../../model/store/userModalStore'
+import { useUserQuery } from "./useUserQuery"
+import { useUserModalStore } from "../../model/store/userModalStore"
 
 export const useUserModal = () => {
   const { isOpen, userId, setOpen, setUserId } = useUserModalStore()
+  if (!userId) return
   const { data: userData } = useUserQuery(userId)
 
   const openModal = (id: number) => {

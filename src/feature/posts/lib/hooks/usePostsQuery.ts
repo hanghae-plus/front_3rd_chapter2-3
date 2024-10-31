@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { postsApi } from "../../api/posts.api"
 import { Post, UpdatePostData } from "../../model/types"
-import { CACHE_CONFIG, ERROR_MESSAGES } from "../../config/posts.config";
+import { CACHE_CONFIG, ERROR_MESSAGES } from "../../config/posts.config"
 
 export const postKeys = {
   all: ["posts"] as const,
   lists: () => [...postKeys.all, "list"] as const,
-  list: (filters: { limit: number; skip: number }) => 
+  list: (filters: { limit: number; skip: number }) =>
     [...postKeys.lists(), filters] as const,
   search: (query: string) => [...postKeys.all, "search", query] as const,
   byTag: (tag: string) => [...postKeys.all, "tag", tag] as const,
@@ -52,23 +52,21 @@ export const useAddPostMutation = (limit: number, skip: number) => {
     mutationFn: (data: { title: string; body: string; userId: number }) =>
       postsApi.addPost(data),
     onSuccess: (newPost) => {
-      const previousData = queryClient.getQueryData<{ posts: Post[]; total: number }>(
-        ["posts", { limit, skip }]
-      )
+      const previousData = queryClient.getQueryData<{
+        posts: Post[]
+        total: number
+      }>(["posts", { limit, skip }])
       if (previousData) {
         const updatedPosts = [newPost, ...previousData.posts.slice(0, -1)]
-        queryClient.setQueryData(
-          ["posts", { limit, skip }],
-          {
-            posts: updatedPosts,
-            total: previousData.total + 1
-          }
-        )
+        queryClient.setQueryData(["posts", { limit, skip }], {
+          posts: updatedPosts,
+          total: previousData.total + 1,
+        })
       }
     },
     onError: (error) => {
       console.error(`${ERROR_MESSAGES.ADD_ERROR}`, error)
-    }
+    },
   })
 }
 
@@ -80,16 +78,16 @@ export const useUpdatePostMutation = () => {
     mutationFn: ({ id, data }: UpdatePostData) => postsApi.updatePost(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["posts"]
+        queryKey: ["posts"],
       })
     },
     onError: (error) => {
       console.error(`${ERROR_MESSAGES.UPDATE_ERROR}`, error)
-    }
+    },
   })
 }
 
-export const useDeletePostMutation = (id?: number) => {
+export const useDeletePostMutation = (id: number) => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -97,11 +95,11 @@ export const useDeletePostMutation = (id?: number) => {
     mutationFn: () => postsApi.deletePost(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["posts"]
+        queryKey: ["posts"],
       })
     },
     onError: (error) => {
       console.error(`${ERROR_MESSAGES.DELETE_ERROR}`, error)
-    }
+    },
   })
 }
