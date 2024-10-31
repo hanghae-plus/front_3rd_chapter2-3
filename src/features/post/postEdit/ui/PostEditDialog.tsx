@@ -3,32 +3,49 @@ import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textar
 import { updatePost } from '../../../../entities/post/api/postApi';
 import { Post } from '../../../../entities/post/model/types';
 import { transformUpdatedPost } from '../../../../entities/post/lib';
+import { useShallow } from 'zustand/shallow';
+import { usePostStore } from '../../postStore';
 
 type Props = {
-  post: Post;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   onPostEdit?: (newPost: Post) => void;
 };
 
 type Form = Pick<Post, 'title' | 'body'>;
 
-export const PostEditDialog = ({ post, open, onOpenChange, onPostEdit }: Props) => {
+export const PostEditDialog = ({ onPostEdit }: Props) => {
+  const { selectedPost, showEditDialog, setShowEditDialog } = usePostStore(
+    useShallow((state) => ({
+      selectedPost: state.selectedPost,
+      setShowEditDialog: state.setShowEditDialog,
+      showEditDialog: state.showEditDialog,
+    })),
+  );
+
   const [form, setForm] = useState<Form>({
     title: '',
     body: '',
   });
 
   useEffect(() => {
-    if (open) {
-      setForm({ title: post.title, body: post.body });
+    if (showEditDialog && selectedPost) {
+      setForm({
+        title: selectedPost.title ?? '',
+        body: selectedPost.body ?? '',
+      });
+    } else if (!showEditDialog) {
+      setForm({
+        title: '',
+        body: '',
+      });
     }
-  }, [post, open]);
+  }, [selectedPost, showEditDialog]);
 
   const handleClick = useCallback(async () => {
+    if (selectedPost === null) return;
+
     try {
       const data = await updatePost({
-        ...post,
+        ...selectedPost,
         ...form,
       });
 
@@ -37,19 +54,17 @@ export const PostEditDialog = ({ post, open, onOpenChange, onPostEdit }: Props) 
 
       onPostEdit?.(updatedPost);
 
-      // setForm(createForm());
-
       // setPosts(posts.map((post) => (post.id === data.id ? data : post)));
-      // setShowEditDialog(false);
+      setShowEditDialog(false);
     } catch (error) {
       console.error('게시물 업데이트 오류:', error);
 
       throw error;
     }
-  }, [post, form, onPostEdit]);
+  }, [selectedPost, form, onPostEdit, setShowEditDialog]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>

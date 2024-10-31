@@ -29,6 +29,7 @@ import { PostDeleteButton } from '../features/post/postDelete';
 import { PostAddDialog } from '../features/post/postAdd/ui/PostAddDialog';
 import { PostEditDialog } from '../features/post/postEdit/ui/PostEditDialog';
 import { Post } from '../entities/post/model/types';
+import { PostEditButton } from '../features/post/postEdit/ui/PostEditButton';
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -45,7 +46,6 @@ const PostsManager = () => {
   const [sortBy, setSortBy] = useState(queryParams.get('sortBy') || '');
   const [sortOrder, setSortOrder] = useState(queryParams.get('sortOrder') || 'asc');
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [showEditDialog, setShowEditDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
@@ -366,16 +366,7 @@ const PostsManager = () => {
                 </Button>
 
                 {/* 게시글 수정 */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPost(post);
-                    setShowEditDialog(true);
-                  }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
+                <PostEditButton post={post} />
 
                 {/* 게시글 삭제 */}
                 <PostDeleteButton
@@ -551,17 +542,11 @@ const PostsManager = () => {
       />
 
       {/* 게시물 수정 대화상자 */}
-      {selectedPost && (
-        <PostEditDialog
-          open={showEditDialog}
-          onOpenChange={setShowEditDialog}
-          post={selectedPost}
-          onPostEdit={(updatedPost) => {
-            setPosts(posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)));
-            setShowEditDialog(false);
-          }}
-        />
-      )}
+      <PostEditDialog
+        onPostEdit={(updatedPost) => {
+          setPosts(posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)));
+        }}
+      />
 
       {/* 댓글 추가 대화상자 */}
       <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
