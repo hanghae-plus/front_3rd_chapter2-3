@@ -1,12 +1,26 @@
-import { useEffect, useState } from "react"
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  Edit2,
+  MessageSquare,
+  Plus,
+  Search,
+  ThumbsDown,
+  ThumbsUp,
+  Trash2,
+} from 'lucide-react';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
 import {
   Button,
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -24,7 +38,7 @@ import {
   TableHeader,
   TableRow,
   Textarea,
-} from "../shared/ui"
+} from '../shared/ui';
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -470,7 +484,7 @@ const PostsManager = () => {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
+      {/* <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
           <Button onClick={() => setShowAddDialog(true)}>
@@ -478,7 +492,7 @@ const PostsManager = () => {
             게시물 추가
           </Button>
         </CardTitle>
-      </CardHeader>
+      </CardHeader> */}
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
