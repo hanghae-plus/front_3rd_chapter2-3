@@ -1,10 +1,10 @@
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
-import { usePostsStore } from "../../post/model/postStore"
+import { usePostTotalStore } from "../../post/model/postTotalStore"
 
 export const Pagination = () => {
   const { limit, setLimit, skip, setSkip } = usePostParamsStore()
-  const { total } = usePostsStore()
+  const { total } = usePostTotalStore()
 
   return (
     <div className="flex justify-between items-center">

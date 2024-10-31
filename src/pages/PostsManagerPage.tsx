@@ -10,14 +10,14 @@ import { TagSelect } from "../features/post-filter/ui/TagSelect"
 import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
 import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
-import { usePostsStore } from "../features/post/model/postStore"
 import { usePostParamsStore } from "../features/post/model/postParamsStore"
 import { usePostQueryStore } from "../features/post/model/postQueryStore"
+import { usePostAddModalStore } from "../features/post/model/postAddModalStore"
 
 const PostsManager = () => {
   const [searchQueryInput, setSearchQueryInput] = useState("")
 
-  const { setShowAddDialog } = usePostsStore()
+  const { setShowAddDialog } = usePostAddModalStore()
   const {
     skip,
     limit,

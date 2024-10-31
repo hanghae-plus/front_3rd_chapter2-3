@@ -1,14 +1,18 @@
 import { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { usePostsStore } from "../../post/model/postStore"
+import { useMutationPostAdd } from "../../post/api/useMutationPostAdd"
+import { usePostAddModalStore } from "../../post/model/postAddModalStore"
 
 export const PostAddModal = () => {
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const { showAddDialog, setShowAddDialog } = usePostAddModalStore()
 
-  const { addPost, showAddDialog, setShowAddDialog } = usePostsStore()
+  const { mutate: addPostMutate } = useMutationPostAdd()
 
   const handleAddPost = async () => {
-    addPost(newPost)
+    addPostMutate(newPost)
+
+    setShowAddDialog(false)
     setNewPost({ title: "", body: "", userId: 1 })
   }
 

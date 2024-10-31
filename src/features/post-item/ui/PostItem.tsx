@@ -6,16 +6,22 @@ import { usePostsStore } from "../../post/model/postStore"
 import { useUserStore } from "../../user/model/userStore"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
 import { usePostEditModalStore } from "../../post/model/postEditModalStore"
+import { useMutationPostDelete } from "../../post/api/useMutationPostDelete"
 
 interface Props {
   post: Post
 }
 
 export const PostItem = ({ post }: Props) => {
-  const { openPostDetail, setSelectedPost, deletePost } = usePostsStore()
+  const { openPostDetail, setSelectedPost } = usePostsStore()
   const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsStore()
   const { openUserModal } = useUserStore()
   const { setShowPostEditModal } = usePostEditModalStore()
+
+  const { mutate: deletePostMutate } = useMutationPostDelete()
+  const deletePost = (postId: number) => {
+    deletePostMutate(postId)
+  }
 
   return (
     <TableRow key={post.id}>

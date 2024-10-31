@@ -3,12 +3,12 @@ import { PostItem } from "../../../features/post-item/ui/PostItem"
 import { useQueryPosts } from "../../../features/post/api/useQueryPosts"
 import { useQueryUsers } from "../../../features/user/api/useQueryUsers"
 import { usePostParamsStore } from "../../../features/post/model/postParamsStore"
-import { usePostsStore } from "../../../features/post/model/postStore"
 import { useEffect } from "react"
+import { usePostTotalStore } from "../../../features/post/model/postTotalStore"
 
 export const PostTable = () => {
   const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = usePostParamsStore()
-  const { setTotal } = usePostsStore()
+  const { setTotal } = usePostTotalStore()
 
   const { data: usersDTO, isLoading: isLoadingUser } = useQueryUsers()
   const { data: posts, isLoading: isLoadingPosts } = useQueryPosts(usersDTO?.users || [], {
