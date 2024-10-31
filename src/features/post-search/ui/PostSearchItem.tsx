@@ -9,9 +9,7 @@ interface Props {
   sortBy: string
   sortOrder: string
   selectedTag: string
-  skip: number
-  limit: number
-  setParam: (key: "searchQuery" | "sortBy" | "sortOrder" | "selectedTag" | "skip" | "limit", value?: ParamValue) => void
+  setParam: (key: "searchQuery" | "sortBy" | "sortOrder" | "selectedTag", value?: ParamValue) => void
 }
 
 const PostSearchItem = ({ setParam, searchQuery, sortBy, sortOrder, selectedTag }: Props) => {

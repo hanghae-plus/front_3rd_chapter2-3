@@ -7,7 +7,7 @@ interface Props {
   query: string
 }
 
-export const useMutateSearchPost = ({ query }: Props) => {
+export const useQuerySearchPost = ({ query }: Props) => {
   const { setPosts, setTotal, setIsLoading } = usePostsStore.getState()
 
   const { isLoading } = useQuery(["post-search", query], () => searchPost(query), {

@@ -2,7 +2,7 @@ import { Search } from "lucide-react"
 import { Input } from "../../../shared/ui/input/ui/Input.tsx"
 import { useState } from "react"
 import { ParamValue } from "../model/types.ts"
-import { useMutateSearchPost } from "../api/useMutateSearchPost.ts"
+import { useQuerySearchPost } from "../api/useQuerySearchPost.ts"
 
 interface Props {
   searchQuery: string
@@ -11,7 +11,7 @@ interface Props {
 
 const SearchInput = ({ searchQuery, setParam }: Props) => {
   const [query, setQuery] = useState("")
-  useMutateSearchPost({ query })
+  useQuerySearchPost({ query })
 
   const handleSearch = (value: string) => {
     setQuery(value)
