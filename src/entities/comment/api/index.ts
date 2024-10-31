@@ -43,9 +43,12 @@ export const updateCommentApi = async (selectedComment: Comment) => {
 
 export const deleteCommentApi = async (id: number) => {
   try {
-    await fetch(`/api/comments/${id}`, {
+    const response = await fetch(`/api/comments/${id}`, {
       method: "DELETE",
     })
+    const data: Comment = await response.json()
+
+    return data
   } catch (error) {
     console.error("댓글 삭제 오류:", error)
   }

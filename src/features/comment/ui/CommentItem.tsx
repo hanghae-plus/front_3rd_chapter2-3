@@ -5,6 +5,7 @@ import { useComments } from "../model/useComment.ts"
 import { usePostParams } from "../../post/model/usePostParams.ts"
 import { useCommentDialog } from "../model/useCommentDialog.ts"
 import { Comment } from "../../../entities/comment/model/types.ts"
+import { useDeleteCommentMutation } from "../api/mutations.ts"
 
 interface Props {
   comment: Comment
@@ -12,7 +13,8 @@ interface Props {
 }
 
 export default function CommentItem({ comment, postId }: Props) {
-  const { likeComment, deleteComment } = useComments()
+  const { likeComment } = useComments()
+  const { mutate: deleteComment } = useDeleteCommentMutation()
   const { setSelectedComment, setShowEditCommentDialog } = useCommentDialog()
   const { searchQuery } = usePostParams()
 
@@ -37,7 +39,7 @@ export default function CommentItem({ comment, postId }: Props) {
         >
           <Edit2 className="w-3 h-3" />
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+        <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id)}>
           <Trash2 className="w-3 h-3" />
         </Button>
       </div>

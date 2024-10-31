@@ -1,6 +1,5 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 import { useCommentDialog } from "../model/useCommentDialog.ts"
-import { useComments } from "../model/useComment.ts"
 import { useUpdateCommentMutation } from "../api/mutations.ts"
 
 export default function CommentEditDialog() {
