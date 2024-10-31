@@ -1,33 +1,36 @@
 import { forwardRef } from "react";
 
-export const Table = forwardRef<HTMLTableElement, { className: string }>(
-  ({ className, ...props }, ref) => (
-    <div className="w-full overflow-auto">
-      <table
-        ref={ref}
-        className={`table-fixed w-full caption-bottom text-sm ${className}`}
-        {...props}
-      />
-    </div>
-  ),
-);
+interface TableProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export const Table = forwardRef<HTMLTableElement, TableProps>(({ className, ...props }, ref) => (
+  <div className="w-full overflow-auto">
+    <table
+      ref={ref}
+      className={`table-fixed w-full caption-bottom text-sm ${className}`}
+      {...props}
+    />
+  </div>
+));
 Table.displayName = "Table";
 
-export const TableHeader = forwardRef<HTMLTableSectionElement, { className: string }>(
+export const TableHeader = forwardRef<HTMLTableSectionElement, TableProps>(
   ({ className, ...props }, ref) => (
     <thead ref={ref} className={`[&_tr]:border-b ${className}`} {...props} />
   ),
 );
 TableHeader.displayName = "TableHeader";
 
-export const TableBody = forwardRef<HTMLTableSectionElement, { className: string }>(
+export const TableBody = forwardRef<HTMLTableSectionElement, TableProps>(
   ({ className, ...props }, ref) => (
     <tbody ref={ref} className={`[&_tr:last-child]:border-0 ${className}`} {...props} />
   ),
 );
 TableBody.displayName = "TableBody";
 
-export const TableRow = forwardRef<HTMLTableRowElement, { className: string }>(
+export const TableRow = forwardRef<HTMLTableRowElement, TableProps>(
   ({ className, ...props }, ref) => (
     <tr
       ref={ref}
@@ -38,7 +41,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, { className: string }>(
 );
 TableRow.displayName = "TableRow";
 
-export const TableHead = forwardRef<HTMLTableHeaderCellElement, { className: string }>(
+export const TableHead = forwardRef<HTMLTableHeaderCellElement, TableProps>(
   ({ className, ...props }, ref) => (
     <th
       ref={ref}
@@ -49,7 +52,7 @@ export const TableHead = forwardRef<HTMLTableHeaderCellElement, { className: str
 );
 TableHead.displayName = "TableHead";
 
-export const TableCell = forwardRef<HTMLTableDataCellElement, { className: string }>(
+export const TableCell = forwardRef<HTMLTableDataCellElement, TableProps>(
   ({ className, ...props }, ref) => (
     <td
       ref={ref}
