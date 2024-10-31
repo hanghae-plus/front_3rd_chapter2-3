@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { URLParams } from "../shared/types"
-import { useTags } from "../shared/model/useTag"
+import { useTag } from "../features/model/tag/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useURLParams } from "../shared/model/useURLParams"
 import { PostSearchInput } from "../widgets/ui/post/PostSearchInput"
@@ -17,7 +17,7 @@ import { CommentEditDialog } from "../widgets/ui/comment/CommentEditDialog"
 import { UserDetailDialog } from "../widgets/ui/user/UserDetailDialog"
 
 const PostsManager = () => {
-  const { tags } = useTags()
+  const { tags } = useTag()
   const { handleSearchPosts, setShowAddDialog } = usePost()
   const { params, updateParams, updateURL } = useURLParams()
   const { search: searchQuery, sortBy, sortOrder, tag: selectedTag } = params as URLParams

@@ -3,12 +3,12 @@ import { PostTagSelect } from "./PostTagSelect"
 import { PostSortSelect } from "./PostSortSelect"
 import { useURLParams } from "../../../shared/model/useURLParams"
 import { usePost } from "../../../shared/model/usePost"
-import { useTags } from "../../../shared/model/useTag"
+import { useTag } from "../../../features/model/tag/useTag"
 
 export const PostFilters = () => {
   const { params, updateParams, updateURL } = useURLParams()
   const { handleSearchPosts } = usePost()
-  const { tags } = useTags()
+  const { tags } = useTag()
   const { search: searchQuery, sortBy, sortOrder, tag: selectedTag } = params
 
   return (
