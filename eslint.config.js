@@ -4,16 +4,14 @@ import reactRefresh from "eslint-plugin-react-refresh"
 import globals from "globals"
 import tseslint from "typescript-eslint"
 
-export default [
-  { ignores: ["dist"] },
+export default tseslint.config(
+  { ignores: ["dist", ".history"] },
   {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
-    extends: [js.configs.recommended, ...tseslint.configs.recommended, "@feature-sliced"],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: {
-        ...globals.browser,
-      },
+      globals: globals.browser,
     },
     plugins: {
       "react-hooks": reactHooks,
@@ -24,4 +22,4 @@ export default [
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },
   },
-]
+)
