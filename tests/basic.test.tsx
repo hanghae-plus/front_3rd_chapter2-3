@@ -86,6 +86,7 @@ describe("PostsManager", () => {
     await waitFor(() => {
       expect(screen.getByText("His mother had always taught him")).toBeInTheDocument()
       expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument()
+      user.clear(searchInput)
     })
   })
 
