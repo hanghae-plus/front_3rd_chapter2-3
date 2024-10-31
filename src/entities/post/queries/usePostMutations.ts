@@ -1,6 +1,9 @@
-import { useCommonMutation } from "../../../shared/lib/query/useCommonMutation"
-import { postApi } from "../api/postApi"
-import { Post, PostRequests } from "../model/postTypes"
+import { useCommonMutation } from '../../../shared/lib/query/useCommonMutation';
+import { postApi } from '../api/postApi';
+import {
+  Post,
+  PostRequests,
+} from '../model/postTypes';
 
 export const useCreatePostMutation = (onSuccess?: (data: Post) => void) => {
   return useCommonMutation<Post, PostRequests["Create"]>({
@@ -22,18 +25,3 @@ export const useDeletePostMutation = (onSuccess?: (data: unknown) => void) => {
     onSuccessCallback: onSuccess,
   })
 }
-
-/**
- * // 게시글 목록 조회
-const { data: posts } = usePostsQuery({ limit: 10, skip: 0 });
-
-// 게시글 생성
-const createPost = useCreatePostMutation(() => {
-  // 성공 시 처리
-});
-createPost.mutate({
-  title: "제목",
-  body: "내용",
-  userId: 1
-});
- */
