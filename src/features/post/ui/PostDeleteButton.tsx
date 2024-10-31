@@ -1,4 +1,5 @@
 import { Button } from "@/shared/ui";
+
 import { Trash2 } from "lucide-react";
 import { useDeletePost } from "../api/use-delete-post";
 

@@ -1,15 +1,15 @@
 import { NewPost } from "@/entities/post/model/types";
 
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 import { Button, Input, Textarea } from "@/shared/ui";
 
-import { useModalStore } from "@/shared/model/useModalStore";
 import { useState } from "react";
 import { useAddPost } from "../../api/use-add-post";
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = () => {
-  const closeAll = useModalStore((state) => state.closeAll);
+  const { close } = useGlobalModal("addPost");
   const { mutate: addPost } = useAddPost();
 
   const [newPost, setNewPost] = useState(initialNewPost);
@@ -17,7 +17,7 @@ const FormAddPost = () => {
   const handleAddPost = (newPost: NewPost) => {
     addPost(newPost);
     setNewPost(initialNewPost);
-    closeAll();
+    close();
   };
 
   const handleChangePost = (key: keyof NewPost, value: string | number) => {

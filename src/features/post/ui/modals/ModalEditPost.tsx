@@ -1,13 +1,21 @@
 import { Post } from "@/entities/post/model/types";
+
 import FormEditPost from "@/features/post/ui/forms/FormEditPost";
 
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 import { Button, Dialog } from "@/shared/ui";
 
 import { Edit2 } from "lucide-react";
-import { useModalEditPost } from "../../model/useModalEditPost";
+import usePostsStore from "../../model/usePostsStore";
 
 const ModalEditPost = ({ post }: { post: Post }) => {
-  const { isOpen, toggle, openEditModal } = useModalEditPost(post);
+  const { isOpen, toggle } = useGlobalModal("editPost", post.id);
+
+  const handleSelectPost = usePostsStore((state) => state.handleSelectPost);
+
+  const openEditModal = () => {
+    handleSelectPost(post);
+  };
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>

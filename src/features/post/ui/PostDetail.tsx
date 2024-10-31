@@ -1,17 +1,21 @@
 import { Post } from "@/entities/post/model/types";
+
 import Comments from "@/features/comment/ui/Comments";
+
+import { useQueryParams } from "@/shared/model/useQueryParams";
 import HighlightText from "@/shared/ui/HighlightText";
 
 type PostDetailProps = {
-  searchQuery: string;
   post: Post | null;
 };
 
-const PostDetail = ({ searchQuery, post }: PostDetailProps) => {
+const PostDetail = ({ post }: PostDetailProps) => {
+  const { queries } = useQueryParams();
+
   return (
     <div className="space-y-4">
       <p>
-        <HighlightText text={post?.body} highlight={searchQuery} />
+        <HighlightText text={post?.body} highlight={queries.search} />
       </p>
       <Comments postId={post?.id || 0} />
     </div>

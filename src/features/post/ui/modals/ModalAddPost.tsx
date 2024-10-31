@@ -1,12 +1,12 @@
 import FormAddPost from "@/features/post/ui/forms/FormAddPost";
 
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 import { Button, Dialog } from "@/shared/ui";
 
 import { Plus } from "lucide-react";
-import { useModalAddPost } from "../../model/useModalAddPost";
 
 const ModalAddPost = () => {
-  const { isOpen, toggle } = useModalAddPost();
+  const { isOpen, toggle } = useGlobalModal("addPost");
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>

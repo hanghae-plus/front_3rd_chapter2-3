@@ -1,17 +1,17 @@
 import FormAddComment from "@/features/comment/ui/forms/FormAddComment";
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 
 import { Button, Dialog } from "@/shared/ui";
 
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Plus } from "lucide-react";
-import { useModalAddComment } from "../../model/useModalAddComment";
 
 type ModalAddCommentProps = {
   postId: number;
 };
 
 export const ModalAddComment = ({ postId }: ModalAddCommentProps) => {
-  const { toggle, isOpen } = useModalAddComment();
+  const { toggle, isOpen } = useGlobalModal("addComment");
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>

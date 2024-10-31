@@ -1,13 +1,14 @@
 import { Post } from "@/entities/post/model/types";
 
-import { useModalStore } from "@/shared/model/useModalStore";
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 import { Button, Input, Textarea } from "@/shared/ui";
+
 import { useShallow } from "zustand/shallow";
 import { useUpdatePost } from "../../api/use-update-post";
 import usePostsStore from "../../model/usePostsStore";
 
 const FormEditPost = () => {
-  const closeAll = useModalStore((state) => state.closeAll);
+  const { closeAll } = useGlobalModal("editPost");
   const { selectedPost, handleSelectPost } = usePostsStore(
     useShallow((state) => ({
       selectedPost: state.selectedPost,

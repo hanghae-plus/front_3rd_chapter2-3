@@ -1,18 +1,18 @@
 import { Comment } from "@/entities/comment/model/types";
 
 import FormEditComment from "@/features/comment/ui/forms/FormEditComment";
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 
 import { Button, Dialog } from "@/shared/ui";
 
 import { Edit2 } from "lucide-react";
-import { useModalEditComment } from "../../model/useModalEditComment";
 
 type ModalEditCommentProps = {
   comment: Comment | null;
 };
 
 const ModalEditComment = ({ comment }: ModalEditCommentProps) => {
-  const { toggle, isOpen } = useModalEditComment(comment);
+  const { toggle, isOpen } = useGlobalModal("editComment", comment?.id);
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>

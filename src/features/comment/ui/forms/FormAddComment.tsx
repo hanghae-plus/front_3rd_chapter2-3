@@ -2,7 +2,7 @@ import { NewComment } from "@/entities/comment/model/types";
 
 import { Button, Textarea } from "@/shared/ui";
 
-import { useModalStore } from "@/shared/model/useModalStore";
+import { useGlobalModal } from "@/shared/model/useGlobalModal";
 import { useState } from "react";
 import { useAddComment } from "../../api/use-add-comment";
 import { initialNewComment } from "../../config/initialValues";
@@ -12,14 +12,14 @@ type FormAddCommentProps = {
 };
 
 const FormAddComment = ({ postId }: FormAddCommentProps) => {
-  const close = useModalStore((state) => state.close);
+  const { close } = useGlobalModal("addComment");
   const { mutate: addComment } = useAddComment();
   const [newComment, setNewComment] = useState<NewComment>(() => ({ ...initialNewComment, postId }));
 
   const handleAddComment = async () => {
     addComment(newComment);
     setNewComment(initialNewComment);
-    close({ type: "addComment" });
+    close();
   };
 
   const handleChangeComment = (key: keyof NewComment, value: string | number) => {

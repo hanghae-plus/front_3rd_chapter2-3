@@ -2,7 +2,6 @@ import CommentActions from "@/features/comment/ui/CommentActions";
 import CommentInfo from "@/features/comment/ui/CommentInfo";
 import { ModalAddComment } from "@/features/comment/ui/modals/ModalAddComment";
 
-import { useQueryParams } from "@/shared/model/useQueryParams";
 import { Loader } from "@/shared/ui";
 import { useQueryComments } from "../api/use-get-comment";
 
@@ -12,8 +11,6 @@ type CommentsProps = {
 
 const Comments = ({ postId }: CommentsProps) => {
   const { data: comments, isLoading: loading } = useQueryComments({ postId });
-  const { queries } = useQueryParams();
-  const { search } = queries;
 
   if (loading) return <Loader />;
 
@@ -27,7 +24,7 @@ const Comments = ({ postId }: CommentsProps) => {
         {comments && comments?.length > 0 ? (
           comments?.map((comment) => (
             <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-              <CommentInfo comment={comment} search={search} />
+              <CommentInfo comment={comment} />
               <CommentActions comment={comment} />
             </div>
           ))

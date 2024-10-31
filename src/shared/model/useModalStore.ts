@@ -1,23 +1,5 @@
 import { create } from "zustand";
-
-type BaseModalType = "addPost" | "editPost" | "postDetail" | "addComment" | "editComment" | "userInfo";
-
-type ModalWithId = {
-  type: BaseModalType;
-  id?: number | string;
-};
-
-type ModalState = {
-  activeModals: Set<string>; // "type:id" 형태로 저장
-};
-
-type ModalActions = {
-  open: (modal: ModalWithId) => void;
-  close: (modal: ModalWithId) => void;
-  toggle: (modal: ModalWithId, isOpen: boolean) => void;
-  closeAll: () => void;
-  isOpen: (modal: ModalWithId) => boolean;
-};
+import { ModalActions, ModalState, ModalWithId } from "./types/modal-store-types";
 
 export const getModalKey = (modal: ModalWithId) => (modal.id ? `${modal.type}:${modal.id}` : modal.type);
 
@@ -43,8 +25,6 @@ export const useModalStore = create<ModalState & ModalActions>()((set, get) => (
       get().close(modal);
     }
   },
-
   closeAll: () => set({ activeModals: new Set() }),
-
   isOpen: (modal) => get().activeModals.has(getModalKey(modal)),
 }));
