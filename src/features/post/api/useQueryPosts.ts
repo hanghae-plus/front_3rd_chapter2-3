@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query"
-import { fetchPostsByTagApi, searchPostsApi } from "../../post-filter/api"
 import { fetchPostsApi } from "../../../entities/post/api"
 import { PostsDTO } from "../../../entities/post/model/types"
 import { User } from "../../../entities/user/model/types"
+import { fetchPostsByTagApi, searchPostsApi } from "../../post-filter/api"
 import { usePostQueryStore } from "../model/postQueryStore"
 import { PostWithUser } from "../model/types"
 

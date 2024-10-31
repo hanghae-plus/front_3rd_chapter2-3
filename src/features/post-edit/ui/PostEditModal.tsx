@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { usePostsStore } from "../../post/model/postStore"
-import { usePostEditModalStore } from "../../post/model/postEditModalStore"
 import { useMutationPostUpdate } from "../../post/api/useMutationPostUpdate"
+import { usePostEditModalStore } from "../../post/model/postEditModalStore"
+import { usePostsStore } from "../../post/model/postStore"
 
 export const PostEditModal = () => {
   const { selectedPost, setSelectedPost } = usePostsStore()

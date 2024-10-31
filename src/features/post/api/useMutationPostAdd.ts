@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { NewPost, Post, PostsDTO } from "../../../entities/post/model/types"
 import { createPostApi } from "../../../entities/post/api"
+import { NewPost, Post, PostsDTO } from "../../../entities/post/model/types"
 import { usePostParamsStore } from "../model/postParamsStore"
 import { usePostQueryStore } from "../model/postQueryStore"
 

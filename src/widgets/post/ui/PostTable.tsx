@@ -1,10 +1,10 @@
-import { Loader, Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
+import { useEffect } from "react"
 import { PostItem } from "../../../features/post-item/ui/PostItem"
 import { useQueryPosts } from "../../../features/post/api/useQueryPosts"
-import { useQueryUsers } from "../../../features/user/api/useQueryUsers"
 import { usePostParamsStore } from "../../../features/post/model/postParamsStore"
-import { useEffect } from "react"
 import { usePostTotalStore } from "../../../features/post/model/postTotalStore"
+import { useQueryUsers } from "../../../features/user/api/useQueryUsers"
+import { Loader, Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
 
 export const PostTable = () => {
   const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery, updateURL } = usePostParamsStore()

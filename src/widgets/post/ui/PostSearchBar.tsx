@@ -2,9 +2,9 @@ import { useState } from "react"
 import { TagSelect } from "../../../features/post-filter/ui/TagSelect"
 import { SelectSortOrder } from "../../../features/post-sort/ui/SelectSortOrder"
 import { SelectSortStandard } from "../../../features/post-sort/ui/SelectSortStandard"
-import { SearchInput } from "../../../shared/ui"
-import { usePostQueryStore } from "../../../features/post/model/postQueryStore"
 import { usePostParamsStore } from "../../../features/post/model/postParamsStore"
+import { usePostQueryStore } from "../../../features/post/model/postQueryStore"
+import { SearchInput } from "../../../shared/ui"
 
 export const PostSearchBar = () => {
   const { setActiveQuery } = usePostQueryStore()

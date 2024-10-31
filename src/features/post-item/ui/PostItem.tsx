@@ -2,10 +2,10 @@ import { MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
+import { PostEditButton } from "../../post-edit/ui/PostEditButton"
 import { useMutationPostDelete } from "../../post/api/useMutationPostDelete"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
 import { usePostsStore } from "../../post/model/postStore"
-import { PostEditButton } from "../../post-edit/ui/PostEditButton"
 import { UserDetailButton } from "../../user-detail/ui/UserDetailButton"
 
 interface Props {

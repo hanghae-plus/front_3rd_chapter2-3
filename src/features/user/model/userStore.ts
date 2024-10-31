@@ -1,5 +1,5 @@
-import { User } from "../../../entities/user/model/types"
 import { atom, useAtom } from "jotai"
+import { User } from "../../../entities/user/model/types"
 
 const showUserModalAtom = atom(false)
 const selectedUserAtom = atom<User | null>(null)

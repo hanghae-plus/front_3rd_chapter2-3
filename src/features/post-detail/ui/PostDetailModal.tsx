@@ -1,8 +1,8 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
 import { CommentView } from "../../../widgets/comment/ui/CommentView"
-import { usePostsStore } from "../../post/model/postStore"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
+import { usePostsStore } from "../../post/model/postStore"
 
 export const PostDetailModal = () => {
   const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePostsStore()

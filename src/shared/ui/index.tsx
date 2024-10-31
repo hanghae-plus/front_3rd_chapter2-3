@@ -2,17 +2,17 @@ export { Button } from "./button/Button"
 export { Card, CardContent, CardHeader, CardTitle } from "./card/Card"
 export {
   Dialog,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
   DialogContent,
   DialogHeader,
+  DialogOverlay,
+  DialogPortal,
   DialogTitle,
+  DialogTrigger,
 } from "./dialog/Dialog"
 export { Error } from "./error/Error"
 export { Input } from "./input/Input"
 export { SearchInput } from "./input/SearchInput"
 export { Loader } from "./loader/Loader"
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem } from "./select/Select"
-export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "./table/Table"
+export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./select/Select"
+export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table/Table"
 export { Textarea } from "./textarea/Textarea"

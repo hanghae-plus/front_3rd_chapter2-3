@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
-import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
-import { UserModal } from "../features/user/ui/UserModal"
-import { PostAddModal } from "../features/post-add/ui/PostAddModal"
-import { PostTable } from "../widgets/post/ui/PostTable"
-import { Pagination } from "../features/post-pagination/ui/Pagination"
-import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
 import PostAddButton from "../features/post-add/ui/PostAddButton"
+import { PostAddModal } from "../features/post-add/ui/PostAddModal"
+import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
+import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
+import { Pagination } from "../features/post-pagination/ui/Pagination"
+import { UserModal } from "../features/user/ui/UserModal"
+import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { PostSearchBar } from "../widgets/post/ui/PostSearchBar"
+import { PostTable } from "../widgets/post/ui/PostTable"
 
 const PostsManager = () => {
   return (
