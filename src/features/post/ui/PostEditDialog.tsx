@@ -1,16 +1,16 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { usePostDialog } from "../model/usePostDialog.ts"
-import { usePosts } from "../model/usePosts.ts"
+import { useUpdatePostMutation } from "../api/mutations.ts"
 
 export default function PostEditDialog() {
-  const { updatePost } = usePosts()
   const { selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePostDialog()
+  const { mutate: updatePost } = useUpdatePostMutation()
 
   const submitUpdatePostForm = async () => {
     if (selectedPost) {
       updatePost(selectedPost)
-      setShowEditDialog(false)
     }
+    setShowEditDialog(false)
   }
 
   return (

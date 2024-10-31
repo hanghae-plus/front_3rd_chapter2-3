@@ -7,3 +7,8 @@ export const createPosts = (postsData: Post[], usersData: User[]) => {
     author: usersData?.find((user) => user.id === post.userId),
   }))
 }
+
+export const updatePost = (prevData: PostDto, updatedPost: Post) => ({
+  ...prevData,
+  posts: prevData.posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)),
+})
