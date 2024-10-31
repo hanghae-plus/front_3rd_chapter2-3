@@ -64,12 +64,15 @@ const DialogTrigger = DialogPrimitive.Trigger;
 const DialogPortal = DialogPrimitive.Portal;
 const DialogOverlay = DialogPrimitive.Overlay;
 
-export const Dialog = Object.assign({
-  Container: DialogContainer,
-  Trigger: DialogTrigger,
-  Portal: DialogPortal,
-  Overlay: DialogOverlay,
-  Content: DialogContent,
-  Header: DialogHeader,
-  Title: DialogTitle,
-});
+export const Dialog = Object.assign(
+  {
+    Container: DialogContainer,
+    Trigger: DialogTrigger,
+    Portal: DialogPortal,
+    Overlay: DialogOverlay,
+    Content: DialogContent,
+    Header: DialogHeader,
+    Title: DialogTitle,
+  },
+  {},
+);

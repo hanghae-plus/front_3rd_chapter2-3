@@ -83,11 +83,14 @@ const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(({ className,
 ));
 TableCell.displayName = "TableCell";
 
-export const Table = Object.assign({
-  Container: TableContainer,
-  Header: TableHeader,
-  Body: TableBody,
-  Row: TableRow,
-  Head: TableHead,
-  Cell: TableCell,
-});
+export const Table = Object.assign(
+  {
+    Container: TableContainer,
+    Header: TableHeader,
+    Body: TableBody,
+    Row: TableRow,
+    Head: TableHead,
+    Cell: TableCell,
+  },
+  {},
+);
