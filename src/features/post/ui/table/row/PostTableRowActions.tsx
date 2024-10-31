@@ -8,7 +8,7 @@ type PostTableRowActionsProps = {
   post: Post;
 };
 
-const PostTableRowActions = ({ post }: PostTableRowActionsProps) => {
+export const PostTableRowActions = ({ post }: PostTableRowActionsProps) => {
   return (
     <div className="flex items-center gap-2">
       <ModalPostDetail post={post} />
@@ -17,5 +17,3 @@ const PostTableRowActions = ({ post }: PostTableRowActionsProps) => {
     </div>
   );
 };
-
-export default PostTableRowActions;

@@ -7,7 +7,7 @@ type PostPaginationProps = {
   skip: number;
 };
 
-const PostPagination = ({ total, size, skip }: PostPaginationProps) => {
+export const PostTablePagination = ({ total, size, skip }: PostPaginationProps) => {
   const { handleUpdateQuery } = useQueryParams();
 
   const handlePageChange = (page: number) => {
@@ -20,5 +20,3 @@ const PostPagination = ({ total, size, skip }: PostPaginationProps) => {
 
   return <Pagination size={size} setSize={handleSizeChange} page={skip} setPage={handlePageChange} total={total} />;
 };
-
-export default PostPagination;

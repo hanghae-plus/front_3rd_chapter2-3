@@ -1,11 +1,12 @@
 import { Post } from "@/entities/post/model/types";
+
 import { useQueryParams } from "@/shared/model";
 
 type PostTableRowTagsProps = {
   post: Post;
 };
 
-const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
+export const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
   const { queries, handleUpdateQuery } = useQueryParams();
   const { tag: selectedTag } = queries;
 
@@ -31,5 +32,3 @@ const PostTableRowTags = ({ post }: PostTableRowTagsProps) => {
     </div>
   );
 };
-
-export default PostTableRowTags;

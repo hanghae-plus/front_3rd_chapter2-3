@@ -5,7 +5,7 @@ type PostTableRowTitleProps = {
   title: string;
 };
 
-const PostTableRowTitle = ({ title }: PostTableRowTitleProps) => {
+export const PostTableRowTitle = ({ title }: PostTableRowTitleProps) => {
   const { queries } = useQueryParams();
   const { search } = queries;
   return (
@@ -14,5 +14,3 @@ const PostTableRowTitle = ({ title }: PostTableRowTitleProps) => {
     </div>
   );
 };
-
-export default PostTableRowTitle;

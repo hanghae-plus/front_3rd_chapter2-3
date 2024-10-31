@@ -5,7 +5,7 @@ type PostTableRowReactionsProps = {
   reactions: Post["reactions"];
 };
 
-const PostTableRowReactions = ({ reactions }: PostTableRowReactionsProps) => {
+export const PostTableRowReactions = ({ reactions }: PostTableRowReactionsProps) => {
   return (
     <div className="flex items-center gap-2">
       <ThumbsUp className="w-4 h-4" />
@@ -15,5 +15,3 @@ const PostTableRowReactions = ({ reactions }: PostTableRowReactionsProps) => {
     </div>
   );
 };
-
-export default PostTableRowReactions;

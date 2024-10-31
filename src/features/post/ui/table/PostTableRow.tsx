@@ -1,19 +1,15 @@
 import { Post } from "@/entities/post/model/types";
 
-import PostTableRowActions from "@/features/post/ui/table/PostTableRowActions";
-import PostTableRowTags from "@/features/post/ui/table/PostTableRowTags";
-import PostTableRowTitle from "@/features/post/ui/table/PostTableRowTitle";
-import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
-
 import { Table } from "@/shared/ui";
 
-import PostTableRowReactions from "./PostTableRowReactions";
+import ModalUserInfo from "@/features/user/ui/modals/ModalUserInfo";
+import { PostTableRowActions, PostTableRowReactions, PostTableRowTags, PostTableRowTitle } from "./row";
 
-type PostTableItemProps = {
+type PostTableRowProps = {
   post: Post;
 };
 
-const PostTableIRow = ({ post }: PostTableItemProps) => {
+export const PostTableRow = ({ post }: PostTableRowProps) => {
   return (
     <Table.Row key={post.id}>
       <Table.Cell>{post.id}</Table.Cell>
@@ -35,5 +31,3 @@ const PostTableIRow = ({ post }: PostTableItemProps) => {
     </Table.Row>
   );
 };
-
-export default PostTableIRow;
