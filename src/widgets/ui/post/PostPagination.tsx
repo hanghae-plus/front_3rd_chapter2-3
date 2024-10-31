@@ -1,8 +1,8 @@
 import { usePost } from "../../../features/model/post/usePost"
 import { useURLParams } from "../../../features/model/url/useURLParams"
 import { URLParams } from "../../../shared/types"
-import { PostItemsPerPage } from "./PostItemsPerPage"
-import { PostPaginationButtons } from "./PostPaginationButtons"
+import { PostItemsPerPage } from "../../../features/ui/post/PostItemsPerPage"
+import { PostPaginationButtons } from "../../../features/ui/post/PostPaginationButtons"
 
 export const PostPagination = () => {
   const { updateParams, params } = useURLParams()
