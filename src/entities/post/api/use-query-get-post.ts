@@ -19,7 +19,8 @@ const getBaseURL = (queryParams: { [key: string]: string }) => {
 const fetchPostList = async (userList: UserType[], searchParams: URLSearchParams) => {
   const searchQuery = Object.fromEntries([...searchParams.entries()]);
   const baseURL = getBaseURL(searchQuery);
-  const queryString = location.search.replace("?keyword", "?q");
+  const queryString =
+    location.search === "" ? `?limit=10&skip=0` : location.search.replace("?keyword", "?q");
 
   try {
     const res = await apiRequest.get(`${baseURL}${queryString}`);
@@ -47,7 +48,7 @@ export const useQueryGetPost = () => {
   const { userList } = userListState();
   const [searchParams] = useSearchParams();
   return useQuery<PostListTotal>({
-    queryKey: ["search-post"],
+    queryKey: ["search-post", { ...searchParams }],
     queryFn: () => fetchPostList(userList, searchParams),
     enabled: false,
   });
