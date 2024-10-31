@@ -31,8 +31,7 @@ import {
   User,
   UserId,
 } from "@/shared/types"
-import PostAddDialogOpenButton from "@/features/post/ui/PostAddDialogOpenButton"
-import PostAddDialog from "@/features/post/ui/PostAddDialog"
+import { PostAddDialog, PostAddDialogOpenButton } from "@/features/post-add-dialog"
 import { CommentEditDialog, CommentEditDialogOpenButton } from "@/features/comment-edit-dialog"
 import { CommentAddDialog, CommentAddDialogOpenButton } from "@/features/comment-add-dialog"
 import PostEditDialog from "@/features/post/ui/PostEditDialog"
