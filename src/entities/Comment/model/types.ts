@@ -1,3 +1,5 @@
+import { UserType } from "../../User/model/types"
+
 export interface NewCommentType {
   body: string
   postId: number | null
@@ -7,6 +9,13 @@ export interface NewCommentType {
 export interface CommentType {
   body: string
   id: number
-  likes?: number
-  postId?: number
+  likes: number
+  postId: number
+  user: UserType
+}
+
+export interface CommentMutationState {
+  isPending: boolean
+  isError: boolean
+  error: Error | null
 }

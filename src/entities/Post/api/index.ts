@@ -1,37 +1,34 @@
 import { apiCall } from "../../../shared/api"
-import { author, NewPostType, PostType } from "../model/types"
+import { TagType } from "../../Tag/model/types"
+import { NewPostType, PostsResponseType, PostType } from "../model/types"
 
-export const fetchPostList = async (limit: number, skip: number) => {
-  const postList = await apiCall.get(`/posts?limit=${limit}&skip=${skip}`)
-  const postListData = postList.data
+export const postApi = {
+  fetchPosts: async ({ limit, skip }: { limit: number; skip: number }) => {
+    return await apiCall.get<PostsResponseType>(`/posts?limit=${limit}&skip=${skip}`)
+  },
 
-  const userList = await apiCall.get(`/users?limit=0&select=username,image`, postListData)
-  const userListData = userList.data
+  fetchPostsByTag: async (tag: string) => {
+    return await apiCall.get<PostsResponseType>(`/posts/tag/${tag}`)
+  },
 
-  const postsWithUsers = postListData.posts.map((post: PostType) => ({
-    ...post,
-    author: userListData.find((user: author) => user.id === post.userId),
-  }))
+  searchPosts: async (query: string) => {
+    return await apiCall.get<PostsResponseType>(`/posts/search?q=${query}`)
+  },
 
-  return postsWithUsers
-}
+  createPost: async (post: NewPostType) => {
+    return await apiCall.post<PostType>("/posts/add", post)
+  },
 
-export const searchPosts = async (query: string) => {
-  const response = await apiCall.get(`/posts/search?q=${query}`)
-  return response.data
-}
+  updatePost: async (post: PostType) => {
+    return await apiCall.put<PostType>(`/posts/${post?.id}`, post)
+  },
 
-export const addPost = async (newPost: NewPostType): Promise<NewPostType> => {
-  const response = await apiCall.post(`/posts/add`, newPost)
-  return response.data
-}
+  deletePost: async (id: number) => {
+    await apiCall.delete(`/posts/${id}`)
+    return id
+  },
 
-export const updatePost = async (post: PostType) => {
-  const response = await apiCall.put(`/posts/${post.id}`, post)
-  return response.data
-}
-
-export const deletePost = async (id: number) => {
-  const response = await apiCall.delete(`/posts/${id}`)
-  return response.data
+  getTags: async () => {
+    return await apiCall.get<TagType[]>("/posts/tags")
+  },
 }

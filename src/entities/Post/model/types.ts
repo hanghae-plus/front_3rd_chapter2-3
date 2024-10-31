@@ -1,12 +1,21 @@
+import { UserType } from "../../User/model/types"
+
 export interface PostType {
-  body: string
   id: number
-  reactions: reactions
-  tags: string[]
-  title: string
   userId: number
+  title: string
+  body: string
+  tags: string[]
+  reactions: reactions
   views: number
-  author: author
+  author?: author
+}
+
+export interface PostsResponseType {
+  posts: PostType[]
+  total: number
+  skip: number
+  users: UserType[]
 }
 
 type reactions = {
@@ -23,4 +32,10 @@ export interface NewPostType {
   title: string
   body: string
   userId: number
+}
+
+export interface PostMutationState {
+  isPending: boolean
+  isError: boolean
+  error: Error | null
 }
