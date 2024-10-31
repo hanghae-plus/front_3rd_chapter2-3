@@ -75,5 +75,6 @@ export const useComment = () => {
     showEditCommentDialog,
     setShowEditCommentDialog,
     updateComment,
+    setComments,
   }
 }

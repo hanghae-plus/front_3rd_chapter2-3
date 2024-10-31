@@ -1,42 +1,11 @@
 // 게시물 수정 대화상자
 
-import React from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
 import { Post } from "../../entities/post/model/type"
+import { usePost } from "../../features/post/model/usePost"
 
-interface Props {
-  selectedPost: Post | null
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
-  posts: Post[]
-  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
-  showEditDialog: boolean
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
-}
-
-const PostUpdateDialog = ({
-  selectedPost,
-  setPosts,
-  posts,
-  setShowEditDialog,
-  showEditDialog,
-  setSelectedPost,
-}: Props) => {
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost?.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
-  }
-
+export const PostUpdateDialog = () => {
+  const { selectedPost, updatePost, setShowEditDialog, showEditDialog, setSelectedPost } = usePost()
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
       <DialogContent>
@@ -55,7 +24,7 @@ const PostUpdateDialog = ({
             value={selectedPost?.body || ""}
             onChange={(e) => setSelectedPost({ ...(selectedPost as Post), body: e.target.value })}
           />
-          <Button onClick={updatePost}>게시물 업데이트</Button>
+          {selectedPost && <Button onClick={() => updatePost(selectedPost)}>게시물 업데이트</Button>}
         </div>
       </DialogContent>
     </Dialog>

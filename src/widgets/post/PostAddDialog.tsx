@@ -1,26 +1,10 @@
 // 게시물 추가 대화상자
 
-import React, { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
-import { Post } from "../../entities/post/model/type"
-import { createPostApi } from "../../entities/post/api"
+import { usePost } from "../../features/post/model/usePost"
 
-interface Props {
-  showAddDialog: boolean
-  setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
-  posts: Post[]
-}
-
-const PostAddDialog = ({ showAddDialog, setShowAddDialog, setPosts, posts }: Props) => {
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const addPost = async () => {
-    const data = await createPostApi(newPost)
-
-    setPosts([data, ...posts])
-    setShowAddDialog(false)
-    setNewPost({ title: "", body: "", userId: 1 })
-  }
+export const PostAddDialog = () => {
+  const { showAddDialog, setShowAddDialog, setNewPost, newPost, addPost } = usePost()
 
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
