@@ -3,7 +3,7 @@ import { CommentList } from "../comment/CommentList"
 import { highlightText } from "../../../shared/lib/highlight"
 import { usePost } from "../../../shared/model/usePost"
 import { useURLParams } from "../../../shared/model/useURLParams"
-import { useComment } from "../../../shared/model/useComment"
+import { useComment } from "../../../features/model/useComment"
 
 export const PostDetailDialog = () => {
   const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePost()
