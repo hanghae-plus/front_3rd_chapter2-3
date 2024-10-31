@@ -1,0 +1,7 @@
+export * from "./Dialog"
+export * from "./DialogContent"
+export * from "./DialogHeader"
+export * from "./DialogOverlay"
+export * from "./DialogPortal"
+export * from "./DialogTitle"
+export * from "./DialogTrigger"

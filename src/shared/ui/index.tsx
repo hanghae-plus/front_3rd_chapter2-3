@@ -38,11 +38,14 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, Var
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant, size, ...props }, ref) => {
   return <button className={buttonVariants({ variant, size, className })} ref={ref} {...props} />
 })
-
 Button.displayName = "Button"
 
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string
+}
+
 // 입력 컴포넌트
-export const Input = forwardRef(({ className, type, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
   return (
     <input
       type={type}
@@ -54,13 +57,21 @@ export const Input = forwardRef(({ className, type, ...props }, ref) => {
 })
 Input.displayName = "Input"
 
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
+
 // 카드 컴포넌트
-export const Card = forwardRef(({ className, ...props }, ref) => (
+export const Card = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
   <div ref={ref} className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props} />
 ))
 Card.displayName = "Card"
 
-export const CardHeader = forwardRef(({ className, ...props }, ref) => (
+interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
+
+export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(({ className, ...props }, ref) => (
   <div ref={ref} className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
 ))
 CardHeader.displayName = "CardHeader"

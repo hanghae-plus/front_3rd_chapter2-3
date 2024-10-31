@@ -1,0 +1,6 @@
+export * from "./Table"
+export * from "./TableBoby"
+export * from "./TableCell"
+export * from "./TableHead"
+export * from "./TableHeader"
+export * from "./TableRow"
