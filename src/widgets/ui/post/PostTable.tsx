@@ -1,7 +1,7 @@
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from "../../../shared/ui"
 import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react"
 import { highlightText } from "../../../shared/lib/highlight"
-import type { URLParams } from "../../../shared/types"
+import type { Post, URLParams } from "../../../shared/types"
 import { usePost } from "../../../features/model/post/usePost"
 import { useURLParams } from "../../../features/model/url/useURLParams"
 
@@ -27,7 +27,7 @@ export const PostTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {posts.map((post) => (
+        {posts.map((post: Post) => (
           <TableRow key={post.id}>
             <TableCell>{post.id}</TableCell>
             <TableCell>
