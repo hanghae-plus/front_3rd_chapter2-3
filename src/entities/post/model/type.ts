@@ -1,4 +1,4 @@
-import { User } from "../../user/model/user"
+import { User } from "../../user/model/type"
 
 export interface Post {
   id: number

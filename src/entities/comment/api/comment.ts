@@ -1,6 +1,6 @@
 import { baseApi } from "../../../shared/api/baseApi"
 import { API_ENDPOINTS } from "../../../shared/config/constants"
-import type { Comment, CommentResponse } from "../model/comment"
+import type { Comment, CommentResponse } from "../model/type"
 
 export const commentService = {
   getComments: (postId: number) =>

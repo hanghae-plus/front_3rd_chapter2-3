@@ -1,5 +1,5 @@
 import { fetchPosts, searchPosts } from "../../../entities/post/api/post"
-import { Post } from "../../../entities/post/model/post"
+import { Post } from "../../../entities/post/model/type"
 
 interface UsePostSearchProps {
   limit: number

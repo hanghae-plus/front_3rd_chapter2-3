@@ -1,5 +1,5 @@
-import { User } from "../../user/model/user"
-import { Post } from "../model/post"
+import { User } from "../../user/model/type"
+import { Post } from "../model/type"
 
 // 게시물 가져오기
 export const fetchPosts = (

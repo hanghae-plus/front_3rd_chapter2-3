@@ -1,4 +1,4 @@
-import { NewPost } from "../../../entities/post/model/post"
+import { NewPost } from "../../../entities/post/model/type"
 import { Button } from "../../../shared/ui/Button"
 import {
   Dialog,

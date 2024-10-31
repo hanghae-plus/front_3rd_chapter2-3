@@ -5,11 +5,11 @@ import {
   ThumbsUp,
   Trash2,
 } from "lucide-react"
-import { Post } from "../../../entities/post/model/post"
+import { Post } from "../../../entities/post/model/type"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { TableBody, TableCell, TableRow } from "../../../shared/ui/Table"
 import { Button } from "../../../shared/ui/Button"
-import { User } from "../../../entities/user/model/user"
+import { User } from "../../../entities/user/model/type"
 import { PostListParams } from "../../../features/post/model/type"
 
 interface Props {

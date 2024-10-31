@@ -2,8 +2,8 @@ import {
   NewComment,
   Comment,
   CommentsByPost,
-} from "../../../entities/comment/model/comment"
-import { Post } from "../../../entities/post/model/post"
+} from "../../../entities/comment/model/type"
+import { Post } from "../../../entities/post/model/type"
 import { PostsCommentList } from "../../../features/comment/ui/PostsCommentList"
 import { highlightText } from "../../../shared/lib/highlightText"
 import {

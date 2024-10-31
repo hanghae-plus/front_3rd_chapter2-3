@@ -1,4 +1,4 @@
-import { User } from "../../../entities/user/model/user"
+import { User } from "../../../entities/user/model/type"
 import {
   Dialog,
   DialogContent,

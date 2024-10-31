@@ -5,7 +5,7 @@ import {
   Comment,
   CommentsByPost,
   NewComment,
-} from "../../../entities/comment/model/comment"
+} from "../../../entities/comment/model/type"
 
 interface Props {
   postId: NewComment["postId"]

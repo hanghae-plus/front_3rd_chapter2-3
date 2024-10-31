@@ -1,4 +1,4 @@
-import { Comment } from "../../../entities/comment/model/comment"
+import { Comment } from "../../../entities/comment/model/type"
 import { Button } from "../../../shared/ui/Button"
 import {
   Dialog,

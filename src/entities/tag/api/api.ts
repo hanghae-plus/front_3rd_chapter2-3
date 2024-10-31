@@ -1,5 +1,5 @@
 import { baseApi } from "../../../shared/api/baseApi"
-import { Tag } from "../../post/model/post"
+import { Tag } from "../../post/model/type"
 
 // 태그 가져오기
 export const fetchTags = async () => {

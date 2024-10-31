@@ -1,6 +1,6 @@
 import { baseApi } from "../../../shared/api/baseApi"
 import { API_ENDPOINTS } from "../../../shared/config/constants"
-import type { User, UsersResponse } from "../model/user"
+import type { User, UsersResponse } from "../model/type"
 
 export const userService = {
   getUsers: () =>

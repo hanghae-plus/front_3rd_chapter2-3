@@ -7,9 +7,9 @@ import { SearchArea } from "../widgets/post/ui/SearchArea"
 import { TagFilterSelect } from "../widgets/tag/ui/TagFilterSelect"
 import { SortKeySelect } from "../widgets/post/ui/SortKeySelect"
 import { SortDirectionSelect } from "../widgets/post/ui/SortDirectionSelect"
-import { User } from "../entities/user/model/user"
+import { User } from "../entities/user/model/type"
 import { PostTableRows } from "../widgets/post/ui/PostTableRows"
-import { Post, Tag } from "../entities/post/model/post"
+import { Post, Tag } from "../entities/post/model/type"
 import { PostTableHeader } from "../widgets/post/ui/PostTableHeader"
 import { PaginationSelect } from "../widgets/post/ui/PaginationSelect"
 import { PaginationControls } from "../widgets/post/ui/PaginationControls"
@@ -19,7 +19,7 @@ import {
   Comment,
   CommentsByPost,
   NewComment,
-} from "../entities/comment/model/comment"
+} from "../entities/comment/model/type"
 import { AddCommentDialog } from "../widgets/comment/ui/AddCommentDialog"
 import { UpdateCommentDialog } from "../widgets/comment/ui/UpdateCommentDialog"
 import { DetailPostDialog } from "../widgets/post/ui/DetailPostDialog"

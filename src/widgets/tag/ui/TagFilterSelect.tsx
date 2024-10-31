@@ -1,4 +1,4 @@
-import { Tag } from "../../../entities/post/model/post"
+import { Tag } from "../../../entities/post/model/type"
 import { PostListParams } from "../../../features/post/model/type"
 import {
   Select,
