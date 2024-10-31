@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from "react-router-dom"
 import { Routes, Route } from "react-router-dom"
 import { Layout } from "@/app/layout"
-import { PostsManagerPage } from "@/pages"
+import PostsManagerPage from "@/pages/PostsManagerPage"
 
 const POSTS_MANAGER_PAGE = "*"
 
