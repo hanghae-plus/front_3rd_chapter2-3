@@ -8,6 +8,7 @@ import { Post } from './types';
 type PostsState = { posts: Post[]; selectedPost: Post | null };
 
 type PostsAction = {
+  fetchPostsAction: (posts: Post[]) => void;
   addNewPostAction: (post: Post) => void;
   updatePostAction: (updatedPost: Post) => void;
   deletePostAction: (id: number) => void;
@@ -30,6 +31,7 @@ const initialState: PostsState = {
 const postSlice: StateCreator<PostsState & PostsAction, [], [['zustand/immer', never]], PostsState & PostsAction> =
   immer((set) => ({
     ...initialState,
+    fetchPostsAction: (posts: Post[]) => set(() => ({ posts: posts })),
     addNewPostAction: (newPost) =>
       set((state) => {
         state.posts.unshift(newPost);
@@ -37,7 +39,12 @@ const postSlice: StateCreator<PostsState & PostsAction, [], [['zustand/immer', n
     updatePostAction: (updatedPost) =>
       set((state) => state.posts.map((post) => (post.id === updatedPost.id ? updatedPost : post))),
     deletePostAction: (id) => set((state) => state.posts.filter((post) => post.id !== id)),
-    selectPost: (selectedPost: Post) => set((state) => (state.selectedPost = selectedPost)),
+    selectPost: (selectedPost: Post) =>
+      set(() => ({
+        selectedPost: selectedPost,
+      })),
+    // getPost: get().posts,
+    // getSelectedPost: get().selectedPost,
   }));
 
 const usePostStoreBase = create<PostsState & PostsAction>()(postSlice);

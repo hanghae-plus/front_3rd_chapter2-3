@@ -15,7 +15,7 @@ type Action = {
 const useUserStoreBase = create<State & Action>()(
   immer((set) => ({
     user: null,
-    selectUser: (selectedUser: User) => set((state) => (state.user = selectedUser)),
+    selectUser: (selectedUser: User) => set(() => ({ user: selectedUser })),
   }))
 );
 

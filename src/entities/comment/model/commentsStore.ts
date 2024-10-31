@@ -15,7 +15,10 @@ type Action = {
 const useCommentsStoreBase = create<State & Action>()(
   immer((set) => ({
     comments: {},
-    addComments: (postId: number, newComments: Comment[]) => set((state) => (state.comments[postId] = newComments)),
+    addComments: (postId: number, newComments: Comment[]) =>
+      set((state) => {
+        state.comments[postId] = newComments;
+      }),
   }))
 );
 

@@ -1,24 +1,20 @@
 import { Edit2, Plus, Search, ThumbsUp, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { PostTableRow } from '~/features/post-table/ui/PostTableRow';
-import { useModalStore } from '~/features/user-modal/model/userModalStore';
+import { PostTable } from '~/widgets/post-table/PostTable';
+import { PostTableRow } from '~/widgets/post-table/PostTableRow';
+
 import { UserModal } from '~/features/user-modal/ui/UserModal';
 
 import {
   addComment as addCommentApi,
   deleteComment as deleteCommentApi,
-  fetchAllCommentsByPostId,
   updateComment as updateCommentApi,
 } from '~/entities/comment/api/commentApi';
 import { CommentResponseDto } from '~/entities/comment/model/type';
-import {
-  addPost as addPostApi,
-  deletePost as deletePostApi,
-  fetchAllPosts,
-  updatePost as updatePostApi,
-} from '~/entities/post/api/postApi';
+import { addPost as addPostApi, fetchAllPosts, updatePost as updatePostApi } from '~/entities/post/api/postApi';
+import { usePostStore } from '~/entities/post/model/store';
 import { PostResponseDto } from '~/entities/post/model/types';
 import { fetchAllPostTags, fetchPostsByTag as fetchPostsByTagApi } from '~/entities/tag/api/tagApi';
 import { TagResponseDto } from '~/entities/tag/model/type';
@@ -37,13 +33,8 @@ const PostsManager = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // 모달 상태관리
-  const modalStore = useModalStore();
-
   // 상태 관리
-  const [posts, setPosts] = useState<any>([]);
+  const [_, setPosts] = useState<any>([]);
   const [total, setTotal] = useState(0);
 
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -59,8 +50,6 @@ const PostsManager = () => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false);
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false);
 
-  const [selectedUser, setSelectedUser] = useState(null);
-
   const [skip, setSkip] = useState(parseInt(queryParams.get('skip') || '0'));
   const [limit, setLimit] = useState(parseInt(queryParams.get('limit') || '10'));
   const [searchQuery, setSearchQuery] = useState(queryParams.get('search') || '');
@@ -68,6 +57,10 @@ const PostsManager = () => {
   const [sortBy, setSortBy] = useState(queryParams.get('sortBy') || '');
   const [sortOrder, setSortOrder] = useState(queryParams.get('sortOrder') || 'asc');
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
+
+  const posts = usePostStore.use.posts();
+  const fetchPostAction = usePostStore.use.fetchPostsAction();
+  const selectPost = usePostStore.use.posts();
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -93,7 +86,7 @@ const PostsManager = () => {
         author: users.find((user) => user.id === post.userId),
       }));
 
-      setPosts(postsWithUsers);
+      fetchPostAction(postsWithUsers);
       setTotal(postsData.total);
     } catch (error) {
       console.error('게시물 가져오기 오류:', error);
@@ -145,6 +138,7 @@ const PostsManager = () => {
       }));
 
       setPosts(postsWithUsers);
+      // fetchPostAction(postsWithUsers)
       setTotal(postsData.total);
     } catch (error) {
       console.error('태그별 게시물 가져오기 오류:', error);
@@ -180,26 +174,26 @@ const PostsManager = () => {
   };
 
   // 게시물 삭제
-  const deletePost = async (id: number) => {
-    try {
-      await deletePostApi(id);
-      setPosts(posts.filter((post) => post.id !== id));
-    } catch (error) {
-      console.error('게시물 삭제 오류:', error);
-    }
-  };
+  // const deletePost = async (id: number) => {
+  //   try {
+  //     await deletePostApi(id);
+  //     setPosts(posts.filter((post) => post.id !== id));
+  //   } catch (error) {
+  //     console.error('게시물 삭제 오류:', error);
+  //   }
+  // };
 
   // 댓글 가져오기
-  const fetchComments = async (postId: number) => {
-    if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const data = await fetchAllCommentsByPostId(postId);
+  // const fetchComments = async (postId: number) => {
+  //   if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+  //   try {
+  //     const data = await fetchAllCommentsByPostId(postId);
 
-      setComments((prev) => ({ ...prev, [postId]: data.comments }));
-    } catch (error) {
-      console.error('댓글 가져오기 오류:', error);
-    }
-  };
+  //     setComments((prev) => ({ ...prev, [postId]: data.comments }));
+  //   } catch (error) {
+  //     console.error('댓글 가져오기 오류:', error);
+  //   }
+  // };
 
   // 댓글 추가
   const addComment = async () => {
@@ -268,11 +262,11 @@ const PostsManager = () => {
   };
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post);
-    fetchComments(post.id);
-    setShowPostDetailDialog(true);
-  };
+  // const openPostDetail = (post) => {
+  //   setSelectedPost(post);
+  //   fetchComments(post.id);
+  //   setShowPostDetailDialog(true);
+  // };
 
   // // 사용자 모달 열기
   // const openUserModal = async (user) => {
@@ -523,7 +517,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable posts={posts} />}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">

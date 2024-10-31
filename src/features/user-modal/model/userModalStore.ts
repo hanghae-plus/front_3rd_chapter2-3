@@ -7,13 +7,16 @@ type State = {
   showUserModal: boolean;
 };
 type Action = {
-  setShowUserModal: (isShow: boolean) => void;
+  setShowUserModal: (showUserModal: boolean) => void;
 };
 
 const useModalStoreBase = create<State & Action>()(
   immer((set) => ({
     showUserModal: false,
-    setShowUserModal: (isShow: boolean) => set((state) => (state.isShow = isShow)),
+    setShowUserModal: (isShow: boolean) =>
+      set((state) => {
+        state.showUserModal = isShow;
+      }),
   }))
 );
 
