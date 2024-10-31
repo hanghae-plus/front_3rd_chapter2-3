@@ -14,6 +14,13 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parser: tseslint.parser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
     },
     settings: {
       "import/resolver": {
@@ -21,8 +28,12 @@ export default tseslint.config(
           alwaysTryTypes: true,
         },
       },
+      "react": {
+        version: "detect",
+      },
     },
     plugins: {
+      "@typescript-eslint": tseslint,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
     },

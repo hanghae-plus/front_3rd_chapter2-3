@@ -1,11 +1,9 @@
-import { useAtomValue } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useState } from "react"
-import { useLocation } from "react-router-dom"
 import { Post } from "../../../entities/post/model/type"
 import { highlightText } from "../../../shared"
 import { openModals } from "../../../shared/lib/modal/openModals"
-import { searchQueryAtom } from "../../../shared/model/atom"
+import { searchQueryAtom, selectedTagAtom } from "../../../shared/model/atom"
 import { Button } from "../../../shared/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/table"
 import { useDeletePost } from "../api/query"
@@ -16,15 +14,11 @@ const PostingTable = () => {
     user,
     post: { openDetailDialog, openEditDialog },
   } = openModals
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
   const searchQuery = useAtomValue(searchQueryAtom)
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "all")
+  const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
-  const { posts: postsWithUsers } = useFilteredPosts({
-    tag: selectedTag,
-    searchQuery,
-  })
+  const { posts: postsWithUsers } = useFilteredPosts()
+
   const { mutate: deletePost } = useDeletePost()
 
   const openPostDetail = (post: Post) => {

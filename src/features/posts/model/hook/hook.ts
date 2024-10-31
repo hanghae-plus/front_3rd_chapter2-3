@@ -3,6 +3,7 @@ import { useMemo } from "react"
 import { Post } from "../../../../entities/post/model/type"
 import { useUsers } from "../../../user/api/query"
 import { usePostsByTag, useSearchPosts } from "../../api/query"
+import { usePostsFilter } from "../hooks/usePostsFilter"
 
 export const useSortedPosts = (posts: Post[], sortConfig: { sortBy: string; sortOrder: "asc" | "desc" }) => {
   return useMemo(() => {
@@ -21,22 +22,10 @@ export const useSortedPosts = (posts: Post[], sortConfig: { sortBy: string; sort
   }, [posts, sortConfig.sortBy, sortConfig.sortOrder])
 }
 
-export const useFilteredPosts = ({
-  tag,
-  searchQuery,
-  sortBy,
-  sortOrder,
-  limit,
-  skip,
-}: {
-  tag?: string
-  searchQuery?: string
-  sortBy?: string
-  sortOrder?: string
-  limit?: number
-  skip?: number
-}) => {
-  const { data: tagPosts } = usePostsByTag({ tag: tag || "all", limit, skip })
+export const useFilteredPosts = () => {
+  const { selectedTag, sortBy, sortOrder, searchQuery, limit, skip } = usePostsFilter()
+
+  const { data: tagPosts } = usePostsByTag({ tag: selectedTag || "all", limit, skip })
   const { data: searchPosts } = useSearchPosts(searchQuery || "")
   const { data: users } = useUsers()
 
