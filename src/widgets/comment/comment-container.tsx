@@ -29,6 +29,7 @@ export const CommentContainer = ({ post }: CommentContainer) => {
         <h3 className="text-sm font-semibold">댓글</h3>
         <AddCommentButton post={post} addNewComment={addNewComment} />
       </div>
+
       <div className="space-y-1">
         {commentList.map((comment, index) => (
           <CommentItem
