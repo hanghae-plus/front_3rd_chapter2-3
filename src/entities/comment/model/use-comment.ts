@@ -6,9 +6,16 @@ export const useComment = (id: number) => {
   const [commentList, setCommentList] = useState<CommentType[]>([]);
   const { data, isLoading } = useQueryGetComment(id);
 
-  async function addNewComment(newComment: CommentType) {
-    setCommentList(prev => [...prev, newComment]);
-  }
+  const updateCommentById = (prev: CommentType[], newComment: CommentType) => {
+    return prev.map(comment => (comment.id === newComment.id ? newComment : comment));
+  };
+
+  const commentHandler = {
+    addNewComment: (newComment: CommentType) => setCommentList(prev => [...prev, newComment]),
+    updateComment: (newComment: CommentType) => {
+      setCommentList(prev => updateCommentById(prev, newComment));
+    },
+  };
 
   useEffect(() => {
     if (!isLoading) {
@@ -16,5 +23,5 @@ export const useComment = (id: number) => {
     }
   }, [isLoading]);
 
-  return { commentList, addNewComment };
+  return { commentList, commentHandler };
 };
