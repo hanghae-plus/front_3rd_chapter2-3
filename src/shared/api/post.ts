@@ -1,4 +1,4 @@
-import { NewPost, Post } from "../types"
+import { NewPost, Post, PostsData, User } from "../types"
 
 export const addPost = async (newPost: NewPost) => {
   try {
@@ -35,5 +35,27 @@ export const deletePost = async (id: number) => {
   } catch (error) {
     console.error("게시물 삭제 오류:", error)
     return false
+  }
+}
+
+export const fetchPostsByTag = async (tag: string) => {
+  try {
+    const [postsResponse, usersResponse] = await Promise.all([
+      fetch(`/api/posts/tag/${tag}`),
+      fetch("/api/users?limit=0&select=username,image"),
+    ])
+
+    const postsData: PostsData = await postsResponse.json()
+    const usersData: { users: User[] } = await usersResponse.json()
+
+    return {
+      posts: postsData.posts.map((post) => ({
+        ...post,
+        author: usersData.users.find((user) => user.id === post.userId),
+      })),
+      total: postsData.total,
+    }
+  } catch (error) {
+    console.error("태그별 게시물 가져오기 오류:", error)
   }
 }
