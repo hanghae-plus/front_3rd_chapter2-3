@@ -23,6 +23,16 @@ const server = setupServer(
     return HttpResponse.json(TEST_USERS)
   }),
 
+  // 개별 사용자 조회를 위한 핸들러 추가
+  http.get("/api/users/:id", ({ params }) => {
+    const { id } = params
+    const user = TEST_USERS.users.find(user => user.id === Number(id))
+    if (!user) {
+      return new HttpResponse(null, { status: 404 })
+    }
+    return HttpResponse.json(user)
+  }),
+
   http.get("/api/posts/tags", () => {
     return HttpResponse.json([
       "history",
