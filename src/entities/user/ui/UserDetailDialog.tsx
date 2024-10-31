@@ -1,35 +1,40 @@
+import { useDialog } from "../../../features/post/model/dialogStore"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { User } from "../model/types"
 
 export const UserDetailDialog: React.FC<{
-  showUserDetailDialog: boolean
-  setShowUserModal: (value: boolean) => void
   selectedUser: User
-}> = ({ showUserDetailDialog, setShowUserModal, selectedUser }) => {
+}> = ({ selectedUser }) => {
+  
+  const {
+    showUserDetailDialog,
+    setShowUserDetailDialog,
+  } = useDialog()
+  
   return (
-    <CustomDialog open={showUserDetailDialog} onOpenChange={setShowUserModal} title={"사용자 정보"}>
+    <CustomDialog open={showUserDetailDialog} onOpenChange={setShowUserDetailDialog} title={"사용자 정보"}>
       <>
-        <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-        <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
+        <img src={selectedUser.image} alt={selectedUser.username} className="w-24 h-24 rounded-full mx-auto" />
+        <h3 className="text-xl font-semibold text-center">{selectedUser.username}</h3>
         <div className="space-y-2">
           <p>
-            <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
+            <strong>이름:</strong> {selectedUser.firstName} {selectedUser.lastName}
           </p>
           <p>
-            <strong>나이:</strong> {selectedUser?.age}
+            <strong>나이:</strong> {selectedUser.age}
           </p>
           <p>
-            <strong>이메일:</strong> {selectedUser?.email}
+            <strong>이메일:</strong> {selectedUser.email}
           </p>
           <p>
-            <strong>전화번호:</strong> {selectedUser?.phone}
+            <strong>전화번호:</strong> {selectedUser.phone}
           </p>
           <p>
-            <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-            {selectedUser?.address?.state}
+            <strong>주소:</strong> {selectedUser.address?.address}, {selectedUser.address?.city},{" "}
+            {selectedUser.address?.state}
           </p>
           <p>
-            <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
+            <strong>직장:</strong> {selectedUser.company?.name} - {selectedUser.company?.title}
           </p>
         </div>
       </>

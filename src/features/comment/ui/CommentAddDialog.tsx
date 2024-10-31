@@ -2,14 +2,19 @@ import { ChangeEvent } from "react"
 import { NewComment } from "../../../entities/comment/model/types"
 import { Button, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
+import { useDialog } from "../../post/model/dialogStore"
 
 export const CommentAddDialog: React.FC<{
-  showCommentAddDialog: boolean
-  setShowCommentAddDialog: (value: boolean) => void
   newComment: NewComment
   setNewComment: (newComment: NewComment) => void
   addComment: (newComment: NewComment) => void
-}> = ({ showCommentAddDialog, setShowCommentAddDialog, newComment, setNewComment, addComment }) => {
+}> = ({ newComment, setNewComment, addComment }) => {
+  
+  const {
+    showCommentAddDialog,
+    setShowCommentAddDialog,
+  } = useDialog()
+  
   return (
     <CustomDialog open={showCommentAddDialog} onOpenChange={setShowCommentAddDialog} title={"새 댓글 추가"}>
       <>

@@ -58,17 +58,11 @@ const PostsManager = () => {
   } = useRouterQueries()
 
   const {
-    showPostAddDialog,
     setShowPostAddDialog,
-    showPostUpdateDialog,
     setShowPostUpdateDialog,
-    showCommentAddDialog,
     setShowCommentAddDialog,
-    showCommentUpdateDialog,
     setShowCommentUpdateDialog,
-    showPostDetailDialog,
     setShowPostDetailDialog,
-    showUserDetailDialog,
     setShowUserDetailDialog,
   } = useDialog()
 
@@ -287,8 +281,6 @@ const PostsManager = () => {
 
       {/* 게시물 추가 대화상자 */}
       <PostAddDialog
-        showPostAddDialog={showPostAddDialog}
-        setShowPostAddDialog={setShowPostAddDialog}
         newPost={newPost}
         setNewPost={setNewPost}
         addPost={addPost}
@@ -297,8 +289,6 @@ const PostsManager = () => {
       {/* 게시물 수정 대화상자 */}
       {selectedPost && (
         <PostUpdateDialog
-          showPostUpdateDialog={showPostUpdateDialog}
-          setShowPostUpdateDialog={setShowPostUpdateDialog}
           selectedPost={selectedPost}
           setSelectedPost={setSelectedPost}
           updatePost={updatePost}
@@ -307,8 +297,6 @@ const PostsManager = () => {
 
       {/* 댓글 추가 대화상자 */}
       <CommentAddDialog
-        showCommentAddDialog={showCommentAddDialog}
-        setShowCommentAddDialog={setShowCommentAddDialog}
         newComment={newComment}
         setNewComment={setNewComment}
         addComment={addComment}
@@ -317,8 +305,6 @@ const PostsManager = () => {
       {/* 댓글 수정 대화상자 */}
       {selectedComment && (
         <CommentUpdateDialog
-          showCommentUpdateDialog={showCommentUpdateDialog}
-          setShowCommentUpdateDialog={setShowCommentUpdateDialog}
           selectedComment={selectedComment}
           setSelectedComment={setSelectedComment}
           updateComment={updateComment}
@@ -328,8 +314,6 @@ const PostsManager = () => {
       {/* 게시물 상세 보기 대화상자 */}
       {selectedPost && (
         <PostDetailDialog
-          showPostDetailDialog={showPostDetailDialog}
-          setShowPostDetailDialog={setShowPostDetailDialog}
           selectedPost={selectedPost}
           searchQuery={searchQuery}
           comments={comments}
@@ -346,8 +330,6 @@ const PostsManager = () => {
       {/* 사용자 모달 */}
       {selectedUser && (
         <UserDetailDialog
-          showUserDetailDialog={showUserDetailDialog}
-          setShowUserModal={setShowUserDetailDialog}
           selectedUser={selectedUser}
         />
       )}

@@ -2,14 +2,19 @@ import { ChangeEvent } from "react"
 import { Input, Textarea, Button } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { Post } from "../../../entities/post/model/types"
+import { useDialog } from "../model/dialogStore"
 
 export const PostUpdateDialog: React.FC<{
-  showPostUpdateDialog: boolean
-  setShowPostUpdateDialog: (value: boolean) => void
   selectedPost: Post
   setSelectedPost: (post: Post) => void
   updatePost: (post: Post) => void
-}> = ({ showPostUpdateDialog, setShowPostUpdateDialog, selectedPost, setSelectedPost, updatePost }) => {
+}> = ({ selectedPost, setSelectedPost, updatePost }) => {
+  
+  const {
+    showPostUpdateDialog,
+    setShowPostUpdateDialog,
+  } = useDialog()
+  
   return (
     <CustomDialog open={showPostUpdateDialog} onOpenChange={setShowPostUpdateDialog} title={"게시물 수정"}>
       <>

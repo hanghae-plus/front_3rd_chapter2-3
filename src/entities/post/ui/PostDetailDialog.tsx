@@ -1,3 +1,4 @@
+import { useDialog } from "../../../features/post/model/dialogStore"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { NewComment, Comment } from "../../comment/model/types"
@@ -5,8 +6,6 @@ import { Comments } from "../../comment/ui/Comments"
 import { Post } from "../model/types"
 
 export const PostDetailDialog: React.FC<{
-  showPostDetailDialog: boolean
-  setShowPostDetailDialog: (value: boolean) => void
   selectedPost: Post
   searchQuery: string
   comments: Record<number, Comment[]>
@@ -18,8 +17,6 @@ export const PostDetailDialog: React.FC<{
   likeComment: (commentId: number, postId: number) => void
   deleteComment: (commentId: number, postId: number) => void
 }> = ({
-  showPostDetailDialog,
-  setShowPostDetailDialog,
   selectedPost,
   searchQuery,
   comments,
@@ -31,6 +28,12 @@ export const PostDetailDialog: React.FC<{
   likeComment,
   deleteComment,
 }) => {
+
+  const {
+    showPostDetailDialog,
+    setShowPostDetailDialog,
+  } = useDialog()
+
   return (
     <CustomDialog
       open={showPostDetailDialog}

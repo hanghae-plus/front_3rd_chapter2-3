@@ -2,20 +2,23 @@ import { ChangeEvent } from "react";
 import { Comment } from "../../../entities/comment/model/types";
 import { Textarea, Button } from "../../../shared/ui";
 import { CustomDialog } from "../../../shared/ui/CustomDialog";
+import { useDialog } from "../../post/model/dialogStore";
 
 export const CommentUpdateDialog : React.FC<{
-  showCommentUpdateDialog: boolean
-  setShowCommentUpdateDialog: (value: boolean) => void
   selectedComment: Comment
   setSelectedComment: (comment: Comment) => void
   updateComment: (comment: Comment) => void
 }> = ({
-  showCommentUpdateDialog,
-  setShowCommentUpdateDialog,
   selectedComment,
   setSelectedComment,
   updateComment
 }) => {
+
+  const {
+    showCommentUpdateDialog,
+    setShowCommentUpdateDialog,
+  } = useDialog()
+
   return(
     <CustomDialog open={showCommentUpdateDialog} onOpenChange={setShowCommentUpdateDialog} title={"댓글 수정"}>
         <>
