@@ -35,7 +35,7 @@ const usePost = () => {
   const [loading, setLoading] = useAtom(loadingAtom)
   const navigate = useNavigate()
 
-  const updateURL = () => {
+  function updateURL() {
     const params = new URLSearchParams()
     if (skip) params.set("skip", skip.toString())
     if (limit) params.set("limit", limit.toString())
@@ -45,22 +45,6 @@ const usePost = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
-
-  /*
-  useEffect(() => {
-    fetchTags()
-  }, [])
-
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  */
 
   return {
     posts,

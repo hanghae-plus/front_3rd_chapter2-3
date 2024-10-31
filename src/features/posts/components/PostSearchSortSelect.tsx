@@ -1,16 +1,19 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
+import usePost from "../hooks/usePost"
 
-interface PostSearchSortSelectProps {
-  sortBy: string
-  setSortBy: (value: string) => void
-  sortOrder: string
-  setSortOrder: (value: string) => void
-}
+const PostSearchSortSelect = () => {
+  const { sortBy, setSortBy, sortOrder, setSortOrder } = usePost()
 
-const PostSearchSortSelect = ({ sortBy, setSortBy, sortOrder, setSortOrder }: PostSearchSortSelectProps) => {
+  function handleChangeSortBy(value: string) {
+    setSortBy(value)
+  }
+
+  function handleChangeSortOrder(value: string) {
+    setSortOrder(value)
+  }
   return (
     <div className="flex gap-4">
-      <Select value={sortBy} onValueChange={setSortBy}>
+      <Select value={sortBy} onValueChange={(value) => handleChangeSortBy(value)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />
         </SelectTrigger>
@@ -21,7 +24,7 @@ const PostSearchSortSelect = ({ sortBy, setSortBy, sortOrder, setSortOrder }: Po
           <SelectItem value="reactions">반응</SelectItem>
         </SelectContent>
       </Select>
-      <Select value={sortOrder} onValueChange={setSortOrder}>
+      <Select value={sortOrder} onValueChange={(value) => handleChangeSortOrder(value)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 순서" />
         </SelectTrigger>

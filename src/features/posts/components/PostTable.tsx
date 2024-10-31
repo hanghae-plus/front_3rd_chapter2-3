@@ -1,17 +1,78 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useFetchPosts } from "../../../entities/posts/api/fetchPost"
-import usePostState from "../../../entities/posts/state/usePostState"
-import { Button } from "../../../shared/ui"
+import { useEffect, useState } from "react"
+import { deletePost } from "../../../entities/posts/api/postEntitiesApi"
+import { Author, Post } from "../../../entities/posts/model/Post"
+import { Users } from "../../../entities/users/model/User"
+import HighlightText from "../../../shared/ui/HighlightText"
+import { useFetchComments } from "../../comments/api/commentsFeaturesApi"
+import { useFetchUserModalInfo } from "../../users/api/userFeaturesApi"
+import useUser from "../../users/hooks/useUser"
+import usePost from "../hooks/usePost"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/Table"
-import { highlightText } from "../../lib/commonUtils"
+import { Button } from "../../../shared/ui"
 
 const PostTable = () => {
-  const { posts, searchQuery, selectedTag, setSelectedTag, setSelectedPost, setShowEditDialog } = usePostState()
-  const { openPostDetail, deletePost } = useFetchPosts()
+  const {
+    posts,
+    searchQuery,
+    selectedTag,
+    setSelectedTag,
+    setSelectedPost,
+    setShowEditDialog,
+    setShowPostDetailDialog,
+  } = usePost()
 
-  // openUserModal,
-  //const updateURL = () => {}; // hooks에 넣을 거
+  const { setShowUserModal, setSelectedUser } = useUser()
 
+  const [postAuthor, setPostAuthor] = useState<Author>({ id: 0, image: "", username: "", fullName: "" })
+  const [postDetail, setPostDetail] = useState<Post>({
+    body: "",
+    id: 0,
+    reactions: {
+      likes: 0,
+      dislikes: 0,
+    },
+    tags: [],
+    title: "",
+    userId: 0,
+    views: 0,
+  })
+
+  const openUserModal = async (user: Users) => {
+    setPostAuthor(user)
+  }
+
+  const { data: userModalInfo, error: modalError, isLoading: isModalLoading } = useFetchUserModalInfo(postAuthor)
+
+  useEffect(() => {
+    if (userModalInfo && !isModalLoading && !modalError) {
+      setSelectedUser(userModalInfo)
+      setShowUserModal(true)
+    }
+  }, [userModalInfo, isModalLoading, modalError])
+
+  const { data: comments, error: postDeatilError, isLoading: isPostDetailLoading } = useFetchComments(postDetail.id)
+
+  useEffect(() => {
+    if (comments && !isPostDetailLoading && !postDeatilError) {
+      setSelectedPost(postDetail)
+      setShowPostDetailDialog(true)
+    }
+  }, [comments, isPostDetailLoading, postDeatilError])
+
+  function openPostDetail(post: Post) {
+    setPostDetail(post)
+  }
+
+  function handleSelectedTag(tag: string) {
+    setSelectedTag(tag)
+  }
+  function handleShowEditDialog(post: Post) {
+    setSelectedPost(post)
+    setShowEditDialog(true)
+  }
+
+  console.log("posts", posts)
   return (
     <Table>
       <TableHeader>
@@ -29,7 +90,9 @@ const PostTable = () => {
             <TableCell>{post.id}</TableCell>
             <TableCell>
               <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
+                <div>
+                  <HighlightText text={post.title} highlight={searchQuery} />
+                </div>
                 <div className="flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
                     <span
@@ -40,8 +103,7 @@ const PostTable = () => {
                           : "text-blue-800 bg-blue-100 hover:bg-blue-200"
                       }`}
                       onClick={() => {
-                        setSelectedTag(tag)
-                        updateURL()
+                        handleSelectedTag(tag)
                       }}
                     >
                       {tag}
@@ -76,8 +138,7 @@ const PostTable = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    setSelectedPost(post)
-                    setShowEditDialog(true)
+                    handleShowEditDialog(post)
                   }}
                 >
                   <Edit2 className="w-4 h-4" />

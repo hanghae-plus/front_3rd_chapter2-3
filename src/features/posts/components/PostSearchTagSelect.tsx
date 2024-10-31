@@ -1,30 +1,30 @@
 // PostSearchTagSelect.tsx
 
-import { Tag } from "../../../entities/posts/model/Post"
+import { useEffect } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
+import usePost from "../hooks/usePost"
+import { useFetchTags } from "../api/postFeatureApi"
 
-interface PostSearchTagSelectProps {
-  selectedTag: string
-  setSelectedTag: (value: string) => void
-  tags: Tag[]
-  fetchPostsByTag: (tag: string) => void
-  updateURL: () => void
-}
+const PostSearchTagSelect = () => {
+  const { selectedTag, setSelectedTag, tags, setTags } = usePost()
 
-const PostSearchTagSelect = ({
-  selectedTag,
-  setSelectedTag,
-  tags,
-  fetchPostsByTag,
-  updateURL,
-}: PostSearchTagSelectProps) => {
+  function handleChangeSelecteTag(value: string) {
+    setSelectedTag(value)
+  }
+
+  const { data, isLoading, isError } = useFetchTags()
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      setTags(data)
+    }
+  }, [data, isLoading, isError, setTags])
+
   return (
     <Select
       value={selectedTag}
       onValueChange={(value) => {
-        setSelectedTag(value)
-        fetchPostsByTag(value)
-        updateURL()
+        handleChangeSelecteTag(value)
       }}
     >
       <SelectTrigger className="w-[180px]">

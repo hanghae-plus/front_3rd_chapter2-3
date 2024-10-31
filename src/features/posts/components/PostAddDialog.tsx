@@ -1,15 +1,32 @@
-import { NewPost } from "../../../entities/posts/model/Post"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
+import { Post } from "../../../entities/posts/model/Post"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui/"
+import { useAddPost } from "../api/postFeatureApi"
+import usePost from "../hooks/usePost"
 
-interface PostAddDialogProps {
-  showAddDialog: boolean
-  setShowAddDialog: (open: boolean) => void
-  newPost: NewPost
-  setNewPost: React.Dispatch<React.SetStateAction<NewPost>>
-  addPost: () => void
-}
+const PostAddDialog = () => {
+  const { showAddDialog, setShowAddDialog, newPost, setNewPost, setPosts } = usePost()
+  function handleChangeNewPost(field: string, value: string | number) {
+    setNewPost((prev) => ({ ...prev, [field]: value }))
+  }
 
-const PostAddDialog = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, addPost }: PostAddDialogProps) => {
+  const { mutate: addPost } = useAddPost()
+  function handleAddPost() {
+    addPost(newPost, {
+      onSuccess: (data: Post) => {
+        setPosts((prev) => ({
+          ...prev,
+          posts: [data, ...prev.posts],
+          total: prev.total + 1,
+        }))
+        setShowAddDialog(false)
+        setNewPost({ title: "", body: "", userId: 1 })
+      },
+      onError: (error) => {
+        console.error("Failed to like comment:", error)
+      },
+    })
+  }
+
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
       <DialogContent>
@@ -20,21 +37,21 @@ const PostAddDialog = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, a
           <Input
             placeholder="제목"
             value={newPost.title}
-            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+            onChange={(e) => handleChangeNewPost("title", e.target.value)}
           />
           <Textarea
             rows={30}
             placeholder="내용"
             value={newPost.body}
-            onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
+            onChange={(e) => handleChangeNewPost("body", e.target.value)}
           />
           <Input
             type="number"
             placeholder="사용자 ID"
             value={newPost.userId}
-            onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
+            onChange={(e) => handleChangeNewPost("userId", Number(e.target.value))}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

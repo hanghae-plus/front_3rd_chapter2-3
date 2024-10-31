@@ -1,29 +1,26 @@
 import CommentsSection from "../../../features/comments/components/CommentsSection"
-import { highlightText } from "../../../features/lib/commonUtils"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
-import { SelectedPost } from "../model/Post"
+import usePost from "../../../features/posts/hooks/usePost"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/"
+import HighlightText from "../../../shared/ui/HighlightText"
 
-interface PostDetailDialogProps {
-  showPostDetailDialog: boolean
-  setShowPostDetailDialog: (show: boolean) => void
-  selectedPost: SelectedPost
-  searchQuery: string
-}
-
-const PostDetailDialog = ({
-  showPostDetailDialog,
-  setShowPostDetailDialog,
-  selectedPost,
-  searchQuery,
-}: PostDetailDialogProps) => {
+const PostDetailDialog = () => {
+  const { showPostDetailDialog, setShowPostDetailDialog, selectedPost, searchQuery } = usePost()
+  if (!selectedPost) {
+    return
+  }
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
+          <DialogTitle>
+            <HighlightText text={selectedPost?.title} highlight={searchQuery} />
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <p>{highlightText(selectedPost?.body, searchQuery)}</p>
+          <p>
+            {" "}
+            <HighlightText text={selectedPost?.body} highlight={searchQuery} />
+          </p>
           {selectedPost.id && <CommentsSection postId={selectedPost?.id} />}
         </div>
       </DialogContent>

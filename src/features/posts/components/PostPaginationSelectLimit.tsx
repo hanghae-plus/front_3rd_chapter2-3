@@ -1,13 +1,14 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/"
+import usePost from "../hooks/usePost"
 
-interface PostPaginationSelectLimitProps {
-  limit: number
-  setLimit: (value: number) => void
-}
+const PostPaginationSelectLimit = () => {
+  const { limit, setLimit } = usePost()
+  function handleChangeLimit(value: number) {
+    setLimit(value)
+  }
 
-const PostPaginationSelectLimit = ({ limit, setLimit }: PostPaginationSelectLimitProps) => {
   return (
-    <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
+    <Select value={limit.toString()} onValueChange={(value) => handleChangeLimit(Number(value))}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="10" />
       </SelectTrigger>
