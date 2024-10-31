@@ -1,19 +1,21 @@
-import { ChangeEvent } from "react"
+import { ChangeEvent, useState } from "react"
 import { NewPost } from "../../../entities/post/model/types"
 import { Button, Input, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { useDialog } from "../model/dialogStore"
 
+const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
+
 export const PostAddDialog: React.FC<{
-  newPost: NewPost
-  setNewPost: (newPost: NewPost) => void
   addPost: (newPost: NewPost) => void
-}> = ({ newPost, setNewPost, addPost }) => {
+}> = ({ addPost }) => {
   
   const {
     showPostAddDialog,
     setShowPostAddDialog,
   } = useDialog()
+
+  const [newPost, setNewPost] = useState<NewPost>({ ...initialNewPost })
   
   return (
     <CustomDialog open={showPostAddDialog} onOpenChange={setShowPostAddDialog} title={"새 게시물 추가"}>

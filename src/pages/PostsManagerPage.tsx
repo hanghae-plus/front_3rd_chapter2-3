@@ -40,7 +40,6 @@ import {
 import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
 
-const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
 const initialNewComment: NewComment = { body: "", postId: null, userId: 1, likes: 0 }
 const PostsManager = () => {
   const {
@@ -70,7 +69,6 @@ const PostsManager = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [newPost, setNewPost] = useState<NewPost>({ ...initialNewPost })
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
@@ -126,7 +124,6 @@ const PostsManager = () => {
     const postData = await createPostApi(newPost)
     setPosts(addToPosts(posts, postData))
     setShowPostAddDialog(false)
-    setNewPost({ ...initialNewPost })
   }
 
   // 게시물 업데이트
@@ -281,8 +278,6 @@ const PostsManager = () => {
 
       {/* 게시물 추가 대화상자 */}
       <PostAddDialog
-        newPost={newPost}
-        setNewPost={setNewPost}
         addPost={addPost}
       />
 
