@@ -1,3 +1,5 @@
+import { Post } from "../../../entities/post"
+
 export interface PostsListState {
   posts: Post[]
   total: number
