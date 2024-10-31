@@ -37,7 +37,7 @@ import {
   likeCommentApi,
   updateCommentApi,
 } from "../entities/comment/api"
-import { useRouterQuereis } from "../features/post/model/routerStore"
+import { useRouterQueries } from "../features/post/model/routerStore"
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
 const initialNewComment: NewComment = { body: "", postId: null, userId: 1, likes: 0 }
@@ -56,7 +56,7 @@ const PostsManager = () => {
     selectedTag,
     setSelectedTag,
     updateURL,
-  } = useRouterQuereis();
+  } = useRouterQueries();
 
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([])
