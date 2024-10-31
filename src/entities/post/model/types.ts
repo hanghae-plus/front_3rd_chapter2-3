@@ -32,10 +32,15 @@ export type FetchPostsPayload = {
   skip: number
 }
 
-export type PostsResponse = {
+export type FetchPostsResponse = {
   posts: PostDTO[]
   limit: number
   skip: number
+  total: number
+}
+
+export type PostsResponse = {
+  posts: Post[]
   total: number
 }
 

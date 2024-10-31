@@ -1,6 +1,10 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { SortOrder } from "../lib/usePostQueryParams"
-import { FetchPostsPayload, PostsResponse } from "../model/types"
+import {
+  FetchPostsPayload,
+  FetchPostsResponse,
+  PostsResponse,
+} from "../model/types"
 import { postQueryKeys } from "./post.queries"
 import { postApi } from "./postApi"
 
@@ -22,7 +26,7 @@ export const usePostsQuery = (payload: usePostsQueryProps) => {
   }
 
   // 게시물 데이터를 가져오는 함수 (태그와 검색 쿼리에 따라 처리)
-  const fetchPostsData = async (): Promise<PostsResponse> => {
+  const fetchPostsData = async (): Promise<FetchPostsResponse> => {
     if (selectedTag && selectedTag !== "all") {
       return await postApi.fetchPostsByTag(selectedTag)
     }
@@ -35,7 +39,7 @@ export const usePostsQuery = (payload: usePostsQueryProps) => {
   }
 
   // 게시물과 글쓴이 정보를 함께 가져오는 함수
-  const fetchPostsWithAuthors = async () => {
+  const fetchPostsWithAuthors = async (): Promise<PostsResponse> => {
     const [authors, postsData] = await Promise.all([
       fetchAuthors(),
       fetchPostsData(),

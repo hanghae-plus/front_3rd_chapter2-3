@@ -2,9 +2,9 @@ import { safeFetch } from "../../../shared/api"
 import {
   AuthorsResponse,
   FetchPostsPayload,
+  FetchPostsResponse,
   NewPost,
   Post,
-  PostsResponse,
   Tag,
 } from "../model/types"
 
@@ -25,7 +25,7 @@ export const postApi = {
   /** 게시물 가져오기 */
   fetchPosts: async ({ limit, skip }: FetchPostsPayload) => {
     try {
-      const response = await safeFetch<PostsResponse>(
+      const response = await safeFetch<FetchPostsResponse>(
         `/api/posts?limit=${limit}&skip=${skip}`,
       )
       return response
@@ -38,7 +38,7 @@ export const postApi = {
   /** 게시물 검색 */
   searchPosts: async (searchQuery: string) => {
     try {
-      const response = await safeFetch<PostsResponse>(
+      const response = await safeFetch<FetchPostsResponse>(
         `/api/posts/search?q=${searchQuery}`,
       )
       return response
@@ -51,7 +51,9 @@ export const postApi = {
   /** 태그별 게시물 가져오기 */
   fetchPostsByTag: async (tag: string) => {
     try {
-      const response = await safeFetch<PostsResponse>(`/api/posts/tag/${tag}`)
+      const response = await safeFetch<FetchPostsResponse>(
+        `/api/posts/tag/${tag}`,
+      )
       return response
     } catch (error) {
       console.error("태그별 게시물 가져오기 오류:", error)
