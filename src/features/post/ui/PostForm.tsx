@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Input } from '../../../shared/ui/InputBox/InputBox';
 import { Textarea } from '../../../shared/ui/Textarea/Textarea';
 import { Button } from '../../../shared/ui/Button/Button';
-import { Post } from '../../../entities/post/api/types';
+import { EnrichedPost } from '../../../entities/post/api/types';
 
 interface PostFormProps {
-  initialData?: Post;
-  onSubmit: (data: Partial<Post>) => void;
+  initialData?: EnrichedPost;
+  onSubmit: (data: Omit<EnrichedPost, "id" | "reactions" | "author"> & Partial<Pick<EnrichedPost, "id" | "reactions" | "author">>) => void;
 }
 
 const PostForm: React.FC<PostFormProps> = ({ initialData = { title: '', body: '', userId: 1 }, onSubmit }) => {
@@ -17,7 +17,11 @@ const PostForm: React.FC<PostFormProps> = ({ initialData = { title: '', body: ''
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, body, userId, id: initialData.id });
+    onSubmit({
+      title, body, userId, id: initialData.id,
+      tags: [],
+      views: 0
+    });
   };
 
   return (

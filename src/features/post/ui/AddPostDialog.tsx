@@ -1,4 +1,3 @@
-// src/features/posts/components/AddPostDialog.tsx
 import React from 'react';
 import { Dialog, DialogContents, DialogHeader, DialogTitle } from '../../../shared/ui/Dialog';
 import PostForm from './PostForm';
@@ -20,13 +19,16 @@ const AddPostDialog: React.FC = () => {
     setShowAddDialog(false);
   };
 
-  const handleAddPost = (data:Partial<Omit<Post, "id" | "reactions" | "author">>) => {
+  const handleAddPost = (data:Omit<Post, "id" | "reactions" | "author">) => {
     addPostMutation.mutate(data, {
       onSuccess: () => {
         queryClient.invalidateQueries({queryKey:['post']});
         handleClose();
         setNewPost({ title: '', body: '', userId: 1 });
-        setPosts([...posts,{...data, reactions: {likes: 0, dislikes: 0},tags:[]}])
+        setPosts([...posts,{
+          ...data, reactions: { likes: 0, dislikes: 0 }, tags: [],
+          id: 0
+        }])
         console.log(posts)
       },
       onError: (error) => {
