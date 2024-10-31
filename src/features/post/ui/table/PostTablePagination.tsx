@@ -18,5 +18,7 @@ export const PostTablePagination = ({ total, size, skip }: PostPaginationProps) 
     handleUpdateQuery("limit", size.toString());
   };
 
-  return <Pagination size={size} setSize={handleSizeChange} page={skip} setPage={handlePageChange} total={total} />;
+  return (
+    <Pagination size={size} onSizeChange={handleSizeChange} page={skip} onPageChange={handlePageChange} total={total} />
+  );
 };

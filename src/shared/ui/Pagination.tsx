@@ -3,23 +3,23 @@ import { Select } from "@/shared/ui/Select";
 
 type PaginationProps = {
   size: number;
-  setSize: (size: number) => void;
+  onSizeChange: (size: number) => void;
   page: number;
-  setPage: (page: number) => void;
+  onPageChange: (page: number) => void;
   total: number;
 };
 
-const Pagination = ({ size, setSize, page, setPage, total }: PaginationProps) => {
+const Pagination = ({ size, onSizeChange, page, onPageChange, total }: PaginationProps) => {
   const handleChangeSize = (value: string) => {
-    setSize(Number(value));
+    onSizeChange(Number(value));
   };
 
   const handlePrevious = () => {
-    setPage(Math.max(0, page - size));
+    onPageChange(Math.max(0, page - size));
   };
 
   const handleNext = () => {
-    setPage(page + size);
+    onPageChange(page + size);
   };
 
   return (

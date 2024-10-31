@@ -1,4 +1,5 @@
 import { Comment } from "@/entities/comment/model/types";
+
 import CommentDeleteButton from "@/features/comment/ui/CommentDeleteButton";
 import CommentLikeButton from "@/features/comment/ui/CommentLikeButton";
 import ModalEditComment from "@/features/comment/ui/modals/ModalEditComment";

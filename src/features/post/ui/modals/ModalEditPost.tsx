@@ -10,17 +10,12 @@ import usePostsStore from "../../model/usePostsStore";
 
 const ModalEditPost = ({ post }: { post: Post }) => {
   const { isOpen, toggle } = useGlobalModal("editPost", post.id);
-
   const handleSelectPost = usePostsStore((state) => state.handleSelectPost);
-
-  const openEditModal = () => {
-    handleSelectPost(post);
-  };
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>
-        <Button variant="ghost" size="sm" onClick={openEditModal}>
+        <Button variant="ghost" size="sm" onClick={() => handleSelectPost(post)}>
           <Edit2 className="w-4 h-4" />
         </Button>
       </Dialog.Trigger>
