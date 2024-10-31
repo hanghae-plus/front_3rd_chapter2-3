@@ -25,7 +25,7 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import { Post, PostsData, User, NewComment, Comment } from "../shared/types"
+import { Post, User, NewComment, Comment } from "../shared/types"
 import { useTags } from "../shared/model/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useComment } from "../shared/model/useComment"
@@ -45,7 +45,6 @@ const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState(false)
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
@@ -59,8 +58,17 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const { tags, getTags } = useTags()
-  const { posts, setPosts, total, setTotal, handleAddPost, handleUpdatePost, handleDeletePost, handleFetchPostsByTag } =
-    usePost()
+  const {
+    posts,
+    total,
+    isLoading,
+    handleAddPost,
+    handleUpdatePost,
+    handleDeletePost,
+    handleFetchPostsByTag,
+    handleFetchPosts,
+    handleSearchPosts,
+  } = usePost()
   const {
     comments,
     handleFetchComments,
@@ -80,54 +88,6 @@ const PostsManager = () => {
     if (sortOrder) params.set("sortOrder", sortOrder)
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
-  }
-
-  // 게시물 가져오기
-  const fetchPosts = () => {
-    setLoading(true)
-    let postsData: PostsData
-    let usersData: User[]
-
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then((response) => response.json())
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
-  // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
-    setLoading(false)
   }
 
   // 게시물 상세 보기
@@ -157,7 +117,7 @@ const PostsManager = () => {
     if (selectedTag) {
       handleFetchPostsByTag(selectedTag)
     } else {
-      fetchPosts()
+      handleFetchPosts({ limit, skip })
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
@@ -338,7 +298,7 @@ const PostsManager = () => {
                   className="pl-8"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearchPosts(searchQuery)}
                 />
               </div>
             </div>
@@ -385,7 +345,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {isLoading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">

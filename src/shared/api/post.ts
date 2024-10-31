@@ -59,3 +59,38 @@ export const fetchPostsByTag = async (tag: string) => {
     console.error("태그별 게시물 가져오기 오류:", error)
   }
 }
+
+export const fetchPosts = async (params: { limit: number; skip: number }) => {
+  try {
+    const [postsResponse, usersResponse] = await Promise.all([
+      fetch(`/api/posts?limit=${params.limit}&skip=${params.skip}`),
+      fetch("/api/users?limit=0&select=username,image"),
+    ])
+
+    const postsData: PostsData = await postsResponse.json()
+    const usersData: { users: User[] } = await usersResponse.json()
+
+    return {
+      posts: postsData.posts.map((post) => ({
+        ...post,
+        author: usersData.users.find((user) => user.id === post.userId),
+      })),
+      total: postsData.total,
+    }
+  } catch (error) {
+    console.error("게시물 가져오기 오류:", error)
+  }
+}
+
+export const searchPosts = async (query: string) => {
+  try {
+    const response = await fetch(`/api/posts/search?q=${query}`)
+    const data = await response.json()
+    return {
+      posts: data.posts,
+      total: data.total,
+    }
+  } catch (error) {
+    console.error("게시물 검색 오류:", error)
+  }
+}

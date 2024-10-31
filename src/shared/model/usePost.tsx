@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { addPost, updatePost, deletePost, fetchPostsByTag } from "../api/post"
+import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts } from "../api/post"
 import type { NewPost, Post } from "../types"
 
 interface UsePostProps {
@@ -7,10 +7,13 @@ interface UsePostProps {
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>
   total: number
   setTotal: React.Dispatch<React.SetStateAction<number>>
+  isLoading: boolean
   handleAddPost: (newPost: NewPost) => Promise<void>
   handleUpdatePost: (post: Post) => Promise<void>
   handleDeletePost: (id: number) => Promise<void>
   handleFetchPostsByTag: (tag: string) => Promise<void>
+  handleFetchPosts: (params: { limit: number; skip: number }) => Promise<void>
+  handleSearchPosts: (query: string) => Promise<void>
 }
 
 export const usePost = (): UsePostProps => {
@@ -58,5 +61,48 @@ export const usePost = (): UsePostProps => {
     }
   }
 
-  return { posts, setPosts, total, setTotal, handleAddPost, handleUpdatePost, handleDeletePost, handleFetchPostsByTag }
+  const handleFetchPosts = async (params: { limit: number; skip: number }) => {
+    setIsLoading(true)
+    try {
+      const data = await fetchPosts(params)
+      if (data) {
+        setPosts(data.posts)
+        setTotal(data.total)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSearchPosts = async (query: string) => {
+    if (!query) {
+      handleFetchPosts({ limit: 10, skip: 0 }) // 기본값 사용
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const data = await searchPosts(query)
+      if (data) {
+        setPosts(data.posts)
+        setTotal(data.total)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return {
+    posts,
+    setPosts,
+    total,
+    setTotal,
+    isLoading,
+    handleAddPost,
+    handleUpdatePost,
+    handleDeletePost,
+    handleFetchPostsByTag,
+    handleFetchPosts,
+    handleSearchPosts,
+  }
 }
