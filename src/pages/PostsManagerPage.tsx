@@ -7,7 +7,7 @@ import {
   ThumbsUp,
   Trash2,
 } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { commentApi } from "../entities/comment/api/commentApi"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { SortOrder, usePostQueryParams, usePostsQuery } from "../entities/post"
@@ -52,8 +52,6 @@ const PostsManager = () => {
   } = usePostQueryParams()
 
   // 상태 관리
-  const [posts, setPosts] = useState<Post[]>([])
-  const [total, setTotal] = useState(0)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [newPost, setNewPost] = useState<NewPost>({
     title: "",
@@ -90,20 +88,15 @@ const PostsManager = () => {
     selectedTag,
   }
 
-  const { data, isLoading } = usePostsQuery(payload)
-
-  // TODO: 점진적 마이그레이션을 위한 임시 useEffect
-  useEffect(() => {
-    if (data) {
-      const { posts, total } = data
-      setPosts(posts)
-      setTotal(total)
-    }
-  }, [data])
+  const {
+    data: { posts, total },
+    isLoading,
+  } = usePostsQuery(payload)
 
   const { mutate: addPostMutate } = useAddPostMutation()
+  const { mutate: updatePostMutate } = useUpdatePostMutation()
+  const { mutate: deletePostMutate } = useDeletePostMutation()
 
-  // 게시물 추가
   const addPost = (newPost: NewPost) => {
     addPostMutate(newPost, {
       onSuccess: () => {
@@ -113,9 +106,6 @@ const PostsManager = () => {
     })
   }
 
-  const { mutate: updatePostMutate } = useUpdatePostMutation()
-
-  // 게시물 업데이트
   const updatePost = (selectedPost: Post | null) => {
     if (!selectedPost) return
 
@@ -125,8 +115,6 @@ const PostsManager = () => {
       },
     })
   }
-
-  const { mutate: deletePostMutate } = useDeletePostMutation()
 
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {

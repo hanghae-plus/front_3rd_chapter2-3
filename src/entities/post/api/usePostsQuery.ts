@@ -53,9 +53,17 @@ export const usePostsQuery = (payload: usePostsQueryProps) => {
     return { posts: postsWithAuthors, total: postsData.total }
   }
 
-  return useQuery({
+  const { data, ...query } = useQuery({
     queryKey: postQueryKeys.list(payload),
     queryFn: () => fetchPostsWithAuthors(),
     placeholderData: keepPreviousData,
   })
+
+  return {
+    data: {
+      posts: data?.posts ?? [],
+      total: data?.total ?? 0,
+    },
+    ...query,
+  }
 }
