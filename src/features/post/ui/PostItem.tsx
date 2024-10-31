@@ -9,14 +9,16 @@ import { useComments } from "../../comment/model/useComment.ts"
 import { User } from "../../../entities/user/model/types.ts"
 import { useUserModal } from "../../user/model/useUserModal.ts"
 import { fetchUserDetailApi } from "../../../entities/user/api"
+import { usePostSearch } from "../model/usePostSearch.ts"
 
 interface Props {
   post: Post
 }
 
 export default function PostItem({ post }: Props) {
-  const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParams()
+  const { selectedTag, setSelectedTag, updateURL } = usePostParams()
   const { deletePost } = usePosts()
+  const { searchText } = usePostSearch()
   const { setSelectedPost, setShowPostDetailDialog, setShowEditDialog } = usePostDialog()
   const { setShowUserModal, setSelectedUser } = useUserModal()
   const { fetchComments } = useComments()
@@ -43,7 +45,7 @@ export default function PostItem({ post }: Props) {
       <TableCell>{post.id}</TableCell>
       <TableCell>
         <div className="space-y-1">
-          <div>{highlightText(post.title, searchQuery)}</div>
+          <div>{highlightText(post.title, searchText)}</div>
 
           <div className="flex flex-wrap gap-1">
             {post.tags?.map((tag) => (

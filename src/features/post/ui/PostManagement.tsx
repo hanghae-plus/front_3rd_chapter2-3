@@ -1,14 +1,19 @@
 import { Button, CardContent, CardHeader, CardTitle } from "../../../shared/ui"
 import { Plus } from "lucide-react"
 import PostSearchFilter from "./PostSearchFilter.tsx"
-import PostTable from "../../../widgets/post/PostTable.tsx"
+import PostTable from "../../../widgets/post/ui/PostTable.tsx"
 import PostPagination from "./PostPagination.tsx"
 import { usePostDialog } from "../model/usePostDialog.ts"
-import { usePosts } from "../model/usePosts.ts"
+import { useUsersQuery } from "../../user/api/useUsersQuery.ts"
+import { usePostsQuery } from "../api/queries.ts"
+import { createPosts } from "../../../entities/post/model"
 
 export default function PostManagement() {
-  const { loading } = usePosts()
   const { setShowAddDialog } = usePostDialog()
+  const { data: usersData } = useUsersQuery()
+  const { data: postsData, isLoading } = usePostsQuery()
+
+  const posts = postsData?.posts && createPosts(postsData.posts, usersData)
 
   return (
     <>
@@ -24,10 +29,13 @@ export default function PostManagement() {
       <CardContent>
         <div className="flex flex-col gap-4">
           <PostSearchFilter />
-          {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
-          <PostPagination />
+          {!posts || isLoading ? (
+            <div className="flex justify-center p-4">로딩 중...</div>
+          ) : (
+            <PostTable posts={posts} />
+          )}
         </div>
+        {postsData?.total && <PostPagination postTotal={postsData.total || 0} />}
       </CardContent>
     </>
   )

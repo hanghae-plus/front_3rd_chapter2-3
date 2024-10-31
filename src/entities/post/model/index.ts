@@ -1,9 +1,9 @@
 import { User } from "../../user/model/types"
-import { Post } from "./types"
+import { Post, PostDto } from "./types"
 
-export const getPostsWithUsers = (postsData: Post[], usersData: User[]) => {
+export const createPosts = (postsData: Post[], usersData: User[]) => {
   return postsData.map((post) => ({
     ...post,
-    author: usersData.find((user) => user.id === post.userId),
+    author: usersData?.find((user) => user.id === post.userId),
   }))
 }

@@ -1,9 +1,9 @@
-import { NewPost, Post } from "../model/types"
+import { NewPost, Post, PostDto } from "../model/types"
 
 export const fetchPostsApi = async (limit: number, skip: number) => {
   try {
     const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-    const data = response.json()
+    const data: PostDto = await response.json()
 
     return data
   } catch (error) {
@@ -18,7 +18,7 @@ export const updatePostApi = async (selectedPost: Post) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(selectedPost),
     })
-    const data = response.json()
+    const data = await response.json()
 
     return data
   } catch (error) {
@@ -54,7 +54,7 @@ export const deletePostApi = async (id: number) => {
 export const fetchPostsByTagApi = async (tag: string) => {
   try {
     const response = await fetch(`/api/posts/tag/${tag}`)
-    const data = await response.json()
+    const data: PostDto = await response.json()
 
     return data
   } catch (error) {
@@ -65,7 +65,7 @@ export const fetchPostsByTagApi = async (tag: string) => {
 export const searchPostsApi = async (searchQuery: string) => {
   try {
     const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-    const data = await response.json()
+    const data: PostDto = await response.json()
 
     return data
   } catch (error) {

@@ -1,9 +1,11 @@
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { usePostParams } from "../model/usePostParams.ts"
-import { usePosts } from "../model/usePosts.ts"
 
-export default function PostPagination() {
-  const { total } = usePosts()
+interface Props {
+  postTotal: number
+}
+
+export default function PostPagination({ postTotal }: Props) {
   const { skip, setSkip, limit, setLimit } = usePostParams()
 
   return (
@@ -26,7 +28,7 @@ export default function PostPagination() {
         <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
           이전
         </Button>
-        <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
+        <Button disabled={skip + limit >= postTotal} onClick={() => setSkip(skip + limit)}>
           다음
         </Button>
       </div>

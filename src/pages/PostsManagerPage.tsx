@@ -1,7 +1,4 @@
-import { useEffect } from "react"
 import { Card } from "../shared/ui"
-import { usePosts } from "../features/post/model/usePosts.ts"
-import { usePostParams } from "../features/post/model/usePostParams.ts"
 import PostAddDialog from "../features/post/ui/PostAddDialog.tsx"
 import PostEditDialog from "../features/post/ui/PostEditDialog.tsx"
 import PostDetailDialog from "../features/post/ui/PostDetailDialog.tsx"
@@ -11,18 +8,6 @@ import CommentEditDialog from "../features/comment/ui/CommentEditDialog.tsx"
 import PostManagement from "../features/post/ui/PostManagement.tsx"
 
 const PostsManager = () => {
-  const { getPosts, fetchPostsByTag } = usePosts()
-  const { limit, skip, selectedTag, sortBy, sortOrder, updateURL } = usePostParams()
-
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag, limit, skip)
-    } else {
-      getPosts(limit, skip)
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <PostManagement />

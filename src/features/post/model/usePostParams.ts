@@ -44,6 +44,10 @@ export const usePostParams = () => {
     navigate(`?${params.toString()}`)
   }
 
+  useEffect(() => {
+    updateURL()
+  }, [skip, limit, sortBy, sortOrder, selectedTag, searchQuery])
+
   return {
     skip,
     setSkip,

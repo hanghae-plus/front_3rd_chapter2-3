@@ -1,5 +1,3 @@
-import { User } from "../../user/model/types"
-
 export interface NewPost {
   title: string
   body: string
@@ -17,5 +15,11 @@ export interface Post {
   }
   views: number
   userId: number
-  author: User
+}
+
+export interface PostDto {
+  posts: Post[]
+  total: number
+  skip: number
+  limit: number
 }

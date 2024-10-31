@@ -1,9 +1,9 @@
-import { User } from "../model/types.ts"
+import { User, UserDetail, UserDTO } from "../model/types.ts"
 
 export const fetchUsersApi = async () => {
   try {
     const response = await fetch("/api/users?limit=0&select=username,image")
-    const data = await response.json()
+    const data: UserDTO = await response.json()
 
     return data
   } catch (error) {
@@ -14,7 +14,7 @@ export const fetchUsersApi = async () => {
 export const fetchUserDetailApi = async (user: User) => {
   try {
     const response = await fetch(`/api/users/${user.id}`)
-    const data = await response.json()
+    const data: UserDetail = await response.json()
 
     return data
   } catch (error) {

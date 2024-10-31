@@ -1,10 +1,12 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../shared/ui"
-import { usePosts } from "../../features/post/model/usePosts.ts"
-import PostItem from "../../features/post/ui/PostItem.tsx"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
+import PostItem from "../../../features/post/ui/PostItem.tsx"
+import { Post } from "../../../entities/post/model/types.ts"
 
-export default function PostTable() {
-  const { posts } = usePosts()
+interface Props {
+  posts: Post[]
+}
 
+export default function PostTable({ posts }: Props) {
   return (
     <Table>
       <TableHeader>
@@ -16,11 +18,7 @@ export default function PostTable() {
           <TableHead className="w-[150px]">작업</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {posts.map((post) => (
-          <PostItem key={post.id} post={post} />
-        ))}
-      </TableBody>
+      <TableBody>{posts?.map((post) => <PostItem key={post.id} post={post} />)}</TableBody>
     </Table>
   )
 }
