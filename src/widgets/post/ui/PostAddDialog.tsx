@@ -1,9 +1,8 @@
 import { DialogProps } from "@radix-ui/react-dialog"
 import { useState } from "react"
 import { NewPost } from "../../../entities/post/model/types"
-import { useAddPostMutation } from "../../../features/post"
+import { PostAddButton } from "../../../features/post"
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -20,17 +19,6 @@ export const PostAddDialog = ({ onOpenChange, open }: Props) => {
     body: "",
     userId: 1,
   })
-
-  const { mutate: addPostMutate } = useAddPostMutation()
-
-  const addPost = (newPost: NewPost) => {
-    addPostMutate(newPost, {
-      onSuccess: () => {
-        onOpenChange(false)
-        setNewPost({ title: "", body: "", userId: 1 })
-      },
-    })
-  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -58,7 +46,13 @@ export const PostAddDialog = ({ onOpenChange, open }: Props) => {
               setNewPost({ ...newPost, userId: Number(e.target.value) })
             }
           />
-          <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
+          <PostAddButton
+            newPost={newPost}
+            onAddSuccess={() => {
+              onOpenChange(false)
+              setNewPost({ title: "", body: "", userId: 1 })
+            }}
+          />
         </div>
       </DialogContent>
     </Dialog>
