@@ -1,12 +1,12 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { usePostParams } from "../../post/model/postParamsStore"
-import { usePostQuery } from "../../post/model/postQueryStore"
+import { usePostParamsStore } from "../../post/model/postParamsStore"
+import { usePostQueryStore } from "../../post/model/postQueryStore"
 import { useTags } from "../../tag/model/useTags"
 
 export const TagSelect = () => {
-  const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParams()
+  const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParamsStore()
   const { tags } = useTags()
-  const { setActiveQuery } = usePostQuery()
+  const { setActiveQuery } = usePostQueryStore()
 
   const handleGetPostsByTag = (tag: string) => {
     setActiveQuery("tag")

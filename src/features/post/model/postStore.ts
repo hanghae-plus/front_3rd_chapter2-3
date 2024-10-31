@@ -11,7 +11,7 @@ const totalAtom = atom(0)
 
 const showPostDetailDialogAtom = atom(false)
 
-export const usePosts = () => {
+export const usePostsStore = () => {
   const [posts, setPosts] = useAtom(postsAtom)
   const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
   const [selectedPost, setSelectedPost] = useAtom<Post | null>(selectedPostAtom)

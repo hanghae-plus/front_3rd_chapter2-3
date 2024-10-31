@@ -1,8 +1,8 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { usePostParams } from "../../post/model/postParamsStore"
+import { usePostParamsStore } from "../../post/model/postParamsStore"
 
 export const SelectSortStandard = () => {
-  const { sortBy, setSortBy } = usePostParams()
+  const { sortBy, setSortBy } = usePostParamsStore()
 
   return (
     <Select value={sortBy} onValueChange={setSortBy}>

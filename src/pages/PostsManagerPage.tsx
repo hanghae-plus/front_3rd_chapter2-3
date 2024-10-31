@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
-import { Button, Card, CardContent, CardHeader, CardTitle, Loader, SearchInput } from "../shared/ui"
+import { Button, Card, CardContent, CardHeader, CardTitle, SearchInput } from "../shared/ui"
 import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
 import { UserModal } from "../features/user/ui/UserModal"
 import { PostAddModal } from "../features/post-add/ui/PostAddModal"
@@ -10,15 +10,14 @@ import { TagSelect } from "../features/post-filter/ui/TagSelect"
 import { SelectSortStandard } from "../features/post-sort/ui/SelectSortStandard"
 import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
-import { usePosts } from "../features/post/model/postStore"
-import { usePostParams } from "../features/post/model/postParamsStore"
-import { usePostQuery } from "../features/post/model/postQueryStore"
+import { usePostsStore } from "../features/post/model/postStore"
+import { usePostParamsStore } from "../features/post/model/postParamsStore"
+import { usePostQueryStore } from "../features/post/model/postQueryStore"
 
 const PostsManager = () => {
-  const [loading] = useState(false)
   const [searchQueryInput, setSearchQueryInput] = useState("")
 
-  const { setShowAddDialog } = usePosts()
+  const { setShowAddDialog } = usePostsStore()
   const {
     skip,
     limit,
@@ -29,8 +28,8 @@ const PostsManager = () => {
     selectedTag,
 
     updateURL,
-  } = usePostParams()
-  const { setActiveQuery } = usePostQuery()
+  } = usePostParamsStore()
+  const { setActiveQuery } = usePostQueryStore()
 
   // 게시물 검색
   const handleSearchPosts = () => {
@@ -70,7 +69,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <Loader /> : <PostTable />}
+          <PostTable />
 
           <Pagination />
         </div>

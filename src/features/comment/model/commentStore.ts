@@ -12,7 +12,7 @@ const showAddCommentDialogAtom = atom(false)
 const selectedCommentAtom = atom<Comment | null>(null)
 const showEditCommentDialogAtom = atom(false)
 
-export const useComments = (postId: number) => {
+export const useCommentsStore = (postId: number) => {
   const queryClient = useQueryClient()
 
   const [newComment, setNewComment] = useAtom(newCommentAtom)

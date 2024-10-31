@@ -1,17 +1,17 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
+import { Loader, Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
 import { PostItem } from "../../../features/post-item/ui/PostItem"
 import { useQueryPosts } from "../../../features/post/api/useQueryPosts"
 import { useQueryUsers } from "../../../features/user/api/useQueryUsers"
-import { usePostParams } from "../../../features/post/model/postParamsStore"
-import { usePosts } from "../../../features/post/model/postStore"
+import { usePostParamsStore } from "../../../features/post/model/postParamsStore"
+import { usePostsStore } from "../../../features/post/model/postStore"
 import { useEffect } from "react"
 
 export const PostTable = () => {
-  const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = usePostParams()
-  const { setTotal } = usePosts()
+  const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = usePostParamsStore()
+  const { setTotal } = usePostsStore()
 
   const { data: usersDTO } = useQueryUsers()
-  const { data: posts } = useQueryPosts(usersDTO?.users || [], {
+  const { data: posts, isLoading } = useQueryPosts(usersDTO?.users || [], {
     skip,
     limit,
     sortBy,
@@ -23,10 +23,6 @@ export const PostTable = () => {
   useEffect(() => {
     setTotal(posts?.length || 0)
   }, [posts, setTotal])
-
-  // if (isLoading) {
-  //   return <Loader />
-  // }
 
   return (
     <>
@@ -43,7 +39,7 @@ export const PostTable = () => {
         <TableBody>{posts?.map((post) => <PostItem key={post.id} post={post} />)}</TableBody>
       </Table>
 
-      {/* {isLoading && <Loader />} */}
+      {isLoading && <Loader />}
     </>
   )
 }

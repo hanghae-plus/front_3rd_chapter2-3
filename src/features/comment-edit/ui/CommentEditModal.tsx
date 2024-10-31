@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
-import { useComments } from "../../comment/model/commentStore"
+import { useCommentsStore } from "../../comment/model/commentStore"
 
 interface Props {
   postId: number
@@ -7,7 +7,7 @@ interface Props {
 
 export const CommentEditModal = ({ postId }: Props) => {
   const { showEditCommentDialog, setShowEditCommentDialog, selectedComment, setSelectedComment, updateComment } =
-    useComments(postId)
+    useCommentsStore(postId)
 
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>

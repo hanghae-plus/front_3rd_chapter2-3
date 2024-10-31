@@ -3,7 +3,7 @@ import { fetchPostsByTagApi, searchPostsApi } from "../../post-filter/api"
 import { fetchPostsApi } from "../../../entities/post/api"
 import { PostsDTO } from "../../../entities/post/model/types"
 import { User } from "../../../entities/user/model/types"
-import { usePostQuery } from "../model/postQueryStore"
+import { usePostQueryStore } from "../model/postQueryStore"
 import { PostWithUser } from "../model/types"
 
 export const useQueryPosts = (
@@ -18,7 +18,7 @@ export const useQueryPosts = (
   },
 ): UseQueryResult<PostWithUser[]> => {
   const { tag, searchQuery, skip, limit } = options
-  const { activeQuery } = usePostQuery()
+  const { activeQuery } = usePostQueryStore()
 
   return useQuery<PostsDTO, Error, PostWithUser[]>({
     queryKey: ["posts", { tag, searchQuery, limit, skip, activeQuery }],

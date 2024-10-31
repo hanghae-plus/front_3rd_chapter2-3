@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
 import { useQueryUser } from "../api/useQueryUser"
-import { useUser } from "../model/userStore"
+import { useUserStore } from "../model/userStore"
 
 export const UserModal = () => {
-  const { selectedUser, showUserModal, setShowUserModal } = useUser()
+  const { selectedUser, showUserModal, setShowUserModal } = useUserStore()
   const { data: userInfo } = useQueryUser(selectedUser?.id || -1)
 
   return (

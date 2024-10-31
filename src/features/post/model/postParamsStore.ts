@@ -11,7 +11,7 @@ const sortByAtom = atom(queryParams.get("sortBy") || "")
 const sortOrderAtom = atom(queryParams.get("sortOrder") || "asc")
 const selectedTagAtom = atom(queryParams.get("tag") || "")
 
-export const usePostParams = () => {
+export const usePostParamsStore = () => {
   const navigate = useNavigate()
   const location = useLocation()
 

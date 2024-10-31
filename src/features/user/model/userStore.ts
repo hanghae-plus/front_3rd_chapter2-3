@@ -4,7 +4,7 @@ import { atom, useAtom } from "jotai"
 const showUserModalAtom = atom(false)
 const selectedUserAtom = atom<User | null>(null)
 
-export const useUser = () => {
+export const useUserStore = () => {
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
   const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom)
 

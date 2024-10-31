@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { usePosts } from "../../post/model/postStore"
+import { usePostsStore } from "../../post/model/postStore"
 
 export const PostAddModal = () => {
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
 
-  const { addPost, showAddDialog, setShowAddDialog } = usePosts()
+  const { addPost, showAddDialog, setShowAddDialog } = usePostsStore()
 
   const handleAddPost = async () => {
     addPost(newPost)

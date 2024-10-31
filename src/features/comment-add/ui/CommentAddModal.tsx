@@ -1,12 +1,13 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
-import { useComments } from "../../comment/model/commentStore"
+import { useCommentsStore } from "../../comment/model/commentStore"
 
 interface Props {
   postId: number
 }
 
 export const CommentAddModal = ({ postId }: Props) => {
-  const { showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment, addComment } = useComments(postId)
+  const { showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment, addComment } =
+    useCommentsStore(postId)
 
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>

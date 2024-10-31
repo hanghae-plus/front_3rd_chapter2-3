@@ -2,18 +2,18 @@ import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react
 import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
-import { usePosts } from "../../post/model/postStore"
-import { useUser } from "../../user/model/userStore"
-import { usePostParams } from "../../post/model/postParamsStore"
+import { usePostsStore } from "../../post/model/postStore"
+import { useUserStore } from "../../user/model/userStore"
+import { usePostParamsStore } from "../../post/model/postParamsStore"
 
 interface Props {
   post: Post
 }
 
 export const PostItem = ({ post }: Props) => {
-  const { openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePosts()
-  const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParams()
-  const { openUserModal } = useUser()
+  const { openPostDetail, setSelectedPost, setShowEditDialog, deletePost } = usePostsStore()
+  const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsStore()
+  const { openUserModal } = useUserStore()
 
   return (
     <TableRow key={post.id}>
