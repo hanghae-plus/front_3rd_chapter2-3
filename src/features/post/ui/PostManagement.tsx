@@ -13,7 +13,7 @@ export default function PostManagement() {
   const { data: usersData } = useUsersQuery()
   const { data: postsData, isLoading } = usePostsQuery()
 
-  const posts = postsData?.posts && createPosts(postsData.posts, usersData.users)
+  const posts = postsData?.posts && usersData?.users && createPosts(postsData.posts, usersData.users)
 
   return (
     <>

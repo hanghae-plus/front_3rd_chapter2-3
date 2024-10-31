@@ -1,4 +1,4 @@
-import { NewComment, Comment } from "../model/types"
+import { NewComment, Comment, CommentDTO } from "../model/types"
 
 export const addCommentApi = async (newComment: NewComment) => {
   try {
@@ -18,7 +18,7 @@ export const addCommentApi = async (newComment: NewComment) => {
 export const fetchCommentsApi = async (postId: number) => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
-    const data = await response.json()
+    const data: CommentDTO = await response.json()
 
     return data
   } catch (error) {

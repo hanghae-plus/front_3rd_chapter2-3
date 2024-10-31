@@ -1,15 +1,15 @@
 import { Button } from "../../../shared/ui"
 import { Plus } from "lucide-react"
 import { useCommentDialog } from "../model/useCommentDialog.ts"
-import { useComments } from "../model/useComment.ts"
 import CommentItem from "./CommentItem.tsx"
+import { useCommentsQuery } from "../api/queries.ts"
 
 interface Props {
   postId: number
 }
 
 export default function CommentList({ postId }: Props) {
-  const { comments } = useComments()
+  const { data: commentsData } = useCommentsQuery(postId)
   const { setNewComment, setShowAddCommentDialog } = useCommentDialog()
 
   return (
@@ -28,7 +28,7 @@ export default function CommentList({ postId }: Props) {
         </Button>
       </div>
       <div className="space-y-1">
-        {comments[postId]?.map((comment) => <CommentItem comment={comment} postId={postId} />)}
+        {commentsData?.comments.map((comment) => <CommentItem key={comment.id} comment={comment} postId={postId} />)}
       </div>
     </div>
   )
