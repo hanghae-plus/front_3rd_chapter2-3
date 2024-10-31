@@ -1,6 +1,6 @@
 import { useAtom } from "jotai"
-import { commentsAtom } from "../../entities/model/comment/atoms"
-import { likeComment } from "../../shared/api/comment"
+import { commentsAtom } from "../../../entities/model/comment/atoms"
+import { likeComment } from "../../../shared/api/comment"
 
 export const useCommentLike = () => {
   const [comments, setComments] = useAtom(commentsAtom)

@@ -1,7 +1,7 @@
 import { useAtom } from "jotai"
-import { commentsAtom } from "../../entities/model/comment/atoms"
-import type { NewComment, Comment } from "../../shared/types"
-import { fetchComments, addComment, updateComment, deleteComment } from "../../shared/api/comment"
+import { commentsAtom } from "../../../entities/model/comment/atoms"
+import type { NewComment, Comment } from "../../../shared/types"
+import { fetchComments, addComment, updateComment, deleteComment } from "../../../shared/api/comment"
 
 export const useCommentActions = () => {
   const [comments, setComments] = useAtom(commentsAtom)

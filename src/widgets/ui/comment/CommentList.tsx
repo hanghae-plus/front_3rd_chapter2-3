@@ -1,4 +1,4 @@
-import { useComment } from "../../../features/model/useComment"
+import { useComment } from "../../../features/model/comment/useComment"
 import { CommentHeader } from "./CommentHeader"
 import { CommentItem } from "./CommentItem"
 import type { Comment } from "../../../shared/types"

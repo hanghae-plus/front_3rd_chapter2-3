@@ -5,7 +5,7 @@ import {
   showAddCommentDialogAtom,
   showEditCommentDialogAtom,
   selectedCommentAtom,
-} from "../../entities/model/comment/atoms"
+} from "../../../entities/model/comment/atoms"
 import { useCommentActions } from "./useCommentActions"
 import { useCommentLike } from "./useCommentLike"
 
