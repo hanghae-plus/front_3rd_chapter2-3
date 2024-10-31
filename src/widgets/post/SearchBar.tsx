@@ -11,7 +11,7 @@ const SearchBar = () => {
     <div className="flex items-center">
       <Search className="mr-2 text-gray-500" />
       <Input
-        placeholder="검색..."
+        placeholder="게시물 검색..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />

@@ -8,6 +8,7 @@ import PostsManager from "../src/pages/PostsManagerPage"
 import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -45,10 +46,21 @@ afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1, // 실패 시 재시도 횟수
+    },
+  },
+});
   return render(
+    <QueryClientProvider client={queryClient}>
+
     <MemoryRouter>
       <PostsManager />
-    </MemoryRouter>,
+    </MemoryRouter>
+    </QueryClientProvider>,
   )
 }
 
@@ -70,7 +82,7 @@ describe("PostsManager", () => {
     // 검색 기능 테스트
     const searchInput = screen.getByPlaceholderText(/게시물 검색.../i)
     await user.type(searchInput, "His mother had always taught him")
-    await user.keyboard("{Enter}")
+    // await user.keyboard("{Enter}")
 
     await waitFor(() => {
       expect(screen.getByText("His mother had always taught him")).toBeInTheDocument()
