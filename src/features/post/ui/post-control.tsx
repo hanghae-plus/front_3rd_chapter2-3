@@ -1,8 +1,9 @@
-import { PostItemType } from "@/entities/post/model/post-type";
-import { Button, TableCell } from "@/shared/ui";
-import { PostDetailDialog } from "@/widgets/postDetail/ui/post-detail-dialog";
-import { Edit2, MessageSquare, Trash2 } from "lucide-react";
 import { overlay } from "overlay-kit";
+
+import { Button, TableCell } from "@/shared/ui";
+import { PostDetailDialog } from "@/widgets/post/ui/post-detail-dialog";
+import { PostItemType } from "@/entities/post/model/post-type";
+import { Edit2, MessageSquare, Trash2 } from "lucide-react";
 
 export const PostControl = ({ post }: PostItemType) => {
   return (

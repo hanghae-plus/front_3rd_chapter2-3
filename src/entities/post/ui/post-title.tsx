@@ -1,6 +1,6 @@
 import { TableCell } from "@/shared/ui";
 import { PostItemType } from "../model/post-type";
-import { TagInPostItem } from "@/features/searchPostList/ui/tag-in-post-item";
+import { TagInPostItem } from "@/features/post/ui/tag-in-post-item";
 import { PostTitleHighlight } from "./post-title-highlight";
 
 export const PostTitle = ({ post }: PostItemType) => {

@@ -1,10 +1,10 @@
 import { BrowserRouter as Router } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OverlayProvider } from "overlay-kit";
 
 import Header from "./widgets/layout/ui/header/Header.tsx";
 import Footer from "./widgets/layout/ui/footer/Footer.tsx";
 import PostsManagerPage from "./pages/PostsManagerPage.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClinet = new QueryClient({
   defaultOptions: {

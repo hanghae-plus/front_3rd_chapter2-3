@@ -1,1 +1,1 @@
-export * from "./updateState";
+export * from "./update-state";

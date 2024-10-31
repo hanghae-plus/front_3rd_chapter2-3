@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import { UserType } from "./user-type";
 
 interface UserListState {

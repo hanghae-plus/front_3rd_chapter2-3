@@ -1,5 +1,6 @@
-import apiRequest from "@/shared/api";
 import { useQuery } from "@tanstack/react-query";
+
+import apiRequest from "@/shared/api";
 import { UserType } from "../model/user-type";
 
 interface FetchUserType {

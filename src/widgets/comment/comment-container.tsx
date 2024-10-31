@@ -1,9 +1,9 @@
+import { AddCommentButton } from "@/features/comment/ui/add-comment-button";
 import { PostWithAuthorType } from "@/entities/post/model/post-type";
 import { useComment } from "@/entities/comment/model/use-comment";
 import { CommentType } from "@/entities/comment/model/comment-type";
 import { CommentItemContent } from "@/entities/comment/ui/comment-item-content";
-import { AddCommentButton } from "@/features/addComment/ui/add-comment-button";
-import { CommentControl } from "@/features/commentControl/ui/comment-control";
+import { CommentControl } from "@/features/comment/ui/comment-control";
 
 interface CommentContainer {
   post: PostWithAuthorType;

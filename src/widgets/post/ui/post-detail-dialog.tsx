@@ -1,7 +1,7 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui";
+import { CommentContainer } from "@/widgets/comment/comment-container";
 import { PostWithAuthorType } from "@/entities/post/model/post-type";
 import { PostTitleHighlight } from "@/entities/post/ui/post-title-highlight";
-import { CommentContainer } from "@/widgets/comment/comment-container";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui";
 
 interface PostDetailDialogProps {
   post: PostWithAuthorType;

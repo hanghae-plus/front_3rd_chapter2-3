@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "@/shared/ui";
-import { useAddComment } from "../model/use-add-comment";
 import { PostWithAuthorType } from "@/entities/post/model/post-type";
 import { CommentType } from "@/entities/comment/model/comment-type";
+import { useAddComment } from "../model/use-add-comment";
 
 interface AddCommentDialogProps {
   isOpen: boolean;

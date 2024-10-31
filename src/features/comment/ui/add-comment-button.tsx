@@ -1,9 +1,10 @@
-import { Button } from "@/shared/ui";
-import { Plus } from "lucide-react";
 import { overlay } from "overlay-kit";
-import { AddCommentDialog } from "./add-comment-dialog";
+
+import { Button } from "@/shared/ui";
 import { PostWithAuthorType } from "@/entities/post/model/post-type";
 import { CommentType } from "@/entities/comment/model/comment-type";
+import { AddCommentDialog } from "./add-comment-dialog";
+import { Plus } from "lucide-react";
 
 interface AddCommmentButtonProps {
   post: PostWithAuthorType;

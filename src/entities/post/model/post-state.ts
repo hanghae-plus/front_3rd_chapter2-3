@@ -1,6 +1,7 @@
 import { create } from "zustand";
+
 import { PostWithAuthorType } from "./post-type";
-import { NewPostType } from "@/features/addPost/model/type";
+import { NewPostType } from "@/features/post/model/type";
 
 interface PostListState {
   postList: PostWithAuthorType[];

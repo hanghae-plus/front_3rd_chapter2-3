@@ -1,6 +1,6 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui";
 import { useUserInfo } from "../model/use-user-info";
 import { UserType } from "../model/user-type";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui";
 
 interface UserInfoDialogProps {
   user: UserType;

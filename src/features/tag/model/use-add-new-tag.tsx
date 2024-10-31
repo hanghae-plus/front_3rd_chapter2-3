@@ -1,6 +1,7 @@
+import { useEffect } from "react";
+
 import { useQueryTagList } from "@/entities/tag/api/fetch-tag-list";
 import { tagListState } from "@/entities/tag/model/tag-state";
-import { useEffect } from "react";
 
 export function useAddNewTag() {
   const { setNewTagList } = tagListState();

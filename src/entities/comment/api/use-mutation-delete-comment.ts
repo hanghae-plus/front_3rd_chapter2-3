@@ -1,5 +1,6 @@
-import apiRequest from "@/shared/api";
 import { useMutation } from "@tanstack/react-query";
+
+import apiRequest from "@/shared/api";
 
 const fetchDeleteComment = async (commentId: number) => {
   try {

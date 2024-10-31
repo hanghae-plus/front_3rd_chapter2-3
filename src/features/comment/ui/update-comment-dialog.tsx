@@ -1,5 +1,5 @@
-import { CommentType } from "@/entities/comment/model/comment-type";
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "@/shared/ui";
+import { CommentType } from "@/entities/comment/model/comment-type";
 import { useUpdateComment } from "../model/use-update-comment";
 
 interface UpdateCommentDialogProps {

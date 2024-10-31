@@ -1,7 +1,7 @@
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui";
-import { Search } from "lucide-react";
 import { tagListState } from "@/entities/tag/model/tag-state";
 import { useSearchQuery } from "../model/use-search-query";
+import { Search } from "lucide-react";
 
 const PostListSearch = () => {
   const { searchQuery, handleChangeQuery, handleSearchPostList } = useSearchQuery();

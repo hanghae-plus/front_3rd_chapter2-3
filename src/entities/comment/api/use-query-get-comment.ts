@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { CommentType } from "../model/comment-type";
+
 import apiRequest from "@/shared/api";
+import { CommentType } from "../model/comment-type";
 
 const fetchCommentList = async (postId: number): Promise<CommentType[]> => {
   try {

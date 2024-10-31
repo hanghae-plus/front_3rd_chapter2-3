@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import apiRequest from "@/shared/api";
 import { UserInfoType, UserType } from "../model/user-type";
-import { useQuery } from "@tanstack/react-query";
 
 const fetchUserInfo = async (user: UserType) => {
   try {

@@ -1,7 +1,8 @@
-import { TableCell } from "@/shared/ui";
-import { PostItemType } from "../model/post-type";
 import { overlay } from "overlay-kit";
+
+import { TableCell } from "@/shared/ui";
 import { UserInfoDialog } from "@/entities/user/ui/user-info-dialog";
+import { PostItemType } from "../model/post-type";
 
 export const PostAuthor = ({ post }: PostItemType) => {
   return (

@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import apiRequest from "@/shared/api";
 import { TagType } from "../model/tag-type";
-import { useQuery } from "@tanstack/react-query";
 
 const fetchTagList = async () => {
   try {

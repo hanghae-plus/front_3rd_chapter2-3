@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
+
 import { SearchQueryType } from "./search-query-type";
 import { useSearchPostList } from "./use-search-post-list";
 

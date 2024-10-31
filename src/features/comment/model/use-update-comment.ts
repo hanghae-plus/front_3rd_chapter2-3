@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { useMutationUpdateComment } from "@/entities/comment/api/use-mutation-update-comment";
 import { CommentType } from "@/entities/comment/model/comment-type";
-import { useState } from "react";
 
 export const useUpdateComment = (comment: CommentType) => {
   const [newContent, setNewContent] = useState<string>(comment.body);

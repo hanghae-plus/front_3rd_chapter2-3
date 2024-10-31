@@ -1,5 +1,5 @@
 import { CardHeader, CardTitle } from "@/shared/ui/card/card";
-import AddPostButton from "@/features/addPost/ui/post-add-button";
+import AddPostButton from "@/features/post/ui/post-add-button";
 
 const BoardHeader = () => {
   return (

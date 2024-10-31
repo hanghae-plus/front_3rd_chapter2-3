@@ -1,5 +1,6 @@
-import { cva, VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
+
+import { cva, VariantProps } from "class-variance-authority";
 
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,

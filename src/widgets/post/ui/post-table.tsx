@@ -1,11 +1,11 @@
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/shared/ui";
 import { postListState } from "@/entities/post/model/post-state";
 import { PostItemType } from "@/entities/post/model/post-type";
 import { PostAuthor } from "@/entities/post/ui/post-author";
 import { PostId } from "@/entities/post/ui/post-id";
 import { PostLike } from "@/entities/post/ui/post-like";
 import { PostTitle } from "@/entities/post/ui/post-title";
-import { PostControl } from "@/features/postControl/ui/post-control";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/shared/ui";
+import { PostControl } from "@/features/post/ui/post-control";
 
 const PostItem = ({ post }: PostItemType) => {
   return (

@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import apiRequest from "@/shared/api";
-import { NewPostType } from "@/features/addPost/model/type";
+import { NewPostType } from "@/features/post/model/type";
 
 interface FetchPostType {
   id: number;

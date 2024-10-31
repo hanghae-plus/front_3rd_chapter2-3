@@ -7,7 +7,7 @@ import {
   Input,
   Textarea,
 } from "@/shared/ui";
-import useAddPost from "@/features/addPost/model/use-add-post";
+import useAddPost from "../model/use-add-post";
 
 interface AddDialogProps {
   isOpen: boolean;

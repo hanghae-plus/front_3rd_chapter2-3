@@ -1,4 +1,4 @@
-import { useSearchQuery } from "@/features/searchPostList/model/use-search-query";
+import { useSearchQuery } from "@/features/post/model/use-search-query";
 
 interface PostTitleHighlightProps {
   text: string;

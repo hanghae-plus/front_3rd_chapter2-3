@@ -1,6 +1,6 @@
 import { TableCell } from "@/shared/ui";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { PostItemType } from "../model/post-type";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 
 export const PostLike = ({ post }: PostItemType) => {
   return (

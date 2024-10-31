@@ -1,10 +1,9 @@
 import { useState } from "react";
 
+import { updateState } from "@/shared/model";
 import { PostType } from "@/entities/post/model/post-type";
 import { postListState } from "@/entities/post/model/post-state";
-import { updateState } from "@/shared/model";
 import { useMutationAddPost } from "@/entities/post/api";
-
 import { NewPostType } from "./type";
 
 const initaialNewPost = { title: "", body: "", userId: 1 };

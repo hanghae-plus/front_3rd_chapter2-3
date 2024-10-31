@@ -1,10 +1,10 @@
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
+import apiRequest from "@/shared/api";
 import { userListState } from "@/entities/user/model/user-state";
 import { UserType } from "@/entities/user/model/user-type";
 import { PostType, PostWithAuthorType } from "../model/post-type";
-import apiRequest from "@/shared/api";
 
 const getBaseURL = (queryParams: { [key: string]: string }) => {
   if (queryParams.keyword !== undefined && queryParams.keyword !== "") {

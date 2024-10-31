@@ -1,5 +1,6 @@
-import apiRequest from "@/shared/api";
 import { useMutation } from "@tanstack/react-query";
+
+import apiRequest from "@/shared/api";
 import { CommentType } from "../model/comment-type";
 
 const fetchUpdateComment = async (commentBody: string, commentId: number): Promise<CommentType> => {

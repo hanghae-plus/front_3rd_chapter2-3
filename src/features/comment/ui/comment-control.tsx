@@ -2,10 +2,10 @@ import { overlay } from "overlay-kit";
 
 import { Button } from "@/shared/ui";
 import { CommentItemProps } from "@/widgets/comment/comment-container";
-import { Edit2, ThumbsUp, Trash2 } from "lucide-react";
 import { useLikeComment } from "../model/use-like-comment";
 import { useDeleteComment } from "../model/use-delete-comment";
 import { UpdateCommentDialog } from "./update-comment-dialog";
+import { Edit2, ThumbsUp, Trash2 } from "lucide-react";
 
 export const CommentControl = ({ commentList, comment, commenthandler }: CommentItemProps) => {
   const { updateComment, deleteComment } = commenthandler;
