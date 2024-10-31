@@ -1,12 +1,15 @@
 import { atom, useAtom } from "jotai"
 import { Post } from "../../../entities/post/model/type"
 import { createPostApi, deletePostApi, fetchPostsApi, searchPostsApi, updatePostApi } from "../../../entities/post/api"
-import { fetchPostsByTagApi, fetchUsersApi } from "../../../entities/user/api"
 import { User } from "../../../entities/user/model/type"
 import { PostsData } from "./type"
 import { UsersData } from "../../user/model/type"
 import { useLoading } from "../../../shared/model/useLoading"
 import { useSearch } from "../../../shared/model/useSearch"
+import { fetchUsersApi } from "../../../entities/user/api"
+import { fetchPostsByTagApi } from "../../../entities/tag/api"
+import { useComment } from "../../comment/model/store"
+import { useEffect } from "react"
 
 // jotai atoms
 export const postsAtom = atom<Post[]>([])
@@ -28,6 +31,7 @@ export const usePost = () => {
 
   const { setLoading } = useLoading()
   const { searchQuery, limit, skip } = useSearch()
+  const { fetchComments } = useComment()
 
   // 게시물 삭제
   const deletePost = async (id: number) => {
@@ -94,6 +98,12 @@ export const usePost = () => {
     setLoading(false)
   }
 
+  const openPostDetail = (post: Post) => {
+    setSelectedPost(post)
+    fetchComments(post.id)
+    setShowPostDetailDialog(true)
+  }
+
   return {
     posts,
     deletePost,
@@ -115,5 +125,6 @@ export const usePost = () => {
     searchPosts,
     setPosts,
     setTotal,
+    openPostDetail,
   }
 }

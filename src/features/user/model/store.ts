@@ -9,10 +9,5 @@ export const useUser = () => {
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
   const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom)
 
-  const openUserModal = async (user: User) => {
-    setSelectedUser(user)
-    setShowUserModal(true)
-  }
-
-  return { showUserModal, setShowUserModal, selectedUser, openUserModal }
+  return { showUserModal, setShowUserModal, selectedUser, setSelectedUser }
 }

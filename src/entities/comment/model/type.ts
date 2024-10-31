@@ -1,5 +1,4 @@
 import { PostId } from "../../post/model/type"
-import { User } from "../../user/model/type"
 
 export type Comment = {
   id: number

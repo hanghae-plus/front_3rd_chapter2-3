@@ -12,7 +12,7 @@ export const CommentContent = ({ postId }: { postId: PostId }) => {
         <CommentAddButton postId={postId} />
       </div>
       <div className="space-y-1">
-        {comments[postId]?.map((comment) => <CommentItem comment={comment} postId={postId} />)}
+        {comments[postId]?.map((comment) => <CommentItem key={comment.id} comment={comment} postId={postId} />)}
       </div>
     </div>
   )

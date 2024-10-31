@@ -11,19 +11,13 @@ import { PostTag } from "./PostTag"
 import { Key } from "react"
 import { useSearch } from "../../../shared/model/useSearch"
 
-export const PostTableRow = ({ post }: { key: Key; post: Post }) => {
-  const { fetchComments } = useComment()
-  const { setSelectedPost, setShowPostDetailDialog, deletePost, setShowEditDialog } = usePost()
+export const PostTableRow = ({ post, key }: { key: Key; post: Post }) => {
+  const { setSelectedPost, openPostDetail, deletePost, setShowEditDialog } = usePost()
   const { searchQuery } = useSearch()
-  // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
+  console.log("PostTableRow", post)
 
   return (
-    <TableRow key={post.id}>
+    <TableRow key={key}>
       <TableCell>{post.id}</TableCell>
       <TableCell>
         <div className="space-y-1">

@@ -1,6 +1,7 @@
 import { atom, useAtom } from "jotai"
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+import { usePost } from "../../features/post/model/store"
 
 const skipAtom = atom(0)
 const limitAtom = atom(10)
@@ -21,6 +22,8 @@ export const useSearch = () => {
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
+  // const { getPostsByTag, getPosts } = usePost()
+
   const updateURL = () => {
     const params = new URLSearchParams()
     if (skip) params.set("skip", skip.toString())
@@ -39,7 +42,16 @@ export const useSearch = () => {
     setSortBy(queryParams.get("sortBy") || "")
     setSortOrder(queryParams.get("sortOrder") || "asc")
     setSelectedTag(queryParams.get("tag") || "")
-  }, [location.search, setSkip, setLimit, setSearchQuery, setSortBy, setSortOrder, setSelectedTag])
+  }, [queryParams])
+
+  // useEffect(() => {
+  //   if (selectedTag) {
+  //     getPostsByTag(selectedTag)
+  //   } else {
+  //     getPosts(limit, skip)
+  //   }
+  //   updateURL()
+  // }, [])
 
   return {
     skip,

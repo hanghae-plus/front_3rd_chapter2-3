@@ -6,12 +6,13 @@ import { useComment } from "../model/store"
 import { PostId } from "../../../entities/post/model/type"
 import { Comment } from "../../../entities/comment/model/type"
 import { useSearch } from "../../../shared/model/useSearch"
+import { Key } from "react"
 
-export const CommentItem = ({ comment, postId }: { comment: Comment; postId: PostId }) => {
+export const CommentItem = ({ comment, postId, key }: { key: Key; comment: Comment; postId: PostId }) => {
   const { setSelectedComment, setShowEditCommentDialog, deleteComment } = useComment()
   const { searchQuery } = useSearch()
   return (
-    <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
+    <div key={key} className="flex items-center justify-between text-sm border-b pb-1">
       <div className="flex items-center space-x-2 overflow-hidden">
         <span className="font-medium truncate">{comment.user.username}:</span>
         <span className="truncate">
