@@ -14,7 +14,7 @@ import { PostEditDialog } from "../features/ui/post/PostEditDialog"
 import { PostDetailDialog } from "../widgets/ui/post/PostDetailDialog"
 import { CommentAddDialog } from "../features/ui/comment/CommentAddDialog"
 import { CommentEditDialog } from "../features/ui/comment/CommentEditDialog"
-import { UserDetailDialog } from "../widgets/ui/user/UserDetailDialog"
+import { UserDetailDialog } from "../features/ui/user/UserDetailDialog"
 
 const PostsManager = () => {
   const { tags } = useTag()
