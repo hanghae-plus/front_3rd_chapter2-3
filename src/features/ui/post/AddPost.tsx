@@ -1,11 +1,11 @@
-// src/components/PostsManager/AddPostDialog.tsx
-import { CardHeader, CardTitle } from "../../shared/ui/card"
+import { CardHeader, CardTitle } from "../../../shared/ui/card"
 import { Plus } from "lucide-react"
-import useManagePosts from "../useManagePosts"
-import { Button } from "../../shared/ui/Button"
+import { Button } from "../../../shared/ui/Button"
+import { useAtom } from "jotai"
+import { showAddDialogAtom } from "../../../app/atom"
 
 const AddPost = () => {
-  const { setShowAddDialog } = useManagePosts()
+  const [, setShowAddDialog] = useAtom(showAddDialogAtom)
 
   return (
     <CardHeader>

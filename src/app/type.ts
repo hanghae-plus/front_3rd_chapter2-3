@@ -22,13 +22,6 @@ export interface User {
   image?: string
 }
 
-// User 타입 정의
-// export interface User {
-//     id: number;
-//     username: string;
-//     image: string;
-//   }
-
 // Reaction 타입 정의
 export interface Reactions {
   likes: number

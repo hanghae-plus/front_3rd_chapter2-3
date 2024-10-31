@@ -1,10 +1,10 @@
 import { useAtom } from "jotai"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog"
-import { searchQueryAtom, selectedPostAtom, showPostDetailDialogAtom } from "../../app/atom"
-import { HighlightText } from "../highlightText"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
+import { searchQueryAtom, selectedPostAtom, showPostDetailDialogAtom } from "../../../app/atom"
+import { HighlightText } from "../../../features/HighlightText"
 
 interface PostDetailDialogProps {
-  renderComments: (postId: number) => JSX.Element // Adjust return type based on what renderComments returns
+  renderComments: (postId: number) => JSX.Element
 }
 
 const PostDetailDialog = ({ renderComments }: PostDetailDialogProps) => {

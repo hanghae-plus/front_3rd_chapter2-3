@@ -3,21 +3,22 @@ import { useNavigate } from "react-router-dom"
 import { Card, CardContent } from "../shared/ui/card"
 import { useAtom } from "jotai"
 import { skipAtom, limitAtom, searchQueryAtom, sortByAtom, sortOrderAtom, selectedTagAtom } from "../app/atom"
-import useFetchPosts from "../features/useFetchPosts"
-import useFetchPostsByTag from "../features/useFetchPostsByTag"
-import Pagination from "../features/ui/Pagenation"
+import Pagination from "../entities/ui/Pagenation"
 import SearchAndFilterControls from "../features/ui/SearchAndFilterControls"
-import PostTable from "../features/ui/PostTable"
-import Comments from "../features/ui/Comments"
-import AddPost from "../features/ui/AddPost"
-import AddPostDialog from "../features/ui/AddPostDialog"
-import EditPostDialog from "../features/ui/EditPostDialog"
-import AddCommentDialog from "../features/ui/AddCommentDialog"
-import EditCommentDialog from "../features/ui/EditCommentDialog"
-import PostDetailDialog from "../features/ui/PostDetailDialog"
-import UserModal from "../features/ui/UserModal"
+import PostTable from "../entities/ui/post/PostTable"
+import Comments from "../features/ui/comment/CommentList"
+import AddPost from "../features/ui/post/AddPost"
+import AddPostDialog from "../features/ui/post/AddPostDialog"
+import EditPostDialog from "../features/ui/post/EditPostDialog"
+import AddCommentDialog from "../features/ui/comment/AddCommentDialog"
+import EditCommentDialog from "../features/ui/comment/EditCommentDialog"
+import PostDetailDialog from "../entities/ui/post/PostDetailDialog"
+import UserModal from "../entities/ui/user/UserModal"
+import { useGetPostsByTag } from "../entities/api/post/useGetPostsByTag"
+import { useGetPosts } from "../entities/api/post/useGetPosts"
 
 const PostsManager = () => {
+  const navigate = useNavigate()
   // 상태 관리
   const [skip] = useAtom(skipAtom)
   const [limit] = useAtom(limitAtom)
@@ -26,19 +27,9 @@ const PostsManager = () => {
   const [sortOrder] = useAtom(sortOrderAtom)
   const [selectedTag] = useAtom(selectedTagAtom)
 
-  const { fetchPosts, loading } = useFetchPosts()
-  const { fetchPostsByTag } = useFetchPostsByTag()
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-    updateURL()
-  }, [])
+  const { data: getPosts, isLoading: postsLoading } = useGetPosts(limit, skip)
+  const { data: getPostsByTag, isLoading: postsByTagLoading } = useGetPostsByTag()
+  const isLoading = postsLoading || postsByTagLoading // 로딩 상태 통합
 
   const updateURL = () => {
     const params = new URLSearchParams()
@@ -50,6 +41,23 @@ const PostsManager = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
+
+  useEffect(() => {
+    updateURL() // URL 업데이트
+  }, [skip, limit, searchQuery, sortBy, sortOrder, selectedTag])
+
+  useEffect(() => {
+    // 로딩 상태를 확인하여 데이터를 가져옵니다.
+    if (!isLoading) {
+      if (selectedTag && getPostsByTag) {
+        // selectedTag가 있을 때 postsByTag 사용
+        console.log("태그에 따른 게시물:", getPostsByTag)
+      } else if (getPosts) {
+        // selectedTag가 없을 때 posts 사용
+        console.log("게시물:", getPosts)
+      }
+    }
+  }, [isLoading, selectedTag, getPostsByTag, getPosts])
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => <PostTable updateURL={updateURL} />
@@ -67,7 +75,7 @@ const PostsManager = () => {
           <SearchAndFilterControls updateURL={updateURL} />
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {postsLoading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
 
           {/* 페이지네이션 */}
           <Pagination />

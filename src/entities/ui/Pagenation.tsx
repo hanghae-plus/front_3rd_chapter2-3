@@ -2,7 +2,7 @@ import { useAtom } from "jotai"
 import { Button } from "../../shared/ui/Button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/select"
 import { limitAtom, skipAtom } from "../../app/atom"
-import usePosts from "../usePosts"
+import usePosts from "../../features/api/hooks/post/usePosts"
 
 const Pagination = () => {
   const [limit, setLimit] = useAtom(limitAtom)

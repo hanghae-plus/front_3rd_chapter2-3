@@ -1,12 +1,11 @@
-// SearchAndFilterControls.tsx
 import { Search } from "lucide-react"
 import { Input } from "../../shared/ui/Input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/select"
 import { useAtom } from "jotai"
 import { searchQueryAtom, selectedTagAtom, sortByAtom, sortOrderAtom } from "../../app/atom"
-import useSearchPosts from "../useSearchPosts"
-import useFetchPostsByTag from "../useFetchPostsByTag"
-import useFetchTags from "../useFetchTags"
+import useSearchPosts from "../api/hooks/useSearchPosts"
+import { useGetPostsByTag } from "../../entities/api/post/useGetPostsByTag"
+import useGetTags from "../../entities/api/tag/useGetTags"
 
 type SearchAndFilterControlsProps = {
   updateURL: () => void
@@ -17,9 +16,9 @@ const SearchAndFilterControls = ({ updateURL }: SearchAndFilterControlsProps) =>
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
   const [sortBy, setSortBy] = useAtom(sortByAtom)
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
-  const tags: string[] = useFetchTags()
   const { searchPosts } = useSearchPosts()
-  const { fetchPostsByTag } = useFetchPostsByTag()
+  const { data: getPostsByTag } = useGetPostsByTag()
+  const { data: tags = [] } = useGetTags()
 
   return (
     <div className="flex gap-4">
@@ -39,7 +38,7 @@ const SearchAndFilterControls = ({ updateURL }: SearchAndFilterControlsProps) =>
         value={selectedTag}
         onValueChange={(value) => {
           setSelectedTag(value)
-          fetchPostsByTag(value)
+          getPostsByTag(value)
           updateURL()
         }}
       >

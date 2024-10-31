@@ -1,14 +1,15 @@
 import { useAtom } from "jotai"
-import { Button } from "../../shared/ui/Button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog"
-import { Textarea } from "../../shared/ui/Textarea"
-import { selectedCommentAtom, showEditCommentDialogAtom } from "../../app/atom"
-import useManageComments from "../useManageComments"
+import { Button } from "../../../shared/ui/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
+import { Textarea } from "../../../shared/ui/Textarea"
+import { selectedCommentAtom, showEditCommentDialogAtom } from "../../../app/atom"
+import { useUpdateComment } from "../../api/hooks/comment/useManageComments"
 
 const EditCommentDialog = () => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
   const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
-  const { updateComment } = useManageComments()
+
+  const { mutate: updateComment } = useUpdateComment()
 
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
@@ -22,7 +23,7 @@ const EditCommentDialog = () => {
             value={selectedComment?.body || ""}
             onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={() => updateComment()}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

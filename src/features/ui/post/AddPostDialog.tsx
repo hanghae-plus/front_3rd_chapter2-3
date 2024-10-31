@@ -1,11 +1,21 @@
-import { Button } from "../../shared/ui/Button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog"
-import { Input } from "../../shared/ui/Input"
-import { Textarea } from "../../shared/ui/Textarea"
-import useManagePosts from "../useManagePosts"
+import { useAtom } from "jotai"
+import { Button } from "../../../shared/ui/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
+import { Input } from "../../../shared/ui/Input"
+import { Textarea } from "../../../shared/ui/Textarea"
+import { useAddPost } from "../../api/hooks/post/useManagePosts"
+import { newPostAtom, showAddDialogAtom } from "../../../app/atom"
 
 const AddPostDialog = () => {
-  const { addPost, showAddDialog, setShowAddDialog, newPost, setNewPost } = useManagePosts()
+  const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
+  const [newPost, setNewPost] = useAtom(newPostAtom)
+
+  const { mutate: addPost } = useAddPost()
+
+  const handleAddPost = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    addPost()
+  }
 
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
@@ -31,7 +41,7 @@ const AddPostDialog = () => {
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

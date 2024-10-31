@@ -1,6 +1,6 @@
 import { useAtom } from "jotai"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog"
-import { selectedUserAtom, showUserModalAtom } from "../../app/atom"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
+import { selectedUserAtom, showUserModalAtom } from "../../../app/atom"
 
 const UserModal = () => {
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
