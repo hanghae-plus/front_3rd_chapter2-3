@@ -1,2 +1,1 @@
-export * from './SearchInput'
-export * from './TagSelect'
+export * from './search-bar/SearchInput'

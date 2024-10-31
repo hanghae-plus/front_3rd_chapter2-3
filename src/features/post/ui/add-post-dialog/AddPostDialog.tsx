@@ -1,5 +1,5 @@
 import { DialogLayout } from '@shared/ui'
-import { postStore } from '../model/stores'
+import { postStore } from '../../model/stores'
 import AddPostForm from './AddPostForm'
 
 export const AddPostDialog = () => {

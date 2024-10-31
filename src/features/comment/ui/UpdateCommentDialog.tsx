@@ -1,8 +1,8 @@
-import { DialogLayout } from '@shared/ui'
-import { commentStore } from '../model/stores'
-import { useComments } from '../model/hooks'
-import { postStore } from '@features/post/model/stores'
 import { useCallback } from 'react'
+import { DialogLayout } from '@shared/ui'
+import { commentStore } from '@features/comment/model/stores'
+import { useComments } from '@features/comment/model/hooks'
+import { postStore } from '@features/post/model/stores'
 import { EditForm } from '@shared/ui'
 
 export const UpdateCommentDialog = () => {

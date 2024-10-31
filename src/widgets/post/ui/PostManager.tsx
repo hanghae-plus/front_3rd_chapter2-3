@@ -1,6 +1,6 @@
 import { Card } from '@shared/ui'
-import { ModalProvider, PostCardContent } from '@widgets/post/ui'
-import { PostCardHeader } from '@features/post/ui'
+import { ModalProvider, SearchBar } from '@widgets/post/ui'
+import { Pagination, PostCardHeader, PostTable } from '@features/post/ui'
 
 const PostManager = () => {
   return (
@@ -8,7 +8,13 @@ const PostManager = () => {
       <PostCardHeader />
 
       <Card.Content>
-        <PostCardContent />
+        <div className="flex flex-col gap-4">
+          <SearchBar />
+
+          <PostTable />
+
+          <Pagination />
+        </div>
       </Card.Content>
 
       <ModalProvider />

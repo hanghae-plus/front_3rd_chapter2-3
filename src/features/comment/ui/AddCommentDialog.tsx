@@ -1,7 +1,7 @@
 import { DialogLayout } from '@shared/ui'
-import { useComments } from '../model/hooks'
+import { useComments } from '@features/comment/model/hooks'
 import { postStore } from '@features/post/model/stores'
-import { commentStore } from '../model/stores'
+import { commentStore } from '@features/comment/model/stores'
 import { useCallback } from 'react'
 import { EditForm } from '@shared/ui'
 

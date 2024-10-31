@@ -1,6 +1,6 @@
 import { Button, Card } from '@shared/ui'
 import { Plus } from 'lucide-react'
-import { postStore } from '../model/stores'
+import { postStore } from '@features/post/model/stores'
 import { useCallback } from 'react'
 
 export const PostCardHeader = () => {

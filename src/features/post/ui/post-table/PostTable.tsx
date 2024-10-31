@@ -1,5 +1,5 @@
 import { Table } from '@shared/ui'
-import { usePosts, useUrlSync } from '../model/hooks'
+import { usePosts, useUrlSync } from '@features/post/model/hooks'
 import { PostTableHeader } from '@entities/post/ui'
 import { PostTableBody } from './PostTableBody'
 

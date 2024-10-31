@@ -1,6 +1,6 @@
 import { Button, Input, Textarea } from '@shared/ui'
-import { postStore } from '../model/stores'
-import { usePosts } from '../model/hooks'
+import { postStore } from '../../model/stores'
+import { usePosts } from '../../model/hooks'
 import { useCallback } from 'react'
 import { Post } from '@entities/comment/model/types'
 

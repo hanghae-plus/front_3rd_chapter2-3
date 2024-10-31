@@ -1,7 +1,10 @@
+import { AppLayout } from '@app/layouts'
 import PostManager from '@widgets/post/ui/PostManager'
 
-const PostPage = () => {
-  return <PostManager />
+export const PostPage = () => {
+  return (
+    <AppLayout>
+      <PostManager />
+    </AppLayout>
+  )
 }
-
-export default PostPage

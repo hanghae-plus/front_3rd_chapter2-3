@@ -1,5 +1,5 @@
-import { SearchBar } from './SearchBar'
-import { PostTable } from '@features/post/ui/PostTable'
+import { SearchBar } from '../../../features/search/ui/search-bar/SearchBar'
+import { PostTable } from '@features/post/ui'
 import { Pagination } from '@features/post/ui'
 
 export const PostCardContent = () => {

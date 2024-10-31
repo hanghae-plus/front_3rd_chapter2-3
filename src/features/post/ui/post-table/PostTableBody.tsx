@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { filterStore } from '../model/stores'
-import { usePosts } from '../model/hooks'
+import { filterStore } from '@features/post/model/stores'
+import { usePosts } from '@features/post/model/hooks'
 import { useUsers } from '@features/user/model/hooks'
 import { HighlightText, Table } from '@shared/ui'
 import { UserAvatar } from '@entities/user/ui'
