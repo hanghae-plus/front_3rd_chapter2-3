@@ -17,6 +17,8 @@ import { Post, Tag } from "../entities/post/model/types"
 import { Comment } from "../entities/comment/model/types"
 import useFetchPosts from "../features/post/api/useFetchPosts"
 import useManageComments from "../features/comment/api/useFetchComments"
+import useSelectedUserModal from "../features/user/api/useSelectedUserModal"
+import UserModal from "../features/user/ui/UserModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -35,6 +37,7 @@ const PostsManager = () => {
     removeLocalPost,
   } = useFetchPosts()
   const { comments, fetchComments, createComment, updateComment, deleteComment, likeComment } = useManageComments()
+  const { selectedUser, handleSetSelectedUser, showUserModal, handleCloseUserModal } = useSelectedUserModal()
 
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -53,8 +56,6 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -180,8 +181,7 @@ const PostsManager = () => {
   const openUserModal = async (user: User) => {
     try {
       const userData = await userApi.fetchUser(user.id)
-      setSelectedUser(userData)
-      setShowUserModal(true)
+      handleSetSelectedUser(userData)
     } catch (error) {
       console.error("사용자 정보 가져오기 오류:", error)
     }
@@ -546,38 +546,11 @@ const PostsManager = () => {
       </Dialog.Dialog>
 
       {/* 사용자 모달 */}
-      <Dialog.Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <Dialog.DialogContent>
-          <Dialog.DialogHeader>
-            <Dialog.DialogTitle>사용자 정보</Dialog.DialogTitle>
-          </Dialog.DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
-        </Dialog.DialogContent>
-      </Dialog.Dialog>
+      <UserModal
+        selectedUser={selectedUser}
+        showUserModal={showUserModal}
+        handleCloseUserModal={handleCloseUserModal}
+      />
     </Card.Card>
   )
 }
