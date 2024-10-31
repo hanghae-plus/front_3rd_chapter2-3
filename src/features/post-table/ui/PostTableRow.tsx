@@ -1,21 +1,67 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+
+import { useModalStore } from '~/features/user-modal/model/userModalStore';
 
 import { deletePost } from '~/entities/post/api/postApi';
 import { Post } from '~/entities/post/model/types';
+import { fetchUserById } from '~/entities/user/api/userApi';
+import { User } from '~/entities/user/model/types';
+import { useUserStore } from '~/entities/user/model/userStore';
 
 import { Button } from '~/shared/ui/Button';
 import { HighlightText } from '~/shared/ui/HighlightText';
 import { TableCell, TableRow } from '~/shared/ui/Table';
 
 export const PostTableRow = ({ post }: { post: Post }) => {
+  // URL query params
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search');
+  const selectedTag = searchParams.get('tag');
+
+  // modal store
+  const setShowUserModal = useModalStore.use.setShowUserModal();
+
+  // user store
+  const selectUser = useUserStore.use.selectUser();
+
+  // 사용자 모달 열기
+  const openUserModal = async (user: User) => {
+    try {
+      const userData = await fetchUserById(user.id);
+      selectUser(userData);
+      setShowUserModal(true);
+    } catch (error) {
+      console.error('사용자 정보 가져오기 오류:', error);
+    }
+  };
+
+  // 댓글 가져오기
+  const fetchComments = async (postId: number) => {
+    if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+    try {
+      const data = await fetchAllCommentsByPostId(postId);
+
+      setComments((prev) => ({ ...prev, [postId]: data.comments }));
+    } catch (error) {
+      console.error('댓글 가져오기 오류:', error);
+    }
+  };
+
+  // 게시물 상세 보기
+  const openPostDetail = (post) => {
+    setSelectedPost(post);
+    fetchComments(post.id);
+    setShowPostDetailDialog(true);
+  };
+
   return (
     <TableRow>
       <TableCell>{post.id}</TableCell>
       <TableCell>
         <div className="space-y-1">
           <div>
-            <HighlightText title={post.title} highlight={searchQuery} />
-            {highlightText(post.title, searchQuery)}
+            <HighlightText text={post.title} highlight={searchQuery} />
           </div>
 
           <div className="flex flex-wrap gap-1">
@@ -28,8 +74,7 @@ export const PostTableRow = ({ post }: { post: Post }) => {
                     : 'text-blue-800 bg-blue-100 hover:bg-blue-200'
                 }`}
                 onClick={() => {
-                  setSelectedTag(tag);
-                  updateURL();
+                  setSearchParams({ tag: tag });
                 }}
               >
                 {tag}

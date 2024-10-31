@@ -1,8 +1,8 @@
 // where are you located in?
 
-export const HighlightText = (text: string, highlight: string) => {
+export const HighlightText = ({ text, highlight }: { text: string; highlight: string | null }) => {
   if (!text) return null;
-  if (!highlight.trim()) {
+  if (!highlight?.trim()) {
     return <span>{text}</span>;
   }
   const regex = new RegExp(`(${highlight})`, 'gi');

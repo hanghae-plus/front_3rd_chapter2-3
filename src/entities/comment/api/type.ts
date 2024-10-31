@@ -1,4 +1,4 @@
-import { UserDto } from '~/entities/user/api/type';
+import { UserDto } from '~/entities/user/model/types';
 
 export type CommentResponseDto = {
   id: number;

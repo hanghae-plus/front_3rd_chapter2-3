@@ -1,6 +1,8 @@
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+
+import { useModalStore } from '~/features/user-modal/model/userModalStore';
 
 import {
   addComment as addCommentApi,
@@ -17,7 +19,7 @@ import {
 } from '~/entities/post/api/postApi';
 import { PostResponseDto } from '~/entities/post/model/types';
 import { fetchAllPostTags, fetchPostsByTag as fetchPostsByTagApi } from '~/entities/tag/api/tagApi';
-import { TagResponseDto } from '~/entities/tag/api/type';
+import { TagResponseDto } from '~/entities/tag/model/type';
 import { fetchAllUser } from '~/entities/user/api/userApi';
 
 import { Button } from '~/shared/ui/Button';
@@ -33,21 +35,20 @@ const PostsManager = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // 모달 상태관리
+  const modalStore = useModalStore();
+
   // 상태 관리
   const [posts, setPosts] = useState<any>([]);
   const [total, setTotal] = useState(0);
-  const [skip, setSkip] = useState(parseInt(queryParams.get('skip') || '0'));
-  const [limit, setLimit] = useState(parseInt(queryParams.get('limit') || '10'));
-  const [searchQuery, setSearchQuery] = useState(queryParams.get('search') || '');
-  const [selectedPost, setSelectedPost] = useState<PostResponseDto | null>(null);
-  const [sortBy, setSortBy] = useState(queryParams.get('sortBy') || '');
-  const [sortOrder, setSortOrder] = useState(queryParams.get('sortOrder') || 'asc');
+
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', body: '', userId: 1 });
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<TagResponseDto[]>([]);
-  const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
 
   const [comments, setComments] = useState<Record<string, CommentResponseDto[]>>({});
   const [selectedComment, setSelectedComment] = useState<CommentResponseDto | null>(null);
@@ -55,8 +56,16 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false);
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false);
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
+
   const [selectedUser, setSelectedUser] = useState(null);
+
+  const [skip, setSkip] = useState(parseInt(queryParams.get('skip') || '0'));
+  const [limit, setLimit] = useState(parseInt(queryParams.get('limit') || '10'));
+  const [searchQuery, setSearchQuery] = useState(queryParams.get('search') || '');
+  const [selectedPost, setSelectedPost] = useState<PostResponseDto | null>(null);
+  const [sortBy, setSortBy] = useState(queryParams.get('sortBy') || '');
+  const [sortOrder, setSortOrder] = useState(queryParams.get('sortOrder') || 'asc');
+  const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -263,17 +272,17 @@ const PostsManager = () => {
     setShowPostDetailDialog(true);
   };
 
-  // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`);
-      const userData = await response.json();
-      setSelectedUser(userData);
-      setShowUserModal(true);
-    } catch (error) {
-      console.error('사용자 정보 가져오기 오류:', error);
-    }
-  };
+  // // 사용자 모달 열기
+  // const openUserModal = async (user) => {
+  //   try {
+  //     const response = await fetch(`/api/users/${user.id}`);
+  //     const userData = await response.json();
+  //     setSelectedUser(userData);
+  //     setShowUserModal(true);
+  //   } catch (error) {
+  //     console.error('사용자 정보 가져오기 오류:', error);
+  //   }
+  // };
 
   useEffect(() => {
     fetchTags();
