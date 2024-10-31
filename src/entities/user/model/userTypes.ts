@@ -17,3 +17,15 @@ export interface User {
     title: string
   }
 }
+
+export interface UserResponse {
+  limit: number
+  skip: number
+  total: number
+  users: User[]
+}
+
+export interface UserState {
+  selectedUser: User | null
+  setSelectedUser: (user: User | null) => void
+}
