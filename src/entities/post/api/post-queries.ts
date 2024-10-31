@@ -1,11 +1,11 @@
-import { UseQueryPosts } from "@/features/post/model/types";
+import { PostSearchParamsKey } from "@/features/post/model/types";
 import { createQueryKey } from "@/shared/lib/api";
 import { queryOptions } from "@tanstack/react-query";
 import { postApi } from "./post-api";
 
 export const postQueries = {
   all: () => ["posts"],
-  list: (queries: UseQueryPosts) =>
+  list: (queries: PostSearchParamsKey) =>
     queryOptions({
       queryKey: createQueryKey(postQueries.all(), "list", queries),
       queryFn: async () => {

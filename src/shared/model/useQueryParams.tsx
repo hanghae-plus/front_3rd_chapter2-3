@@ -1,8 +1,8 @@
-import { UseQueryPosts } from "@/features/post/model/types";
+import { PostSearchParamsKey } from "@/features/post/model/types";
 import { parseAsInteger, parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
 import { useCallback, useEffect, useState } from "react";
 
-type UpdatableQueryKey = keyof UseQueryPosts;
+type UpdatableQueryKey = keyof PostSearchParamsKey;
 
 // 커스텀 파서 생성
 const sortOrderParser = parseAsStringEnum(["asc", "desc"] as const).withDefault("asc");

@@ -4,7 +4,7 @@ import { userApi } from "@/entities/user/api/user-api";
 import { apiHandler } from "@/shared/api/apiHandler";
 import { addItemInArray, filterByID, findById, updateByID } from "@/shared/lib/array";
 import { create } from "zustand";
-import { UseQueryPosts } from "./types";
+import { PostSearchParamsKey } from "./types";
 
 type PostsStates = {
   posts: Post[];
@@ -22,7 +22,7 @@ type PostApiActions = {
   addPost: (newPost: NewPost) => void;
   updatePost: (post: Post) => void;
   deletePost: (id: number) => void;
-  fetchPosts: (queries: UseQueryPosts) => void;
+  fetchPosts: (queries: PostSearchParamsKey) => void;
   fetchPostsByTag: (tag: string) => void;
   searchPosts: (props: useQuerySearchPostsProps) => void;
 };

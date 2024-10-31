@@ -1,4 +1,4 @@
-export type UseQueryPosts = {
+export type PostSearchParamsKey = {
   limit: number;
   skip: number;
   sortBy: string;

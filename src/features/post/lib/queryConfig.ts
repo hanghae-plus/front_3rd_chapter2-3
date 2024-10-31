@@ -1,7 +1,7 @@
 import { postQueries } from "@/entities/post/api/post-queries";
-import { UseQueryPosts } from "../model/types";
+import { PostSearchParamsKey } from "../model/types";
 
-export const getQueryConfig = ({ search, tag, priorityKey, limit, skip, sortBy, sortOrder }: UseQueryPosts) => {
+export const getQueryConfig = ({ search, tag, priorityKey, limit, skip, sortBy, sortOrder }: PostSearchParamsKey) => {
   const isSearch = !!search && priorityKey === "search";
   const isTag = !!tag && tag !== "all" && priorityKey === "tag";
 

@@ -2,9 +2,9 @@ import { mergePostsWithUsers } from "@/entities/post/lib/post-query-helper";
 import { userQueries } from "@/entities/user/api/user-queries";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryConfig } from "../lib/queryConfig";
-import { UseQueryPosts } from "../model/types";
+import { PostSearchParamsKey } from "../model/types";
 
-export const useQueryPosts = (queries: UseQueryPosts) => {
+export const useQueryPosts = (queries: PostSearchParamsKey) => {
   const queryConfig = getQueryConfig(queries);
 
   const postsQuery = useQuery(queryConfig);
