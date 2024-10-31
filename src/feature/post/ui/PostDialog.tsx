@@ -5,7 +5,7 @@ import { Button } from "../../../shared/ui/button/Button"
 import { usePostHandler } from "../model/postHandler"
 import { newPostAtom, selectedPostAtom, showAddDialogAtom, showEditDialogAtom } from "../model/postAtoms"
 import { useAtom } from "jotai"
-import { Post } from "../model/postType"
+import { Post } from "../../../entities/types/postType"
 
 // 게시물 추가 대화상자
 export const AddPostDialog = () => {

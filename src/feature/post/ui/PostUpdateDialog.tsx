@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { Input, Textarea } from "../../../shared/ui/input/Text"
 import { usePostHandler } from "../model/postHandler"
 import { selectedPostAtom, showEditDialogAtom } from "../model/postAtoms"
-import { Post } from "../model/postType"
+import { Post } from "../../../entities/types/postType"
 
 export const PostUpdateDialog = () => {
   const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)

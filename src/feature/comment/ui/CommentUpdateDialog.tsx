@@ -23,7 +23,7 @@ export const CommentUpdateDialog = () => {
             value={selectedComment?.body || ""}
             onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={() => updateComment(selectedComment)}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

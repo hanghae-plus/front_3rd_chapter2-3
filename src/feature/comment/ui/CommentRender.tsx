@@ -12,7 +12,7 @@ import {
 } from "../model/commentAtom"
 import { commentFetch } from "../model/commentFetch"
 import { useEffect } from "react"
-import { Comment } from "../model/commentTypes"
+import { Comment } from "../../../entities/types/commentTypes"
 
 // 컴포넌트 prop 타입 정의
 interface CommentRenderProps {

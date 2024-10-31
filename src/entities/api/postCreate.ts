@@ -1,4 +1,4 @@
-import { Post, PostForm } from "../model/types"
+import { Post, PostForm } from "../types/types"
 
 export const postCreate = async (newPost: PostForm): Promise<Post> => {
   try {

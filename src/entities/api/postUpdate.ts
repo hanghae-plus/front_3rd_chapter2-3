@@ -1,4 +1,4 @@
-import { Post } from "../model/types"
+import { Post } from "../types/types"
 
 export const PostUpdate = async (selectedPost: Partial<Post>): Promise<Post> => {
   try {

@@ -18,9 +18,9 @@ import { useUpdateURL } from "../../../shared/model/urlUtils"
 import { useEffect, useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/select/Select"
 import { SearchPost } from "./Search"
-import { Post } from "../model/postType"
+import { Post } from "../../../entities/types/postType"
 import { postFetch, postFetchTags } from "../../../entities/model/postFetch"
-import { UserData } from "../../../entities/model/types"
+import { UserData } from "../../../entities/types/types"
 
 export const SearchAndFilter: React.FC = () => {
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)

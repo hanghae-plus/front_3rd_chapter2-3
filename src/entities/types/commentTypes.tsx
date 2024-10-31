@@ -1,4 +1,4 @@
-import { UserData } from "../../../entities/model/types"
+import { UserData } from "./types"
 
 export interface Comment {
   id: number

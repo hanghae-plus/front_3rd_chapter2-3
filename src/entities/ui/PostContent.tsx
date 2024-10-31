@@ -18,7 +18,7 @@ import { loadingAtom } from "../model/atom"
 import { useEffect } from "react"
 import { postFetch } from "../model/postFetch"
 import { useUpdateURL } from "../../shared/model/urlUtils"
-import { Post, UserData } from "../model/types"
+import { Post, UserData } from "../types/types"
 
 export const PostContent = () => {
   const [total, setTotal] = useAtom(totalAtom)

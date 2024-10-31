@@ -3,11 +3,13 @@ import { commentCreateApi } from "../api/commentCreateApi"
 import { commentDeleteApi } from "../api/commentDeleteApi"
 import { commentLikeApi } from "../api/commentLikeAip"
 import { commentUpdateApi } from "../api/commentUpdateApi"
+import { showEditCommentDialogAtom } from "../model/commentAtom"
 
 const commentsAtom = atom<Comment[]>([])
 
 export const useCommentHandler = () => {
   const [, setComments] = useAtom(commentsAtom)
+  const [, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
 
   // 댓글 추가
   const commentCreate = async (newComment: Omit<Comment, "id" | "likes">) => {
@@ -39,10 +41,12 @@ export const useCommentHandler = () => {
   }
 
   // 댓글 업데이트
-  const updateComment = async (selectedComment: Pick<Comment, "id" | "body">) => {
-    const data = commentUpdateApi(selectedComment)
+  const updateComment = async (selectedComment: Comment) => {
+    const data = await commentUpdateApi(selectedComment)
+    console.log("data", data)
 
     setComments((prev) => prev.map((comment) => (comment.id === data.id ? data : comment)))
+    setShowEditCommentDialog(false)
   }
 
   return {

@@ -8,7 +8,7 @@ import {
   showPostDetailDialogAtom,
   showUserModalAtom,
 } from "./postAtoms"
-import { Post } from "./postType"
+import { Post } from "../../../entities/types/postType"
 import { PostUpdate } from "../../../entities/api/postUpdate"
 import { postCreate } from "../../../entities/api/postCreate"
 import { postDelete } from "../../../entities/api/postDelete"

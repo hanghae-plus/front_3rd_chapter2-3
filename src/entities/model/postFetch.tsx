@@ -1,4 +1,4 @@
-import { Post, PostFetchResponse, Tag } from "../../feature/post/model/postType"
+import { Post, PostFetchResponse, Tag } from "../types/postType"
 
 export const postFetchTags = async (): Promise<Tag[] | undefined> => {
   try {
@@ -24,6 +24,11 @@ export const postFetch = async ({ limit, skip }: { limit: number; skip: number }
       ...post,
       author: usersData.users.find((user: { id: number }) => user.id === post.userId),
     }))
+
+    console.log("postFetch", {
+      posts: postsWithUsers,
+      total: postsData.total,
+    })
 
     return {
       posts: postsWithUsers,

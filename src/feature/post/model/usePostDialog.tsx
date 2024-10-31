@@ -6,7 +6,7 @@ import {
   showPostDetailDialogAtom,
   showUserModalAtom,
 } from "./postAtoms"
-import { Post } from "./postType"
+import { Post } from "../../../entities/types/postType"
 import { PostUpdate } from "../../../entities/api/postUpdate"
 import { commentFetch } from "../../comment/model/commentFetch"
 import { commentsAtom } from "../../comment/model/commentAtom"

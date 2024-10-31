@@ -1,5 +1,5 @@
 import { atom } from "jotai"
-import { Post, Tag } from "./postType"
+import { Post, Tag } from "../../../entities/types/postType"
 
 // 게시물 리스트 상태
 export const postsAtom = atom<Post[]>([]) // 초기값은 빈 배열

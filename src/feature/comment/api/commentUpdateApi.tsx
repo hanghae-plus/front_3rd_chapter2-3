@@ -1,4 +1,6 @@
 export const commentUpdateApi = async (selectedComment: Comment) => {
+  console.log("selectedComment", selectedComment)
+
   if (!selectedComment) {
     return
   }
@@ -9,7 +11,7 @@ export const commentUpdateApi = async (selectedComment: Comment) => {
       body: JSON.stringify({ body: selectedComment.body }),
     })
 
-    return { data, error: null }
+    return selectedComment
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error"
     console.error("댓글 업데이트 오류:", errorMessage)

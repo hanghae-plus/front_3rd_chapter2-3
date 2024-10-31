@@ -1,4 +1,4 @@
-import { ApiResponse } from "../../feature/comment/model/commentTypes"
+import { ApiResponse } from "../types/commentTypes"
 
 // API 에러 처리
 export class ApiError extends Error {
