@@ -1,7 +1,7 @@
 // 사용자 모달
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
-import { useUser } from "../../features/user/model/store"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { useUser } from "../model/store"
 
 export const UserModal = () => {
   const { showUserModal, setShowUserModal, selectedUser } = useUser()

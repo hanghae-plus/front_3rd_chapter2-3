@@ -1,6 +1,6 @@
 import { Key } from "react"
-import { TagName } from "../../entities/tag/model/type"
-import { useSearch } from "../../features/post/model/useSearch"
+import { TagName } from "../../../entities/tag/model/type"
+import { useSearch } from "../../../shared/model/useSearch"
 
 export const PostTag = ({ tag }: { key: Key; tag: TagName }) => {
   const { selectedTag, setSelectedTag, updateURL } = useSearch()

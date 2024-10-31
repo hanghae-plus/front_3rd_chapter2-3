@@ -1,10 +1,10 @@
 import { CardContent } from "../../shared/ui"
 
 import { PostTable } from "./PostTable"
-import { PostSearch } from "./PostSearch"
-import { PostSelect } from "./PostSelect"
-import { PostPagination } from "./PostPagination"
-import { usePost } from "../../features/post/model/usePost"
+import { PostSearch } from "../../features/post/ui/PostSearch"
+import { PostSelect } from "../../features/post/ui/PostSelect"
+import { PostPagination } from "../../features/post/ui/PostPagination"
+import { usePost } from "../../features/post/model/store"
 
 const PostsContent = ({ loading }: { loading: boolean }) => {
   const { posts, total } = usePost()

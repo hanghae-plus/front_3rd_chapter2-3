@@ -1,6 +1,6 @@
 import { Post } from "../../entities/post/model/type"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../shared/ui"
-import { PostTableRow } from "./PostTableRow"
+import { PostTableRow } from "../../features/post/ui/PostTableRow"
 
 export const PostTable = ({ posts }: { posts: Post[] }) => (
   <Table>

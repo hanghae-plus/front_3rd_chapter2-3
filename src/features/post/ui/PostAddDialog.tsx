@@ -1,7 +1,7 @@
 // 게시물 추가 대화상자
 
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
-import { usePost } from "../../features/post/model/usePost"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
+import { usePost } from "../model/store"
 
 export const PostAddDialog = () => {
   const { showAddDialog, setShowAddDialog, setNewPost, newPost, addPost } = usePost()

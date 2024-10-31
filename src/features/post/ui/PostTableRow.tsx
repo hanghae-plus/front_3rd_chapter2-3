@@ -1,15 +1,15 @@
 import { Edit2, MessageSquare, Trash2 } from "lucide-react"
-import { Post } from "../../entities/post/model/type"
-import { TagName } from "../../entities/tag/model/type"
-import { useComment } from "../../features/comment/model/store"
-import { usePost } from "../../features/post/model/usePost"
-import { Button, TableCell, TableRow } from "../../shared/ui"
-import HighlightText from "../ui/HighlightText"
+import { Post } from "../../../entities/post/model/type"
+import { TagName } from "../../../entities/tag/model/type"
+import { useComment } from "../../comment/model/store"
+import { usePost } from "../model/store"
+import { Button, TableCell, TableRow } from "../../../shared/ui"
+import HighlightText from "../../../widgets/common/HighlightText"
 import { PostAuthor } from "./PostAuthor"
-import { PostReaction } from "./PostReaction"
+import { PostReaction } from "../../../widgets/post/PostReaction"
 import { PostTag } from "./PostTag"
 import { Key } from "react"
-import { useSearch } from "../../features/post/model/useSearch"
+import { useSearch } from "../../../shared/model/useSearch"
 
 export const PostTableRow = ({ post }: { key: Key; post: Post }) => {
   const { fetchComments } = useComment()

@@ -1,7 +1,7 @@
 import { Search } from "lucide-react"
-import { usePost } from "../../features/post/model/usePost"
-import { useSearch } from "../../features/post/model/useSearch"
-import { Input } from "../../shared/ui"
+import { usePost } from "../model/store"
+import { useSearch } from "../../../shared/model/useSearch"
+import { Input } from "../../../shared/ui"
 
 export const PostSearch = () => {
   const { searchPosts } = usePost()

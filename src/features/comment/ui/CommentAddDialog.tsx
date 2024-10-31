@@ -1,5 +1,5 @@
-import { useComment } from "../../features/comment/model/store"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../shared/ui"
+import { useComment } from "../model/store"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 
 export const CommentAddDialog = () => {
   const { newComment, addComment, setShowAddCommentDialog, setNewComment, showAddCommentDialog } = useComment()

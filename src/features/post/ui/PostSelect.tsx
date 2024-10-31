@@ -1,8 +1,8 @@
 import { SelectContent } from "@radix-ui/react-select"
-import { Select, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui"
-import { TagSelect } from "../tag/TagSelect"
-import { usePost } from "../../features/post/model/usePost"
-import { useSearch } from "../../features/post/model/useSearch"
+import { Select, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
+import { TagSelect } from "../../../widgets/tag/TagSelect"
+import { usePost } from "../model/store"
+import { useSearch } from "../../../shared/model/useSearch"
 
 export const PostSelect = () => {
   const { sortBy, sortOrder, selectedTag, updateURL, setSortBy, setSortOrder, setSelectedTag } = useSearch()

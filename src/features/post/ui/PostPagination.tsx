@@ -1,5 +1,5 @@
-import { useSearch } from "../../features/post/model/useSearch"
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui"
+import { useSearch } from "../../../shared/model/useSearch"
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 
 export const PostPagination = ({ total }: { total: number }) => {
   const { limit, setLimit, skip, setSkip } = useSearch()

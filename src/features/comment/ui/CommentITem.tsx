@@ -1,11 +1,11 @@
 import { Edit2, Trash2 } from "lucide-react"
-import { Button } from "../../shared/ui"
-import HighlightText from "../ui/HighlightText"
-import { CommentLikeButton } from "./CommentLikeButton"
-import { useComment } from "../../features/comment/model/store"
-import { PostId } from "../../entities/post/model/type"
-import { Comment } from "../../entities/comment/model/type"
-import { useSearch } from "../../features/post/model/useSearch"
+import { Button } from "../../../shared/ui"
+import HighlightText from "../../../widgets/common/HighlightText"
+import { CommentLikeButton } from "../../../widgets/comment/CommentLikeButton"
+import { useComment } from "../model/store"
+import { PostId } from "../../../entities/post/model/type"
+import { Comment } from "../../../entities/comment/model/type"
+import { useSearch } from "../../../shared/model/useSearch"
 
 export const CommentItem = ({ comment, postId }: { comment: Comment; postId: PostId }) => {
   const { setSelectedComment, setShowEditCommentDialog, deleteComment } = useComment()

@@ -1,7 +1,7 @@
 // 댓글 수정 대화상자
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../shared/ui"
-import { Comment } from "../../entities/comment/model/type"
-import { useComment } from "../../features/comment/model/store"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
+import { Comment } from "../../../entities/comment/model/type"
+import { useComment } from "../model/store"
 
 const CommentUpdateDialog = () => {
   const { selectedComment, updateComment, setShowEditCommentDialog, showEditCommentDialog, setSelectedComment } =

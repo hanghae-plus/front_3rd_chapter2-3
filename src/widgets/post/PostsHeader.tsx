@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react"
 import { Button, CardHeader, CardTitle } from "../../shared/ui"
-import { usePost } from "../../features/post/model/usePost"
+import { usePost } from "../../features/post/model/store"
 
 export const PostHeader = () => {
   const { setShowAddDialog } = usePost()

@@ -1,13 +1,13 @@
 import { Card } from "../shared/ui"
 import PostsHeader from "../widgets/post/PostsHeader"
 import PostsContent from "../widgets/post/PostsContent"
-import PostAddDialog from "../widgets/post/PostAddDialog"
-import PostUpdateDialog from "../widgets/post/PostUpdateDialog"
-import CommentAddDialog from "../widgets/comments/CommentAddDialog"
-import CommentUpdateDialog from "../widgets/comments/CommentUpdateDialog"
-import PostDetailDialog from "../widgets/post/PostDetailDialog"
-import UserModal from "../widgets/user/UserModal"
-import { useLoading } from "../features/post/model/useLoading"
+import CommentAddDialog from "../features/comment/ui/CommentAddDialog"
+import CommentUpdateDialog from "../features/comment/ui/CommentUpdateDialog"
+import UserModal from "../features/user/ui/UserModal"
+import { useLoading } from "../shared/model/useLoading"
+import PostAddDialog from "../features/post/ui/PostAddDialog"
+import PostDetailDialog from "../features/post/ui/PostDetailDialog"
+import PostUpdateDialog from "../features/post/ui/PostUpdateDialog"
 
 const PostsManager = () => {
   const { loading } = useLoading()
@@ -18,11 +18,8 @@ const PostsManager = () => {
       <PostsContent loading={loading} />
 
       <PostAddDialog />
-
       <PostUpdateDialog />
-
       <CommentAddDialog />
-
       <CommentUpdateDialog />
       <PostDetailDialog />
 

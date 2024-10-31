@@ -1,5 +1,5 @@
-import { Post } from "../../entities/post/model/type"
-import { useUser } from "../../features/user/model/store"
+import { Post } from "../../../entities/post/model/type"
+import { useUser } from "../../user/model/store"
 
 export const PostAuthor = ({ author }: { author: Post["author"] }) => {
   const { openUserModal } = useUser()

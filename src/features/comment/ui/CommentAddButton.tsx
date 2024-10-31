@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react"
-import { PostId } from "../../entities/post/model/type"
-import { useComment } from "../../features/comment/model/store"
-import { Button } from "../../shared/ui"
+import { PostId } from "../../../entities/post/model/type"
+import { useComment } from "../model/store"
+import { Button } from "../../../shared/ui"
 
 export const CommentAddButton = ({ postId }: { postId: PostId }) => {
   const { setNewComment, setShowAddCommentDialog } = useComment()
