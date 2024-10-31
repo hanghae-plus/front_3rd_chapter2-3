@@ -49,3 +49,7 @@ export interface NewPost {
   body: string
   userId: number
 }
+
+export interface AddPost extends NewPost {
+  id: number
+}
