@@ -1,4 +1,4 @@
-import { PostTableRow } from '~/widgets/post-table/PostTableRow';
+import { PostTableRow } from '~/widgets/post-table/ui/PostTableRow';
 
 import { Post } from '~/entities/post/model/types';
 

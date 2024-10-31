@@ -5,10 +5,10 @@ import { createSelectors } from '~/shared/lib/zustandUtil';
 
 import { Post } from './types';
 
-type PostsState = { posts: Post[]; selectedPost: Post | null };
+type PostsState = { posts: Post[]; selectedPost: Post | null; totalPost: number };
 
 type PostsAction = {
-  fetchPostsAction: (posts: Post[]) => void;
+  fetchPostsAction: ({ posts, total }: { posts: Post[]; total: number }) => void;
   addNewPostAction: (post: Post) => void;
   updatePostAction: (updatedPost: Post) => void;
   deletePostAction: (id: number) => void;
@@ -25,13 +25,18 @@ type PostsAction = {
 const initialState: PostsState = {
   posts: [],
   selectedPost: null,
+  totalPost: 0,
 };
 
 // Post Type
 const postSlice: StateCreator<PostsState & PostsAction, [], [['zustand/immer', never]], PostsState & PostsAction> =
   immer((set) => ({
     ...initialState,
-    fetchPostsAction: (posts: Post[]) => set(() => ({ posts: posts })),
+    fetchPostsAction: ({ posts, total }: { posts: Post[]; total: number }) =>
+      set((state) => {
+        state.posts = posts;
+        state.totalPost = total;
+      }),
     addNewPostAction: (newPost) =>
       set((state) => {
         state.posts.unshift(newPost);
@@ -43,8 +48,6 @@ const postSlice: StateCreator<PostsState & PostsAction, [], [['zustand/immer', n
       set(() => ({
         selectedPost: selectedPost,
       })),
-    // getPost: get().posts,
-    // getSelectedPost: get().selectedPost,
   }));
 
 const usePostStoreBase = create<PostsState & PostsAction>()(postSlice);

@@ -2,8 +2,8 @@ import { Edit2, Plus, Search, ThumbsUp, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { PostTable } from '~/widgets/post-table/PostTable';
-import { PostTableRow } from '~/widgets/post-table/PostTableRow';
+import { Pagination } from '~/widgets/pagination/ui/Pagination';
+import { PostTable } from '~/widgets/post-table/ui/PostTable';
 
 import { UserModal } from '~/features/user-modal/ui/UserModal';
 
@@ -25,7 +25,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '~/shared/ui/Card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/shared/ui/Dialog';
 import { Input } from '~/shared/ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/ui/Select';
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '~/shared/ui/Table';
 import { Textarea } from '~/shared/ui/Textarea';
 
 const PostsManager = () => {
@@ -35,7 +34,6 @@ const PostsManager = () => {
 
   // 상태 관리
   const [_, setPosts] = useState<any>([]);
-  const [total, setTotal] = useState(0);
 
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -86,7 +84,7 @@ const PostsManager = () => {
         author: users.find((user) => user.id === post.userId),
       }));
 
-      fetchPostAction(postsWithUsers);
+      fetchPostAction({ posts: postsWithUsers, total: postsData.total });
       setTotal(postsData.total);
     } catch (error) {
       console.error('게시물 가져오기 오류:', error);
@@ -172,28 +170,6 @@ const PostsManager = () => {
       console.error('게시물 업데이트 오류:', error);
     }
   };
-
-  // 게시물 삭제
-  // const deletePost = async (id: number) => {
-  //   try {
-  //     await deletePostApi(id);
-  //     setPosts(posts.filter((post) => post.id !== id));
-  //   } catch (error) {
-  //     console.error('게시물 삭제 오류:', error);
-  //   }
-  // };
-
-  // 댓글 가져오기
-  // const fetchComments = async (postId: number) => {
-  //   if (comments[postId]) return; // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-  //   try {
-  //     const data = await fetchAllCommentsByPostId(postId);
-
-  //     setComments((prev) => ({ ...prev, [postId]: data.comments }));
-  //   } catch (error) {
-  //     console.error('댓글 가져오기 오류:', error);
-  //   }
-  // };
 
   // 댓글 추가
   const addComment = async () => {
@@ -318,87 +294,6 @@ const PostsManager = () => {
     );
   };
 
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">ID</TableHead>
-          <TableHead>제목</TableHead>
-          <TableHead className="w-[150px]">작성자</TableHead>
-          <TableHead className="w-[150px]">반응</TableHead>
-          <TableHead className="w-[150px]">작업</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {posts.map((post) => (
-          <PostTableRow key={post.id} post={post} />
-          // <TableRow key={post.id}>
-          //   <TableCell>{post.id}</TableCell>
-          //   <TableCell>
-          //     <div className="space-y-1">
-          //       <div>{highlightText(post.title, searchQuery)}</div>
-
-          //       <div className="flex flex-wrap gap-1">
-          //         {post.tags?.map((tag) => (
-          //           <span
-          //             key={tag}
-          //             className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-          //               selectedTag === tag
-          //                 ? 'text-white bg-blue-500 hover:bg-blue-600'
-          //                 : 'text-blue-800 bg-blue-100 hover:bg-blue-200'
-          //             }`}
-          //             onClick={() => {
-          //               setSelectedTag(tag);
-          //               updateURL();
-          //             }}
-          //           >
-          //             {tag}
-          //           </span>
-          //         ))}
-          //       </div>
-          //     </div>
-          //   </TableCell>
-          //   <TableCell>
-          //     <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-          //       <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-          //       <span>{post.author?.username}</span>
-          //     </div>
-          //   </TableCell>
-          //   <TableCell>
-          //     <div className="flex items-center gap-2">
-          //       <ThumbsUp className="w-4 h-4" />
-          //       <span>{post.reactions?.likes || 0}</span>
-          //       <ThumbsDown className="w-4 h-4" />
-          //       <span>{post.reactions?.dislikes || 0}</span>
-          //     </div>
-          //   </TableCell>
-          //   <TableCell>
-          //     <div className="flex items-center gap-2">
-          //       <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-          //         <MessageSquare className="w-4 h-4" />
-          //       </Button>
-          //       <Button
-          //         variant="ghost"
-          //         size="sm"
-          //         onClick={() => {
-          //           setSelectedPost(post);
-          //           setShowEditDialog(true);
-          //         }}
-          //       >
-          //         <Edit2 className="w-4 h-4" />
-          //       </Button>
-          //       <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
-          //         <Trash2 className="w-4 h-4" />
-          //       </Button>
-          //     </div>
-          //   </TableCell>
-          // </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-
   // 댓글 렌더링
   const renderComments = (postId) => (
     <div className="mt-2">
@@ -520,30 +415,7 @@ const PostsManager = () => {
           {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable posts={posts} />}
 
           {/* 페이지네이션 */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span>표시</span>
-              <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="10" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="30">30</SelectItem>
-                </SelectContent>
-              </Select>
-              <span>항목</span>
-            </div>
-            <div className="flex gap-2">
-              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
-                이전
-              </Button>
-              <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
-                다음
-              </Button>
-            </div>
-          </div>
+          <Pagination />
         </div>
       </CardContent>
 

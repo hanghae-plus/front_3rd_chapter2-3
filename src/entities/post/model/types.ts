@@ -36,5 +36,5 @@ export type Post = {
   tags: string[];
   reactions: Reactions;
   views: number;
-  author: User;
+  author?: User;
 };
