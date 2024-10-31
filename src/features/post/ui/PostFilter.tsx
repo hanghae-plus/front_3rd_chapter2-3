@@ -1,5 +1,5 @@
 import { Tag } from "../../../entities/tag/model/types"
-import { Selector } from "../../../widgets/ui/Selector"
+import { Selector } from "../../../shared/ui/Selector"
 
 export const PostFilter: React.FC<{
   selectedTag: string

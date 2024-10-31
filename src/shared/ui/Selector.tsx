@@ -1,4 +1,4 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "."
 
 interface OptionItem {
   value: string | undefined
