@@ -12,7 +12,7 @@ type Props = {
 
 const createForm = () => ({ title: '', body: '', userId: 1 });
 
-const PostAddDialog = ({ open, onOpenChange, onPostAdd }: Props) => {
+export const PostAddDialog = ({ open, onOpenChange, onPostAdd }: Props) => {
   const [postForm, setPostForm] = useState(createForm());
 
   const handleClickAddButton = useCallback(async () => {
@@ -58,5 +58,3 @@ const PostAddDialog = ({ open, onOpenChange, onPostAdd }: Props) => {
     </Dialog>
   );
 };
-
-export default PostAddDialog;

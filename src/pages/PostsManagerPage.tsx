@@ -26,7 +26,7 @@ import {
   Textarea,
 } from '../shared/ui';
 import { PostDeleteButton } from '../features/post/postDelete';
-import PostAddDialog from '../features/post/postAdd/ui/PostAddDialog';
+import { PostAddDialog } from '../features/post/postAdd/ui/PostAddDialog';
 
 const PostsManager = () => {
   const navigate = useNavigate();
