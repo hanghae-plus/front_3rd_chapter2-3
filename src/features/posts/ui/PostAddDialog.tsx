@@ -1,5 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
-import { Button, DialogHeader, Input, Textarea } from "../../../shared/ui"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { PostPayload } from "../../../entities/posts/model/types"
 
 interface PostAddDialogProps {
@@ -7,7 +6,7 @@ interface PostAddDialogProps {
   handleDialog: () => void
   newPost: PostPayload
   setNewPost: (post: PostPayload) => void
-  addPost: () => void
+  addPost: (newPost: PostPayload) => void
 }
 
 export const PostAddDialog = ({ isShow, handleDialog, newPost, setNewPost, addPost }: PostAddDialogProps) => {
@@ -35,7 +34,7 @@ export const PostAddDialog = ({ isShow, handleDialog, newPost, setNewPost, addPo
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -1,5 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
-import { Button, DialogHeader, Textarea } from "../../../shared/ui"
+import { Button, DialogHeader, Textarea, Dialog, DialogContent, DialogTitle } from "../../../shared/ui"
 import { Comment } from "../../../entities/comments/model/types"
 
 interface CommentUpdateDialogProps {

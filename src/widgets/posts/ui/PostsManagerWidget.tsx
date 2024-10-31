@@ -1,27 +1,40 @@
 import { useMemo, useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { Card, CardContent } from "../../../shared/ui"
 import PostSearchHeader from "./PostSearchHeader"
 import PostSearchFilter from "./PostSeacrFilter"
 import PostTable from "./PostTable"
 import { Post, PostPayload } from "../../../entities/posts/model/types"
 import { User } from "../../../entities/user/model/types"
-import { fetchPosts, fetchPostsByTag, searchPosts, addPost, updatePost, deletePost } from "../../../entities/posts/api"
-import { fetchUsers } from "../../../entities/user/api"
 import { useFilter } from "../../../shared/model/useFilter"
 import { Pagination } from "../../../shared/ui/Pagination"
 import { PostAddDialog } from "../../../features/posts/ui/PostAddDialog"
 import { PostUpdateDialog } from "../../../features/posts/ui/PostUpdateDialog"
-import { Comment, CommentLikeUpdate, CommentPayload } from "../../../entities/comments/model/types"
-import { addComment, deleteComment, likeComment, updateComment } from "../../../entities/comments/api"
+import { Comment, CommentPayload } from "../../../entities/comments/model/types"
 import { CommentAddDialog } from "../../../features/comments/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../../../features/comments/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "./PostDetailDialog"
 import { UserDialog } from "../../../entities/user/ui/UserDialog"
+import {
+  addPostMutation,
+  getPosts,
+  getPostsByTag,
+  getSearchPosts,
+  updatePostMutation,
+  deletePostMutation,
+} from "../../../features/posts/api"
+import { getUsers } from "../../../features/users/api"
+import {
+  addCommentMutation,
+  deleteCommentMutation,
+  likeCommentMutation,
+  updateCommentMutation,
+} from "../../../features/comments/api"
+import { fetchUser } from "../../../entities/user/api"
+import { usePostDialogs } from "../../../features/posts/model/usePostDialogs"
+import { useCommentDialogs } from "../../../features/comments/model/useCommentDialogs"
+import { useUserDialogs } from "../../../features/users/model/useUserDialogs"
 
 const PostsManagerWidget = () => {
-  const queryClient = useQueryClient()
-
   // useFilter 훅 사용
   const {
     searchQuery,
@@ -40,12 +53,13 @@ const PostsManagerWidget = () => {
   } = useFilter()
 
   // 다이얼로그 상태
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
+  const { showAddDialog, showEditDialog, showPostDetailDialog, handlers: dialogHandlers } = usePostDialogs()
+  const {
+    showAddDialog: showAddCommentDialog,
+    showEditDialog: showEditCommentDialog,
+    handlers: commentDialogHandlers,
+  } = useCommentDialogs()
+  const { showDetailDialog, handlers: userDialogHandlers } = useUserDialogs()
 
   // 선택된 항목 상태
   const [newPost, setNewPost] = useState<PostPayload>({ title: "", body: "", userId: 1 })
@@ -55,28 +69,20 @@ const PostsManagerWidget = () => {
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
 
   // Queries
-  const { data: posts, isLoading: postsLoading } = useQuery({
-    queryKey: ["posts", limit, skip, sortBy, sortOrder],
-    queryFn: () => fetchPosts(limit, skip),
-    enabled: !searchQuery && selectedTag === "all",
-  })
 
-  const { data: searchResults } = useQuery({
-    queryKey: ["posts", "search", searchQuery],
-    queryFn: () => searchPosts(searchQuery),
-    enabled: !!searchQuery,
-  })
+  const { data: posts, isLoading: postsLoading } = getPosts(limit, skip, searchQuery, selectedTag)
 
-  const { data: taggedPosts } = useQuery({
-    queryKey: ["posts", "tag", selectedTag],
-    queryFn: () => fetchPostsByTag(selectedTag),
-    enabled: selectedTag !== "all",
-  })
+  const { data: searchResults } = getSearchPosts(searchQuery)
 
-  const { data: users } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
-  })
+  const { data: taggedPosts } = getPostsByTag(selectedTag)
+
+  const { data: users } = getUsers()
+
+  const { mutate: addPostMutate } = addPostMutation()
+
+  const { mutate: updatePostMutate } = updatePostMutation()
+
+  const { mutate: deletePostMutate } = deletePostMutation()
 
   // posts에 author 추가
   const postsWithUsers = useMemo(() => {
@@ -94,75 +100,45 @@ const PostsManagerWidget = () => {
   }, [posts, users, taggedPosts])
 
   // Mutations
-  const addPostMutation = useMutation({
-    mutationFn: (newPost: PostPayload) => addPost(newPost),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] })
-      setShowAddDialog(false)
-    },
-  })
+  const addPost = (newPost: PostPayload) => {
+    addPostMutate(newPost)
+    dialogHandlers.handleAddDialog()
+  }
 
-  const updatePostMutation = useMutation({
-    mutationFn: (selectedPost: Post) => updatePost(selectedPost),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] })
-      setShowEditDialog(false)
-    },
-  })
+  const updatePost = (selectedPost: Post) => {
+    updatePostMutate(selectedPost)
+    dialogHandlers.handleEditDialog()
+  }
 
-  const deletePostMutation = useMutation({
-    mutationFn: deletePost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] })
-    },
-  })
+  const deletePost = (id: number) => {
+    deletePostMutate(id)
+  }
 
-  const addCommentMutation = useMutation({
-    mutationFn: (comment: CommentPayload) => addComment(comment),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", selectedPost?.id] })
-      setShowAddCommentDialog(false)
-    },
-  })
+  const { mutate: addCommentMutate } = addCommentMutation(selectedPost?.id as number)
 
-  const updateCommentMutation = useMutation({
-    mutationFn: (comment: Comment) => updateComment(comment),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", selectedPost?.id] })
-      setShowEditCommentDialog(false)
-    },
-  })
+  const { mutate: updateCommentMutate } = updateCommentMutation(selectedPost?.id as number)
 
-  const deleteCommentMutation = useMutation({
-    mutationFn: (id: number) => deleteComment(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", selectedPost?.id] })
-    },
-  })
+  const { mutate: deleteCommentMutate } = deleteCommentMutation(selectedPost?.id as number)
 
-  const likeCommentMutation = useMutation({
-    mutationFn: (comment: CommentLikeUpdate) =>
-      likeComment({
-        id: comment.id,
-        likes: comment.likes + 1,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", selectedPost?.id] })
-    },
-  })
+  const { mutate: likeCommentMutate } = likeCommentMutation(selectedPost?.id as number)
+
+  const addComment = (newComment: CommentPayload) => {
+    addCommentMutate(newComment)
+    commentDialogHandlers.handleAddDialog()
+    setNewComment({ body: "", postId: 1, userId: 1, likes: 0 })
+  }
 
   // 핸들러 함수들
   const handlePostDetail = async (post: Post) => {
     setSelectedPost(post)
-    setShowPostDetailDialog(true)
+    dialogHandlers.handlePostDetail()
   }
 
   const handleUserModal = async (user: User) => {
-    const userData = users?.users.find((u) => u.id === user.id)
-    if (userData) {
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    }
+    const userData = await fetchUser(user.id)
+
+    setSelectedUser(userData)
+    userDialogHandlers.handleDetailDialog()
   }
 
   // 현재 표시할 posts 결정
@@ -170,7 +146,7 @@ const PostsManagerWidget = () => {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <PostSearchHeader handleDialog={() => setShowAddDialog(true)} />
+      <PostSearchHeader handleDialog={dialogHandlers.handleAddDialog} />
 
       <CardContent>
         <div className="flex flex-col gap-4">
@@ -198,8 +174,8 @@ const PostsManagerWidget = () => {
               openUserModal={handleUserModal}
               openPostDetail={handlePostDetail}
               setSelectedPost={setSelectedPost}
-              setShowEditDialog={setShowEditDialog}
-              deletePost={(id) => deletePostMutation.mutate(id)}
+              setShowEditDialog={dialogHandlers.handleEditDialog}
+              deletePost={(id) => deletePost(id)}
             />
           )}
 
@@ -209,44 +185,48 @@ const PostsManagerWidget = () => {
 
       <PostDetailDialog
         isShow={showPostDetailDialog}
-        handleDialog={() => setShowPostDetailDialog(false)}
+        handleDialog={dialogHandlers.handlePostDetail}
         selectedPost={selectedPost}
-        likeComment={() => selectedComment && likeCommentMutation.mutate(selectedComment)}
-        deleteComment={() => selectedComment && deleteCommentMutation.mutate(selectedComment.id)}
+        likeComment={() => selectedComment && likeCommentMutate(selectedComment)}
+        deleteComment={() => selectedComment && deleteCommentMutate(selectedComment.id)}
         searchQuery={searchQuery}
         setSelectedComment={setSelectedComment}
-        setShowEditCommentDialog={setShowEditCommentDialog}
-        handleAddComment={() => setShowAddCommentDialog(true)}
+        setShowEditCommentDialog={commentDialogHandlers.handleEditDialog}
+        handleAddComment={commentDialogHandlers.handleAddDialog}
       />
       <PostAddDialog
         isShow={showAddDialog}
-        handleDialog={() => setShowAddDialog(false)}
+        handleDialog={dialogHandlers.handleAddDialog}
         newPost={newPost}
         setNewPost={setNewPost}
-        addPost={() => addPostMutation.mutate(newPost)}
+        addPost={addPost}
       />
       <PostUpdateDialog
         isShow={showEditDialog}
-        handleDialog={() => setShowEditDialog(false)}
+        handleDialog={dialogHandlers.handleEditDialog}
         selectedPost={selectedPost}
         setSelectedPost={setSelectedPost}
-        updatePost={() => selectedPost && updatePostMutation.mutate(selectedPost)}
+        updatePost={() => selectedPost && updatePost(selectedPost)}
       />
       <CommentAddDialog
         isShow={showAddCommentDialog}
-        handleDialog={() => setShowAddCommentDialog(false)}
+        handleDialog={commentDialogHandlers.handleAddDialog}
         newComment={newComment}
         setNewComment={setNewComment}
-        addComment={() => addCommentMutation.mutate(newComment)}
+        addComment={() => addComment(newComment)}
       />
       <CommentUpdateDialog
         isShow={showEditCommentDialog}
-        handleDialog={() => setShowEditCommentDialog(false)}
+        handleDialog={commentDialogHandlers.handleEditDialog}
         selectedComment={selectedComment}
         setSelectedComment={setSelectedComment}
-        updateComment={() => selectedComment && updateCommentMutation.mutate(selectedComment)}
+        updateComment={() => selectedComment && updateCommentMutate(selectedComment)}
       />
-      <UserDialog isShow={showUserModal} handleDialog={() => setShowUserModal(false)} selectedUser={selectedUser} />
+      <UserDialog
+        isShow={showDetailDialog}
+        handleDialog={userDialogHandlers.handleDetailDialog}
+        selectedUser={selectedUser}
+      />
     </Card>
   )
 }

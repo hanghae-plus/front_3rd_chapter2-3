@@ -1,5 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
-import { Button, DialogHeader, Input, Textarea } from "../../../shared/ui"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { Post } from "../../../entities/posts/model/types"
 
 interface PostUpdateDialogProps {
