@@ -70,7 +70,7 @@ const PostsManager = () => {
     openPostDetail,
     openUserModal,
   } = usePost()
-  const { comments, handleAddComment, handleUpdateComment, handleDeleteComment, handleLikeComment } = useComment()
+  const { handleAddComment, handleUpdateComment } = useComment()
   const { params, updateParams } = useURLParams()
   const { skip = 0, limit = 10, search: searchQuery, sortBy, sortOrder, tag: selectedTag } = params as URLParams
   const updateURL = () => {
