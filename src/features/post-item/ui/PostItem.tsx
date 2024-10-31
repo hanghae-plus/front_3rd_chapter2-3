@@ -2,26 +2,23 @@ import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react
 import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/highlightText"
 import { Button, TableCell, TableRow } from "../../../shared/ui"
+import { useMutationPostDelete } from "../../post/api/useMutationPostDelete"
+import { usePostEditModalStore } from "../../post/model/postEditModalStore"
+import { usePostParamsStore } from "../../post/model/postParamsStore"
 import { usePostsStore } from "../../post/model/postStore"
 import { useUserStore } from "../../user/model/userStore"
-import { usePostParamsStore } from "../../post/model/postParamsStore"
-import { usePostEditModalStore } from "../../post/model/postEditModalStore"
-import { useMutationPostDelete } from "../../post/api/useMutationPostDelete"
 
 interface Props {
   post: Post
 }
 
 export const PostItem = ({ post }: Props) => {
+  const { openUserModal } = useUserStore()
   const { openPostDetail, setSelectedPost } = usePostsStore()
   const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsStore()
-  const { openUserModal } = useUserStore()
   const { setShowPostEditModal } = usePostEditModalStore()
 
   const { mutate: deletePostMutate } = useMutationPostDelete()
-  const deletePost = (postId: number) => {
-    deletePostMutate(postId)
-  }
 
   return (
     <TableRow key={post.id}>
@@ -79,7 +76,7 @@ export const PostItem = ({ post }: Props) => {
           >
             <Edit2 className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+          <Button variant="ghost" size="sm" onClick={() => deletePostMutate(post.id)}>
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>
