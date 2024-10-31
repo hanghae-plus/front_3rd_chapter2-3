@@ -20,7 +20,6 @@ export const usePostParamsStore = () => {
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
-  // URL 업데이트 함수
   const updateURL = () => {
     const params = new URLSearchParams()
     if (skip) params.set("skip", skip.toString())
@@ -29,6 +28,7 @@ export const usePostParamsStore = () => {
     if (sortBy) params.set("sortBy", sortBy)
     if (sortOrder) params.set("sortOrder", sortOrder)
     if (selectedTag) params.set("tag", selectedTag)
+
     navigate(`?${params.toString()}`)
   }
 

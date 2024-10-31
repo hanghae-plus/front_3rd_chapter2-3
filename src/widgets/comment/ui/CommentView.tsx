@@ -1,7 +1,7 @@
 import { CommentAddModal } from "../../../features/comment-add/ui/CommentAddModal"
 import { CommentEditModal } from "../../../features/comment-edit/ui/CommentEditModal"
 import { CommentAddButton } from "../../../features/comment-add/ui/CommentAddButton"
-import { CommentItems } from "../../../features/comment-items/ui/CommentItems"
+import { CommentItems } from "./CommentItems"
 
 interface Props {
   postId: number

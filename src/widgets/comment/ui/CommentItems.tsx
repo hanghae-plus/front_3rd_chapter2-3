@@ -1,5 +1,5 @@
-import { CommentItem } from "../../comment-item/ui/CommentItem"
-import { useQueryComments } from "../../comment/api/useQueryComments"
+import { CommentItem } from "../../../features/comment-item/ui/CommentItem"
+import { useQueryComments } from "../../../features/comment/api/useQueryComments"
 
 interface Props {
   postId: number
