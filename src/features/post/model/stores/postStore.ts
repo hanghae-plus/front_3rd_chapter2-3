@@ -1,5 +1,21 @@
-import { PostAction, PostState } from '@entities/comment/model/types'
+import { NewPost, Post } from '@entities/comment/model/types'
 import { create } from 'zustand'
+
+interface PostState {
+  newPost: NewPost
+  selectedPost: Post | null
+  showAddDialog: boolean
+  showEditDialog: boolean
+  showPostDetailDialog: boolean
+}
+
+interface PostAction {
+  setNewPost: (newPost: NewPost) => void
+  setSelectedPost: (selectedPost: Post | null) => void
+  setShowAddDialog: (showAddDialog: boolean) => void
+  setShowEditDialog: (showEditDialog: boolean) => void
+  setShowPostDetailDialog: (showPostDetailDialog: boolean) => void
+}
 
 export const postStore = create<PostState & PostAction>((set) => ({
   newPost: { title: '', body: '', userId: 1 },
@@ -8,7 +24,7 @@ export const postStore = create<PostState & PostAction>((set) => ({
   showEditDialog: false,
   showPostDetailDialog: false,
   setNewPost: (newPost) => set({ newPost }),
-  
+
   setSelectedPost: (selectedPost) => set({ selectedPost }),
   setShowAddDialog: (showAddDialog) => set({ showAddDialog }),
   setShowEditDialog: (showEditDialog) => set({ showEditDialog }),

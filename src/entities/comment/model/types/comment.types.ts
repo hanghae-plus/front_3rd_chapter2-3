@@ -17,23 +17,3 @@ export interface NewComment {
   postId: number | null
   userId: number
 }
-
-export interface CommentState {
-  newComment: NewComment
-  selectedComment: Comment | null
-  showAddCommentDialog: boolean
-  showEditCommentDialog: boolean
-}
-
-export interface CommentAction {
-  setNewComment: (newComment: NewComment) => void
-  setShowAddCommentDialog: (showAddCommentDialog: boolean) => void
-  setShowEditCommentDialog: (showEditCommentDialog: boolean) => void
-  setSelectedComment: (selectedComment: Comment | null) => void
-}
-
-export interface CommentMutationState {
-  isPending: boolean
-  isError: boolean
-  error: Error | null
-}

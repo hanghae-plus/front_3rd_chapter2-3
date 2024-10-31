@@ -1,5 +1,19 @@
-import { CommentAction, CommentState } from '@entities/comment/model/types'
+import { Comment, NewComment } from '@entities/comment/model/types'
 import { create } from 'zustand'
+
+interface CommentState {
+  newComment: NewComment
+  selectedComment: Comment | null
+  showAddCommentDialog: boolean
+  showEditCommentDialog: boolean
+}
+
+interface CommentAction {
+  setNewComment: (newComment: NewComment) => void
+  setShowAddCommentDialog: (showAddCommentDialog: boolean) => void
+  setShowEditCommentDialog: (showEditCommentDialog: boolean) => void
+  setSelectedComment: (selectedComment: Comment | null) => void
+}
 
 export const commentStore = create<CommentState & CommentAction>((set) => ({
   newComment: { body: '', postId: null, userId: 1 },

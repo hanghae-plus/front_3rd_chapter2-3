@@ -24,32 +24,3 @@ export interface NewPost {
   body: string
   userId: number
 }
-
-export interface PostMutationState {
-  isPending: boolean
-  isError: boolean
-  error: Error | null
-}
-
-export interface PostsQueryProps {
-  limit: number
-  skip: number
-  tag: string
-  searchQuery: string
-}
-
-export interface PostState {
-  newPost: NewPost
-  selectedPost: Post | null
-  showAddDialog: boolean
-  showEditDialog: boolean
-  showPostDetailDialog: boolean
-}
-
-export interface PostAction {
-  setNewPost: (newPost: NewPost) => void
-  setSelectedPost: (selectedPost: Post | null) => void
-  setShowAddDialog: (showAddDialog: boolean) => void
-  setShowEditDialog: (showEditDialog: boolean) => void
-  setShowPostDetailDialog: (showPostDetailDialog: boolean) => void
-}

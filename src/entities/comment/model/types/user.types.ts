@@ -21,7 +21,3 @@ export interface User {
   address: Address
   company: Company
 }
-
-export interface UserProfileProps {
-  selectedUser: User | null
-}

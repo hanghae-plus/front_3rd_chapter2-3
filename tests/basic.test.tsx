@@ -1,59 +1,66 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest"
-import { render, screen, waitFor } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { http, HttpResponse } from "msw"
-import { setupServer } from "msw/node"
-import { MemoryRouter } from "react-router-dom"
-import PostsManager from "../src/pages/PostsManagerPage"
-import * as React from "react"
-import "@testing-library/jest-dom"
-import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
+import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
+import { setupServer } from 'msw/node'
+import { MemoryRouter } from 'react-router-dom'
+import { PostPage } from '../src/pages/post'
+import * as React from 'react'
+import '@testing-library/jest-dom'
+import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from './mockData'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
+
+function renderWithQueryClient(ui: React.ReactElement) {
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>)
+}
 
 // MSW 서버 설정
 const server = setupServer(
-  http.get("/api/posts", () => {
+  http.get('/api/posts', () => {
     return HttpResponse.json(TEST_POSTS)
   }),
 
-  http.get("/api/posts/search?q=His%20mother%20had%20always%20taught%20him", () => {
+  http.get('/api/posts/search?q=His%20mother%20had%20always%20taught%20him', () => {
     return HttpResponse.json(TEST_SEARCH_POST)
   }),
 
-  http.get("/api/users", () => {
+  http.get('/api/users', () => {
     return HttpResponse.json(TEST_USERS)
   }),
 
-  http.get("/api/posts/tags", () => {
+  http.get('/api/posts/tags', () => {
     return HttpResponse.json([
-      "history",
-      "american",
-      "crime",
-      "french",
-      "fiction",
-      "english",
-      "magical",
-      "mystery",
-      "love",
-      "classic",
+      'history',
+      'american',
+      'crime',
+      'french',
+      'fiction',
+      'english',
+      'magical',
+      'mystery',
+      'love',
+      'classic',
     ])
   }),
 )
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }))
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
-  return render(
+  return renderWithQueryClient(
     <MemoryRouter>
-      <PostsManager />
+      <PostPage />
     </MemoryRouter>,
   )
 }
 
-describe("PostsManager", () => {
-  it("게시물을 렌더링하고 검색을 허용합니다", async () => {
+describe('PostsManager', () => {
+  it('게시물을 렌더링하고 검색을 허용합니다', async () => {
     const user = userEvent.setup()
     renderPostsManager()
 
@@ -69,28 +76,28 @@ describe("PostsManager", () => {
 
     // 검색 기능 테스트
     const searchInput = screen.getByPlaceholderText(/게시물 검색.../i)
-    await user.type(searchInput, "His mother had always taught him")
-    await user.keyboard("{Enter}")
+    await user.type(searchInput, 'His mother had always taught him')
+    await user.keyboard('{Enter}')
 
     await waitFor(() => {
-      expect(screen.getByText("His mother had always taught him")).toBeInTheDocument()
-      expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument()
+      expect(screen.getByText('His mother had always taught him')).toBeInTheDocument()
+      expect(screen.queryByText('He was an expert but not in a discipline')).not.toBeInTheDocument()
     })
   })
 
-  it("새 게시물 추가를 허용합니다", async () => {
+  it('새 게시물 추가를 허용합니다', async () => {
     const user = userEvent.setup()
     const NEW_POST = {
       id: TEST_POSTS.posts.length + 1,
-      title: "New Post",
-      body: "This is a new post",
+      title: 'New Post',
+      body: 'This is a new post',
       userId: 1,
       tags: [],
     }
 
     // POST 요청에 대한 핸들러 추가
     server.use(
-      http.post("/api/posts/add", async ({ request }) => {
+      http.post('/api/posts/add', async ({ request }) => {
         const body = await request.json()
         // 요청 body 검증 (선택적)
         expect(body).toMatchObject({
@@ -110,7 +117,7 @@ describe("PostsManager", () => {
       })
     })
 
-    const addButton = screen.getByRole("button", { name: /게시물 추가/i })
+    const addButton = screen.getByRole('button', { name: /게시물 추가/i })
     await user.click(addButton)
 
     const titleInput = screen.getByPlaceholderText(/제목/i)
@@ -118,7 +125,7 @@ describe("PostsManager", () => {
     await user.type(titleInput, NEW_POST.title)
     await user.type(bodyInput, NEW_POST.body)
 
-    const submitButton = screen.getByRole("button", { name: /게시물 추가/i })
+    const submitButton = screen.getByRole('button', { name: /게시물 추가/i })
     await user.click(submitButton)
 
     // 새 게시물이 추가되었는지 확인
@@ -128,19 +135,19 @@ describe("PostsManager", () => {
   })
 
   // 다른 테스트 케이스들. 참고용으로 작성된 것이며, 실제로는 작성하지 않았습니다.
-  it("태그 필터링이 올바르게 작동해야 합니다")
-  it("정렬 기능이 올바르게 작동해야 합니다")
-  it("페이지네이션이 올바르게 작동해야 합니다")
-  it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다")
-  it("댓글 추가 기능이 올바르게 작동해야 합니다")
-  it("댓글 수정 기능이 올바르게 작동해야 합니다")
-  it("댓글 삭제 기능이 올바르게 작동해야 합니다")
-  it("댓글 좋아요 기능이 올바르게 작동해야 합니다")
-  it("사용자 모달이 올바르게 열리고 사용자 정보를 표시해야 합니다")
-  it("게시물 수정 기능이 올바르게 작동해야 합니다")
-  it("게시물 삭제 기능이 올바르게 작동해야 합니다")
-  it("검색 결과에서 하이라이트 기능이 올바르게 작동해야 합니다")
-  it("URL 파라미터 변경에 따라 컴포넌트 상태가 올바르게 업데이트되어야 합니다")
-  it("에러 상황에서 적절한 에러 메시지를 표시해야 합니다")
-  it("로딩 상태일 때 로딩 인디케이터를 표시해야 합니다")
+  it('태그 필터링이 올바르게 작동해야 합니다')
+  it('정렬 기능이 올바르게 작동해야 합니다')
+  it('페이지네이션이 올바르게 작동해야 합니다')
+  it('게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다')
+  it('댓글 추가 기능이 올바르게 작동해야 합니다')
+  it('댓글 수정 기능이 올바르게 작동해야 합니다')
+  it('댓글 삭제 기능이 올바르게 작동해야 합니다')
+  it('댓글 좋아요 기능이 올바르게 작동해야 합니다')
+  it('사용자 모달이 올바르게 열리고 사용자 정보를 표시해야 합니다')
+  it('게시물 수정 기능이 올바르게 작동해야 합니다')
+  it('게시물 삭제 기능이 올바르게 작동해야 합니다')
+  it('검색 결과에서 하이라이트 기능이 올바르게 작동해야 합니다')
+  it('URL 파라미터 변경에 따라 컴포넌트 상태가 올바르게 업데이트되어야 합니다')
+  it('에러 상황에서 적절한 에러 메시지를 표시해야 합니다')
+  it('로딩 상태일 때 로딩 인디케이터를 표시해야 합니다')
 })

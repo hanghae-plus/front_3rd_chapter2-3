@@ -1,6 +1,12 @@
-import { Post, NewPost, PostMutationState } from '@entities/comment/model/types'
+import { Post, NewPost } from '@entities/comment/model/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postApi, PostsResponse } from '@features/post/api'
+
+interface PostMutationState {
+  isPending: boolean
+  isError: boolean
+  error: Error | null
+}
 
 export function usePostMutations() {
   const queryClient = useQueryClient()
