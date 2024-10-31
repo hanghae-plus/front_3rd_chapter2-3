@@ -1,3 +1,5 @@
+import { User } from '~/entities/user/model/types';
+
 export type PostRequestDto = {
   title: string;
   body: string;
@@ -34,6 +36,5 @@ export type Post = {
   tags: string[];
   reactions: Reactions;
   views: number;
-  // TODO: user type 변경
-  author: any;
+  author: User;
 };

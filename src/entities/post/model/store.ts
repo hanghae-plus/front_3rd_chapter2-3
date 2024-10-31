@@ -5,12 +5,13 @@ import { createSelectors } from '~/shared/lib/zustandUtil';
 
 import { Post } from './types';
 
-type PostsState = { posts: Post[] };
+type PostsState = { posts: Post[]; selectedPost: Post | null };
 
 type PostsAction = {
   addNewPostAction: (post: Post) => void;
   updatePostAction: (updatedPost: Post) => void;
   deletePostAction: (id: number) => void;
+  selectPost: (selectedPost: Post) => void;
 };
 
 // interface IPostSlice {
@@ -20,12 +21,15 @@ type PostsAction = {
 //   deletePostAction: () => void;
 // }
 
-const initialState: Post[] = [];
+const initialState: PostsState = {
+  posts: [],
+  selectedPost: null,
+};
 
 // Post Type
 const postSlice: StateCreator<PostsState & PostsAction, [], [['zustand/immer', never]], PostsState & PostsAction> =
   immer((set) => ({
-    posts: initialState,
+    ...initialState,
     addNewPostAction: (newPost) =>
       set((state) => {
         state.posts.unshift(newPost);
@@ -33,6 +37,7 @@ const postSlice: StateCreator<PostsState & PostsAction, [], [['zustand/immer', n
     updatePostAction: (updatedPost) =>
       set((state) => state.posts.map((post) => (post.id === updatedPost.id ? updatedPost : post))),
     deletePostAction: (id) => set((state) => state.posts.filter((post) => post.id !== id)),
+    selectPost: (selectedPost: Post) => set((state) => (state.selectedPost = selectedPost)),
   }));
 
 const usePostStoreBase = create<PostsState & PostsAction>()(postSlice);
