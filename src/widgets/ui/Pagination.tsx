@@ -1,5 +1,5 @@
 import { UpdateQueryParam } from "../../entities/post"
-import { PaginationType } from "../../shared/model/paginationType"
+import { PaginationType } from "../../shared/model/types"
 import {
   Button,
   Select,

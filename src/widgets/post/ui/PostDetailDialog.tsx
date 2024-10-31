@@ -11,7 +11,7 @@ import { Comments } from "../../comment"
 
 type Props = Pick<DialogProps, "open" | "onOpenChange"> & {
   selectedPost: Post | null
-  searchQuery: string
+  search: string
 }
 
 export const PostDetailDialog = ({
@@ -19,25 +19,19 @@ export const PostDetailDialog = ({
   onOpenChange,
 
   selectedPost,
-  searchQuery,
+  search,
 }: Props) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>
-            <TextHighlighter
-              text={selectedPost?.title}
-              highlight={searchQuery}
-            />
+            <TextHighlighter text={selectedPost?.title} highlight={search} />
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <p>
-            <TextHighlighter
-              text={selectedPost?.body}
-              highlight={searchQuery}
-            />
+            <TextHighlighter text={selectedPost?.body} highlight={search} />
           </p>
           {selectedPost && <Comments postId={selectedPost?.id} />}
         </div>

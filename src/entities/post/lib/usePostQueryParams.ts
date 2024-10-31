@@ -2,17 +2,15 @@ import {
   getQueryParameters,
   useUpdateQueryParameter,
 } from "../../../shared/lib/queryParams"
-import { PaginationType } from "../../../shared/model/paginationType"
+import { PaginationType, SortType } from "../../../shared/model/types"
 
 export type UpdateQueryParam = (params: Partial<PostQueryParams>) => void
-export type SortOrder = "asc" | "desc"
 
-type PostQueryParams = PaginationType & {
-  search: string
-  sortBy: string
-  sortOrder: SortOrder
-  tag: string
-}
+type PostQueryParams = PaginationType &
+  SortType & {
+    search: string
+    tag: string
+  }
 
 type UsePostQueryParams = () => {
   queryParams: PostQueryParams

@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { SortOrder } from "../lib/usePostQueryParams"
+import { SortType } from "../../../shared/model/types"
 import {
   FetchPostsPayload,
   FetchPostsResponse,
@@ -8,16 +8,14 @@ import {
 import { postQueryKeys } from "./post.queries"
 import { postApi } from "./postApi"
 
-export type usePostsQueryProps = FetchPostsPayload & {
-  searchQuery?: string
-  selectedTag?: string
-
-  sortBy?: string
-  sortOrder?: SortOrder
-}
+export type usePostsQueryProps = FetchPostsPayload &
+  SortType & {
+    search?: string
+    selectedTag?: string
+  }
 
 export const usePostsQuery = (payload: usePostsQueryProps) => {
-  const { limit, skip, searchQuery, selectedTag } = payload
+  const { limit, skip, search, selectedTag } = payload
 
   // 글쓴이 정보를 가져오는 함수
   const fetchAuthors = async () => {
@@ -31,8 +29,8 @@ export const usePostsQuery = (payload: usePostsQueryProps) => {
       return await postApi.fetchPostsByTag(selectedTag)
     }
 
-    if (searchQuery) {
-      return await postApi.searchPosts(searchQuery)
+    if (search) {
+      return await postApi.searchPosts(search)
     }
 
     return await postApi.fetchPosts({ limit, skip })
