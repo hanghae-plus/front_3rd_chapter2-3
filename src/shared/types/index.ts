@@ -61,4 +61,10 @@ interface Tag {
   slug: string
 }
 
-export type { PostsData, Post, Reactions, User, Comment, NewComment, Tag }
+interface NewPost {
+  title: string
+  body: string
+  userId: number
+}
+
+export type { PostsData, Post, Reactions, User, Comment, NewComment, Tag, NewPost }
