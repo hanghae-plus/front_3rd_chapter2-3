@@ -1,11 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
-import PostTable from "../widgets/post/ui/PostTable.tsx"
+import PostTable from "../widgets/post-table/ui/PostTable.tsx"
 import { usePostStore } from "../entities/post/model/store.ts"
 import usePostQueryParams from "./model/usePostURLParams.ts"
 import PostAddButton from "../features/post-add/ui/PostAddButton.tsx"
 import PostSearchItem from "../features/post-search/ui/PostSearchItem.tsx"
 import PostPagination from "../features/post-pagination/ui/PostPagination.tsx"
 import { useQueryPostsAndUsers } from "./api/useQueryPostsAndUsers.ts"
+import Loading from "../widgets/loading/ui/Loading.tsx"
+import PostItem from "../features/post-item/ui/PostItem.tsx"
 
 const PostsManager = () => {
   const { skip, limit, searchQuery, sortBy, sortOrder, selectedTag, setParam } = usePostQueryParams()
@@ -44,9 +46,13 @@ const PostsManager = () => {
         <div className="flex flex-col gap-4">
           <PostSearchItem {...postSearchParams} />
           {isLoading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
+            <Loading />
           ) : (
-            <PostTable posts={posts} postTableParams={postTableParams} />
+            <PostTable>
+              {posts.map((post) => (
+                <PostItem key={post.id} post={post} {...postTableParams} />
+              ))}
+            </PostTable>
           )}
           <PostPagination {...postPaginationParams} />
         </div>

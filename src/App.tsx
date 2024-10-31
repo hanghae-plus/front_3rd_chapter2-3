@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom"
-import Header from "./widgets/ui/Header.tsx"
-import Footer from "./widgets/ui/Footer.tsx"
+import Header from "./widgets/layout/Header.tsx"
+import Footer from "./widgets/layout/Footer.tsx"
 import PostsManagerPage from "./pages/PostsManagerPage.tsx"
 import TanstackQueryProvider from "./app/tanstack-query/TanstackQueryProvider.tsx"
 
