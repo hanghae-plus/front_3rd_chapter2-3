@@ -81,11 +81,11 @@ describe("PostsManager", () => {
     // 검색 기능 테스트
     const searchInput = screen.getByPlaceholderText(/게시물 검색.../i)
     await user.type(searchInput, "His mother had always taught him")
-    // await user.keyboard("{Enter}")
+    await user.keyboard("{Enter}")
 
     await waitFor(() => {
       expect(screen.getByText("His mother had always taught him")).toBeInTheDocument()
-      // expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument()
+      expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument()
     })
   })
 
@@ -133,25 +133,25 @@ describe("PostsManager", () => {
     await user.click(submitButton)
 
     // 새 게시물이 추가되었는지 확인
-    // await waitFor(() => {
-    //   expect(screen.getByText(NEW_POST.title)).toBeInTheDocument()
-    // })
+    await waitFor(() => {
+      expect(screen.getByText(NEW_POST.title)).toBeInTheDocument()
+    })
   })
 
   // 다른 테스트 케이스들. 참고용으로 작성된 것이며, 실제로는 작성하지 않았습니다.
-  it("태그 필터링이 올바르게 작동해야 합니다")
-  it("정렬 기능이 올바르게 작동해야 합니다")
-  it("페이지네이션이 올바르게 작동해야 합니다")
-  it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다")
-  it("댓글 추가 기능이 올바르게 작동해야 합니다")
-  it("댓글 수정 기능이 올바르게 작동해야 합니다")
-  it("댓글 삭제 기능이 올바르게 작동해야 합니다")
-  it("댓글 좋아요 기능이 올바르게 작동해야 합니다")
-  it("사용자 모달이 올바르게 열리고 사용자 정보를 표시해야 합니다")
-  it("게시물 수정 기능이 올바르게 작동해야 합니다")
-  it("게시물 삭제 기능이 올바르게 작동해야 합니다")
-  it("검색 결과에서 하이라이트 기능이 올바르게 작동해야 합니다")
-  it("URL 파라미터 변경에 따라 컴포넌트 상태가 올바르게 업데이트되어야 합니다")
-  it("에러 상황에서 적절한 에러 메시지를 표시해야 합니다")
-  it("로딩 상태일 때 로딩 인디케이터를 표시해야 합니다")
+  // it("태그 필터링이 올바르게 작동해야 합니다")
+  // it("정렬 기능이 올바르게 작동해야 합니다")
+  // it("페이지네이션이 올바르게 작동해야 합니다")
+  // it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다")
+  // it("댓글 추가 기능이 올바르게 작동해야 합니다")
+  // it("댓글 수정 기능이 올바르게 작동해야 합니다")
+  // it("댓글 삭제 기능이 올바르게 작동해야 합니다")
+  // it("댓글 좋아요 기능이 올바르게 작동해야 합니다")
+  // it("사용자 모달이 올바르게 열리고 사용자 정보를 표시해야 합니다")
+  // it("게시물 수정 기능이 올바르게 작동해야 합니다")
+  // it("게시물 삭제 기능이 올바르게 작동해야 합니다")
+  // it("검색 결과에서 하이라이트 기능이 올바르게 작동해야 합니다")
+  // it("URL 파라미터 변경에 따라 컴포넌트 상태가 올바르게 업데이트되어야 합니다")
+  // it("에러 상황에서 적절한 에러 메시지를 표시해야 합니다")
+  // it("로딩 상태일 때 로딩 인디케이터를 표시해야 합니다")
 })

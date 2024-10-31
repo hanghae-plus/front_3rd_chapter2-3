@@ -19,7 +19,6 @@ const Tag: React.FC<TagProps> = ({ tag }) => {
       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${tagClass}`}
       onClick={() => {
         setSelectedTag(tag);
-        updateURL();
       }}
     >
       {tag}

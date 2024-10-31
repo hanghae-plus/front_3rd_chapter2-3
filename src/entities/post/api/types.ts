@@ -1,8 +1,13 @@
+import { User } from "../../user/api/types";
+
 export interface Posts {
-  posts: Post[]
+  posts: EnrichedPost[]
   total: number
   skip: number
   limit: number
+}
+export interface EnrichedPost extends Post {
+  author?: User;
 }
 
 export interface Post {

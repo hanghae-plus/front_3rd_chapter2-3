@@ -6,11 +6,11 @@ import { useAtom } from "jotai"
 import usePostMutations from "../model/usePostMutations"
 import { searchQueryAtom, selectedPostAtom, showEditDialogAtom, showPostDetailDialogAtom } from '../../../entities/post/model/postAtom';
 import { highlightText } from "../../../shared/utils"
-import { Post } from "../../../entities/post/api/types"
+import { EnrichedPost, Post } from "../../../entities/post/api/types"
 import { showUserModalAtom } from "../../../entities/user/model/userAtom"
 
 interface PostRowProps {
-  post: Post
+  post: EnrichedPost
 }
 
 
@@ -26,12 +26,6 @@ const PostRow: React.FC<PostRowProps> = ({
   const [searchQuery, ] = useAtom(searchQueryAtom);
 
   const { deletePostMutation } = usePostMutations();
-  // const { openUserModal } = useUserModal();
-  // const { data: allUsersData } = useUser();
-  // const getUserProfile = () =>{
-  //   // console.log(allUsersData?.users.find(item => item.id === post.userId))
-  //   return allUsersData?.users.find(item => item.id === post.userId)
-  // }
 
   const openPostDetail = (post:Post) => {
     setSelectedPost(post);
@@ -65,12 +59,8 @@ const PostRow: React.FC<PostRowProps> = ({
       className="flex items-center space-x-2 cursor-pointer"
       onClick={() => openUserModal(post)}
     >
-    {/* <img
-      src={getUserProfile()?.image}
-      alt={getUserProfile()?.username}
-      className="w-8 h-8 rounded-full" />
-    <span>{getUserProfile()?.username}</span> */}
-
+    <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
+    <span>{post.author?.username}</span>
     </div>
   </TableCell>
   <TableCell>

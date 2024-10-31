@@ -7,8 +7,7 @@ interface PostsTableProps {
   posts?: Post[];
 }
 
-const PostTable: React.FC<PostsTableProps> = ({ posts}) => {
-
+const PostTable: React.FC<PostsTableProps> = ({posts}) => {
   return(
     <Table>
       <TableHeader>

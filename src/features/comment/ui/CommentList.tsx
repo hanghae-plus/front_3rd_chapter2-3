@@ -3,7 +3,7 @@ import CommentItem from "./CommentItem";
 import { Button } from "../../../shared/ui/Button/Button";
 import { Plus } from "lucide-react";
 import { useAtom } from "jotai";
-import { commentsAtom, showEditCommentDialogAtom } from "../../../entities/comment/model/commentAtom";
+import { commentsAtom, showAddCommentDialogAtom } from "../../../entities/comment/model/commentAtom";
 import useComment from "../model/useComment";
 
 interface CommentListProps {
@@ -12,7 +12,7 @@ interface CommentListProps {
 
 const CommentList: React.FC<CommentListProps> = ({ postId }) => {
   const [comments] = useAtom(commentsAtom);
-  const [, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom);
+  const [, setShowAddCommentDialogAtom] = useAtom(showAddCommentDialogAtom);
   const { fetchCommentsMutation } = useComment();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
     <div>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
-        <Button size="sm" onClick={() => setShowEditCommentDialog(true)}>
+        <Button size="sm" onClick={() => setShowAddCommentDialogAtom(true)}>
           <Plus className="w-3 h-3 mr-1" />
           댓글 추가
         </Button>

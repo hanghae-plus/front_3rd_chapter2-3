@@ -8,11 +8,13 @@ import { newCommentAtom, showAddCommentDialogAtom } from '../../../entities/comm
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addComment } from '../../../entities/comment/api/commentApi';
 import { Comment } from '../../../entities/comment/api/types';
+import { selectedPostAtom } from '../../../entities/post/model/postAtom';
 
 const AddCommentDialog: React.FC = () => {
   const queryClient = useQueryClient();
   const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom);
   const [newComment, setNewComment] = useAtom(newCommentAtom);
+  const [selectedPost, ] = useAtom(selectedPostAtom);
 
   const addCommentMutation = useMutation<Comment,Error,{ body: string; postId: number | null; userId: number; }>({
     mutationFn: (newComment)=>addComment(newComment),
@@ -20,12 +22,11 @@ const AddCommentDialog: React.FC = () => {
       queryClient.invalidateQueries({queryKey:['comments']});
       setShowAddCommentDialog(false);
       setNewComment({ body: '', postId: null, userId: 1 });
-    
     },
   });
 
   const handleSubmit = () => {
-    if(newComment.postId) addCommentMutation.mutate(newComment);
+    addCommentMutation.mutate(newComment);
   };
 
   return (
@@ -38,7 +39,7 @@ const AddCommentDialog: React.FC = () => {
           <Textarea
             placeholder="댓글 내용"
             value={newComment.body}
-            onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
+            onChange={(e) => setNewComment({ ...newComment, body: e.target.value , postId:selectedPost?.id ?? null})}
           />
           <Button onClick={handleSubmit} disabled={addCommentMutation.isPending}>
             {addCommentMutation.isPending ? '추가 중...' : '댓글 추가'}

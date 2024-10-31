@@ -1,22 +1,21 @@
-// src/features/posts/components/UserDetailDialog.tsx
 import React, { useEffect } from 'react';
 import { Dialog, DialogContents, DialogHeader, DialogTitle } from '../../../shared/ui/Dialog';
 import { useAtom } from 'jotai';
 import { selectedPostAtom } from '../../../entities/post/model/postAtom';
 import { selectedUserAtom, showUserModalAtom } from '../../../entities/user/model/userAtom';
-import useUser from '../model/useUser';
+import {useUser} from '../model/useUser';
 
 const UserDetailDialog: React.FC = () => {
   const [selectedPost] = useAtom(selectedPostAtom);
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom);
-  const [selectedUser] = useAtom(selectedUserAtom);
-  const { fetchUserMutation } = useUser();
+  const [selectedUser,setSelectedUser] = useAtom(selectedUserAtom);
+  const { data, isLoading } = useUser(selectedPost?.userId || NaN);
 
   useEffect(() => {
-    if (selectedPost && !fetchUserMutation.isPending && !fetchUserMutation.isSuccess) {
-      fetchUserMutation.mutate(selectedPost.userId);
+    if (data && selectedPost && !isLoading) {
+      setSelectedUser(data);
     }
-  }, [ fetchUserMutation, selectedPost]);
+  }, [data, isLoading, selectedPost, setSelectedUser]);
 
   if (!selectedPost) return null;
 
@@ -27,7 +26,7 @@ const UserDetailDialog: React.FC = () => {
           <DialogTitle>사용자 정보</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          {fetchUserMutation.isPending ? (
+          {isLoading ? (
             <p>사용자 정보를 불러오는 중...</p>
           ) : selectedUser ? (
             <>

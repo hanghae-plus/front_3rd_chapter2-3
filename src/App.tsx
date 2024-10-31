@@ -4,6 +4,7 @@ import Footer from "./widgets/layout/ui/Footer.tsx"
 import PostsManagerPage from "./pages/PostsManagerPage.tsx"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Provider as JotaiProvider } from 'jotai';
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -16,6 +17,7 @@ const App = () => {
           <JotaiProvider>
               <QueryClientProvider client={queryClient}>
                 <PostsManagerPage />
+                <ReactQueryDevtools initialIsOpen={false} />
               </QueryClientProvider>
           </JotaiProvider>
         </main>

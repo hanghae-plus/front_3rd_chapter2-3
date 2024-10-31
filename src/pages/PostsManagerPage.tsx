@@ -1,4 +1,3 @@
-// src/pages/PostsManagerPage
 import { useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../shared/ui/Card';
 import { Button } from '../shared/ui/Button/Button';
@@ -17,7 +16,6 @@ import { selectedTagAtom, tagsAtom } from '../entities/tag/model/tagAtom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../shared/ui/Select';
 import PostsTable from '../features/post/ui/PostsTable';
-import usePosts from '../features/post/model/usePost';
 import useTags from '../features/post/model/useTags.tsx';
 import { FetchPostsParams } from '../entities/post/api/types.ts';
 import PostDetailDialog from '../features/post/ui/PostDetailDialog.tsx';
@@ -27,6 +25,7 @@ import EditPostDialog from '../features/post/ui/EditPostDialog.tsx';
 import AddPostDialog from '../features/post/ui/AddPostDialog.tsx';
 import UserDetailDialog from '../features/user/ui/UserDetailDialog.tsx';
 import SearchBar from '../widgets/post/SearchBar.tsx';
+import usePosts from '../features/post/model/usePost.tsx';
 
 const PostsManagerPage = () => {
   console.log('PostsManagerPage')
@@ -43,18 +42,17 @@ const PostsManagerPage = () => {
   const [, setShowAddDialog] = useAtom(showAddDialogAtom);
 
   const [, setTags] = useAtom(tagsAtom);
-  const [, setPosts] = useAtom(postsAtom);
-
-  // React Query Hooks
-  const params = useMemo(() => ({
+  const [posts, setPosts] = useAtom(postsAtom);
+  
+  const params = {
     limit,
     skip,
     tag: selectedTag,
     search: searchQuery,
     sortBy,
     sortOrder,
-  }), [limit, skip, selectedTag, searchQuery, sortBy, sortOrder]);
-  
+  };
+
   const { data: postsData, isLoading: postsLoading } = usePosts(params);
   const { data: tagsData } = useTags();
 
@@ -84,11 +82,11 @@ const PostsManagerPage = () => {
   // 게시물 데이터 로드 성공 시 태그 설정
   useEffect(() => {
     if (postsData) {
-      const uniqueTags = Array.from(new Set(postsData.posts.flatMap(post => post.tags)));
+      const uniqueTags = Array.from(new Set(postsData.flatMap(post => post.tags)));
       setPosts(postsData)
       setTags(uniqueTags);
     }
-  }, [postsData, setTags]);
+  }, [postsData, setPosts, setTags]);
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -155,9 +153,7 @@ const PostsManagerPage = () => {
           {postsLoading ? (
             <div className="flex justify-center p-4">로딩 중...</div>
           ) : (
-            <PostsTable
-              posts={postsData?.posts}
-            />
+            <PostsTable posts={posts} />
           )}
 
           {/* 페이지네이션 */}
@@ -193,7 +189,7 @@ const PostsManagerPage = () => {
                 이전
               </Button>
               <Button
-                disabled={skip + limit >= (postsData?.total || 0)}
+                disabled={skip + limit >= (postsData?.length || 0)}
                 onClick={() => {
                   setSkip(skip + limit);
                   updateURL();
@@ -214,9 +210,11 @@ const PostsManagerPage = () => {
 
       {/* 게시물 상세 보기 대화상자 */}
       <PostDetailDialog />
+      
       <AddCommentDialog />
       <EditCommentDialog />
 
+    
       {/* 사용자 모달 */}
       <UserDetailDialog />
     </Card>
