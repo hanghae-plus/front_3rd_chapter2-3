@@ -1,4 +1,4 @@
-import { useTagsQuery } from "../../../shared/api/useTagQuery"
+import { useTagsQuery } from "../../../entities/api/tag/useTagQuery"
 
 export const useTag = () => {
   const { data: tags, isLoading } = useTagsQuery()

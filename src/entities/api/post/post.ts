@@ -1,4 +1,4 @@
-import { NewPost, Post, PostsData, User } from "../types"
+import { NewPost, Post, PostsData, User } from "../../../shared/types"
 
 export const addPost = async (newPost: NewPost) => {
   try {

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import * as commentApi from "./comment"
-import type { Comment, NewComment } from "../types"
+import type { Comment, NewComment } from "../../../shared/types"
 
 export const commentKeys = {
   all: ["comments"] as const,

@@ -5,7 +5,7 @@ import {
   selectedUserAtom,
   showUserModalAtom,
 } from "../../../entities/model/post/atoms"
-import { fetchUserDetail } from "../../../shared/api/post"
+import { fetchUserDetail } from "../../../entities/api/post/post"
 import { useComment } from "../../../features/model/comment/useComment"
 import type { Post, User } from "../../../shared/types"
 

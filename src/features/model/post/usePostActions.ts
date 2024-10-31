@@ -1,6 +1,6 @@
 import { useAtom } from "jotai"
 import { showAddDialogAtom } from "../../../entities/model/post/atoms"
-import { usePostMutations } from "../../../shared/api/usePostQuery"
+import { usePostMutations } from "../../../entities/api/post/usePostQuery"
 import type { NewPost, Post } from "../../../shared/types"
 
 export const usePostActions = () => {

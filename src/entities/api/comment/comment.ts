@@ -1,4 +1,4 @@
-import type { Comment, NewComment } from "../types"
+import type { Comment, NewComment } from "../../../shared/types"
 
 export const fetchComments = async (postId: number) => {
   try {

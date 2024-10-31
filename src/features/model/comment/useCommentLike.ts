@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { likeComment } from "../../../shared/api/comment"
-import { commentKeys } from "../../../shared/api/useCommentQuery"
+import { likeComment } from "../../../entities/api/comment/comment"
+import { commentKeys } from "../../../entities/api/comment/useCommentQuery"
 import { Comment } from "../../../shared/types"
 
 interface CommentsResponse {

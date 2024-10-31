@@ -2,7 +2,7 @@ import { useAtom } from "jotai"
 import { showAddDialogAtom, showEditDialogAtom, newPostAtom } from "../../../entities/model/post/atoms"
 import { usePostModal } from "./usePostModal"
 import { useURLParams } from "../url/useURLParams"
-import { usePostQuery, usePostsByTagQuery, useSearchPostsQuery } from "../../../shared/api/usePostQuery"
+import { usePostQuery, usePostsByTagQuery, useSearchPostsQuery } from "../../../entities/api/post/usePostQuery"
 import { usePostActions } from "./usePostActions"
 
 export const usePost = () => {

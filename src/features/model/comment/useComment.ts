@@ -5,7 +5,7 @@ import {
   showEditCommentDialogAtom,
   selectedCommentAtom,
 } from "../../../entities/model/comment/atoms"
-import { useCommentsQuery, useCommentMutations } from "../../../shared/api/useCommentQuery"
+import { useCommentsQuery, useCommentMutations } from "../../../entities/api/comment/useCommentQuery"
 import { NewComment, Comment } from "../../../shared/types"
 import { useCommentLike } from "./useCommentLike"
 
