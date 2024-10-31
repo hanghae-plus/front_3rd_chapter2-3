@@ -79,7 +79,6 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserDTO | null>(null)
 
-  // TODO: 오름차순, 내림차순
   const { data, isLoading } = usePostsQuery({
     limit,
     skip,

@@ -25,20 +25,10 @@ export const postApi = {
   /** 게시물 가져오기 */
   fetchPosts: async ({ limit, skip }: FetchPostsPayload) => {
     try {
-      const [postsData, usersData] = await Promise.all([
-        safeFetch<PostsResponse>(`/api/posts?limit=${limit}&skip=${skip}`),
-        postApi.fetchAuthors(),
-      ])
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      return {
-        posts: postsWithUsers,
-        total: postsData.total,
-      }
+      const response = await safeFetch<PostsResponse>(
+        `/api/posts?limit=${limit}&skip=${skip}`,
+      )
+      return response
     } catch (error) {
       console.error("게시물 가져오기 오류:", error)
       throw error
@@ -48,17 +38,10 @@ export const postApi = {
   /** 게시물 검색 */
   searchPosts: async (searchQuery: string) => {
     try {
-      const [postsData, usersData] = await Promise.all([
-        safeFetch<PostsResponse>(`/api/posts/search?q=${searchQuery}`),
-        postApi.fetchAuthors(),
-      ])
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      return { posts: postsWithUsers, total: postsData.total }
+      const response = await safeFetch<PostsResponse>(
+        `/api/posts/search?q=${searchQuery}`,
+      )
+      return response
     } catch (error) {
       console.error("게시물 검색 오류:", error)
       throw error
@@ -68,17 +51,8 @@ export const postApi = {
   /** 태그별 게시물 가져오기 */
   fetchPostsByTag: async (tag: string) => {
     try {
-      const [postsData, usersData] = await Promise.all([
-        safeFetch<PostsResponse>(`/api/posts/tag/${tag}`),
-        postApi.fetchAuthors(),
-      ])
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      return { posts: postsWithUsers, total: postsData.total }
+      const response = await safeFetch<PostsResponse>(`/api/posts/tag/${tag}`)
+      return response
     } catch (error) {
       console.error("태그별 게시물 가져오기 오류:", error)
       throw error
