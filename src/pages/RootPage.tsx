@@ -3,7 +3,7 @@ import { PostTable } from "../features/post/ui/PostTable"
 
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
 
-export const PostsManager = () => {
+export const RootPage = () => {
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
@@ -19,4 +19,4 @@ export const PostsManager = () => {
   )
 }
 
-export default PostsManager
+export default RootPage
