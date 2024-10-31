@@ -14,13 +14,13 @@ import { tagFetch } from "../../../entities/model/tagFetch"
 import { userFetchDetail } from "../../../entities/model/userFetch"
 import { useUpdateURL } from "../../../shared/model/urlUtils"
 import { useEffect, useState } from "react"
-import { postFetch } from "../model/postFetch"
-import { postFetchTags } from "../../../entities/model/postFetchTags"
+
 import { useLocation } from "react-router-dom"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/select/Select"
 import { SearchPost } from "./Search"
 import { Post } from "../model/postType"
-import { User } from "../../../entities/model/atom"
+import { postFetch, postFetchTags } from "../../../entities/model/postFetch"
+import { UserData } from "../../../entities/model/types"
 
 export const SearchAndFilter: React.FC = () => {
   const location = useLocation()
@@ -58,7 +58,7 @@ export const SearchAndFilter: React.FC = () => {
   }, [location.search])
 
   // 게시물과 사용자를 결합하는 함수
-  const processPosts = (posts: Post[], users: User[]) => {
+  const processPosts = (posts: Post[], users: UserData[]) => {
     return posts.map((post) => ({
       ...post,
       author: users.find((user) => user.id === post.userId),

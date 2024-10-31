@@ -1,8 +1,8 @@
 import { atom } from "jotai"
 
 // 댓글 상태
-export const commentsAtom = atom<Record<number, any>>({})
-export const selectedCommentAtom = atom<any>(null)
+export const commentsAtom = atom<Record<number, Comment[]>>({})
+export const selectedCommentAtom = atom<Comment | null>(null)
 export const newCommentAtom = atom<{ body: string; postId: number | null; userId: number }>({
   body: "",
   postId: null,

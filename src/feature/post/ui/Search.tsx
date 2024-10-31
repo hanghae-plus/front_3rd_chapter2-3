@@ -3,7 +3,7 @@ import { Input } from "../../../shared/ui/input/Text"
 import { limitAtom, postsAtom, searchQueryAtom, skipAtom } from "../model/postAtoms"
 import { useAtom } from "jotai"
 import { useState } from "react"
-import { postFetch } from "../model/postFetch"
+import { postFetch } from "../../../entities/model/postFetch"
 
 export const SearchPost: React.FC = () => {
   // const queryParams = new URLSearchParams(location.search)

@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/Card
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog/Dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select/Select"
 import { Input, Textarea } from "../shared/ui/input/Text"
-import { postFetch } from "../feature/post/model/postFetch"
-import { postFetchTags } from "../entities/model/postFetchTags"
+
 import { highlightText } from "../shared/utils/highlightText"
 import { useUpdateURL } from "../shared/model/urlUtils"
 import { User } from "../entities/ui/User"
@@ -45,6 +44,7 @@ import {
   showAddCommentDialogAtom,
   showEditCommentDialogAtom,
 } from "../feature/comment/model/commentAtom"
+import { postFetch, postFetchTags } from "../entities/model/postFetch"
 
 const PostsManager = () => {
   const location = useLocation()

@@ -57,7 +57,12 @@ export const RenderPostTable = () => {
     setSelectedPost(post)
     try {
       const getComment = await commentFetch(post.id)
-      setComments((prev) => ({ ...prev, [post.id]: getComment.comments }))
+      console.log("getComment", getComment)
+      if (!getComment) {
+        return
+      }
+
+      setComments((prev) => ({ ...prev, [post.id]: getComment }))
       setShowPostDetailDialog(true)
     } catch (error) {
       console.error("댓글을 가져오는 중 오류 발생:", error)

@@ -12,11 +12,18 @@ import {
 } from "../model/commentAtom"
 import { commentFetch } from "../model/commentFetch"
 import { useEffect } from "react"
+import { Comment } from "../model/commentTypes"
 
-// 댓글 렌더링
-export const CommentRender = ({ postId }) => {
+// 컴포넌트 prop 타입 정의
+interface CommentRenderProps {
+  postId: number
+}
+
+// 댓글 렌더링 컴포넌트
+export const CommentRender = ({ postId }: CommentRenderProps) => {
   const [searchQuery] = useAtom(searchQueryAtom)
   const [comments, setComments] = useAtom(commentsAtom)
+
   const [, setSelectedComment] = useAtom(selectedCommentAtom)
   const [, setNewComment] = useAtom(newCommentAtom)
   const [, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom)
@@ -36,21 +43,28 @@ export const CommentRender = ({ postId }) => {
     fetchComments()
   }, [postId, setComments])
 
-  useEffect(() => {
-    console.log("Updated comments:", comments)
-  }, [comments])
+  const handleLikeComment = async (commentId: number) => {
+    const targetComment = comments[postId].find((c) => c.id === commentId)
+    const likeUpdate = targetComment?.likes + 1
+    console.log("likeUpdate", likeUpdate)
+    console.log("targetComment", targetComment)
 
-  const handleLikeComment = async (commentId) => {
-    const targetComment = comments[postId]?.find((c) => c.id === commentId)
     if (!targetComment) return
 
     try {
       const response = await fetch(`/api/comments/${commentId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: targetComment.likes + 1 }),
+        body: JSON.stringify({ likes: likeUpdate }),
       })
-      const data = await response.json()
+      const data: Comment = await response.json()
+
+      console.log("data", data)
+
+      if (!data) {
+        return
+      }
+      prev[postId].map((comment) => (comment.id === data.id ? data : comment))
 
       setComments((prev) => ({
         ...prev,
@@ -61,7 +75,7 @@ export const CommentRender = ({ postId }) => {
     }
   }
 
-  const handleDeleteComment = async (commentId) => {
+  const handleDeleteComment = async (commentId: number) => {
     try {
       await fetch(`/api/comments/${commentId}`, { method: "DELETE" })
       setComments((prev) => ({
