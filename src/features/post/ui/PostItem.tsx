@@ -3,13 +3,13 @@ import { highlightText } from "../../../shared/lib/highlightText.tsx"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { Post } from "../../../entities/post/model/types.ts"
 import { usePostParams } from "../model/usePostParams.ts"
-import { usePosts } from "../model/usePosts.ts"
 import { usePostDialog } from "../model/usePostDialog.ts"
 import { useComments } from "../../comment/model/useComment.ts"
 import { User } from "../../../entities/user/model/types.ts"
 import { useUserModal } from "../../user/model/useUserModal.ts"
 import { fetchUserDetailApi } from "../../../entities/user/api"
 import { usePostSearch } from "../model/usePostSearch.ts"
+import { useDeletePostMutation } from "../api/mutations.ts"
 
 interface Props {
   post: Post
@@ -17,9 +17,9 @@ interface Props {
 
 export default function PostItem({ post }: Props) {
   const { selectedTag, setSelectedTag, updateURL } = usePostParams()
-  const { deletePost } = usePosts()
   const { searchText } = usePostSearch()
   const { setSelectedPost, setShowPostDetailDialog, setShowEditDialog } = usePostDialog()
+  const { mutate: deletePost } = useDeletePostMutation()
   const { setShowUserModal, setSelectedUser } = useUserModal()
   const { fetchComments } = useComments()
 

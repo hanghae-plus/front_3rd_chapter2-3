@@ -12,3 +12,9 @@ export const updatePost = (prevData: PostDto, updatedPost: Post) => ({
   ...prevData,
   posts: prevData.posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)),
 })
+
+export const deletePost = (prevData: PostDto, postId: number) => ({
+  ...prevData,
+  posts: prevData.posts.filter((post) => post.id !== postId),
+  total: prevData.total - 1,
+})

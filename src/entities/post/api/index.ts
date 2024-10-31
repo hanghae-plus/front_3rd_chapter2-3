@@ -43,9 +43,13 @@ export const addPostApi = async (newPost: NewPost) => {
 
 export const deletePostApi = async (id: number) => {
   try {
-    await fetch(`/api/posts/${id}`, {
+    const response = await fetch(`/api/posts/${id}`, {
       method: "DELETE",
     })
+
+    const data: PostDto = await response.json()
+
+    return data
   } catch (error) {
     console.error("게시물 삭제 오류:", error)
   }

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { updatePostApi } from "../../../entities/post/api"
+import { deletePostApi, updatePostApi } from "../../../entities/post/api"
 import { Post, PostDto } from "../../../entities/post/model/types.ts"
-import { updatePost } from "../../../entities/post/model"
+import { deletePost, updatePost } from "../../../entities/post/model"
 
 export const useUpdatePostMutation = () => {
   const queryClient = useQueryClient()
@@ -17,16 +17,15 @@ export const useUpdatePostMutation = () => {
   })
 }
 
-export const useUpdatePostMutation = () => {
+export const useDeletePostMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: updatePostApi,
-    onSuccess: (updatedPost: Post) => {
+    mutationFn: deletePostApi,
+    onSuccess: (deletedPost) => {
       queryClient.setQueriesData<PostDto>({ queryKey: ["posts"] }, (prevData) => {
-        console.log(prevData)
         if (!prevData) return
-        return updatePost(prevData, updatedPost)
+        return deletePost(prevData, deletedPost.id)
       })
     },
   })
