@@ -1,8 +1,7 @@
-import { CommentResponse } from '@/entities/comment/model/types';
+import { Comment } from '@/entities/comment';
 import { Post, PostResponse } from '@/entities/post';
-import { Tag } from '@/entities/tag/model/type';
-import { User } from '@/entities/user';
-import { UserResponse } from '@/entities/user/model/types';
+import { Tag } from '@/entities/tag';
+import { User, UserResponse } from '@/entities/user';
 import {
   Button,
   Card,
@@ -53,13 +52,8 @@ const PostsManager = () => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
 
-  const [comments, setComments] = useState<CommentResponse>({
-    comments: [],
-    limit: 0,
-    skip: 0,
-    total: 0
-  });
-  const [selectedComment, setSelectedComment] = useState(null);
+  const [comments, setComments] = useState<Record<number, Comment[]>>({});
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
   const [newComment, setNewComment] = useState({
     body: '',
     postId: null,
@@ -190,6 +184,9 @@ const PostsManager = () => {
 
   // 게시물 업데이트
   const updatePost = async () => {
+    if (!selectedPost) {
+      return;
+    }
     try {
       const response = await fetch(`/api/posts/${selectedPost.id}`, {
         method: 'PUT',
@@ -250,6 +247,9 @@ const PostsManager = () => {
 
   // 댓글 업데이트
   const updateComment = async () => {
+    if (!selectedComment) {
+      return;
+    }
     try {
       const response = await fetch(`/api/comments/${selectedComment.id}`, {
         method: 'PUT',
