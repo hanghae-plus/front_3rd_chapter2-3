@@ -9,7 +9,6 @@ interface Props {
   selectedTag: any
   setSelectedTag: any
   updateURL: any
-  openUserModal: any
   openPostDetail: any
   setSelectedPost: any
   setShowEditDialog: any
@@ -23,7 +22,6 @@ const PostTable = ({
   selectedTag,
   setSelectedTag,
   updateURL,
-  openUserModal,
   openPostDetail,
   setSelectedPost,
   setShowEditDialog,
@@ -42,7 +40,6 @@ const PostTable = ({
             selectedTag={selectedTag}
             setSelectedTag={setSelectedTag}
             updateURL={updateURL}
-            openUserModal={openUserModal}
             openPostDetail={openPostDetail}
             setSelectedPost={setSelectedPost}
             setShowEditDialog={setShowEditDialog}

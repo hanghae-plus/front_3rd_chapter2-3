@@ -6,7 +6,6 @@ import {
   NewCommentType,
   PostType,
   PostsResponseType,
-  SelectUserType,
   UserType,
 } from "../shared/type"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
@@ -56,8 +55,6 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<SelectUserType | null>(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -297,17 +294,18 @@ const PostsManager = () => {
     setShowPostDetailDialog(true)
   }
 
-  // 사용자 모달 열기
-  const openUserModal = async (user: UserType) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
+  // // 사용자 모달 열기
+  // const openUserModal = async (user: UserType) => {
+  //   try {
+  //     const response = await fetch(`/api/users/${user.id}`)
+  //     const userData = await response.json()
+  //     console.log(userData)
+  //     setSelectedUser(userData)
+  //     setShowUserModal(true)
+  //   } catch (error) {
+  //     console.error("사용자 정보 가져오기 오류:", error)
+  //   }
+  // }
 
   useEffect(() => {
     fetchTags()
@@ -356,7 +354,6 @@ const PostsManager = () => {
       selectedTag={selectedTag}
       setSelectedTag={setSelectedTag}
       updateURL={updateURL}
-      openUserModal={openUserModal}
       openPostDetail={openPostDetail}
       setSelectedPost={setSelectedPost}
       setShowEditDialog={setShowEditDialog}
@@ -478,7 +475,7 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 사용자 모달 */}
-      <UserModal showUserModal={showUserModal} setShowUserModal={setShowUserModal} selectedUser={selectedUser} />
+      <UserModal />
     </Card>
   )
 }

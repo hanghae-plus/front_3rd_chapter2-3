@@ -1,3 +1,4 @@
+import useUserStore from "../../../entities/user/model/useUserStore"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 
 interface Props {
@@ -7,7 +8,9 @@ interface Props {
 }
 
 //사용자 정보 모달창
-const UserModal = ({ showUserModal, setShowUserModal, selectedUser }: Props) => {
+const UserModal = () => {
+  const { showUserModal, setShowUserModal, selectedUser } = useUserStore()
+
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
       <DialogContent>

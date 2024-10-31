@@ -11,7 +11,6 @@ interface Props {
   selectedTag: any
   setSelectedTag: any
   updateURL: any
-  openUserModal: any
   openPostDetail: any
   setSelectedPost: any
   setShowEditDialog: any
@@ -25,7 +24,6 @@ const PostTableRow = ({
   selectedTag,
   setSelectedTag,
   updateURL,
-  openUserModal,
   openPostDetail,
   setSelectedPost,
   setShowEditDialog,
@@ -42,7 +40,7 @@ const PostTableRow = ({
         setSelectedTag={setSelectedTag}
         updateURL={updateURL}
       />
-      <PostUserCell openUserModal={openUserModal} post={post} />
+      <PostUserCell post={post} />
       <PostReactionCell post={post} />
       <PostActionCell
         post={post}

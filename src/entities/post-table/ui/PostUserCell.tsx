@@ -1,12 +1,12 @@
 import { UserType } from "../../../shared/type"
 import { TableCell } from "../../../shared/ui/table"
+import { openUserModal } from "../../user/model/openUserModal"
 
 interface Props {
-  openUserModal: any
   post: any
 }
 
-const UserModalButton = ({ openUserModal, post }: Props) => {
+const PostUserCell = ({ post }: Props) => {
   return (
     <TableCell>
       <div
@@ -20,4 +20,4 @@ const UserModalButton = ({ openUserModal, post }: Props) => {
   )
 }
 
-export default UserModalButton
+export default PostUserCell
