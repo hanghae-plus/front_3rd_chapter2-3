@@ -28,7 +28,6 @@ export default tseslint.config(
       "no-shadow": "warn", // 변수 섀도잉 방지(상위스코프와 동일한 하위스코프의 변수 네이밍)
       "no-magic-numbers": ["warn", { ignore: [0, 1] }], // 매직넘버 사용금지
       "no-multi-spaces": ["warn"], // 여러 개의 연속된 공백 금지
-      "space-before-function-paren": ["warn", "never"], // 함수 앞 공백 정의
       "object-shorthand": ["warn", "always"], // Object에서 key/value 같을시 value 생략
       "no-trailing-spaces": ["warn"], // 불필요 공백 방지
     },
