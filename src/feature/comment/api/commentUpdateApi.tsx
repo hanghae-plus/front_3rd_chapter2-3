@@ -1,5 +1,5 @@
 export const commentUpdateApi = async (selectedComment: Comment) => {
-  console.log("selectedComment", selectedComment)
+  console.log("selectedComment3", selectedComment)
 
   if (!selectedComment) {
     return
@@ -11,6 +11,9 @@ export const commentUpdateApi = async (selectedComment: Comment) => {
       body: JSON.stringify({ body: selectedComment.body }),
     })
 
+    if (!data) {
+      return
+    }
     return selectedComment
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error"

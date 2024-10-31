@@ -23,7 +23,7 @@ export const CommentCreateDialog = () => {
             value={newComment.body}
             onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
           />
-          <Button onClick={commentCreate}>댓글 추가</Button>
+          <Button onClick={() => commentCreate(newComment)}>댓글 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

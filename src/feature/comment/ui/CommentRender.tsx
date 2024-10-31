@@ -46,8 +46,6 @@ export const CommentRender = ({ postId }: CommentRenderProps) => {
   const handleLikeComment = async (commentId: number) => {
     const targetComment = comments[postId].find((c) => c.id === commentId)
     const likeUpdate = targetComment?.likes + 1
-    console.log("likeUpdate", likeUpdate)
-    console.log("targetComment", targetComment)
 
     if (!targetComment) return
 
