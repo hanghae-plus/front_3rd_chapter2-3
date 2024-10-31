@@ -36,7 +36,7 @@ export const usePostFilters = (filters: {
   return {
     posts: postsQuery.data?.posts ?? [],
     total: postsQuery.data?.total ?? 0,
-    tags: tagsQuery.data ?? [],
+    tags: tagsQuery.data?.tags ?? [],
     isLoading: postsQuery.isLoading || tagsQuery.isLoading,
     error: postsQuery.error || tagsQuery.error,
     refetchPosts: postsQuery.refetch,
