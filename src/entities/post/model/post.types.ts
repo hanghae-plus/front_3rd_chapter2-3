@@ -1,4 +1,4 @@
-import { User } from './user.types'
+import { User } from '@entities/user/model/user.types'
 
 export interface Reactions {
   likes: number

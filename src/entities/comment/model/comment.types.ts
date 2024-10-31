@@ -1,4 +1,4 @@
-import { User } from './user.types'
+import { User } from '../../user/model/user.types'
 
 export interface Comment {
   body: string

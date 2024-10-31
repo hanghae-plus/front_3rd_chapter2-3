@@ -1,4 +1,4 @@
-import { Reactions } from '@entities/comment/model/types'
+import { Reactions } from '@entities/post/model/post.types'
 import { ThumbsDown, ThumbsUp } from 'lucide-react'
 import { FC } from 'react'
 

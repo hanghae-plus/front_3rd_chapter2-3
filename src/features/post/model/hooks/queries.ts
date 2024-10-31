@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { postApi, PostsResponse } from '@features/post/api'
-import { DEFAULT_STALE_TIME } from '@entities/comment/model/constants'
+import { postApi, PostsResponse } from '@entities/post/api'
+import { DEFAULT_STALE_TIME } from '@entities/common/constants'
 
 export interface PostsQueryProps {
   limit: number

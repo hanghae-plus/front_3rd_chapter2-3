@@ -1,4 +1,4 @@
-import { Post } from '@entities/comment/model/types'
+import { Post } from '@entities/post/model/post.types'
 import { filterStore } from '@features/post/model/stores'
 
 export const Tags = ({ post }: { post: Post }) => {

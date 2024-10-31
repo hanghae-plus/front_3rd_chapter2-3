@@ -1,4 +1,4 @@
-import { NewPost, Post } from '@entities/comment/model/types'
+import { NewPost, Post } from '@entities/post/model/post.types'
 import { create } from 'zustand'
 
 interface PostState {

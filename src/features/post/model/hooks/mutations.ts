@@ -1,6 +1,6 @@
-import { Post, NewPost } from '@entities/comment/model/types'
+import { Post, NewPost } from '@entities/post/model/post.types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { postApi, PostsResponse } from '@features/post/api'
+import { postApi, PostsResponse } from '@entities/post/api'
 
 interface PostMutationState {
   isPending: boolean

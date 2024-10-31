@@ -1,4 +1,4 @@
-import { Comment, NewComment } from '@entities/comment/model/types'
+import { Comment, NewComment } from '@entities/comment/model/comment.types'
 import { api } from '@app/api'
 
 export const commentApi = {

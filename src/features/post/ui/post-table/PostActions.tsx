@@ -1,4 +1,4 @@
-import { Post } from '@entities/comment/model/types'
+import { Post } from '@entities/post/model/post.types'
 import { Button } from '@shared/ui'
 import { Edit2, MessageSquare, Trash2 } from 'lucide-react'
 import { useCallback } from 'react'

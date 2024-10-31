@@ -1,6 +1,6 @@
-import { Comment, NewComment } from '@entities/comment/model/types'
+import { Comment, NewComment } from '@entities/comment/model/comment.types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { commentApi } from '@features/comment/api'
+import { commentApi } from '@entities/comment/api'
 
 interface CommentMutationState {
   isPending: boolean

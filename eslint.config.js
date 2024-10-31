@@ -1,3 +1,5 @@
+import eslintPluginReact from 'eslint-plugin-react'
+
 export default [
   {
     ignores: ['node_modules/**'], // 특정 파일 또는 폴더를 무시할 수 있음
@@ -8,7 +10,9 @@ export default [
       ecmaVersion: 'latest', // 최신 ECMAScript 버전 사용
       sourceType: 'module', // ES 모듈을 지원하도록 설정
     },
-    plugins: ['react'], // react 플러그인 추가
+    plugins: {
+      react: eslintPluginReact, // react 플러그인 객체로 설정
+    },
     rules: {
       'no-console': 'error', // console.log 사용 금지
       'no-use-before-define': ['error', { functions: false }], // 함수 선언 전 사용 금지

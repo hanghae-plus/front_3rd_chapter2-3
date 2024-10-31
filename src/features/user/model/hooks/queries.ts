@@ -1,5 +1,5 @@
-import { DEFAULT_STALE_TIME } from '@entities/comment/model/constants'
-import { userApi, UsersResponse } from '@features/user/api'
+import { DEFAULT_STALE_TIME } from '@entities/common/constants'
+import { userApi, UsersResponse } from '@entities/user/ui/api'
 import { useQuery } from '@tanstack/react-query'
 
 export interface UsersQueryProps {

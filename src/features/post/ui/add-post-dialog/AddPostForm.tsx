@@ -2,7 +2,7 @@ import { Button, Input, Textarea } from '@shared/ui'
 import { postStore } from '../../model/stores'
 import { usePosts } from '../../model/hooks'
 import { useCallback } from 'react'
-import { Post } from '@entities/comment/model/types'
+import { Post } from '@entities/post/model/post.types'
 
 export default function AddPostForm() {
   const { newPost, setNewPost, setShowAddDialog } = postStore()

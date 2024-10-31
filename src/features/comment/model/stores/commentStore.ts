@@ -1,4 +1,4 @@
-import { Comment, NewComment } from '@entities/comment/model/types'
+import { Comment, NewComment } from '@entities/comment/model/comment.types'
 import { create } from 'zustand'
 
 interface CommentState {
