@@ -4,10 +4,10 @@ import { postApi } from "../../../entities/post/api/postApi"
 import { PostsResponse } from "../../../entities/post/model/types"
 import { queryClient } from "../../../shared/api"
 
-export const useAddPostMutation = () => {
+export const useUpdatePostMutation = () => {
   return useMutation({
-    mutationFn: postApi.addPost,
-    onSuccess: (newPost) => {
+    mutationFn: postApi.updatePost,
+    onSuccess: (updatedPost) => {
       const [[queryKey, oldData]] = queryClient.getQueriesData<PostsResponse>({
         queryKey: postQueryKeys.lists(),
       })
@@ -16,8 +16,10 @@ export const useAddPostMutation = () => {
       const total = oldData?.total ?? 0
 
       const newData: PostsResponse = {
-        posts: [newPost, ...posts],
-        total: total + 1,
+        posts: posts.map((post) =>
+          post.id === updatedPost.id ? { ...post, ...updatedPost } : post,
+        ),
+        total,
       }
 
       queryClient.setQueriesData({ queryKey }, newData)

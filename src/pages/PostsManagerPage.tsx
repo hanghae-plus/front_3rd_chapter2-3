@@ -18,6 +18,7 @@ import { Author, NewPost, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
 import { useAddPostMutation } from "../features/post/api/useAddPostMutation"
+import { useUpdatePostMutation } from "../features/post/api/useUpdatePostMutation"
 import {
   Button,
   Card,
@@ -112,15 +113,17 @@ const PostsManager = () => {
     })
   }
 
+  const { mutate: updatePostMutate } = useUpdatePostMutation()
+
   // 게시물 업데이트
-  const updatePost = async () => {
+  const updatePost = (selectedPost: Post | null) => {
     if (!selectedPost) return
 
-    const data = await postApi.updatePost(selectedPost)
-    if (data) {
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    }
+    updatePostMutate(selectedPost, {
+      onSuccess: () => {
+        setShowEditDialog(false)
+      },
+    })
   }
 
   // 게시물 삭제
@@ -560,7 +563,9 @@ const PostsManager = () => {
                 }
               }}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={() => updatePost(selectedPost)}>
+              게시물 업데이트
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
