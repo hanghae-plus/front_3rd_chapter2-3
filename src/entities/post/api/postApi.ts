@@ -26,3 +26,13 @@ export const deletePost = async (id: number) => {
   const res = await apiClient.delete(`/api/posts/${id}`);
   return res;
 };
+
+export const fetchPostsByTag = async (tag: string) => {
+  const res = await apiClient.get<PostsResponseDto>(`/api/posts/tag/${tag}`);
+  return res;
+};
+
+export const searchPostsApi = async (searchQuery: string) => {
+  const res = await apiClient.get<PostsResponseDto>(`/api/posts/search?q=${searchQuery}`);
+  return res;
+};

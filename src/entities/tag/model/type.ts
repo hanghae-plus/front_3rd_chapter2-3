@@ -3,3 +3,5 @@ export interface TagResponseDto {
   name: string;
   url: string;
 }
+
+export type Tags = TagResponseDto[];

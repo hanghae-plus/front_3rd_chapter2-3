@@ -4,7 +4,7 @@ import { fetchUserById } from '~/entities/user/api/userApi';
 import { User } from '~/entities/user/model/types';
 import { useUserStore } from '~/entities/user/model/userStore';
 
-export const PostAuthorCell = ({ author }: { author: User }) => {
+export const PostAuthorCell = ({ author }: { author?: User }) => {
   // modal store
   const setShowUserModal = useModalStore.use.setShowUserModal();
 

@@ -1,10 +1,13 @@
-import { Edit2, Plus, Search, ThumbsUp, Trash2 } from 'lucide-react';
+import { Edit2, Plus, ThumbsUp, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { Loading } from '~/widgets/layout/ui/Loading';
 import { Pagination } from '~/widgets/pagination/ui/Pagination';
 import { PostTable } from '~/widgets/post-table/ui/PostTable';
+import { SearchFilter } from '~/widgets/search-filter/ui/SearchFilter';
 
+import { usePost } from '~/features/post/model/usePost';
 import { UserModal } from '~/features/user-modal/ui/UserModal';
 
 import {
@@ -13,18 +16,15 @@ import {
   updateComment as updateCommentApi,
 } from '~/entities/comment/api/commentApi';
 import { CommentResponseDto } from '~/entities/comment/model/type';
-import { addPost as addPostApi, fetchAllPosts, updatePost as updatePostApi } from '~/entities/post/api/postApi';
+import { addPost as addPostApi, updatePost as updatePostApi } from '~/entities/post/api/postApi';
 import { usePostStore } from '~/entities/post/model/store';
 import { PostResponseDto } from '~/entities/post/model/types';
-import { fetchAllPostTags, fetchPostsByTag as fetchPostsByTagApi } from '~/entities/tag/api/tagApi';
 import { TagResponseDto } from '~/entities/tag/model/type';
-import { fetchAllUser } from '~/entities/user/api/userApi';
 
 import { Button } from '~/shared/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/shared/ui/Card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/shared/ui/Dialog';
 import { Input } from '~/shared/ui/Input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/ui/Select';
 import { Textarea } from '~/shared/ui/Textarea';
 
 const PostsManager = () => {
@@ -34,12 +34,12 @@ const PostsManager = () => {
 
   // 상태 관리
   const [_, setPosts] = useState<any>([]);
+  const [tags, setTags] = useState<TagResponseDto[]>([]);
 
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', body: '', userId: 1 });
   const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState<TagResponseDto[]>([]);
 
   const [comments, setComments] = useState<Record<string, CommentResponseDto[]>>({});
   const [selectedComment, setSelectedComment] = useState<CommentResponseDto | null>(null);
@@ -57,8 +57,8 @@ const PostsManager = () => {
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
 
   const posts = usePostStore.use.posts();
-  const fetchPostAction = usePostStore.use.fetchPostsAction();
-  const selectPost = usePostStore.use.posts();
+
+  const { fetchPosts } = usePost();
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -72,77 +72,75 @@ const PostsManager = () => {
     navigate(`?${params.toString()}`);
   };
 
-  // 게시물 가져오기
-  const fetchPosts = async () => {
-    setLoading(true);
-    try {
-      const postsData = await fetchAllPosts({ limit, skip });
-      const { users } = await fetchAllUser();
+  // // 게시물 가져오기
+  // const fetchPosts = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const postsData = await fetchAllPosts({ limit, skip });
+  //     const { users } = await fetchAllUser();
 
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: users.find((user) => user.id === post.userId),
-      }));
+  //     const postsWithUsers = postsData.posts.map((post) => ({
+  //       ...post,
+  //       author: users.find((user) => user.id === post.userId),
+  //     }));
 
-      fetchPostAction({ posts: postsWithUsers, total: postsData.total });
-      setTotal(postsData.total);
-    } catch (error) {
-      console.error('게시물 가져오기 오류:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     fetchPostAction({ posts: postsWithUsers, total: postsData.total });
+  //   } catch (error) {
+  //     console.error('게시물 가져오기 오류:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const tags = await fetchAllPostTags();
-      setTags(tags);
-    } catch (error) {
-      console.error('태그 가져오기 오류:', error);
-    }
-  };
+  // // 태그 가져오기
+  // const fetchTags = async () => {
+  //   try {
+  //     const tags = await fetchAllPostTags();
+  //     setTags(tags);
+  //   } catch (error) {
+  //     console.error('태그 가져오기 오류:', error);
+  //   }
+  // };
 
   // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts();
-      return;
-    }
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`);
-      const data = await response.json();
-      setPosts(data.posts);
-      setTotal(data.total);
-    } catch (error) {
-      console.error('게시물 검색 오류:', error);
-    }
-    setLoading(false);
-  };
+  // const searchPosts = async () => {
+  //   if (!searchQuery) {
+  //     fetchPosts();
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(`/api/posts/search?q=${searchQuery}`);
+  //     const data = await response.json();
+  //     setPosts(data.posts);
+  //     fetchPostAction({ posts: data.posts, total: data.total });
+  //   } catch (error) {
+  //     console.error('게시물 검색 오류:', error);
+  //   }
+  //   setLoading(false);
+  // };
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag?: string) => {
-    if (!tag || tag === 'all') {
-      fetchPosts();
-      return;
-    }
-    setLoading(true);
-    try {
-      const [postsData, usersData] = await Promise.all([fetchPostsByTagApi(tag), fetchAllUser()]);
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }));
+  // const fetchPostsByTag = async (tag?: string) => {
+  //   if (!tag || tag === 'all') {
+  //     fetchPosts();
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   try {
+  //     const [postsData, usersData] = await Promise.all([fetchPostsByTagApi(tag), fetchAllUser()]);
+  //     const postsWithUsers = postsData.posts.map((post) => ({
+  //       ...post,
+  //       author: usersData.users.find((user) => user.id === post.userId),
+  //     }));
 
-      setPosts(postsWithUsers);
-      // fetchPostAction(postsWithUsers)
-      setTotal(postsData.total);
-    } catch (error) {
-      console.error('태그별 게시물 가져오기 오류:', error);
-    }
-    setLoading(false);
-  };
+  //     // setPosts(postsWithUsers);
+  //     fetchPostAction({ posts: postsWithUsers, total: postsData.total });
+  //   } catch (error) {
+  //     console.error('태그별 게시물 가져오기 오류:', error);
+  //   }
+  //   setLoading(false);
+  // };
 
   // 게시물 추가
   const addPost = async () => {
@@ -256,15 +254,15 @@ const PostsManager = () => {
   //   }
   // };
 
-  useEffect(() => {
-    fetchTags();
-  }, []);
+  // useEffect(() => {
+  //   fetchTags();
+  // }, []);
 
   useEffect(() => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag);
     } else {
-      fetchPosts();
+      fetchPosts({});
     }
     updateURL();
   }, [skip, limit, sortBy, sortOrder, selectedTag]);
@@ -356,63 +354,10 @@ const PostsManager = () => {
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="게시물 검색..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && searchPosts()}
-                />
-              </div>
-            </div>
-            <Select
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value);
-                fetchPostsByTag(value);
-                updateURL();
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="태그 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
-                  <SelectItem key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 기준" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">없음</SelectItem>
-                <SelectItem value="id">ID</SelectItem>
-                <SelectItem value="title">제목</SelectItem>
-                <SelectItem value="reactions">반응</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 순서" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">오름차순</SelectItem>
-                <SelectItem value="desc">내림차순</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <SearchFilter />
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable posts={posts} />}
+          {loading ? <Loading /> : <PostTable posts={posts} />}
 
           {/* 페이지네이션 */}
           <Pagination />
