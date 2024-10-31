@@ -5,3 +5,4 @@ export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectI
 export { Textarea } from "./Textarea";
 export { Dialog, DialogHeader, DialogTitle, DialogContent } from "./Dialog";
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "./Table";
+export { SearchInput } from "./SearchInput";
