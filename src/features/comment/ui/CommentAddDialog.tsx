@@ -20,6 +20,10 @@ export const CommentAddDialog = () => {
     setShowCommentAddDialog(false)
   }
 
+  const handleCommentBodyUpdate = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setNewComment({ ...newComment, body: e.target.value })
+  }
+
   useEffect(() => {
     if (showCommentAddDialog) {
       setNewComment({ ...initialNewComment, postId })
@@ -32,7 +36,7 @@ export const CommentAddDialog = () => {
         <Textarea
           placeholder="댓글 내용"
           value={newComment.body}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setNewComment({ ...newComment, body: e.target.value })}
+          onChange={handleCommentBodyUpdate}
         />
         <Button onClick={handleCommentAdd}>댓글 추가</Button>
       </>
