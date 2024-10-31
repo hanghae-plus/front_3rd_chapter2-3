@@ -6,5 +6,5 @@ export const fetchUsersApi = async () => {
 };
 
 export const fetchUsersById = async (id: number) => {
-    return apiClient.get(`/users/${id}`);
+    return apiClient.get<User>(`/users/${id}`);
 } 
