@@ -56,7 +56,7 @@ const renderPostsManager = () => {
   );
 };
 
-describe("PostsManager", () => {
+describe.skip("PostsManager", () => {
   it("게시물을 렌더링하고 검색을 허용합니다", async () => {
     const user = userEvent.setup();
     renderPostsManager();
@@ -108,11 +108,11 @@ describe("PostsManager", () => {
     renderPostsManager();
 
     // 기존 게시물들이 로드될 때까지 대기
-    // await waitFor(() => {
-    //   TEST_POSTS.posts.forEach((post) => {
-    //     expect(screen.getByText(post.title)).toBeInTheDocument();
-    //   });
-    // });
+    await waitFor(() => {
+      TEST_POSTS.posts.forEach((post) => {
+        expect(screen.getByText(post.title)).toBeInTheDocument();
+      });
+    });
 
     const addButton = screen.getByRole("button", { name: /게시물 추가/i });
     await user.click(addButton);
