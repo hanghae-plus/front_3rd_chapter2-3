@@ -1,14 +1,14 @@
 import apiInstance from '../../../shared/lib/apiInstance';
-import { Comment } from './types';
+import { Comment, CommentList } from './types';
 
 // 댓글 가져오기
-export const fetchComments = async (postId: number): Promise<Comment[]>  => {
+export const fetchComments = async (postId: number): Promise<CommentList>  => {
   const response = await apiInstance(`/api/comments/post/${postId}`);
   return response;
 };
 
 // 댓글 추가
-export const addComment = async (newComment: Omit<Comment, 'id' | 'likes' | 'user'>): Promise<Comment> => {
+export const addComment = async (newComment:{ body: string; postId: number | null; userId: number; }): Promise<Comment> => {
   const response = await apiInstance('/api/comments/add', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

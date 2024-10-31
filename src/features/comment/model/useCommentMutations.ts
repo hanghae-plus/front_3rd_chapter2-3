@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addComment, updateComment, deleteComment, likeComment } from '../../../entities/comment/api/commentApi.js';
+import { addComment, deleteComment, likeComment } from '../../../entities/comment/api/commentApi.js';
 import { Comment } from '../../../entities/comment/api/types.js';
 
 const useCommentMutations = () => {
@@ -7,13 +7,6 @@ const useCommentMutations = () => {
 
   const addCommentMutation = useMutation<Comment,Error,Omit<Comment, 'id' | 'likes' | 'user'>>({
     mutationFn: addComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:['comments']});
-    },
-  });
-
-  const updateCommentMutation = useMutation<Comment,Error,Partial<Comment> & { id: number }>({
-    mutationFn: updateComment,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['comments']});
     },
@@ -35,7 +28,7 @@ const useCommentMutations = () => {
 
   return {
     addCommentMutation,
-    updateCommentMutation,
+    // updateCommentMutation,
     deleteCommentMutation,
     likeCommentMutation,
   };

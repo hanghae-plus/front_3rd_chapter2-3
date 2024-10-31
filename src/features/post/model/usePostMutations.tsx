@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addPost, updatePost, deletePost } from '../../../entities/post/api/postApi.js';
+import { addPost, deletePost, updatePost } from '../../../entities/post/api/postApi.js';
 import { Post } from '../../../entities/post/api/types.js';
 
 const usePostMutations = () => {
   const queryClient = useQueryClient();
 
-  const addPostMutation = useMutation<Post, Error, Omit<Post, 'id' | 'reactions' | 'author'>>({
+  const addPostMutation = useMutation<Post, Error,Partial<Omit<Post, 'id' | 'reactions' | 'author'>>>({
     mutationFn: addPost,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['posts']});
@@ -24,6 +24,7 @@ const usePostMutations = () => {
       console.error(error.message);
     },
   });
+
 
   const deletePostMutation = useMutation<{ success: boolean }, Error, number>({
     mutationFn: deletePost,

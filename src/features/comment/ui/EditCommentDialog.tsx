@@ -2,9 +2,10 @@
 import React from 'react';
 import { Dialog, DialogContents, DialogHeader, DialogTitle } from '../../../shared/ui/Dialog';
 import { Button } from '../../../shared/ui/Button/Button';
+import { Comment } from "../../../entities/comment/api/types";
 import { Textarea } from '../../../shared/ui/Textarea/Textarea';
 import { useAtom } from 'jotai';
-import { selectedCommentAtom, showEditCommentDialogAtom } from '../../../entities/comment/model/commentAtom';
+import { commentsAtom, selectedCommentAtom, showEditCommentDialogAtom } from '../../../entities/comment/model/commentAtom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateComment } from '../../../entities/comment/api/commentApi';
 
@@ -12,18 +13,22 @@ const EditCommentDialog: React.FC = () => {
   const queryClient = useQueryClient();
   const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom);
   const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom);
+  const [, setComments] = useAtom(commentsAtom);
 
-  const updateCommentMutation = useMutation(updateComment, {
+  const updateCommentMutation = useMutation<Comment,Error,Partial<Comment> & { id: number }>({
+    mutationFn: updateComment,
     onSuccess: () => {
+
       if (selectedComment?.postId) {
-        queryClient.invalidateQueries(['comments', selectedComment.postId]);
+        queryClient.invalidateQueries({queryKey:['comments', selectedComment?.postId]});
+        setComments((prev) => ({
+          ...prev,
+          [selectedComment.postId]: prev[selectedComment.postId].map((comment) => (comment.id === selectedComment.id ? selectedComment : comment)),
+        }))
       }
       setShowEditCommentDialog(false);
       setSelectedComment(null);
-    },
-    onError: (error: any) => {
-      console.error('댓글 업데이트 오류:', error);
-      // 필요 시 사용자에게 에러 메시지 표시
+      
     },
   });
 
@@ -47,8 +52,8 @@ const EditCommentDialog: React.FC = () => {
             value={selectedComment.body}
             onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
           />
-          <Button onClick={handleSubmit} disabled={updateCommentMutation.isLoading}>
-            {updateCommentMutation.isLoading ? '업데이트 중...' : '댓글 업데이트'}
+          <Button onClick={handleSubmit} disabled={updateCommentMutation.isPending}>
+            {updateCommentMutation.isPending ? '업데이트 중...' : '댓글 업데이트'}
           </Button>
         </div>
       </DialogContents>

@@ -1,8 +1,8 @@
 // src/pages/PostsManagerPage
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../shared/ui/Card';
 import { Button } from '../shared/ui/Button/Button';
-import { Plus, Search } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useAtom } from 'jotai';
 import {
   skipAtom,
@@ -13,30 +13,19 @@ import {
   showAddDialogAtom,
 } from '../entities/post/model/postAtom';
 import { selectedTagAtom, tagsAtom } from '../entities/tag/model/tagAtom';
-import { commentAtom } from '../entities/comment/model/commentAtom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../shared/ui/Select';
 import PostsTable from '../features/post/ui/PostsTable';
-import PostForm from '../features/post/ui/PostForm';
-import PostDetail from '../features/post/ui/PostDeatil';
-import { Textarea } from '../shared/ui/Textarea/Textarea';
-import { highlightText } from '../shared/utils/index.tsx';
 import usePosts from '../features/post/model/usePost';
-import useComments from '../features/comment/model/useComments';
-import usePostMutations from '../features/post/model/usePostMutations';
-import useCommentMutations from '../features/comment/model/useCommentMutations';
-import {
-  Dialog,
-  DialogContents,
-  DialogHeader,
-  DialogTitle,
-} from "../shared/ui/Dialog";
-import { Input } from "../shared/ui/InputBox/InputBox";
-import CommentList from '../features/comment/ui/CommentList.tsx';
-import { selectedUserAtom, showUserModalAtom } from '../entities/user/model/userAtom.ts';
-import useUser from '../features/user/model/useUser.tsx';
 import useTags from '../features/post/model/useTags.tsx';
 import { FetchPostsParams } from '../entities/post/api/types.ts';
+import PostDetailDialog from '../features/post/ui/PostDetailDialog.tsx';
+import AddCommentDialog from '../features/comment/ui/AddCommentDialog.tsx';
+import EditCommentDialog from '../features/comment/ui/EditCommentDialog.tsx';
+import EditPostDialog from '../features/post/ui/EditPostDialog.tsx';
+import AddPostDialog from '../features/post/ui/AddPostDialog.tsx';
+import UserDetailDialog from '../features/user/ui/UserDetailDialog.tsx';
+import SearchBar from '../widgets/post/SearchBar.tsx';
 
 const PostsManagerPage = () => {
   console.log('PostsManagerPage')
@@ -50,12 +39,9 @@ const PostsManagerPage = () => {
   const [sortBy, setSortBy] = useAtom(sortByAtom);
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom);
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom);
-  const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom);
-  const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom);
-  const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom);
+  const [, setShowAddDialog] = useAtom(showAddDialogAtom);
 
-  const [tags, setTags] = useAtom(tagsAtom);
-  const [comments, setComments] = useAtom(commentAtom);
+  const [, setTags] = useAtom(tagsAtom);
 
   // React Query Hooks
   const params = useMemo(() => ({
@@ -67,14 +53,8 @@ const PostsManagerPage = () => {
     sortOrder,
   }), [limit, skip, selectedTag, searchQuery, sortBy, sortOrder]);
   
-  const { data: postsData, isLoading: postsLoading } = usePosts({ limit, skip, tag: selectedTag, search: searchQuery, sortBy, sortOrder });
-  const { data: tagsData, isLoading: tagsLoading } = useTags();
-  // const { data: tagsData, isLoading: tagsLoading } = usePosts({ limit: 0, skip: 0, tag: 'all', search: '', sortBy: '', sortOrder: 'asc' }); // fetchTags is handled in usePosts
-  // const { data: usersData, isLoading: usersLoading } = usePosts({ limit: 0, skip: 0, tag: 'all', search: '', sortBy: '', sortOrder: 'asc' }); // fetchUsers is handled in usePosts
-
-  // Mutations
-  const postMutations = usePostMutations();
-  const commentMutations = useCommentMutations();
+  const { data: postsData, isLoading: postsLoading } = usePosts(params);
+  const { data: tagsData } = useTags();
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -97,7 +77,7 @@ const PostsManagerPage = () => {
     setSortBy(params.get("sortBy") || "");
     setSortOrder(params.get("sortOrder") as FetchPostsParams['sortOrder'] || "asc");
     setSelectedTag(params.get("tag") || "");
-  }, [location.search, setSkip, setLimit, setSearchQuery, setSortBy, setSortOrder, setSelectedTag]);
+  }, [location.search, setLimit, setSearchQuery, setSelectedTag, setSkip, setSortBy, setSortOrder]);
 
   // 게시물 데이터 로드 성공 시 태그 설정
   useEffect(() => {
@@ -123,16 +103,7 @@ const PostsManagerPage = () => {
           {/* 검색 및 필터 컨트롤 */}
           <div className="flex gap-4">
             <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="게시물 검색..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && updateURL()}
-                />
-              </div>
+              <SearchBar />
             </div>
             <Select
               value={selectedTag}
@@ -164,7 +135,9 @@ const PostsManagerPage = () => {
                 <SelectItem value="reactions">반응</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
+            <Select value={sortOrder} onValueChange={(value:'asc' | 'desc') => {
+                  setSortOrder(value);
+                }}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="정렬 순서" />
               </SelectTrigger>
@@ -231,72 +204,18 @@ const PostsManagerPage = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContents>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <PostForm />
-        </DialogContents>
-      </Dialog>
+      <AddPostDialog />
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={postMutations.updatePostMutation.isLoading || postMutations.addPostMutation.isLoading} onOpenChange={() => {}}>
-        <DialogContents>
-          <DialogHeader>
-            <DialogTitle>게시물 {postMutations.updatePostMutation.isLoading ? '업데이트 중' : '추가 중'}</DialogTitle>
-          </DialogHeader>
-          <div className="flex justify-center p-4">처리 중...</div>
-        </DialogContents>
-      </Dialog>
+      <EditPostDialog />
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={postMutations.showPostDetailDialog} onOpenChange={postMutations.setShowPostDetailDialog}>
-        <DialogContents className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{highlightText(postMutations.selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>{highlightText(postMutations.selectedPost?.body, searchQuery)}</p>
-            {/* 댓글 렌더링 */}
-            <CommentList comments={comments[postMutations.selectedPost.id] || []} searchQuery={searchQuery} />
-          </div>
-        </DialogContents>
-      </Dialog>
+      <PostDetailDialog />
+      <AddCommentDialog />
+      <EditCommentDialog />
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContents>
-          <DialogHeader>
-            <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
-        </DialogContents>
-      </Dialog>
+      <UserDetailDialog />
     </Card>
   );
 };

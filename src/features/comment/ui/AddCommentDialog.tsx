@@ -14,7 +14,7 @@ const AddCommentDialog: React.FC = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom);
   const [newComment, setNewComment] = useAtom(newCommentAtom);
 
-  const addCommentMutation = useMutation<Comment,Error,Omit<Comment, 'id' | 'likes' | 'user'>>({
+  const addCommentMutation = useMutation<Comment,Error,{ body: string; postId: number | null; userId: number; }>({
     mutationFn: (newComment)=>addComment(newComment),
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['comments']});

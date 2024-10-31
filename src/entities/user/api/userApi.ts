@@ -4,6 +4,7 @@ import { AllUsers, UserInfo } from './types';
 // 모든 사용자 가져오기
 export const fetchUsers = async (): Promise<AllUsers> => {
   const response = await apiInstance('/api/users?limit=0&select=username,image');
+  console.log('response',response)
   return response.data;
 };
 

@@ -9,11 +9,12 @@ const apiInstance = async (endpoint:string, { method = 'GET', body = undefined, 
   const config:RequestInit = {
     method,
     headers: method.toUpperCase() === 'GET' ? {} : defaultHeaders,
+    body
   };
 
   // body가 있는 경우 JSON.stringify
   if (body && method.toUpperCase() !== 'GET') {
-    config.body = JSON.stringify(body);
+    config.body = body;
   }
 
   try {

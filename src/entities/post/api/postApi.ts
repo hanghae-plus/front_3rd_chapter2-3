@@ -11,7 +11,7 @@ export const fetchPosts = async (params:FetchPostsParams): Promise<Posts>=> {
   return await apiInstance(url);
 };
 
-export const addPost = async (newPost: Omit<Post, 'id' | 'reactions' | 'author'>): Promise<Post> => {
+export const addPost = async (newPost: Partial<Omit<Post, 'id' | 'reactions' | 'author'>>): Promise<Post> => {
   const response = await apiInstance('/api/posts/add', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

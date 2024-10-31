@@ -1,35 +1,36 @@
 // src/features/posts/components/EditPostDialog.tsx
 import React from 'react';
 import { Dialog, DialogContents, DialogHeader, DialogTitle } from '../../../shared/ui/Dialog';
-import { Button } from '../../../shared/ui/Button/Button';
-import { Input } from '../../../shared/ui/InputBox/InputBox';
-import { Textarea } from '../../../shared/ui/Textarea/Textarea';
+import PostForm from './PostForm';
 import { useAtom } from 'jotai';
-import { selectedPostAtom, showEditDialogAtom } from '../../../entities/post/model/postAtom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updatePost } from '../../../entities/post/api/postApi';
+import { showEditDialogAtom, selectedPostAtom } from '../../../entities/post/model/postAtom';
+import { Post } from '../../../entities/post/api/types';
+import usePostMutations from '../model/usePostMutations';
 
 const EditPostDialog: React.FC = () => {
-  const queryClient = useQueryClient();
   const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom);
-  const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom);
+  const [selectedPost] = useAtom(selectedPostAtom);
+  const { updatePostMutation } = usePostMutations();
 
-  const updatePostMutation = useMutation(updatePost, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['posts']);
-      setShowEditDialog(false);
-      setSelectedPost(null);
-    },
-    onError: (error: any) => {
-      console.error('게시물 업데이트 오류:', error);
-      // 필요 시 사용자에게 에러 메시지 표시
-    },
-  });
+  const handleClose = () => {
+    setShowEditDialog(false);
+  };
 
-  const handleSubmit = () => {
-    if (selectedPost) {
-      updatePostMutation.mutate(selectedPost);
+  const handleUpdatePost = (data: Partial<Post>) => {
+    if (selectedPost?.id === undefined) {
+      alert('게시물 ID가 없습니다.');
+      return;
     }
+
+    updatePostMutation.mutate({ ...data, id: selectedPost.id } as Post, {
+      onSuccess: () => {
+        handleClose();
+      },
+      onError: (error) => {
+        console.error('게시물 업데이트 실패:', error);
+        alert('게시물 업데이트에 실패했습니다. 다시 시도해주세요.');
+      },
+    });
   };
 
   if (!selectedPost) return null;
@@ -40,22 +41,7 @@ const EditPostDialog: React.FC = () => {
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <Input
-            placeholder="제목"
-            value={selectedPost.title}
-            onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-          />
-          <Textarea
-            rows={5}
-            placeholder="내용"
-            value={selectedPost.body}
-            onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-          />
-          <Button onClick={handleSubmit} disabled={updatePostMutation.isLoading}>
-            {updatePostMutation.isLoading ? '업데이트 중...' : '게시물 업데이트'}
-          </Button>
-        </div>
+        <PostForm initialData={selectedPost} onSubmit={handleUpdatePost} />
       </DialogContents>
     </Dialog>
   );
