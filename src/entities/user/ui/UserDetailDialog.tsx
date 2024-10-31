@@ -1,4 +1,4 @@
-import { CustomDialog } from "../../../widgets/ui/CustomDialog"
+import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { User } from "../model/types"
 
 export const UserDetailDialog: React.FC<{

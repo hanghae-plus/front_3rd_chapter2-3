@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react"
 import { NewPost } from "../../../entities/post/model/types"
 import { Button, Input, Textarea } from "../../../shared/ui"
-import { CustomDialog } from "../../../widgets/ui/CustomDialog"
+import { CustomDialog } from "../../../shared/ui/CustomDialog"
 
 export const PostAddDialog: React.FC<{
   showAddDialog: boolean

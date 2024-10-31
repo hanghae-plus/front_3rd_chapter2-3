@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react"
 import { Input, Textarea, Button } from "../../../shared/ui"
-import { CustomDialog } from "../../../widgets/ui/CustomDialog"
+import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { Post } from "../../../entities/post/model/types"
 
 export const PostUpdateDialog: React.FC<{

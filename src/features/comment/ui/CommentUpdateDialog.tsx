@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react";
 import { Comment } from "../../../entities/comment/model/types";
 import { Textarea, Button } from "../../../shared/ui";
-import { CustomDialog } from "../../../widgets/ui/CustomDialog";
+import { CustomDialog } from "../../../shared/ui/CustomDialog";
 
 export const CommentUpdateDialog : React.FC<{
   showEditCommentDialog: boolean

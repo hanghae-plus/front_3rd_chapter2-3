@@ -1,4 +1,4 @@
-import { CustomDialog } from "../../../widgets/ui/CustomDialog"
+import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { NewComment, Comment } from "../../comment/model/types"
 import { Comments } from "../../comment/ui/Comments"

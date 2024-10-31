@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react"
 import { NewComment } from "../../../entities/comment/model/types"
 import { Button, Textarea } from "../../../shared/ui"
-import { CustomDialog } from "../../../widgets/ui/CustomDialog"
+import { CustomDialog } from "../../../shared/ui/CustomDialog"
 
 export const CommentAddDialog: React.FC<{
   showAddCommentDialog: boolean
