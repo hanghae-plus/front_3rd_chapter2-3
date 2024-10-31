@@ -1,5 +1,5 @@
-import { Button } from "../../shared/ui/button/Button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/select/Select"
+import { Button } from "../../shared/ui/Button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/Select"
 
 interface Props {
   limit: number

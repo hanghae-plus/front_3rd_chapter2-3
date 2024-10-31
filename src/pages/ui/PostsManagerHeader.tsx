@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react"
-import { Button } from "../../shared/ui/button/Button"
-import { CardHeader, CardTitle } from "../../shared/ui/card/Card"
+import { Button } from "../../shared/ui/Button"
+import { CardHeader, CardTitle } from "../../shared/ui/Card"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
 
 const PostsManagerHeader = () => {

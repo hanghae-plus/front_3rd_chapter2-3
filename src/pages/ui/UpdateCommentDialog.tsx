@@ -1,7 +1,7 @@
 // 댓글 수정 대화상자
-import { Button } from "../../shared/ui/button/Button"
-import { Textarea } from "../../shared/ui/textarea/Textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { Button } from "../../shared/ui/Button"
+import { Textarea } from "../../shared/ui/Textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { useComment } from "../../features/comment/model/useComment"
 import { Comment } from "../../features/comment/model/types"
 import { putCommentFetch } from "../../entities/comment/api"

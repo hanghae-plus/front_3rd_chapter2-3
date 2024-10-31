@@ -1,9 +1,9 @@
 // 게시물 수정 대화상자
 
-import { Button } from "../../shared/ui/button/Button"
-import { Input } from "../../shared/ui/input/Input"
-import { Textarea } from "../../shared/ui/textarea/Textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/dialog/Dialog"
+import { Button } from "../../shared/ui/Button"
+import { Input } from "../../shared/ui/Input"
+import { Textarea } from "../../shared/ui/Textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { usePost } from "../../features/post/model/usePost"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
 import { putPostFetch } from "../../entities/post/api"
