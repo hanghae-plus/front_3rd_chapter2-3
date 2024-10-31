@@ -6,7 +6,7 @@ import { pipe } from "@/shared/lib/function";
 import { merge } from "@/shared/lib/object";
 import { useQueryParams } from "@/shared/model/useQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postQueryKey } from "../lib/queryConfig";
+import { getQueryConfig } from "../lib/queryConfig";
 
 export const useAddPost = () => {
   const queryClient = useQueryClient();
@@ -15,7 +15,7 @@ export const useAddPost = () => {
   return useMutation({
     mutationFn: postApi.addPost,
     onSuccess: (data) => {
-      queryClient.setQueryData(postQueryKey(queries), (oldData: PostsResponse | undefined) => {
+      queryClient.setQueryData(getQueryConfig(queries).queryKey, (oldData: PostsResponse | undefined) => {
         if (!oldData) return undefined;
         const pipePost = pipe(withDefaultAuthor, withDefaultTags, withDefaultReactions);
         return merge<PostsResponse>(oldData, "posts", addItemInArray(oldData.posts, pipePost(data), "start"));
