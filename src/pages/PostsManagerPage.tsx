@@ -27,6 +27,7 @@ import {
 } from "../shared/ui"
 import { Post, PostsData, User, NewComment, Comment } from "../shared/types"
 import { useTags } from "../shared/model/useTag"
+import { usePost } from "../shared/model/usePost"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -34,7 +35,6 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
@@ -60,7 +60,7 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const { tags, getTags } = useTags()
-
+  const { posts, setPosts, handleAddPost, handleUpdatePost, handleDeletePost } = usePost()
   // URL 업데이트 함수
   const updateURL = () => {
     const params = new URLSearchParams()
@@ -147,51 +147,6 @@ const PostsManager = () => {
       console.error("태그별 게시물 가져오기 오류:", error)
     }
     setLoading(false)
-  }
-
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
-  }
-
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost!.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
-  }
-
-  // 게시물 삭제
-  const deletePost = async (id: number) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
-    }
   }
 
   // 댓글 가져오기
@@ -404,7 +359,7 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -587,7 +542,7 @@ const PostsManager = () => {
               value={newPost.userId}
               onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
             />
-            <Button onClick={addPost}>게시물 추가</Button>
+            <Button onClick={handleAddPost.bind(this, newPost)}>게시물 추가</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -610,7 +565,7 @@ const PostsManager = () => {
               value={selectedPost?.body || ""}
               onChange={(e) => setSelectedPost({ ...selectedPost!, body: e.target.value })}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={handleUpdatePost.bind(this, selectedPost!)}>게시물 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>
