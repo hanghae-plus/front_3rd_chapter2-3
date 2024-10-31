@@ -29,6 +29,12 @@ import {
 } from "../entities/comment/api"
 import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
+import {
+  addToCommentsRecord,
+  findInCommentsRecord,
+  removeFromCommentsRecord,
+  updateInCommentsMap,
+} from "../entities/comment/model/utils"
 import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
