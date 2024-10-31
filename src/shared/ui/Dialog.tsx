@@ -6,7 +6,7 @@ type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root> & {
   className?: string
 }
 
-const Dialog = DialogPrimitive.Root
+const DialogContainer = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
 const DialogPortal = DialogPrimitive.Portal
 const DialogOverlay = DialogPrimitive.Overlay
@@ -44,4 +44,12 @@ DialogContent.displayName = DialogPrimitive.Content.displayName
 DialogHeader.displayName = 'DialogHeader'
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
-export { Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle }
+export const Dialog = Object.assign({
+  Container: DialogContainer,
+  Trigger: DialogTrigger,
+  Portal: DialogPortal,
+  Overlay: DialogOverlay,
+  Content: DialogContent,
+  Header: DialogHeader,
+  Title: DialogTitle,
+})

@@ -1,12 +1,6 @@
-import { Comment, NewComment } from '@entities/model/types'
+import { Comment, CommentMutationState, NewComment } from '@entities/comment/model/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { commentApi } from '@features/comment/api'
-
-interface MutationState {
-  isPending: boolean
-  isError: boolean
-  error: Error | null
-}
 
 export function useCommentMutations(postId: number) {
   const queryClient = useQueryClient()
@@ -50,7 +44,7 @@ export function useCommentMutations(postId: number) {
     },
   })
 
-  const mutationState: MutationState = {
+  const mutationState: CommentMutationState = {
     isPending:
       createMutation.isPending || updateMutation.isPending || deleteMutation.isPending || likeMutation.isPending,
     isError: createMutation.isError || updateMutation.isError || deleteMutation.isError || likeMutation.isError,

@@ -1,8 +1,9 @@
-import { Button, Textarea } from '@shared/ui'
-import { DialogLayout } from '@widgets/ui'
+import { DialogLayout } from '@shared/ui'
 import { useComments } from '../model/hooks'
 import { postStore } from '@features/post/model/stores'
 import { commentStore } from '../model/stores'
+import { useCallback } from 'react'
+import { EditForm } from '@shared/ui'
 
 export const AddCommentDialog = () => {
   const { selectedPost } = postStore()
@@ -10,19 +11,20 @@ export const AddCommentDialog = () => {
 
   const { addComment } = useComments(selectedPost?.id ?? 0)
 
-  const handleAddComment = async () => {
-    await addComment(newComment)
+  const handleAddComment = useCallback(() => {
+    addComment(newComment)
     setShowAddCommentDialog(false)
-  }
+  }, [addComment, newComment, setShowAddCommentDialog])
 
   return (
     <DialogLayout title="새 댓글 추가" open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-      <Textarea
-        placeholder="댓글 내용"
+      <EditForm
         value={newComment.body}
+        placeholder="댓글 내용"
+        submitText="댓글 추가"
         onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
+        onSubmit={handleAddComment}
       />
-      <Button onClick={handleAddComment}>댓글 추가</Button>
     </DialogLayout>
   )
 }

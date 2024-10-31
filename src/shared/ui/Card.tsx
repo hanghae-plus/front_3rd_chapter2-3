@@ -4,7 +4,7 @@ type CardProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string
 }
 
-const Card = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+const CardWrapper = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
   <div ref={ref} className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props} />
 ))
 
@@ -20,9 +20,16 @@ const CardTitle = forwardRef<HTMLHeadingElement, CardProps>(({ className, ...pro
   <h3 ref={ref} className={`text-2xl font-semibold leading-none tracking-tight ${className}`} {...props} />
 ))
 
-Card.displayName = 'Card'
+CardWrapper.displayName = 'Card'
 CardHeader.displayName = 'CardHeader'
 CardContent.displayName = 'CardContent'
 CardTitle.displayName = 'CardTitle'
 
-export { Card, CardContent, CardHeader, CardTitle }
+// export { Card, CardContent, CardHeader, CardTitle }
+
+export const Card = Object.assign({
+  Container: CardWrapper,
+  Header: CardHeader,
+  Title: CardTitle,
+  Content: CardContent,
+})

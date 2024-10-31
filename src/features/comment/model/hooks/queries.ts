@@ -1,8 +1,7 @@
 import { commentApi } from '@features/comment/api'
 import { useQuery } from '@tanstack/react-query'
-import type { Comment } from '@entities/model/types'
-
-const DEFAULT_STALE_TIME = 5 * 60 * 1000
+import type { Comment } from '@entities/comment/model/types'
+import { DEFAULT_STALE_TIME } from '@entities/comment/model/constants'
 
 export function useCommentsQuery(postId: number) {
   return useQuery<Comment[], Error>({
@@ -12,5 +11,6 @@ export function useCommentsQuery(postId: number) {
       return comments
     },
     staleTime: DEFAULT_STALE_TIME,
+    enabled: postId !== 0,
   })
 }

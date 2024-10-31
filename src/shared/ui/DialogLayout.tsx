@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shared/ui'
+import { Dialog } from '@shared/ui'
 
 interface DialogLayoutProps {
   open: boolean
@@ -11,11 +11,11 @@ interface DialogLayoutProps {
 
 export const DialogLayout: FC<DialogLayoutProps> = ({ open, onOpenChange, children, title, className = '' }) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={className}>
-        <DialogHeader>{title && <DialogTitle>{title}</DialogTitle>}</DialogHeader>
+    <Dialog.Container open={open} onOpenChange={onOpenChange}>
+      <Dialog.Content className={className}>
+        <Dialog.Header>{title && <Dialog.Title>{title}</Dialog.Title>}</Dialog.Header>
         <div className="space-y-4">{children}</div>
-      </DialogContent>
-    </Dialog>
+      </Dialog.Content>
+    </Dialog.Container>
   )
 }

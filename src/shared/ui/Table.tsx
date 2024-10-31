@@ -30,7 +30,7 @@ type TableCellProps = TdHTMLAttributes<HTMLTableDataCellElement> & {
   className?: string
 }
 
-const Table = forwardRef<HTMLTableElement, TableProps>(({ className = '', ...props }, ref) => (
+const TableContainer = forwardRef<HTMLTableElement, TableProps>(({ className = '', ...props }, ref) => (
   <div className="w-full overflow-auto">
     <table ref={ref} className={`table-fixed w-full caption-bottom text-sm ${className}`} {...props} />
   </div>
@@ -65,10 +65,18 @@ const TableCell = forwardRef<HTMLTableDataCellElement, TableCellProps>(({ classN
   <td ref={ref} className={`p-2 align-middle [&:has([role=checkbox])]:pr-0 ${className}`} {...props} />
 ))
 
-Table.displayName = 'Table'
+TableContainer.displayName = 'TableContainer'
+TableHeader.displayName = 'TableHeader'
 TableBody.displayName = 'TableBody'
 TableRow.displayName = 'TableRow'
 TableHead.displayName = 'TableHead'
 TableCell.displayName = 'TableCell'
 
-export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }
+export const Table = Object.assign({
+  Container: TableContainer,
+  Header: TableHeader,
+  Body: TableBody,
+  Row: TableRow,
+  Head: TableHead,
+  Cell: TableCell,
+})

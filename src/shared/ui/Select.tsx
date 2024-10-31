@@ -15,7 +15,7 @@ type SelectItemProps = ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & {
   className?: string
 }
 
-const Select = SelectPrimitive.Root
+const SelectContainer = SelectPrimitive.Root
 const SelectGroup = SelectPrimitive.Group
 const SelectValue = SelectPrimitive.Value
 
@@ -64,4 +64,11 @@ SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 SelectContent.displayName = SelectPrimitive.Content.displayName
 SelectItem.displayName = SelectPrimitive.Item.displayName
 
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem }
+export const Select = Object.assign({
+  Container: SelectContainer,
+  Group: SelectGroup,
+  Value: SelectValue,
+  Trigger: SelectTrigger,
+  Content: SelectContent,
+  Item: SelectItem,
+})

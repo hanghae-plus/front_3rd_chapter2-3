@@ -1,4 +1,4 @@
-import { Post, NewPost, Tag, User } from '@entities/model/types'
+import { Post, NewPost, Tag, User } from '@entities/comment/model/types'
 import { api } from '@app/api'
 
 export interface PostsResponse {

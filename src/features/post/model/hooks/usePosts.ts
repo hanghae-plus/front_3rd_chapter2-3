@@ -1,11 +1,13 @@
-import { PostsQueryProps, usePostsQuery } from './queries'
+import { usePostsQuery } from './queries'
 import { usePostMutations } from './mutations'
+import { filterStore } from '../stores'
 
-export function usePosts({ limit, skip, tag, searchQuery }: PostsQueryProps) {
+export function usePosts() {
+  const { limit, skip, searchQuery, selectedTag } = filterStore()
   const { data, isLoading, error, isError } = usePostsQuery({
     limit,
     skip,
-    tag,
+    tag: selectedTag,
     searchQuery,
   })
 

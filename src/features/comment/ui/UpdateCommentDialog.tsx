@@ -1,8 +1,9 @@
-import { Button, Textarea } from '@shared/ui'
-import { DialogLayout } from '@widgets/ui'
+import { DialogLayout } from '@shared/ui'
 import { commentStore } from '../model/stores'
 import { useComments } from '../model/hooks'
 import { postStore } from '@features/post/model/stores'
+import { useCallback } from 'react'
+import { EditForm } from '@shared/ui'
 
 export const UpdateCommentDialog = () => {
   const { showEditCommentDialog, selectedComment, setShowEditCommentDialog, setSelectedComment } = commentStore()
@@ -11,22 +12,23 @@ export const UpdateCommentDialog = () => {
 
   const { updateComment } = useComments(selectedPost?.id ?? 0)
 
-  const handleUpdateComment = async () => {
-    await updateComment({ id: selectedComment?.id ?? 0, body: selectedComment?.body ?? '' })
+  const handleUpdateComment = useCallback(() => {
+    updateComment({ id: selectedComment?.id ?? 0, body: selectedComment?.body ?? '' })
     setShowEditCommentDialog(false)
-  }
+  }, [updateComment, selectedComment, setShowEditCommentDialog])
 
   return (
     <DialogLayout open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-      <Textarea
-        placeholder="댓글 내용"
+      <EditForm
         value={selectedComment?.body || ''}
+        placeholder="댓글 내용"
+        submitText="댓글 업데이트"
         onChange={(e) => {
           if (!selectedComment) return
           setSelectedComment({ ...selectedComment, body: e.target.value })
         }}
+        onSubmit={handleUpdateComment}
       />
-      <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
     </DialogLayout>
   )
 }

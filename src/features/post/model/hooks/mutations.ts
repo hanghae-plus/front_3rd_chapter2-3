@@ -1,12 +1,6 @@
-import { Post, NewPost } from '@entities/model/types'
+import { Post, NewPost, PostMutationState } from '@entities/comment/model/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postApi, PostsResponse } from '@features/post/api'
-
-interface MutationState {
-  isPending: boolean
-  isError: boolean
-  error: Error | null
-}
 
 export function usePostMutations() {
   const queryClient = useQueryClient()
@@ -52,7 +46,7 @@ export function usePostMutations() {
     },
   })
 
-  const mutationState: MutationState = {
+  const mutationState: PostMutationState = {
     isPending: createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
     isError: createMutation.isError || updateMutation.isError || deleteMutation.isError,
     error: createMutation.error || updateMutation.error || deleteMutation.error,

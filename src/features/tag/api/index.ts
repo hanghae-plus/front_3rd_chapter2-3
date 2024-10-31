@@ -1,5 +1,5 @@
 import { api } from '@app/api'
-import { Tag } from '@entities/model/types'
+import { Tag } from '@entities/comment/model/types'
 
 export const tagApi = {
   fetchTags: async () => {
