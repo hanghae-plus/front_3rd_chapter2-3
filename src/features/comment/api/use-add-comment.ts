@@ -4,7 +4,7 @@ import { Comment } from "@/entities/comment/model/types";
 import { addItemInArray } from "@/shared/lib/array";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useAddComment = () => {
+export const useMutateAddComment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

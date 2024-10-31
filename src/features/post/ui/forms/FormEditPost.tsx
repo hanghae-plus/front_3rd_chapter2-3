@@ -5,7 +5,7 @@ import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useShallow } from "zustand/shallow";
 
-import { useUpdatePost } from "../../api/use-update-post";
+import { useMutateUpdatePost } from "../../api/use-update-post";
 import usePostsStore from "../../model/usePostsStore";
 
 const FormEditPost = () => {
@@ -16,7 +16,7 @@ const FormEditPost = () => {
       handleSelectPost: state.handleSelectPost,
     })),
   );
-  const { mutate: updatePost, isPending } = useUpdatePost();
+  const { mutate: updatePost, isPending } = useMutateUpdatePost();
 
   const handleChangePost = (key: keyof Post, value: string | number) => {
     if (!selectedPost) return;

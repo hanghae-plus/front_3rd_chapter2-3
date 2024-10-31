@@ -1,5 +1,5 @@
 import Tags from "@/entities/tag/ui/Tags";
-import useFetchTags from "@/features/filter/api/use-get-tags";
+import useQueryTags from "@/features/filter/api/use-get-tags";
 
 import { useQueryParams } from "@/shared/model";
 import { Select } from "@/shared/ui/Select";
@@ -9,7 +9,7 @@ const FilterTag = () => {
     queries: { tag },
     handleUpdateQuery,
   } = useQueryParams();
-  const { data: tags } = useFetchTags();
+  const { data: tags } = useQueryTags();
 
   const handleChangeTag = (tag: string) => {
     handleUpdateQuery("tag", tag);

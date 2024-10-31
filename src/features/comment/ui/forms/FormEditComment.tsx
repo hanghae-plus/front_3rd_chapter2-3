@@ -4,7 +4,7 @@ import { useGlobalModal } from "@/shared/model";
 import { Button, Textarea } from "@/shared/ui";
 
 import { useEffect, useState } from "react";
-import { useUpdateComment } from "../../api/use-update-comment";
+import { useMutateUpdateComment } from "../../api/use-update-comment";
 
 type FormEditCommentProps = {
   comment: Comment | null;
@@ -13,7 +13,7 @@ type FormEditCommentProps = {
 const FormEditComment = ({ comment }: FormEditCommentProps) => {
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
   const { close } = useGlobalModal("editComment", comment?.id);
-  const { mutate: updateComment } = useUpdateComment();
+  const { mutate: updateComment } = useMutateUpdateComment();
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setSelectedComment((prev) => {

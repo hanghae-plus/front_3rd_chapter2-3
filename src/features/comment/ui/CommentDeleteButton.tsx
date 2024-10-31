@@ -3,14 +3,14 @@ import { Comment } from "@/entities/comment/model/types";
 import { Button } from "@/shared/ui";
 
 import { Trash2 } from "lucide-react";
-import { useDeleteComment } from "../api/use-delete-comment";
+import { useMutateDeleteComment } from "../api/use-delete-comment";
 
 type CommentLikeButtonProps = {
   comment: Comment;
 };
 
 const CommentDeleteButton = ({ comment }: CommentLikeButtonProps) => {
-  const { mutate: deleteComment } = useDeleteComment();
+  const { mutate: deleteComment } = useMutateDeleteComment();
 
   return (
     <Button variant="ghost" size="sm" onClick={() => deleteComment({ postId: comment.postId, id: comment.id })}>

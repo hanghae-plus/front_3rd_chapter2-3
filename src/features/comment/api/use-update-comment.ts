@@ -4,7 +4,7 @@ import { Comment } from "@/entities/comment/model/types";
 import { updateByID } from "@/shared/lib/array";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useUpdateComment = () => {
+export const useMutateUpdateComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: commentApi.updateComment,

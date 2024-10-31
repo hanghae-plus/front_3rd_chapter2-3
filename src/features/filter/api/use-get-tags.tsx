@@ -1,8 +1,8 @@
 import { tagQueries } from "@/entities/tag/api/tag-queries";
 import { useQuery } from "@tanstack/react-query";
 
-const useFetchTags = () => {
+const useQueryTags = () => {
   return useQuery(tagQueries.list());
 };
 
-export default useFetchTags;
+export default useQueryTags;

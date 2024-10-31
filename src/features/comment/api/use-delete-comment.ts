@@ -4,7 +4,7 @@ import { Comment } from "@/entities/comment/model/types";
 import { filterByID } from "@/shared/lib/array";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useDeleteComment = () => {
+export const useMutateDeleteComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id }: { postId: number; id: number }) => commentApi.deleteComment(id),

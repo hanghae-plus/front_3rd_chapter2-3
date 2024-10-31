@@ -4,13 +4,13 @@ import { useGlobalModal } from "@/shared/model";
 import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useState } from "react";
-import { useAddPost } from "../../api/use-add-post";
+import { useMutateAddPost } from "../../api/use-add-post";
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1 };
 
 const FormAddPost = () => {
   const { close } = useGlobalModal("addPost");
-  const { mutate: addPost } = useAddPost();
+  const { mutate: addPost } = useMutateAddPost();
 
   const [newPost, setNewPost] = useState(initialNewPost);
 

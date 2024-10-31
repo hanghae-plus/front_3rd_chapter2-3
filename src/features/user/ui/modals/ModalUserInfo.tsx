@@ -4,7 +4,7 @@ import UserInfo from "@/entities/user/ui/UserInfo";
 import { useToggle } from "@/shared/model";
 import { Dialog, Loader } from "@/shared/ui";
 
-import { useGetUser } from "../../api/use-get-user";
+import { useQueryUser } from "../../api/use-get-user";
 
 type ModalUserInfoProps = {
   user?: UserSummary;
@@ -13,7 +13,7 @@ type ModalUserInfoProps = {
 // Data Component
 const ModalUserInfo = ({ user }: ModalUserInfoProps) => {
   const { isOpen, toggle } = useToggle();
-  const { data: userData, isLoading } = useGetUser({ id: user?.id ?? 0, options: { enabled: isOpen } });
+  const { data: userData, isLoading } = useQueryUser({ id: user?.id ?? 0, options: { enabled: isOpen } });
 
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>

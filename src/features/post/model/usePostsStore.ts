@@ -23,10 +23,10 @@ type PostApiActions = {
   deletePost: (id: number) => void;
   fetchPosts: (props?: { limit: number; skip: number }) => void;
   fetchPostsByTag: (tag: string) => void;
-  searchPosts: (props: UseSearchPostsProps) => void;
+  searchPosts: (props: useQuerySearchPostsProps) => void;
 };
 
-type UseSearchPostsProps = {
+type useQuerySearchPostsProps = {
   searchQuery: string;
   limit: number;
   skip: number;

@@ -4,7 +4,7 @@ import { Button, Textarea } from "@/shared/ui";
 
 import { useGlobalModal } from "@/shared/model";
 import { useState } from "react";
-import { useAddComment } from "../../api/use-add-comment";
+import { useMutateAddComment } from "../../api/use-add-comment";
 import { initialNewComment } from "../../config/initialValues";
 
 type FormAddCommentProps = {
@@ -13,7 +13,7 @@ type FormAddCommentProps = {
 
 const FormAddComment = ({ postId }: FormAddCommentProps) => {
   const { close } = useGlobalModal("addComment");
-  const { mutate: addComment } = useAddComment();
+  const { mutate: addComment } = useMutateAddComment();
   const [newComment, setNewComment] = useState<NewComment>(() => ({ ...initialNewComment, postId }));
 
   const handleAddComment = async () => {

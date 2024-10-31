@@ -8,7 +8,7 @@ import { useQueryParams } from "@/shared/model";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getQueryConfig } from "../lib/queryConfig";
 
-export const useAddPost = () => {
+export const useMutateAddPost = () => {
   const queryClient = useQueryClient();
   const { queries } = useQueryParams();
 

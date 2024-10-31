@@ -76,10 +76,16 @@ TableHead.displayName = "TableHead";
 
 type TableCellProps = React.HTMLAttributes<HTMLTableCellElement> & {
   className?: string;
+  colSpan?: number;
 };
 
-const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(({ className, ...props }, ref) => (
-  <td ref={ref} className={mixinClasses("p-2 align-middle [&:has([role=checkbox])]:pr-0", className)} {...props} />
+const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(({ className, colSpan, ...props }, ref) => (
+  <td
+    ref={ref}
+    colSpan={colSpan}
+    className={mixinClasses("p-2 align-middle [&:has([role=checkbox])]:pr-0", className)}
+    {...props}
+  />
 ));
 TableCell.displayName = "TableCell";
 
