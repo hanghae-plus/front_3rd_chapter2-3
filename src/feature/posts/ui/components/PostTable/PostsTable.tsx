@@ -6,13 +6,11 @@ import {
   TableRow,
 } from "../../../../../shared"
 import { User } from "../../../../users/model/types"
-import { usePostsQuery } from "../../../lib/hooks/usePostsQuery"
 import { Post } from "../../../model/types"
 import { PostTableRow } from "./PostTableRow"
 
 export const PostTable = ({
-  limit,
-  skip,
+  posts,
   searchQuery,
   selectedTag,
   onPostDetail,
@@ -20,8 +18,7 @@ export const PostTable = ({
   onPostDelete,
   onUserClick,
 }: {
-  limit: number
-  skip: number
+  posts: Post[]
   searchQuery: string
   selectedTag: string
   onPostDetail: (post: Post) => void
@@ -29,7 +26,7 @@ export const PostTable = ({
   onPostDelete: (id: number) => void
   onUserClick: (author: User) => void
 }) => {
-  const { data: posts } = usePostsQuery(limit, skip)
+
   return (
     <Table>
       <TableHeader>
@@ -42,7 +39,7 @@ export const PostTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {posts?.posts.map((post) => (
+        {posts?.map((post) => (
           <PostTableRow
             key={post.id}
             post={post}

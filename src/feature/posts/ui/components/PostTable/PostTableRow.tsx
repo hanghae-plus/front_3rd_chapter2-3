@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "../../../../../shared"
-import { highlightText } from "../../../../../shared/lib"
+import highlightText from "../../../../../shared/lib/helper/highlight-text"
 import { User } from "../../../../users/model/types"
 import { UserAvatar } from "../../../../users/ui/components/UserAvatar"
 import { Post } from "../../../model/types"

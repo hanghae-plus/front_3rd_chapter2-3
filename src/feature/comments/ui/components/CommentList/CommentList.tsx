@@ -2,6 +2,7 @@ import { useState } from "react"
 import {
   useComments,
   useDeleteCommentMutation,
+  useLikeCommentMutation,
 } from "../../../lib/hooks/useCommentsQuery"
 import { Button } from "../../../../../shared"
 import { Plus } from "lucide-react"
@@ -18,6 +19,7 @@ interface CommentListProps {
 export const CommentList = ({ postId, searchQuery }: CommentListProps) => {
   const { data: commentsData, isLoading } = useComments(postId)
   const { mutate: deleteComment } = useDeleteCommentMutation()
+  const { mutate: likeComment } = useLikeCommentMutation(postId)
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
@@ -42,7 +44,7 @@ export const CommentList = ({ postId, searchQuery }: CommentListProps) => {
             comment={comment}
             searchQuery={searchQuery}
             onLike={() => {
-              console.log("Like comment!")
+              likeComment(comment.id)
             }}
             onEdit={() => {
               setSelectedComment(comment)
@@ -63,6 +65,7 @@ export const CommentList = ({ postId, searchQuery }: CommentListProps) => {
         comment={selectedComment}
         open={showEditDialog}
         onOpenChange={setShowEditDialog}
+        postId={postId}
       />
     </div>
   )

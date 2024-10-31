@@ -8,6 +8,7 @@ import {
 import { useUpdatePostMutation } from "../../../lib/hooks/usePostsQuery"
 import type { Post } from "../../../model/types"
 import { Button, Input, Textarea } from "../../../../../shared"
+import { ERROR_MESSAGES } from "../../../config/posts.config"
 
 interface EditPostDialogProps {
   post: Post | null
@@ -38,17 +39,21 @@ export const EditPostDialog = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!post) return
-
-    updatePost(
-      { id: post.id, data: formData },
-      {
-        onSuccess: () => {
-          onOpenChange(false)
-          onSuccess?.()
+    try {
+      if (!post) return
+      updatePost(
+        { id: post.id, data: formData },
+        {
+          onSuccess: () => {
+            onOpenChange(false)
+            onSuccess?.()
+          },
         },
-      },
-    )
+      )
+    } catch (error) {
+      console.error(`${ERROR_MESSAGES.UPDATE_ERROR}`, error)
+    }
+    
   }
 
   return (
@@ -94,7 +99,7 @@ export const EditPostDialog = ({
             />
           </div>
           <Button type="submit" disabled={isPending}>
-            {isPending ? "추가 중..." : "게시물 수정"}
+            {isPending ? "수정 중..." : "게시물 수정"}
           </Button>
         </form>
       </DialogContent>

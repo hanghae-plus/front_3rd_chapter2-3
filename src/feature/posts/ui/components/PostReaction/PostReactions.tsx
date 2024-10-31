@@ -34,7 +34,7 @@ export const PostReactions = ({
         onClick={interactive ? onLike : undefined}
       >
         <ThumbsUp className={iconSize} />
-        <span className={textSize}>{reactions.likes}</span>
+        <span className={textSize}>{reactions?.likes}</span>
       </div>
       <div
         className={cn(
@@ -44,7 +44,7 @@ export const PostReactions = ({
         onClick={interactive ? onDislike : undefined}
       >
         <ThumbsDown className={iconSize} />
-        <span className={textSize}>{reactions.dislikes}</span>
+        <span className={textSize}>{reactions?.dislikes}</span>
       </div>
     </div>
   )

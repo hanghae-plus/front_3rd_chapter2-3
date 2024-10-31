@@ -23,7 +23,7 @@ export const AddCommentDialog = ({
   onSuccess,
 }: AddCommentDialogProps) => {
   const [body, setBody] = useState("")
-  const { mutate: addComment, isPending } = useAddCommentMutation()
+  const { mutate: addComment, isPending } = useAddCommentMutation(postId)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

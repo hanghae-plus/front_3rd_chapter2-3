@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import {
   Button,
   Card,
@@ -12,13 +12,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../shared"
-import { postsApi } from "../feature/posts/api/posts.api"
 import {
+  useDeletePostMutation,
   usePostsQuery,
   useSearchPostsQuery,
 } from "../feature/posts/lib/hooks/usePostsQuery"
 import { Pagination } from "../feature/posts/ui/components/Controls/Pagination"
-
 import { PostTable } from "../feature/posts/ui/components/PostTable"
 import {
   AddPostDialog,
@@ -26,143 +25,52 @@ import {
   PostDetailDialog,
 } from "../feature/posts/ui/components/PostDialogs"
 import { PostFilters } from "../feature/posts/ui"
+import { useURLParams } from "../feature/posts/lib/hooks/useURLParams"
 
 const PostsManager = () => {
-  const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
 
-  // 상태 관리
-  const [posts, setPosts] = useState([])
-  const [total, setTotal] = useState(0)
+   // URL 관련 상태만 유지
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(
-    queryParams.get("search") || "",
-  )
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(
-    queryParams.get("sortOrder") || "asc",
-  )
+  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+
+  // 다이얼로그 상태
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState(false)
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
-
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
+
+  // 선택된 항목 상태
+  const [selectedPost, setSelectedPost] = useState(null)
   const [selectedUser, setSelectedUser] = useState(null)
 
-  //  react-query
-  const { data: postsData, isPending: postsPending } = usePostsQuery(
-    limit,
-    skip,
-  )
+  // 데이터 쿼리
+  const { data: postsData, isPending: postsPending } = usePostsQuery(limit, skip)
   const { data: searchedData } = useSearchPostsQuery(searchQuery)
+  const deletePostMutation = useDeletePostMutation()
+  const { updateURL } = useURLParams()
 
-  // URL 업데이트 함수
-  const updateURL = () => {
-    const params = new URLSearchParams()
-    if (skip) params.set("skip", skip.toString())
-    if (limit) params.set("limit", limit.toString())
-    if (searchQuery) params.set("search", searchQuery)
-    if (sortBy) params.set("sortBy", sortBy)
-    if (sortOrder) params.set("sortOrder", sortOrder)
-    if (selectedTag) params.set("tag", selectedTag)
-    navigate(`?${params.toString()}`)
-  }
-
-  useEffect(() => {
-    if (searchQuery) {
-      setPosts(searchedData?.posts)
-      setTotal(searchedData?.total)
-    }
-  }, [searchedData])
-
-  // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
-    if (!tag || tag === "all") {
-      postsApi.getPosts(limit, skip).then((data) => {
-        setPosts(data.posts)
-        setTotal(data.total)
-      })
-      return
-    }
-    setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
-    setLoading(false)
-  }
+  // 실제 표시할 posts와 total 계산
+  const posts = searchQuery ? searchedData?.posts : postsData?.posts
+  const total = searchQuery ? searchedData?.total : postsData?.total
 
   // 게시물 삭제
   const deletePost = async (id) => {
     try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      setPosts(posts.filter((post) => post.id !== id))
+      await deletePostMutation.mutateAsync(id)
     } catch (error) {
       console.error("게시물 삭제 오류:", error)
-    }
-  }
-
-  // 댓글 가져오기
-  const fetchComments = async (postId) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
-    }
-  }
-
-  // 댓글 좋아요
-  const likeComment = async (id, postId) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          likes: comments[postId].find((c) => c.id === id).likes + 1,
-        }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) =>
-          comment.id === data.id ? data : comment,
-        ),
-      }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
     }
   }
 
   // 게시물 상세 보기
   const openPostDetail = (post) => {
     setSelectedPost(post)
-    fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
@@ -179,26 +87,15 @@ const PostsManager = () => {
   }
 
   useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      postsApi.getPosts(limit, skip).then((data) => {
-        setPosts(data.posts)
-        setTotal(data.total)
-      })
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
+    updateURL({
+      skip,
+      limit,
+      search: searchQuery,
+      sortBy,
+      sortOrder,
+      tag: selectedTag
+    })
+  }, [skip, limit, searchQuery, sortBy, sortOrder, selectedTag])
 
   if (postsPending) {
     return <div className="flex justify-center p-4">로딩 중...</div>
@@ -230,20 +127,18 @@ const PostsManager = () => {
           />
 
           {/* 게시물 테이블 */}
-          {loading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
-          ) : (
-            <PostTable
-              limit={limit}
-              skip={skip}
-              searchQuery={searchQuery}
-              selectedTag={selectedTag}
-              onPostDetail={openPostDetail}
-              onPostEdit={setSelectedPost}
-              onPostDelete={deletePost}
-              onUserClick={openUserModal}
-            />
-          )}
+          <PostTable
+            posts={posts}
+            searchQuery={searchQuery}
+            selectedTag={selectedTag}
+            onPostDetail={openPostDetail}
+            onPostEdit={(post) => {
+              setSelectedPost(post)
+              setShowEditDialog(true)
+            }}
+            onPostDelete={deletePost}
+            onUserClick={openUserModal}
+          />
 
           {/* 페이지네이션 */}
           <Pagination
@@ -258,11 +153,12 @@ const PostsManager = () => {
 
       {/* 게시물 추가 대화상자 */}
       <AddPostDialog
+        limit={limit}
+        skip={skip}
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
         onSuccess={() => {
           setShowAddDialog(false)
-          setNewPost({ title: "", body: "", userId: 1 })
         }}
       />
       {/* 게시물 수정 대화상자 */}

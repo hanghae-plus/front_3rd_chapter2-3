@@ -48,4 +48,13 @@ export class BaseApi {
       throw new Error("data delete 실패!!")
     }
   }
+
+  protected async patch(path: string): Promise<void> {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: "PATCH",
+    })
+    if (!response.ok) {
+      throw new Error("data patch 실패!!")
+    }
+  }
 }

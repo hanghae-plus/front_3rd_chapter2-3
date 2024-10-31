@@ -16,6 +16,7 @@ interface EditCommentDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess?: () => void
+  postId: number
 }
 
 export const EditCommentDialog = ({
@@ -23,9 +24,10 @@ export const EditCommentDialog = ({
   open,
   onOpenChange,
   onSuccess,
+  postId,
 }: EditCommentDialogProps) => {
   const [body, setBody] = useState("")
-  const { mutate: updateComment, isPending } = useUpdateCommentMutation()
+  const { mutate: updateComment, isPending } = useUpdateCommentMutation(postId)
 
   useEffect(() => {
     if (comment) {

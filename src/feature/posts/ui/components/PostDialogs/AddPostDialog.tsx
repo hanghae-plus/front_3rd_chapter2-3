@@ -8,15 +8,20 @@ import {
 
 import { useAddPostMutation } from "../../../lib/hooks/usePostsQuery"
 import { Button, Input, Textarea } from "../../../../../shared"
+import { ERROR_MESSAGES } from "../../../config/posts.config"
 
 interface AddPostDialogProps {
   open: boolean
+  limit: number
+  skip: number
   onOpenChange: (open: boolean) => void
   onSuccess?: () => void
 }
 
 export const AddPostDialog = ({
   open,
+  limit,
+  skip,
   onOpenChange,
   onSuccess,
 }: AddPostDialogProps) => {
@@ -26,27 +31,50 @@ export const AddPostDialog = ({
     userId: 1,
   })
 
-  const { mutate: addPost, isPending } = useAddPostMutation()
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const addPostMutation = useAddPostMutation(limit, skip)
+    
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    addPost(formData, {
-      onSuccess: () => {
-        onOpenChange(false)
-        setFormData({ title: "", body: "", userId: 1 })
-        onSuccess?.()
-      },
-    })
+    
+    try {
+      await addPostMutation.mutateAsync({
+        title: formData.title,
+        body: formData.body,
+        userId: 1,
+      })
+      
+      setFormData({
+        title: "",
+        body: "",
+        userId: 1,
+      })
+      onOpenChange(false)
+      onSuccess?.()
+    } catch (error) {
+      console.error(`${ERROR_MESSAGES.ADD_ERROR}`, error)
+    }
+  }
+
+  // ESC나 외부 클릭으로 닫힐 때 폼 초기화
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      setFormData({
+        title: "",
+        body: "",
+        userId: 1,
+      })
+    }
+    onOpenChange(newOpen)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>새 게시물 추가</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+        <div className="space-y-2">
             <label htmlFor="title" className="text-sm font-medium">
               제목
             </label>
@@ -81,9 +109,21 @@ export const AddPostDialog = ({
               required
             />
           </div>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "추가 중..." : "게시물 추가"}
-          </Button>
+          <div className="flex justify-end space-x-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => handleOpenChange(false)}
+            >
+              취소
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={addPostMutation.isPending}
+            >
+              {addPostMutation.isPending ? "추가 중..." : "게시물 추가"}
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

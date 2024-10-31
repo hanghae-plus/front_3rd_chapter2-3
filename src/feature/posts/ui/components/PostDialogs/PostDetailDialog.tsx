@@ -34,7 +34,7 @@ export const PostDetailDialog = ({
         <div className="space-y-4">
           <div className="prose prose-sm max-w-none">{post.body}</div>
           <div className="flex flex-wrap gap-1">
-            {post.tags.map((tag) => (
+            {post.tags?.map((tag) => (
               <span
                 key={tag}
                 className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
