@@ -2,7 +2,7 @@ import React, { Dispatch, useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog/ui"
 import { Textarea } from "../../../shared/ui/textarea/ui/Textarea.tsx"
 import { Button } from "../../../shared/ui/button/ui/Button.tsx"
-import { useAddCommentMutation } from "../api/useMutateCommentAdd.ts"
+import { useAddCommentMutation } from "../api/useMutateAddComment.ts"
 import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 interface Props {

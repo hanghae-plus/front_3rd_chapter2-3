@@ -1,4 +1,4 @@
-import { PostsResponse, UserResponse } from "../model/types.ts"
+import { Post, PostsResponse, UserResponse } from "../model/types.ts"
 import axiosClient from "../../../app/axios/axiosClient.ts"
 
 export const getPostsAndUsers = async (
@@ -35,11 +35,16 @@ export const addPost = async (newPost: { title: string; body: string; userId: nu
   return response.data
 }
 
-export const updatePost = async (postId: number, updatedPost: { title: string; body: string }) => {
+export const editPost = async (postId: number, updatedPost: { title: string; body: string }): Promise<Post> => {
   const response = await axiosClient.put(`/posts/${postId}`, updatedPost)
   return response.data
 }
 
 export const deletePost = async (postId: number) => {
   await axiosClient.delete(`/posts/${postId}`)
+}
+
+export const searchPost = async (query: string): Promise<PostsResponse> => {
+  const response = await axiosClient.get(`/posts/search?q=${query}`)
+  return response.data
 }

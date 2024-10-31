@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { Button } from "../../../shared/ui/button/ui/Button.tsx"
 import { Textarea } from "../../../shared/ui/textarea/ui/Textarea.tsx"
 import { Comment } from "../../../entities/comment/model/types.ts"
-import { useEditCommentMutation } from "../api/useMutateCommentEdit.ts"
+import { useEditCommentMutation } from "../api/useMutateEditComment.ts"
 
 interface Props {
   comment: Comment

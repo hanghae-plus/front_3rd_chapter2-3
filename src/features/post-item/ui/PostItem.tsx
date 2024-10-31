@@ -6,6 +6,8 @@ import PostTableTagCell from "../../post-tag-select/ui/PostTableTagCell.tsx"
 import PostAuthorUser from "../../post-author-user/ui/PostAuthorUser.tsx"
 import PostReactionsItem from "../../../entities/post/ui/PostReactionsItem.tsx"
 import PostDetailButton from "../../post-detail/ui/PostDetailButton.tsx"
+import PostEditButton from "../../post-edit/ui/PostEditButton.tsx"
+import PostDeleteButton from "../../post-delete/ui/PostDeleteButton.tsx"
 
 interface Props {
   post: Post
@@ -32,22 +34,8 @@ const PostItem = ({ post }: Props) => {
       <TableCell>
         <div className="flex items-center gap-2">
           <PostDetailButton post={post} />
-          {/*<Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>*/}
-          {/*  <MessageSquare className="w-4 h-4" />*/}
-          {/*</Button>*/}
-          {/*<Button*/}
-          {/*  variant="ghost"*/}
-          {/*  size="sm"*/}
-          {/*  onClick={() => {*/}
-          {/*    setSelectedPost(post)*/}
-          {/*    setShowEditDialog(true)*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  <Edit2 className="w-4 h-4" />*/}
-          {/*</Button>*/}
-          {/*<Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>*/}
-          {/*  <Trash2 className="w-4 h-4" />*/}
-          {/*</Button>*/}
+          <PostEditButton post={post} />
+          <PostDeleteButton post={post} />
         </div>
       </TableCell>
     </TableRow>

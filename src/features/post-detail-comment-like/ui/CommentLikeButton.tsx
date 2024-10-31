@@ -1,7 +1,7 @@
 import { Button } from "../../../shared/ui/button/ui/Button.tsx"
 import { ThumbsUp } from "lucide-react"
 import { Comment } from "../../../entities/comment/model/types.ts"
-import { useLikeCommentMutation } from "../api/useMutateCommentLike.ts"
+import { useLikeCommentMutation } from "../api/useMutateLikeComment.ts"
 
 interface Props {
   comment: Comment

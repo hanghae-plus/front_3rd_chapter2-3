@@ -22,8 +22,6 @@ const PostDetailButton = ({ post }: Props) => {
     setShowPostDetailDialog(true)
   }
 
-  console.log(selectedPost, "selectedPost")
-
   return (
     <>
       <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
@@ -38,7 +36,6 @@ const PostDetailButton = ({ post }: Props) => {
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
             <CommentContent postId={post.id} />
-            {/*{renderComments(selectedPost?.id)}*/}
           </div>
         </DialogContent>
       </Dialog>

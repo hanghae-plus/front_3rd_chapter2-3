@@ -4,15 +4,16 @@ import { Post } from "../../../entities/post/model/types.ts"
 interface PostStoreState {
   posts: Post[]
   total: number
-  selectedPost: Post | null
   isLoading: boolean
 }
 
 interface PostStoreAction {
   setPosts: (posts: Post[]) => void
   setTotal: (total: number) => void
-  setSelectedPost: (post: Post | null) => void
   setIsLoading: (isLoading: boolean) => void
+  removePosts: (postId: number) => void
+  editPosts: (updatedPost: Post) => void
+  addPosts: (newPost: Post) => void
 }
 
 type PostsStore = PostStoreAction & PostStoreState
@@ -20,17 +21,29 @@ type PostsStore = PostStoreAction & PostStoreState
 export const usePostsStore = create<PostsStore>((set) => ({
   posts: [],
   total: 0,
-  selectedPost: null,
   isLoading: false,
 
-  setPosts: (posts) => {
-    console.log(posts, "storePost")
-    return set({ posts })
-  },
   setTotal: (total: number) => set({ total }),
-  setSelectedPost: (post) => set({ selectedPost: post }),
-  setIsLoading: (isLoading) => {
-    console.log(isLoading, "stoare")
-    return set({ isLoading })
+
+  setIsLoading: (isLoading) => set({ isLoading }),
+
+  setPosts: (posts) => set({ posts }),
+
+  removePosts: (postId) => {
+    set((state) => ({
+      posts: state.posts.filter((post) => post.id !== postId),
+    }))
+  },
+
+  editPosts: (updatedPost) => {
+    set((state) => ({
+      posts: state.posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)),
+    }))
+  },
+
+  addPosts: (newPost) => {
+    set((state) => ({
+      posts: [newPost, ...state.posts],
+    }))
   },
 }))

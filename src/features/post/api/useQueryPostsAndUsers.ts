@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { usePostsStore } from "../model/usePostsStore.ts"
-import { getPostsAndUsers, getPostsByTagAndUsers } from "../../../entities/post/api/postApi.ts"
+import { getPostsAndUsers, getPostsByTagAndUsers } from "../../../entities/post/api"
 import { getPostsWithAuthors } from "../../../entities/post/model/getPostsWithAuthors.ts"
 import { useEffect } from "react"
 

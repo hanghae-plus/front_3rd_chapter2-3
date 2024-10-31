@@ -2,7 +2,7 @@ import { deleteComment } from "../../../entities/comment/api/commentApi.ts"
 import { useMutation } from "@tanstack/react-query"
 import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
-export const UseMutateCommentDelete = () => {
+export const UseMutateDeleteComment = () => {
   const { postId, deleteComments } = useCommentStore((state) => state)
 
   return useMutation<void, Error, number>(deleteComment, {
