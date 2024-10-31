@@ -9,6 +9,8 @@ import { Button } from "../shared/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/Table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/Select";
 import { highlightText } from "../shared/lib/highlightText";
+import { getPosts, getPostsTag, searchPosts } from "../entities/posts/api/posts";
+import { getAllUsersData } from "../entities/user/api/users";
 // import { TableBodyRow } from "../features/posts/ui/PostTableRow";
 
 const PostsManager = () => {
@@ -65,56 +67,44 @@ const PostsManager = () => {
   };
 
   // 게시물 가져오기
-  const fetchPosts = () => {
+  const fetchPosts = async () => {
     setLoading(true);
-    let postsData;
-    let usersData;
-
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then(response => response.json())
-      .then(data => {
-        postsData = data;
-        return fetch("/api/users?limit=0&select=username,image");
-      })
-      .then(response => response.json())
-      .then(users => {
-        usersData = users.users;
-        const postsWithUsers = postsData.posts.map(post => ({
-          ...post,
-          author: usersData.find(user => user.id === post.userId),
-        }));
-        setPosts(postsWithUsers);
-        setTotal(postsData.total);
-      })
-      .catch(error => {
-        console.error("게시물 가져오기 오류:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      const postsData = await getPosts(limit, skip);
+      const usersData = await getAllUsersData();
+      const postsWithUsers = postsData.posts.map(post => ({
+        ...post,
+        author: usersData.users.find(user => user.id === post.userId),
+      }));
+      setPosts(postsWithUsers);
+      setTotal(postsData.total);
+    } catch (error) {
+      console.error("게시물 가져오기 오류:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 태그 가져오기
   const fetchTags = async () => {
     try {
-      const response = await fetch("/api/posts/tags");
-      const data = await response.json();
-      setTags(data);
+      const tags = await getPostsTag();
+      setTags(tags);
     } catch (error) {
       console.error("태그 가져오기 오류:", error);
     }
   };
 
   // 게시물 검색
-  const searchPosts = async () => {
+  const onSearchPosts = async () => {
     if (!searchQuery) {
       fetchPosts();
       return;
     }
     setLoading(true);
     try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`);
-      const data = await response.json();
+      const response = searchPosts(searchQuery);
       setPosts(data.posts);
       setTotal(data.total);
     } catch (error) {
@@ -338,7 +328,7 @@ const PostsManager = () => {
       </TableHeader>
       <TableBody>
         {posts.map(post => (
-          <TableBodyRow post={post} />
+          <TableBodyRow post={post} key={post.id} />
         ))}
       </TableBody>
     </Table>
@@ -365,7 +355,9 @@ const PostsManager = () => {
         <PostCommentButton postId={postId} />
       </div>
       <div className="space-y-1">
-        {comments[postId]?.map(comment => <Comment comment={comment} postId={postId} />)}
+        {comments[postId]?.map(comment => (
+          <Comment comment={comment} postId={postId} key={postId} />
+        ))}
       </div>
     </div>
   );
@@ -403,7 +395,7 @@ const PostsManager = () => {
                   className="pl-8"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  onKeyPress={e => e.key === "Enter" && searchPosts()}
+                  onKeyPress={e => e.key === "Enter" && onSearchPosts()}
                 />
               </div>
             </div>
@@ -620,10 +612,9 @@ const PostsManager = () => {
     </Card>
   );
 
-  function PostTag(tag, selectedTag) {
+  function PostTag({ tag, selectedTag }) {
     return (
       <span
-        key={tag}
         className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
           selectedTag === tag
             ? "text-white bg-blue-500 hover:bg-blue-600"
@@ -647,7 +638,11 @@ const PostsManager = () => {
           <div className="space-y-1">
             <div>{highlightText(post.title, searchQuery)}</div>
 
-            <div className="flex flex-wrap gap-1">{post.tags.map(PostTag)}</div>
+            <div className="flex flex-wrap gap-1">
+              {post.tags.map(tag => (
+                <PostTag selectedTag={selectedTag} tag={tag} key={tag} />
+              ))}
+            </div>
           </div>
         </TableCell>
         <TableCell>
