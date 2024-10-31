@@ -3,10 +3,32 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 // 대화상자 컴포넌트
-export const Dialog = DialogPrimitive.Root;
+const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogPortal = DialogPrimitive.Portal;
 export const DialogOverlay = DialogPrimitive.Overlay;
+
+type Props = {
+  children: React.ReactNode;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title?: React.ReactNode;
+};
+
+export function DialogContainer({ children, open, onOpenChange, title = "" }: Props) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        {title && (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+        )}
+        {children}
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export const DialogContent: DivForwardRef = forwardRef(({ className, children, ...props }, ref) => (
   <DialogPortal>

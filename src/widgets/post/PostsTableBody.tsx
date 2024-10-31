@@ -1,4 +1,4 @@
-import { usePosts } from "../../features/post/hook/usePosts";
+import { usePosts } from "../../features/post/model/hook/usePosts";
 import { Post } from "../../features/post/ui";
 import { TableBody } from "../../shared/ui";
 

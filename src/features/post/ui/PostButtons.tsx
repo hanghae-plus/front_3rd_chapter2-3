@@ -1,6 +1,6 @@
 import { MessageSquare, Edit2, Trash2 } from "lucide-react";
 import { Button } from "../../../shared/ui";
-import { usePosts } from "../hook/usePosts";
+import { usePosts } from "../model/hook/usePosts";
 import { usePostsStore } from "../store/usePostsStore";
 
 type Props = {
