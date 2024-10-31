@@ -20,7 +20,7 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
-      "no-unused-vars": ["error"], // 사용되지 않는 변수 검출
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }], // 사용되지 않는 변수 검출
       "no-console": ["warn"], // console.log() 사용 제한
       eqeqeq: ["error", "always"], // === 및 !== 연산자 사용 강제
       "prefer-const": ["error"], // 재할당되지 않는 변수에 const 사용 강제

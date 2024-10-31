@@ -4,7 +4,7 @@ import { TagType } from "./tag-type";
 
 interface TagListState {
   tagList: TagType[];
-  setNewTagList: (newTagList: TagType[]) => void;
+  setNewTagList: (_newTagList: TagType[]) => void;
 }
 
 export const tagListState = create<TagListState>(set => ({

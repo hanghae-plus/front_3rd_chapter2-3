@@ -3,7 +3,7 @@ import { useMutationDeleteComment } from "@/entities/comment/api/use-mutation-de
 export const useDeleteComment = (commentId: number) => {
   const mutation = useMutationDeleteComment(commentId);
 
-  async function handleDeleteComment(deleteComment: (commentId: number) => void) {
+  async function handleDeleteComment(deleteComment: (_commentId: number) => void) {
     await mutation.mutateAsync();
     deleteComment(commentId);
   }

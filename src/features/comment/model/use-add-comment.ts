@@ -12,7 +12,7 @@ export const useAddComment = (id: number) => {
 
   const mutation = useMutationAddComment(newComment);
 
-  async function addComment(addNewComment: (newComment: CommentType) => void, close: () => void) {
+  async function addComment(addNewComment: (_newComment: CommentType) => void, close: () => void) {
     const newCommentData = await mutation.mutateAsync();
     addNewComment(newCommentData);
     setNewComment({ body: "", postId: 0, userId: 1 });

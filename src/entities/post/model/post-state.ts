@@ -6,11 +6,11 @@ import { PostWithAuthorType } from "./post-type";
 interface PostListState {
   postList: PostWithAuthorType[];
   total: number;
-  addNewPost: (post: NewPostType) => void;
-  setNewPostList: (newPostList: PostWithAuthorType[]) => void;
-  deletePost: (postId: number) => void;
-  updatePost: (newPost: PostWithAuthorType) => void;
-  setTotal: (num: number) => void;
+  addNewPost: (_post: NewPostType) => void;
+  setNewPostList: (_newPostList: PostWithAuthorType[]) => void;
+  deletePost: (_postId: number) => void;
+  updatePost: (_newPost: PostWithAuthorType) => void;
+  setTotal: (_num: number) => void;
 }
 
 const postDetail = (newPost: NewPostType): PostWithAuthorType => {

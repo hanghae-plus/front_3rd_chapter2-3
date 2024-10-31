@@ -4,7 +4,7 @@ import { UserType } from "./user-type";
 
 interface UserListState {
   userList: UserType[];
-  setNewUserList: (newUserList: UserType[]) => void;
+  setNewUserList: (_newUserList: UserType[]) => void;
 }
 
 export const userListState = create<UserListState>(set => ({
