@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextHighlighter,
 } from "../../../../shared/ui"
-import { Comments } from "../../../comments"
+import { Comments } from "../../../comment"
 
 type Props = Pick<DialogProps, "open" | "onOpenChange"> & {
   selectedPost: Post | null

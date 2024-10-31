@@ -1,9 +1,15 @@
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import { useEffect, useState } from "react"
-import { commentApi } from "../../../entities/comment/api/commentApi"
+import { useState } from "react"
+import { useCommentsQuery } from "../../../entities/comment/api/useCommentsQuery"
 import { Comment, NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
+import {
+  useAddCommentMutation,
+  useDeleteComment,
+  useLikeComment,
+  useUpdateCommentMutation,
+} from "../../../features/comment"
 import {
   Button,
   Dialog,
@@ -23,7 +29,6 @@ export const Comments = ({ postId }: Props) => {
     queryParams: { search: searchQuery },
   } = usePostQueryParams()
 
-  const [comments, setComments] = useState<Comment[]>([])
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
     body: "",
@@ -34,61 +39,34 @@ export const Comments = ({ postId }: Props) => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
 
-  // 댓글 가져오기
-  const fetchComments = async (postId: number) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
+  const { data: comments = [] } = useCommentsQuery(postId)
+  const { mutate: addCommentMutate } = useAddCommentMutation()
+  const { mutate: updateCommentMutate } = useUpdateCommentMutation()
+  const { mutate: deleteComment } = useDeleteComment()
+  const { mutate: likeCommentMutate } = useLikeComment()
 
-    const data = await commentApi.fetchComments(postId)
-    if (data) {
-      setComments(data.comments)
-    }
+  const addComment = () => {
+    addCommentMutate(newComment, {
+      onSuccess: () => {
+        setShowAddCommentDialog(false)
+        setNewComment({ body: "", postId: null, userId: 1 })
+      },
+    })
   }
 
-  useEffect(() => {
-    fetchComments(postId)
-  }, [])
-
-  // 댓글 추가
-  const addComment = async () => {
-    const data = await commentApi.addComment(newComment)
-    if (data) {
-      setComments((prev) => [...prev, data])
-      setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
-    }
-  }
-
-  // 댓글 업데이트
-  const updateComment = async () => {
+  const updateComment = () => {
     if (!selectedComment) return
 
-    const data = await commentApi.updateComment(selectedComment)
-    if (data) {
-      setComments((prev) =>
-        prev.map((comment) => (comment.id === data.id ? data : comment)),
-      )
-      setShowEditCommentDialog(false)
-    }
-  }
-
-  // 댓글 삭제
-  const deleteComment = async (id: Comment["id"]) => {
-    await commentApi.deleteComment(id)
-    setComments((prev) => prev.filter((comment) => comment.id !== id))
+    updateCommentMutate(selectedComment, {
+      onSuccess: () => {
+        setShowEditCommentDialog(false)
+      },
+    })
   }
 
   // 댓글 좋아요
-  const likeComment = async (id: Comment["id"]) => {
-    const data = await commentApi.likeComment(
-      id,
-      comments.find((c) => c.id === id)?.likes,
-    )
-
-    if (data) {
-      setComments((prev) =>
-        prev.map((comment) => (comment.id === data.id ? data : comment)),
-      )
-    }
+  const likeComment = (id: Comment["id"]) => {
+    likeCommentMutate({ id, likes: comments?.find((c) => c.id === id)?.likes })
   }
 
   return (

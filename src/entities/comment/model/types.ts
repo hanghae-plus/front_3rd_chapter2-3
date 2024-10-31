@@ -24,7 +24,4 @@ export type DeletedComment = Comment & {
 
 export type FetchCommentResponse = {
   comments: Comment[]
-  limit: number
-  skip: number
-  total: number
 }

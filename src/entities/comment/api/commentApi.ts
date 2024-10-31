@@ -8,7 +8,7 @@ import {
 
 export const commentApi = {
   /* 댓글 가져오기 **/
-  fetchComments: async (postId: number) => {
+  fetchComments: async (postId: Comment["postId"]) => {
     try {
       const response = await safeFetch<FetchCommentResponse>(
         `/api/comments/post/${postId}`,
@@ -64,7 +64,13 @@ export const commentApi = {
   },
 
   /** 댓글 좋아요 */
-  likeComment: async (id: Comment["id"], likes: Comment["likes"] = 0) => {
+  likeComment: async ({
+    id,
+    likes = 0,
+  }: {
+    id: Comment["id"]
+    likes: Comment["likes"] | undefined
+  }) => {
     try {
       const response = await safeFetch.patch<Comment>(`/api/comments/${id}`, {
         likes: likes + 1,
