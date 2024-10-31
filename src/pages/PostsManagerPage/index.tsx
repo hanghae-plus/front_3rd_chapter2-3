@@ -37,8 +37,7 @@ import { CommentAddDialog, CommentAddDialogOpenButton } from "@/features/comment
 import { PostEditDialog, PostEditDialogOpenButton } from "@/features/post-edit-dialog"
 import { highlightText } from "@/shared/lib"
 import { UserDetailDialog, UserDetailDialogOpenButton } from "@/features/user-detail-dialog"
-import PostDetailDialog from "@/features/post/ui/PostDetailDialog"
-import CommentEditDialogOpenButton from "@/features/comment/ui/CommentEditDialogOpenButton"
+import { PostDetailDialog, PostDetailDialogOpenButton } from "@/features/post-detail-dialog"
 import Pagination from "@/shared/ui/Pagination"
 import { PostsSearch } from "@/features/search-posts"
 import { useAtom } from "jotai"
@@ -348,9 +347,7 @@ const PostsManagerPage = () => {
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
+                <PostDetailDialogOpenButton onClick={() => openPostDetail(post)} />
                 <PostEditDialogOpenButton
                   onClick={() => {
                     setSelectedPost(post)
