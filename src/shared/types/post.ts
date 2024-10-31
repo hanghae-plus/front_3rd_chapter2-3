@@ -29,4 +29,11 @@ interface NewPost {
   userId: number
 }
 
-export type { PostsData, Post, Reactions, NewPost }
+interface PostsDTO {
+  posts: Post[]
+  limit: number
+  skip: number
+  total: number
+}
+
+export type { PostsData, Post, Reactions, NewPost, PostsDTO }

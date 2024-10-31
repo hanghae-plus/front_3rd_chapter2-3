@@ -1,59 +1,48 @@
-import { useEffect } from "react"
 import { useAtom } from "jotai"
-import {
-  postsAtom,
-  totalAtom,
-  showAddDialogAtom,
-  showEditDialogAtom,
-  newPostAtom,
-} from "../../../entities/model/post/atoms"
-import { usePostActions } from "./usePostActions"
+import { showAddDialogAtom, showEditDialogAtom, newPostAtom } from "../../../entities/model/post/atoms"
 import { usePostModal } from "./usePostModal"
-import { useURLParams } from "../../../features/model/url/useURLParams"
-import type { UsePostProps } from "../../../entities/model/post/types"
+import { useURLParams } from "../url/useURLParams"
+import { usePostQuery, usePostsByTagQuery, useSearchPostsQuery } from "../../../shared/api/usePostQuery"
+import { usePostActions } from "./usePostActions"
 
-export const usePost = (): UsePostProps => {
-  const [posts, setPosts] = useAtom(postsAtom)
-  const [total, setTotal] = useAtom(totalAtom)
+export const usePost = () => {
   const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom)
   const [showEditDialog, setShowEditDialog] = useAtom(showEditDialogAtom)
   const [newPost, setNewPost] = useAtom(newPostAtom)
-
   const actions = usePostActions()
   const modal = usePostModal()
-  const { params, updateURL } = useURLParams()
-  const { skip = 0, limit = 10, sortBy, sortOrder, tag: selectedTag, search: searchQuery } = params
+  const { params, updateParams, updateURL } = useURLParams()
+  const { skip = 0, limit = 10, tag: selectedTag, search: searchQuery } = params
 
-  useEffect(() => {
-    if (selectedTag) {
-      actions.handleFetchPostsByTag(selectedTag)
-    } else {
-      actions.handleFetchPosts({ limit: limit as number, skip: skip as number })
-    }
+  const { data: postsData, isLoading: isLoadingPosts } = usePostQuery({ limit: Number(limit), skip: Number(skip) })
+
+  const { data: tagPostsData, isLoading: isLoadingTagPosts } = usePostsByTagQuery(selectedTag as string)
+
+  const { data: searchPostsData, isLoading: isLoadingSearch } = useSearchPostsQuery(searchQuery as string)
+
+  const handleSearchPosts = (value: string) => {
+    updateParams({ search: value, skip: 0 })
     updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
+  }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery) {
-        actions.handleSearchPosts(searchQuery)
-      }
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [searchQuery])
+  const posts = searchQuery ? searchPostsData?.posts : selectedTag ? tagPostsData?.posts : (postsData?.posts ?? [])
+
+  const total = searchQuery ? searchPostsData?.total : selectedTag ? tagPostsData?.total : (postsData?.total ?? 0)
+
+  const isLoading = isLoadingPosts || isLoadingTagPosts || isLoadingSearch
 
   return {
     posts,
-    setPosts,
     total,
-    setTotal,
     showAddDialog,
     setShowAddDialog,
     showEditDialog,
     setShowEditDialog,
     newPost,
     setNewPost,
-    ...actions,
+    handleSearchPosts,
+    isLoading,
     ...modal,
+    ...actions,
   }
 }
