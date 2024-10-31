@@ -53,18 +53,19 @@ export const updateCommentApi = async (updatingComment: Comment): Promise<Commen
 
 // TODO feature
 // 댓글 삭제
-export const deleteCommentApi = async (commentId: number): Promise<void> => {
+export const deleteCommentApi = async (commentId: number): Promise<number> => {
   try {
     await fetch(`/api/comments/${commentId}`, {
       method: "DELETE",
     })
+    return commentId
   } catch (error) {
     throw new Error(`댓글 삭제 오류: ${error}`)
   }
 }
 
 // 댓글 좋아요
-export const likeCommentApi = async(commentId: number, likes: number): Promise<Comment> => {
+export const likeCommentApi = async (commentId: number, likes: number): Promise<Comment> => {
   try {
     const response = await fetch(`/api/comments/${commentId}`, {
       method: "PATCH",
@@ -72,8 +73,9 @@ export const likeCommentApi = async(commentId: number, likes: number): Promise<C
       body: JSON.stringify({ likes }),
     })
     const data = await response.json()
-    return data;
+    // NOTE - server 에서 like 수정이 안됨
+    return { ...data, likes }
   } catch (error) {
     throw new Error(`댓글 좋아요 오류: ${error}`)
   }
-};
+}
