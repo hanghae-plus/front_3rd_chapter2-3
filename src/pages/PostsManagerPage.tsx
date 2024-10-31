@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { Plus } from "lucide-react"
-import { Button, Card, CardContent, CardHeader, CardTitle, SearchInput } from "../shared/ui"
+import { Card, CardContent, CardHeader, CardTitle, SearchInput } from "../shared/ui"
 import { PostDetailModal } from "../features/post-detail/ui/PostDetailModal"
 import { UserModal } from "../features/user/ui/UserModal"
 import { PostAddModal } from "../features/post-add/ui/PostAddModal"
@@ -12,12 +11,11 @@ import { SelectSortOrder } from "../features/post-sort/ui/SelectSortOrder"
 import { PostEditModal } from "../features/post-edit/ui/PostEditModal"
 import { usePostParamsStore } from "../features/post/model/postParamsStore"
 import { usePostQueryStore } from "../features/post/model/postQueryStore"
-import { usePostAddModalStore } from "../features/post/model/postAddModalStore"
+import PostAddButton from "../features/post-add/ui/PostAddButton"
 
 const PostsManager = () => {
   const [searchQueryInput, setSearchQueryInput] = useState("")
 
-  const { setShowAddDialog } = usePostAddModalStore()
   const {
     skip,
     limit,
@@ -46,10 +44,7 @@ const PostsManager = () => {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
+          <PostAddButton />
         </CardTitle>
       </CardHeader>
 
