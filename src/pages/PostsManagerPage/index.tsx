@@ -34,7 +34,7 @@ import {
 import { PostAddDialog, PostAddDialogOpenButton } from "@/features/post-add-dialog"
 import { CommentEditDialog, CommentEditDialogOpenButton } from "@/features/comment-edit-dialog"
 import { CommentAddDialog, CommentAddDialogOpenButton } from "@/features/comment-add-dialog"
-import PostEditDialog from "@/features/post/ui/PostEditDialog"
+import { PostEditDialog, PostEditDialogOpenButton } from "@/features/post-edit-dialog"
 import { highlightText } from "@/shared/lib"
 import { UserDetailDialog, UserDetailDialogOpenButton } from "@/features/user-detail-dialog"
 import PostDetailDialog from "@/features/post/ui/PostDetailDialog"
@@ -351,16 +351,12 @@ const PostsManagerPage = () => {
                 <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <PostEditDialogOpenButton
                   onClick={() => {
                     setSelectedPost(post)
                     setShowEditDialog(true)
                   }}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
+                />
                 <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
