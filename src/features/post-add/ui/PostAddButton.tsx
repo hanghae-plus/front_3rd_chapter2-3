@@ -3,10 +3,10 @@ import { Button } from "../../../shared/ui"
 import { usePostAddModalStore } from "../../post/model/postAddModalStore"
 
 const PostAddButton = () => {
-  const { setShowAddDialog } = usePostAddModalStore()
+  const { setShowPostAddModal } = usePostAddModalStore()
 
   return (
-    <Button onClick={() => setShowAddDialog(true)}>
+    <Button onClick={() => setShowPostAddModal(true)}>
       <Plus className="w-4 h-4 mr-2" />
       게시물 추가
     </Button>

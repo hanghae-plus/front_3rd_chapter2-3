@@ -5,19 +5,19 @@ import { usePostAddModalStore } from "../../post/model/postAddModalStore"
 
 export const PostAddModal = () => {
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const { showAddDialog, setShowAddDialog } = usePostAddModalStore()
+  const { showPostAddModal, setShowPostAddModal } = usePostAddModalStore()
 
   const { mutate: addPostMutate } = useMutationPostAdd()
 
   const handleAddPost = async () => {
     addPostMutate(newPost)
 
-    setShowAddDialog(false)
+    setShowPostAddModal(false)
     setNewPost({ title: "", body: "", userId: 1 })
   }
 
   return (
-    <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+    <Dialog open={showPostAddModal} onOpenChange={setShowPostAddModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 게시물 추가</DialogTitle>
