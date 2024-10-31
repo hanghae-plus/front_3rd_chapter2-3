@@ -6,16 +6,6 @@ class UsersApi extends BaseApi {
     super("/api")
   }
 
-  async getUsers(params: {
-    limit: number
-    select: string
-  }): Promise<{ users: User[] }> {
-    const queryString = new URLSearchParams(
-      params as unknown as URLSearchParams,
-    ).toString()
-    return this.get<{ users: User[] }>(`/users?${queryString}`)
-  }
-
   async getUser(id: number): Promise<User> {
     return this.get<User>(`/users/${id}`)
   }

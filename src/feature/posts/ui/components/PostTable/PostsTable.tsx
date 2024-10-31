@@ -1,11 +1,8 @@
+import { PostTableHeader } from "../../../../../entities/post/ui/components/PostsTable/PostTableHeader"
 import {
   Table,
   TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "../../../../../shared"
-import { User } from "../../../../users/model/types"
 import { Post } from "../../../model/types"
 import { PostTableRow } from "./PostTableRow"
 
@@ -15,7 +12,6 @@ export const PostTable = ({
   selectedTag,
   onPostDetail,
   onPostEdit,
-  onPostDelete,
   onUserClick,
 }: {
   posts: Post[]
@@ -23,21 +19,12 @@ export const PostTable = ({
   selectedTag: string
   onPostDetail: (post: Post) => void
   onPostEdit: (post: Post) => void
-  onPostDelete: (id: number) => void
-  onUserClick: (author: User) => void
+  onUserClick: (id: number) => void
 }) => {
 
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">ID</TableHead>
-          <TableHead>제목</TableHead>
-          <TableHead className="w-[150px]">작성자</TableHead>
-          <TableHead className="w-[150px]">반응</TableHead>
-          <TableHead className="w-[150px]">작업</TableHead>
-        </TableRow>
-      </TableHeader>
+      <PostTableHeader />
       <TableBody>
         {posts?.map((post) => (
           <PostTableRow
@@ -47,7 +34,6 @@ export const PostTable = ({
             selectedTag={selectedTag}
             onPostDetail={onPostDetail}
             onPostEdit={onPostEdit}
-            onPostDelete={onPostDelete}
             onUserClick={onUserClick}
           />
         ))}

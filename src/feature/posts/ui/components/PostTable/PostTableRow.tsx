@@ -1,7 +1,6 @@
 import { TableCell, TableRow } from "../../../../../shared"
 import highlightText from "../../../../../shared/lib/helper/highlight-text"
-import { User } from "../../../../users/model/types"
-import { UserAvatar } from "../../../../users/ui/components/UserAvatar"
+import { UserAvatar } from "../../../../users/ui/components/UserAvatar/UserAvatar"
 import { Post } from "../../../model/types"
 import { PostActions } from "../PostActions/PostActions"
 import { PostReactionsContainer } from "../PostReaction/PostReactionContainer"
@@ -13,7 +12,6 @@ export const PostTableRow = ({
   selectedTag,
   onPostDetail,
   onPostEdit,
-  onPostDelete,
   onUserClick,
 }: {
   post: Post
@@ -21,8 +19,7 @@ export const PostTableRow = ({
   selectedTag: string
   onPostDetail: (post: Post) => void
   onPostEdit: (post: Post) => void
-  onPostDelete: (id: number) => void
-  onUserClick: (author: User) => void
+  onUserClick: (id: number) => void
 }) => {
   return (
     <TableRow>
@@ -35,8 +32,8 @@ export const PostTableRow = ({
       </TableCell>
       <TableCell>
         <UserAvatar
-          user={post.author}
-          onClick={() => onUserClick(post.author)}
+          user={post.userId}
+          onClick={() => onUserClick(post.userId)}
         />
       </TableCell>
       <TableCell>
@@ -47,7 +44,6 @@ export const PostTableRow = ({
           post={post}
           onDetail={onPostDetail}
           onEdit={onPostEdit}
-          onDelete={onPostDelete}
         />
       </TableCell>
     </TableRow>

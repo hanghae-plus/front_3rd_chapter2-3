@@ -1,12 +1,12 @@
 import { MessageSquare, Edit2, Trash2 } from "lucide-react"
 import { Button } from "../../../../../shared"
 import { Post } from "../../../model/types"
+import { useDeletePostMutation } from "../../../lib/hooks/usePostsQuery"
 
 interface PostActionsProps {
   post: Post
   onDetail: (post: Post) => void
   onEdit: (post: Post) => void
-  onDelete: (id: number) => void
   className?: string
   size?: "sm" | "default"
   variant?: "ghost" | "default"
@@ -16,11 +16,11 @@ export const PostActions = ({
   post,
   onDetail,
   onEdit,
-  onDelete,
   className = "",
   size = "sm",
   variant = "ghost",
 }: PostActionsProps) => {
+  const { mutate: deletePost } = useDeletePostMutation(post.id)
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <Button
@@ -42,7 +42,9 @@ export const PostActions = ({
       <Button
         variant={variant}
         size={size}
-        onClick={() => onDelete(post.id)}
+        onClick={() => {
+          deletePost()
+        }}
         title="삭제"
       >
         <Trash2 className="w-4 h-4" />
