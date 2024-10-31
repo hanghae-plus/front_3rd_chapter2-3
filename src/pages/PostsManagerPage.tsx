@@ -15,26 +15,13 @@ import { PostFilter } from "../features/post/ui/PostFilter"
 import { PostTable } from "../entities/post/ui/PostTable"
 import { PostAddDialog } from "../features/post/ui/PostAddDialog"
 import { PostUpdateDialog } from "../features/post/ui/PostUpdateDialog"
-import { Comment, NewComment } from "../entities/comment/model/types"
+import { Comment } from "../entities/comment/model/types"
 import { CommentAddDialog } from "../features/comment/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
 import { UserDetailDialog } from "../entities/user/ui/UserDetailDialog"
-import {
-  createCommentApi,
-  deleteCommentApi,
-  fetchCommentsApi,
-  likeCommentApi,
-  updateCommentApi,
-} from "../entities/comment/api"
 import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
-import {
-  addToCommentsRecord,
-  findInCommentsRecord,
-  removeFromCommentsRecord,
-  updateInCommentsMap,
-} from "../entities/comment/model/utils"
 import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
@@ -63,7 +50,6 @@ const PostsManager = () => {
   // 상태 관리
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [tags, setTags] = useState<Tag[]>([])
-  const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
@@ -75,43 +61,9 @@ const PostsManager = () => {
     setTags(tagsData)
   }
 
-  // 댓글 가져오기
-  const fetchComments = async (postId: number) => {
-    if (comments[postId]) return
-    const commentsData = await fetchCommentsApi(postId)
-    setComments((prev) => ({ ...prev, [postId]: commentsData.comments }))
-  }
-
-  // 댓글 추가
-  const addComment = async (newComment: NewComment) => {
-    const commentData = await createCommentApi(newComment)
-    setComments((prev) => addToCommentsRecord(prev, commentData.postId, commentData))
-  }
-
-  // 댓글 업데이트
-  const updateComment = async (updatingComment: Comment) => {
-    const commentData = await updateCommentApi(updatingComment)
-    setComments((prev) => updateInCommentsMap(prev, commentData.postId, updatingComment))
-  }
-
-  // 댓글 삭제
-  const deleteComment = async (commentId: number, postId: number) => {
-    await deleteCommentApi(commentId)
-    setComments((prev) => removeFromCommentsRecord(prev, postId, commentId))
-  }
-
-  // 댓글 좋아요
-  const likeComment = async (commentId: number, postId: number) => {
-    const likedComment = findInCommentsRecord(comments, postId, commentId)
-    if (!likedComment) return
-    const commentData = await likeCommentApi(commentId, likedComment.likes + 1)
-    setComments((prev) => updateInCommentsMap(prev, postId, commentData))
-  }
-
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
-    fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
@@ -184,22 +136,19 @@ const PostsManager = () => {
       {selectedPost && <PostUpdateDialog selectedPost={selectedPost} />}
 
       {/* 댓글 추가 대화상자 */}
-      {selectedPost && <CommentAddDialog postId={selectedPost.id} addComment={addComment} />}
+      {selectedPost && <CommentAddDialog postId={selectedPost.id} />}
 
       {/* 댓글 수정 대화상자 */}
-      {selectedComment && <CommentUpdateDialog selectedComment={selectedComment} updateComment={updateComment} />}
+      {selectedComment && <CommentUpdateDialog selectedComment={selectedComment} />}
 
       {/* 게시물 상세 보기 대화상자 */}
       {selectedPost && (
         <PostDetailDialog
           selectedPost={selectedPost}
           searchQuery={searchQuery}
-          comments={comments}
           setShowCommentAddDialog={setShowCommentAddDialog}
           setSelectedComment={setSelectedComment}
           setShowCommentUpdateDialog={setShowCommentUpdateDialog}
-          likeComment={likeComment}
-          deleteComment={deleteComment}
         />
       )}
 

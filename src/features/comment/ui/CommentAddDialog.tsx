@@ -3,22 +3,20 @@ import { NewComment } from "../../../entities/comment/model/types"
 import { Button, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { useDialog } from "../../post/model/dialogStore"
+import { useCommentMutations } from "../model/commentStore"
 
 const initialNewComment: NewComment = { body: "", postId: null, userId: 1 }
 export const CommentAddDialog: React.FC<{
   postId: number
-  addComment: (newComment: NewComment) => void
-}> = ({ postId, addComment }) => {
-  
-  const {
-    showCommentAddDialog,
-    setShowCommentAddDialog,
-  } = useDialog()
+}> = ({ postId }) => {
+  const { showCommentAddDialog, setShowCommentAddDialog } = useDialog()
 
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment)
-  
+
+  const { createComment } = useCommentMutations(postId)
+
   const handleCommentAdd = () => {
-    addComment(newComment)
+    createComment.mutate(newComment)
     setShowCommentAddDialog(false)
   }
 
