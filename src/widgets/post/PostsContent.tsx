@@ -8,6 +8,7 @@ import { usePost } from "../../features/post/model/store"
 
 const PostsContent = ({ loading }: { loading: boolean }) => {
   const { posts, total } = usePost()
+  console.log("PostContent", loading)
   return (
     <CardContent>
       <div className="flex flex-col gap-4">

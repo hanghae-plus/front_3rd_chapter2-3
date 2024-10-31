@@ -1,8 +1,9 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
-import HighlightText from "../ui/HighlightText"
-import { CommentContent } from "../comments/CommentContent"
-import { useSearch } from "../../features/post/model/useSearch"
-import { usePost } from "../../features/post/model/usePost"
+import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
+import { useSearch } from "../../../shared/model/useSearch"
+import { DialogHeader } from "../../../shared/ui"
+import { CommentContent } from "../../../widgets/comment/CommentContent"
+import HighlightText from "../../../widgets/HighlightText"
+import { usePost } from "../model/store"
 
 export const PostDetailDialog = () => {
   const { showPostDetailDialog, setShowPostDetailDialog, selectedPost } = usePost()

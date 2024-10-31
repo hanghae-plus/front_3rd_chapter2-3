@@ -1,7 +1,6 @@
-import { Key } from "react"
 import { SelectContent, SelectItem } from "../../shared/ui"
-import { Tag } from "../../entities/tag/model/type"
 import { useTag } from "../../features/tag/model/store"
+import { TagItem } from "../../entities/tag/ui/TagItem"
 
 export const TagSelect = () => {
   const { tags } = useTag()
@@ -14,4 +13,3 @@ export const TagSelect = () => {
     </SelectContent>
   )
 }
-export const TagItem = ({ tag }: { key: Key; tag: Tag }) => <SelectItem value={tag.slug}>{tag.slug}</SelectItem>

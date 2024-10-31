@@ -1,5 +1,5 @@
 import { ThumbsDown, ThumbsUp } from "lucide-react"
-import { Post } from "../../entities/post/model/type"
+import { Post } from "../model/type"
 
 export const PostReaction = ({ reactions }: { reactions: Post["reactions"] }) => (
   <div className="flex items-center gap-2">

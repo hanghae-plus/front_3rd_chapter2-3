@@ -1,8 +1,8 @@
 import { ThumbsUp } from "lucide-react"
-import { useComment } from "../../features/comment/model/store"
-import { Button } from "../../shared/ui"
-import { PostId } from "../../entities/post/model/type"
-import { Comment } from "../../entities/comment/model/type"
+import { useComment } from "../../../features/comment/model/store"
+import { Button } from "../../../shared/ui"
+import { PostId } from "../../post/model/type"
+import { Comment } from "../model/type"
 
 export const CommentLikeButton = ({ comment, postId }: { comment: Comment; postId: PostId }) => {
   const { likeComment } = useComment()

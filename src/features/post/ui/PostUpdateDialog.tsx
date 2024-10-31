@@ -1,8 +1,9 @@
 // 게시물 수정 대화상자
 
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
-import { Post } from "../../entities/post/model/type"
-import { usePost } from "../../features/post/model/usePost"
+import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
+import { Post } from "../../../entities/post/model/type"
+import { DialogHeader, Input, Textarea, Button } from "../../../shared/ui"
+import { usePost } from "../model/store"
 
 export const PostUpdateDialog = () => {
   const { selectedPost, updatePost, setShowEditDialog, showEditDialog, setSelectedPost } = usePost()
