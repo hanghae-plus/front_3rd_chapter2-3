@@ -6,7 +6,7 @@ import { Post } from "../../../entities/post/model/types"
 import { removeFromPosts, updateInPosts } from "../../../entities/post/model/utils"
 import { atom, useAtom } from "jotai"
 
-interface PostsQueryFilters {
+export interface PostsQueryFilters {
   skip?: number
   limit?: number
   searchQuery?: string

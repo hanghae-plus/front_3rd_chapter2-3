@@ -1,8 +1,10 @@
+import { PostsQueryFilters } from "../../features/post/model/postStore";
+
 export const queryKeys = {
   posts: {
     all: ['posts'] as const,
     lists: () => [...queryKeys.posts.all, 'list'] as const,
-    list: (filters: Record<string, any>) => [...queryKeys.posts.lists(), filters] as const,
+    list: (filters: PostsQueryFilters) => [...queryKeys.posts.lists(), filters] as const,
     detail: (id: number) => [...queryKeys.posts.all, id] as const
   },
   comments: {

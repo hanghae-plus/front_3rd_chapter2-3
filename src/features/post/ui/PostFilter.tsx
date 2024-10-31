@@ -3,7 +3,7 @@ import { useTagsQuery } from "../../tag/model/tagStore"
 import { useRouterQueries } from "../model/routerStore"
 
 export const PostFilter = () => {
-  const { sortBy, sortOrder, selectedTag, setSelectedTag, updateURL, setSortBy, setSortOrder } = useRouterQueries()
+  const { sortBy, sortOrder, selectedTag, setSelectedTag, setSortBy, setSortOrder } = useRouterQueries()
   const { data: tagsData } = useTagsQuery()
   return (
     <>

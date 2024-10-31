@@ -17,7 +17,6 @@ import { PostTitle } from "../features/post/ui/PostTitle"
 
 const PostsManager = () => {
   
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
