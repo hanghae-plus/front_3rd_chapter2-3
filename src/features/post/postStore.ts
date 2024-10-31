@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { Post } from '../entities/post/model/types';
+import { Post } from '../../entities/post/model/types';
 
 type PostState = {
   selectedPost: Post | null;
