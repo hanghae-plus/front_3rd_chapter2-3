@@ -7,12 +7,22 @@ import { useEffect } from "react";
 import { PostSearchBarTagSelectBox } from "./PostSearchBarTagSelectBox.tsx";
 
 export const PostSearchBar = () => {
-  const { sortBy, sortOrder, setSortOrder, setSortBy, searchQuery, setSearchQuery, setPosts, setTotal } = usePost();
+  const { sortBy, sortOrder, setSortOrder, setSortBy, searchQuery, setSearchQuery, setPosts, setTotal, setLoading } =
+    usePost();
 
   const { queryParams } = useQueryParams();
 
-  const { data: postsData } = useGetPosts(queryParams.limit, queryParams.skip, sortBy, sortOrder);
+  const { data: postsData, isLoading: postDataLoading } = useGetPosts(
+    queryParams.limit,
+    queryParams.skip,
+    sortBy,
+    sortOrder,
+  );
   const { data: searchData } = useGetSearchPosts(searchQuery);
+
+  useEffect(() => {
+    setLoading(postDataLoading);
+  }, [postDataLoading]);
 
   useEffect(() => {
     if (postsData) {
