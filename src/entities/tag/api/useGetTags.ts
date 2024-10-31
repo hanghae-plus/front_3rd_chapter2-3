@@ -1,4 +1,4 @@
-import { apiClient } from '@/shared/api/base-api';
+import { api } from '@/shared/api/base-api';
 import { QueryConfig } from '@/shared/lib/query/types';
 import { useQuery } from '@tanstack/react-query';
 import { Tag } from '../model/types';
@@ -6,7 +6,7 @@ import { tagQueryKeys } from './query-key';
 
 const tagsApi = {
   getTags: async (): Promise<Tag[]> => {
-    return apiClient<Tag[]>('/posts/tags');
+    return api.get<Tag[]>('/posts/tags');
   }
 };
 
