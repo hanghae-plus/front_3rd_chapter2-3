@@ -1,18 +1,10 @@
-import { useEffect } from "react"
-import { useAtom } from "jotai"
-import { tagsAtom } from "../../../entities/model/tag/atoms"
-import { useTagActions } from "./useTagActions"
+import { useTagsQuery } from "../../../shared/api/useTagQuery"
 
 export const useTag = () => {
-  const [tags] = useAtom(tagsAtom)
-  const { getTags } = useTagActions()
-
-  useEffect(() => {
-    getTags()
-  }, [])
+  const { data: tags, isLoading } = useTagsQuery()
 
   return {
-    tags,
-    getTags,
+    tags: tags || [],
+    isLoading,
   }
 }
