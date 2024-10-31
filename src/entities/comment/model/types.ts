@@ -15,3 +15,5 @@ export interface NewComment {
   postId: number | null
   userId: number
 }
+
+export type CommentRecord = Record<number, Comment[]>
