@@ -6,7 +6,7 @@ type UseSearchDebounceProps = {
   delay?: number;
 };
 
-export const useSearchDebounce = ({ delay = 0 }: UseSearchDebounceProps = {}) => {
+export const useSearchDebounce = ({ delay = 500 }: UseSearchDebounceProps = {}) => {
   const { queries } = useQueryParams();
   const { search: currentSearch } = queries;
   const [search, setSearch] = useState(currentSearch);

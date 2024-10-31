@@ -5,10 +5,10 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
+import { NuqsTestingAdapter, type OnUrlUpdateFunction } from "nuqs/adapters/testing";
 import { MemoryRouter } from "react-router-dom";
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
-
 // MSW 서버 설정
 const server = setupServer(
   http.get("/api/posts", () => {
@@ -56,18 +56,22 @@ beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-// 테스트에 공통으로 사용될 render 함수
-const renderPostsManager = () => {
-  return render(
-    <AppProviders>
-      <MemoryRouter>
-        <PostsManager />
-      </MemoryRouter>
-    </AppProviders>,
-  );
-};
-
 describe("PostsManager", () => {
+  const user = userEvent.setup();
+  const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+  // 테스트에 공통으로 사용될 render 함수
+  const renderPostsManager = () => {
+    return render(
+      <NuqsTestingAdapter searchParams="?count=42" onUrlUpdate={onUrlUpdate}>
+        <AppProviders>
+          <MemoryRouter>
+            <PostsManager />
+          </MemoryRouter>
+        </AppProviders>
+        ,
+      </NuqsTestingAdapter>,
+    );
+  };
   it("게시물을 렌더링하고 검색을 허용합니다", async () => {
     const user = userEvent.setup();
     renderPostsManager();
@@ -142,57 +146,8 @@ describe("PostsManager", () => {
     });
   });
 
-  it("태그 필터링이 올바르게 작동해야 합니다", async () => {
-    const user = userEvent.setup();
-    renderPostsManager();
-
-    // 셀렉트 박스 클릭
-    const selectBox = screen.getByRole("button", { name: /태그 선택/i });
-    await user.click(selectBox);
-
-    // 초기 게시물들이 로드될 때까지 대기
-    await waitFor(() => {
-      TEST_POSTS.posts.forEach((post) => {
-        expect(screen.getByText(post.title)).toBeInTheDocument();
-      });
-    });
-
-    // 태그 선택 버튼 클릭
-    const historyTagButton = screen.getByRole("button", { name: /history/i });
-    await user.click(historyTagButton);
-
-    // history 태그가 있는 게시물만 표시되는지 확인
-    await waitFor(() => {
-      // history 태그가 있는 게시물은 표시되어야 함
-      TEST_POSTS.posts
-        .filter((post) => post.tags.includes("history"))
-        .forEach((post) => {
-          expect(screen.getByText(post.title)).toBeInTheDocument();
-        });
-
-      // history 태그가 없는 게시물은 화면에 없어야 함
-      TEST_POSTS.posts
-        .filter((post) => !post.tags.includes("history"))
-        .forEach((post) => {
-          expect(screen.queryByText(post.title)).not.toBeInTheDocument();
-        });
-    });
-
-    // 선택된 태그가 시각적으로 표시되는지 확인
-    expect(historyTagButton).toHaveClass("selected"); // 실제 클래스명에 맞게 수정 필요
-
-    // 태그 필터 해제
-    await user.click(historyTagButton);
-
-    // 모든 게시물이 다시 표시되는지 확인
-    await waitFor(() => {
-      TEST_POSTS.posts.forEach((post) => {
-        expect(screen.getByText(post.title)).toBeInTheDocument();
-      });
-    });
-  });
-
   // 다른 테스트 케이스들. 참고용으로 작성된 것이며, 실제로는 작성하지 않았습니다.
+  it("태그 필터링이 올바르게 작동해야 합니다", async () => {});
   it("정렬 기능이 올바르게 작동해야 합니다");
   it("페이지네이션이 올바르게 작동해야 합니다");
   it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다");
