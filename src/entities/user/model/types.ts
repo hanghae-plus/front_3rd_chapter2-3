@@ -1,3 +1,6 @@
+import { Filter_i } from "../../../shared/model/types"
+import { Pagination_i } from "../../../shared/model/types"
+
 export interface User_i {
   id: number
   firstName: string
@@ -68,4 +71,8 @@ interface Crypto_i {
   coin: string
   wallet: string
   network: string
+}
+
+export interface UserResponse_t extends Pagination_i, Filter_i {
+  users: User_i[]
 }
