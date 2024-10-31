@@ -1,4 +1,4 @@
-import { Comment } from "../model/types"
+import { Comment, NewComment } from "../model/types"
 
 export interface CommentsData {
   comments: Comment[]
@@ -9,7 +9,7 @@ export interface CommentsData {
 
 // TODO feature
 // 댓글 가져오기
-export const fetchComments = async (postId: number): Promise<CommentsData> => {
+export const fetchCommentsApi = async (postId: number): Promise<CommentsData> => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
     const data = await response.json()
@@ -21,7 +21,7 @@ export const fetchComments = async (postId: number): Promise<CommentsData> => {
 
 // TODO feature
 // 댓글 추가
-export const addComment = async (newComment: Comment): Promise<Comment> => {
+export const createCommentApi = async (newComment: NewComment): Promise<Comment> => {
   try {
     const response = await fetch("/api/comments/add", {
       method: "POST",
@@ -37,7 +37,7 @@ export const addComment = async (newComment: Comment): Promise<Comment> => {
 
 // TODO feature
 // 댓글 업데이트
-export const updateComment = async (updatingComment: Comment): Promise<Comment> => {
+export const updateCommentApi = async (updatingComment: Comment): Promise<Comment> => {
   try {
     const response = await fetch(`/api/comments/${updatingComment.id}`, {
       method: "PUT",
@@ -53,7 +53,7 @@ export const updateComment = async (updatingComment: Comment): Promise<Comment> 
 
 // TODO feature
 // 댓글 삭제
-export const deleteComment = async (commentId: number): Promise<void> => {
+export const deleteCommentApi = async (commentId: number): Promise<void> => {
   try {
     await fetch(`/api/comments/${commentId}`, {
       method: "DELETE",
@@ -64,7 +64,7 @@ export const deleteComment = async (commentId: number): Promise<void> => {
 }
 
 // 댓글 좋아요
-export const likeComment = async(commentId: number, likes: number): Promise<Comment> => {
+export const likeCommentApi = async(commentId: number, likes: number): Promise<Comment> => {
   try {
     const response = await fetch(`/api/comments/${commentId}`, {
       method: "PATCH",

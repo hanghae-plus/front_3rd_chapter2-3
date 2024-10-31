@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, Textarea } from "../shared/ui"
+import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { NewPost, Post } from "../entities/post/model/types"
 import { fetchUserApi, fetchUsersApi } from "../entities/user/api"
 import {
@@ -32,9 +32,10 @@ import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
 import { UserDetailDialog } from "../entities/user/ui/UserDetailDialog"
 import { HighlightedText } from "../widgets/ui/HighlightedText"
+import { createCommentApi, deleteCommentApi, fetchCommentsApi, likeCommentApi, updateCommentApi } from "../entities/comment/api"
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
-const initialNewComment: NewComment = { body: "", postId: null, userId: 1 }
+const initialNewComment: NewComment = { body: "", postId: null, userId: 1, likes: 0 }
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -55,8 +56,8 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState<Comment>(null)
+  const [comments, setComments] = useState<Record<number, Comment[]>>({})
+  const [selectedComment, setSelectedComment] = useState<Comment|null>(null)
   const [newComment, setNewComment] = useState<NewComment>({ ...initialNewComment })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
@@ -142,86 +143,50 @@ const PostsManager = () => {
 
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
-    }
+    if (comments[postId]) return;
+    const commentsData = await fetchCommentsApi(postId)
+    setComments((prev) => ({ ...prev, [postId]: commentsData.comments }))
   }
 
   // 댓글 추가
   const addComment = async (newComment: NewComment) => {
-    try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-      setShowAddCommentDialog(false)
-      setNewComment({ ...initialNewComment })
-    } catch (error) {
-      console.error("댓글 추가 오류:", error)
-    }
+    const commentData = await createCommentApi(newComment)
+    setComments((prev) => ({
+      ...prev,
+      [commentData.postId]: [...(prev[commentData.postId] || []), commentData],
+    }))
+    setShowAddCommentDialog(false)
+    setNewComment({ ...initialNewComment })
   }
 
   // 댓글 업데이트
   const updateComment = async (updatingComment: Comment) => {
-    try {
-      const response = await fetch(`/api/comments/${updatingComment.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: updatingComment.body }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-      setShowEditCommentDialog(false)
-    } catch (error) {
-      console.error("댓글 업데이트 오류:", error)
-    }
+    const commentData = await updateCommentApi(updatingComment)
+    setComments((prev) => ({
+      ...prev,
+      [commentData.postId]: prev[commentData.postId].map((comment) => (comment.id === commentData.id ? commentData : comment)),
+    }))
+    setShowEditCommentDialog(false)
   }
 
   // 댓글 삭제
-  const deleteComment = async (id, postId) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
+  const deleteComment = async (id: number, postId: number) => {
+    await deleteCommentApi(id)
+    setComments((prev) => ({
+      ...prev,
+      [postId]: prev[postId].filter((comment) => comment.id !== id),
+    }))
   }
 
   // 댓글 좋아요
-  const likeComment = async (id, postId) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
-    }
+  const likeComment = async (id: number, postId: number) => {
+    const likedComment = comments[postId].find((item) => item.id === id)
+    if (!likedComment) return
+    const commentData = await likeCommentApi(id, likedComment.likes + 1)
+    setComments((prev) => ({
+      ...prev,
+      [postId]: prev[postId].map((comment) => (comment.id === commentData.id ? commentData : comment)),
+    }))
   }
 
   // 게시물 상세 보기
