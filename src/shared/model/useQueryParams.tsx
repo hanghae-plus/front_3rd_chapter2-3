@@ -1,5 +1,5 @@
 import { parseAsInteger, parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export type UpdatableQueryKey = "skip" | "limit" | "search" | "sortBy" | "sortOrder" | "tag";
 
@@ -7,6 +7,7 @@ export type UpdatableQueryKey = "skip" | "limit" | "search" | "sortBy" | "sortOr
 const sortOrderParser = parseAsStringEnum(["asc", "desc"] as const).withDefault("asc");
 
 export const useQueryParams = () => {
+  const [search, setSearch] = useState("");
   const [queries, setQueries] = useQueryStates(
     {
       priorityKey: parseAsString.withDefault(""),
@@ -33,8 +34,18 @@ export const useQueryParams = () => {
     [setQueries],
   );
 
+  //FIXME: 완벽한 해결 방안은 아니라고 생각
+  useEffect(() => {
+    if (queries.search) {
+      setSearch(queries.search);
+      setQueries({
+        search: "",
+      });
+    }
+  }, [queries.search, setQueries]);
+
   return {
-    queries,
+    queries: { ...queries, search },
     handleUpdateQuery,
   };
 };
