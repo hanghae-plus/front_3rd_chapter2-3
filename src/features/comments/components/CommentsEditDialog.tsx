@@ -1,23 +1,58 @@
 import React from "react"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
-import { Comments } from "../../../entities/comments/model/Comments"
 
-interface CommentsEditDialogProps {
-  showEditCommentDialog: boolean
-  setShowEditCommentDialog: (open: boolean) => void
-  selectedComment: Comments | null
-  setSelectedComment: React.Dispatch<React.SetStateAction<Comments | null>>
-  updateComment: () => void
-}
+import { Comments, CommentsState } from "../../../entities/comments/model/Comments"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, Textarea, Button } from "../../../shared/ui/"
+import { useUpdateComment } from "../api/commentsFeaturesApi"
+import useComment from "../hooks/useComments"
 
 // 댓글 수정 대화상자 */
-const CommentsEditDialog = ({
-  showEditCommentDialog,
-  setShowEditCommentDialog,
-  selectedComment,
-  setSelectedComment,
-  updateComment,
-}: CommentsEditDialogProps) => {
+const CommentsEditDialog = () => {
+  const { showEditCommentDialog, setShowEditCommentDialog, selectedComment, setSelectedComment, setComments } =
+    useComment()
+  function handleChangeSelectedComment(field: string, value: string) {
+    setSelectedComment((prev) =>
+      prev
+        ? { ...prev, [field]: value }
+        : {
+            id: 0,
+            body: value,
+            likes: 0,
+            postId: 0,
+            user: {
+              id: 0,
+              image: "",
+              username: "",
+            },
+          },
+    )
+  }
+
+  const { mutate: updateComment } = useUpdateComment()
+
+  function handleUpdateComment() {
+    if (!selectedComment) {
+      return
+    }
+
+    updateComment(selectedComment, {
+      onSuccess: (data: Comments) => {
+        setComments((prev: CommentsState | null) => {
+          const currentState = prev || {} // prev가 null인 경우 빈 객체로 초기화
+          const commentsForPost = currentState[data.postId] || []
+
+          return {
+            ...currentState,
+            [data.postId]: commentsForPost.map((comment) => (comment.id === data.id ? data : comment)),
+          }
+        })
+        setShowEditCommentDialog(false)
+      },
+      onError: (error) => {
+        console.error("Failed to update comment:", error)
+      },
+    })
+  }
+
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
       <DialogContent>
@@ -28,25 +63,9 @@ const CommentsEditDialog = ({
           <Textarea
             placeholder="댓글 내용"
             value={selectedComment?.body || ""}
-            onChange={(e) =>
-              setSelectedComment((prev) =>
-                prev
-                  ? { ...prev, body: e.target.value }
-                  : {
-                      id: 0,
-                      body: e.target.value,
-                      likes: 0,
-                      postId: 0,
-                      user: {
-                        id: 0,
-                        image: "",
-                        username: "",
-                      },
-                    },
-              )
-            }
+            onChange={(e) => handleChangeSelectedComment("body", e.target.value)}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

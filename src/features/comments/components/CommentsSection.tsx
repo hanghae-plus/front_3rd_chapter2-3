@@ -1,18 +1,65 @@
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
+import { Comments } from "../../../entities/comments/model/Comments"
 import { Button } from "../../../shared/ui"
-import useCommentState from "../../../entities/comments/state/useCommentState"
-import { highlightText } from "../../lib/commonUtils"
-import usePostState from "../../../entities/posts/state/usePostState"
-import { useFetchComments } from "../../../entities/comments/api/fetchComments"
+import { useDeleteComment, useLikeComment } from "../api/commentsFeaturesApi"
+import useComment from "../hooks/useComments"
+import CommentUserInfo from "../../../entities/comments/ui/CommentUserInfo"
 
 interface CommentsSectionProps {
   postId: number
 }
 const CommentsSection = ({ postId }: CommentsSectionProps) => {
-  const { searchQuery } = usePostState()
-  const { setNewComment, setShowAddCommentDialog, comments, setSelectedComment, setShowEditCommentDialog } =
-    useCommentState()
-  const { likeComment, deleteComment } = useFetchComments()
+  const {
+    setComments,
+    setNewComment,
+    setShowAddCommentDialog,
+    comments,
+    setSelectedComment,
+    setShowEditCommentDialog,
+  } = useComment()
+
+  const { mutate: likeComment } = useLikeComment()
+
+  function handleLikeComment(commentId: number, postId: number) {
+    const comment = comments[postId]?.find((c) => c.id === commentId)
+    const updateLikes = comment ? comment.likes + 1 : 0
+
+    likeComment(
+      { id: commentId, updateLikes },
+      {
+        onSuccess: (data: Comments) => {
+          setComments((prev) => ({
+            ...prev,
+            [postId]: prev[postId].map((c) => (c.id === data.id ? data : c)),
+          }))
+        },
+        onError: (error) => {
+          console.error("Failed to like comment:", error)
+        },
+      },
+    )
+  }
+
+  const { mutate: deleteComment } = useDeleteComment()
+
+  function handleDeleteComment(commentId: number, postId: number) {
+    deleteComment(commentId, {
+      onSuccess: () => {
+        setComments((prev) => ({
+          ...prev,
+          [postId]: prev[postId].filter((comment) => comment.id !== commentId),
+        }))
+      },
+      onError: (error) => {
+        console.error("Failed to like comment:", error)
+      },
+    })
+  }
+
+  function handleShowEditCommentDialog(comment: Comments) {
+    setSelectedComment(comment)
+    setShowEditCommentDialog(true)
+  }
 
   return (
     <div className="mt-2">
@@ -34,12 +81,10 @@ const CommentsSection = ({ postId }: CommentsSectionProps) => {
       <div className="space-y-1">
         {comments[postId]?.map((comment) => (
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-            <div className="flex items-center space-x-2 overflow-hidden">
-              <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
-            </div>
+            <CommentUserInfo comment={comment} />
+
             <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+              <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment.id, postId)}>
                 <ThumbsUp className="w-3 h-3" />
                 <span className="ml-1 text-xs">{comment.likes}</span>
               </Button>
@@ -47,13 +92,12 @@ const CommentsSection = ({ postId }: CommentsSectionProps) => {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  setSelectedComment(comment)
-                  setShowEditCommentDialog(true)
+                  handleShowEditCommentDialog(comment)
                 }}
               >
                 <Edit2 className="w-3 h-3" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+              <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment.id, postId)}>
                 <Trash2 className="w-3 h-3" />
               </Button>
             </div>
