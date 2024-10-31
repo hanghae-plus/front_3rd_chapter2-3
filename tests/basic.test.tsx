@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "@testing-library/jest-dom"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -6,7 +7,7 @@ import { setupServer } from "msw/node"
 import * as React from "react"
 import { MemoryRouter } from "react-router-dom"
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
-import PostsManagerPage from "../src/pages/PostsManager/ui/PostsManagerPage"
+import { PostWidget } from "../src/widgets/posts/ui/PostWidget"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
 
 // MSW 서버 설정
@@ -43,12 +44,22 @@ beforeAll(() => server.listen({ onUnhandledRequest: "error" }))
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
+
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
   return render(
-    <MemoryRouter>
-      <PostsManagerPage />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <PostWidget />
+      </MemoryRouter>
+    </QueryClientProvider>,
   )
 }
 
