@@ -31,3 +31,19 @@ export interface UserType {
   address?: Address
   company?: Company
 }
+
+export interface Post {
+  id: number
+  body: string
+  reactions: { likes: number; dislikes: number }
+  tags: string[]
+  title: string
+  userId: number
+  views: number
+}
+
+export interface PostForm {
+  body: string
+  title: string
+  userId: number
+}

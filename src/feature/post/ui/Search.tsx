@@ -4,9 +4,9 @@ import { limitAtom, postsAtom, searchQueryAtom, skipAtom } from "../model/postAt
 import { useAtom } from "jotai"
 import { useState } from "react"
 import { postFetch } from "../../../entities/model/postFetch"
+import { postSearchApi } from "../../../entities/api/postSearchApi"
 
 export const SearchPost: React.FC = () => {
-  // const queryParams = new URLSearchParams(location.search)
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
   const [, setPosts] = useAtom(postsAtom)
   const [, setTotal] = useState(0)
@@ -21,8 +21,6 @@ export const SearchPost: React.FC = () => {
     try {
       let posts, total
 
-      console.log("searchQuery", searchQuery)
-
       if (!searchQuery) {
         // 검색어가 없는 경우
         const result = await postFetch({ limit, skip })
@@ -30,10 +28,8 @@ export const SearchPost: React.FC = () => {
         total = result.total
       } else {
         // 검색어가 있는 경우
-        const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-        const data = await response.json()
 
-        console.log("dat  a", data)
+        const data = await postSearchApi(searchQuery)
 
         posts = data.posts
         total = data.total

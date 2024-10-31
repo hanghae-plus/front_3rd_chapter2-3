@@ -9,13 +9,13 @@ import {
   tagsAtom,
   totalAtom,
 } from "../model/postAtoms"
+
+import { useLocation } from "react-router-dom"
 import { useAtom } from "jotai"
 import { tagFetch } from "../../../entities/model/tagFetch"
 import { userFetchDetail } from "../../../entities/model/userFetch"
 import { useUpdateURL } from "../../../shared/model/urlUtils"
 import { useEffect, useState } from "react"
-
-import { useLocation } from "react-router-dom"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/select/Select"
 import { SearchPost } from "./Search"
 import { Post } from "../model/postType"
@@ -23,13 +23,9 @@ import { postFetch, postFetchTags } from "../../../entities/model/postFetch"
 import { UserData } from "../../../entities/model/types"
 
 export const SearchAndFilter: React.FC = () => {
-  const location = useLocation()
-  const updateURL = useUpdateURL()
-  // const queryParams = new URLSearchParams(location.search)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
   const [, setPosts] = useAtom(postsAtom)
   const [, setSearchQuery] = useAtom(searchQueryAtom)
-
   const [, setLoading] = useState(false)
   const [, setTotal] = useAtom(totalAtom)
   const [tags, setTags] = useAtom(tagsAtom)
@@ -37,6 +33,9 @@ export const SearchAndFilter: React.FC = () => {
   const [, setLimit] = useAtom(limitAtom)
   const [sortBy, setSortBy] = useAtom(sortByAtom)
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
+
+  const location = useLocation()
+  const updateURL = useUpdateURL()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,9 +75,7 @@ export const SearchAndFilter: React.FC = () => {
     try {
       const postsData = await tagFetch(tag)
       const usersData = await userFetchDetail()
-
       const postsWithUsers = processPosts(postsData.posts, usersData.users)
-      console.log("postsWithUsers", postsWithUsers)
 
       setPosts(postsWithUsers)
       setTotal(postsData.total)
