@@ -1,23 +1,11 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query"
-import { AxiosError } from "axios"
+import { useMutation } from '@tanstack/react-query';
 
-export const useCommonMutation = <TData, TVariables, TContext = unknown>({
-  mutationFn,
-  onSuccessCallback,
-  options,
-}: {
+export const useCommonMutation = <TData, TVariables>(config: {
   mutationFn: (variables: TVariables) => Promise<TData>
-  onSuccessCallback?: (data: TData, variables: TVariables, context: TContext) => void
-  options?: Omit<UseMutationOptions<TData, AxiosError, TVariables, TContext>, "mutationFn" | "onSuccess" | "onError">
+  onSuccessCallback?: (data: TData, variables: TVariables) => void
 }) => {
   return useMutation({
-    mutationFn,
-    onSuccess: (data, variables, context) => {
-      onSuccessCallback?.(data, variables, context)
-    },
-    onError: (error) => {
-      console.error("Mutation failed:", error)
-    },
-    ...options,
+    mutationFn: config.mutationFn,
+    onSuccess: config.onSuccessCallback,
   })
 }

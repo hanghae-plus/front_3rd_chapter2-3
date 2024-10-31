@@ -1,20 +1,26 @@
-import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query"
-import { AxiosError } from "axios"
+import {
+  QueryKey,
+  useQuery,
+} from '@tanstack/react-query';
 
-export const useCommonQuery = <T, P = unknown>({
+interface CommonQueryOptions<TData, TParams> {
+  queryKey: QueryKey
+  queryFn: (params: TParams) => Promise<TData>
+  params?: TParams
+  select?: (data: TData) => TData
+}
+
+export function useCommonQuery<TData, TParams = void>({
   queryKey,
   queryFn,
   params,
-  options,
-}: {
-  queryKey: QueryKey
-  queryFn: (params: P) => Promise<T>
-  params?: P
-  options?: Omit<UseQueryOptions<T, AxiosError>, "queryKey" | "queryFn">
-}) => {
+  select,
+  ...options
+}: CommonQueryOptions<TData, TParams>) {
   return useQuery({
-    queryKey: [...queryKey, params],
-    queryFn: () => queryFn(params as P),
+    queryKey,
+    queryFn: () => queryFn(params as TParams),
+    select,
     ...options,
   })
 }

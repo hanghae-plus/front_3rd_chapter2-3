@@ -1,21 +1,30 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query"
-import { AxiosError } from "axios"
+import { AxiosError } from 'axios';
 
-export const useCommonDetailQuery = <T>({
+import {
+  QueryKey,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
+
+interface CommonDetailQueryOptions<TData, TError = AxiosError> {
+  queryKey: QueryKey
+  queryFn: (id: string | number) => Promise<TData>
+  id: string | number
+  select?: (data: TData) => TData
+  options?: Omit<UseQueryOptions<TData, TError, TData>, "queryKey" | "queryFn">
+}
+
+export function useCommonDetailQuery<TData, TError = AxiosError>({
   queryKey,
   queryFn,
   id,
+  select,
   options,
-}: {
-  queryKey: string[]
-  queryFn: (id: string | number) => Promise<T>
-  id: string | number
-  options?: Omit<UseQueryOptions<T, AxiosError>, "queryKey" | "queryFn">
-}) => {
-  return useQuery({
-    queryKey: [...queryKey, id],
+}: CommonDetailQueryOptions<TData, TError>) {
+  return useQuery<TData, TError>({
+    queryKey,
     queryFn: () => queryFn(id),
-    enabled: !!id,
+    select,
     ...options,
   })
 }
