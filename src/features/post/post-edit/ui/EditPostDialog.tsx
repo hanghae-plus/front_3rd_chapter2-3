@@ -12,7 +12,7 @@ interface EditPostDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-export const EditPostDialog: FC<EditPostDialogProps> = ({ post, open, onOpenChange }) => {
+export const EditPostDialog: FC<EditPostDialogProps> = ({ open, onOpenChange }) => {
   const {
     mutate: updatePost,
     editingPost,

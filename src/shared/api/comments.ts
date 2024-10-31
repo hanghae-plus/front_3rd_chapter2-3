@@ -19,7 +19,7 @@ export const useComments = (postId: number) => {
         ...commentsData,
         comments: commentsData.comments.map((comment) => ({
           ...comment,
-          user: usersData.users.find((user: any) => user.id === comment.userId),
+          user: usersData.users.find((user) => user.id === comment.userId),
         })),
       }
     },

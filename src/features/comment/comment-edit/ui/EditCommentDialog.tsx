@@ -11,8 +11,7 @@ interface EditCommentDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-export const EditCommentDialog: FC<EditCommentDialogProps> = ({ 
-  comment, 
+export const EditCommentDialog: FC<EditCommentDialogProps> = ({  
   open, 
   onOpenChange 
 }) => {

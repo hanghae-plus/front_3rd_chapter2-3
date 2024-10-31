@@ -19,7 +19,7 @@ export const useCreateComment = ({ postId, onSuccess }: UseCreateCommentOptions)
   const [newComment, setNewComment] = useState<CreateCommentData>({
     body: "",
     postId,
-    userId: 1, // 임시 사용자 ID
+    userId: 1,
   })
 
   const { mutate } = useMutation({
@@ -32,7 +32,7 @@ export const useCreateComment = ({ postId, onSuccess }: UseCreateCommentOptions)
       if (!response.ok) throw new Error("Failed to create comment")
       return response.json() as Promise<Comment>
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.comments.byPost(postId) })
       setNewComment({ body: "", postId, userId: 1 })
       onSuccess?.()

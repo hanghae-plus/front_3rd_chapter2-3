@@ -31,7 +31,7 @@ export const usePosts = (params: PostsParams) => {
         ...postsData,
         posts: postsData.posts.map((post) => ({
           ...post,
-          author: usersData.users.find((user: any) => user.id === post.userId),
+          author: usersData.users.find((user) => user.id === post.userId),
         })),
       }
     },
