@@ -1,5 +1,13 @@
-import { PostSearchParams } from "../../../features/post/model/searchTypes"
-import { Tag } from "../../tag/model/tagTypes"
+import { Tag } from "../../../entities/tag/model/tagTypes"
+
+export interface PostSearchParams {
+  skip: number
+  limit: number
+  search: string
+  sortBy: string
+  sortOrder: "asc" | "desc"
+  tag: string
+}
 
 export interface SearchStore {
   skip: number

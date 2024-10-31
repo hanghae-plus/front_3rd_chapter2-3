@@ -1,6 +1,5 @@
 import { create } from "zustand"
-import { PostSearchParams } from "../../../features/post/model/searchTypes"
-import { SearchStore } from "./searchTypes"
+import { PostSearchParams, SearchStore } from "./searchTypes"
 
 export const useSearchStore = create<SearchStore>((set) => ({
   skip: 0,

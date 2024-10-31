@@ -1,4 +1,4 @@
-import { PostSearchParams } from "../../../features/post/model/searchTypes"
+import { PostSearchParams } from "../../../features/postSearch/model/searchTypes"
 import { axiosInstance } from "../../../shared/api/axiosInstance"
 import { PostRequests } from "../model/postTypes"
 

@@ -2,8 +2,8 @@ import { useCommonDetailQuery } from "../../../shared/lib/query/useCommonDetailQ
 import { useCommonQuery } from "../../../shared/lib/query/useCommonQuery"
 import { postApi } from "../api/postApi"
 import { PostsResponse } from "../model/postTypes"
-import { useSearchStore } from "../model/useSearchStore"
-import { PostSearchParams } from "../../../features/post/model/searchTypes"
+import { useSearchStore } from "../../../features/postSearch/model/useSearchStore"
+import { PostSearchParams } from "../../../features/postSearch/model/searchTypes"
 import { TagsResponse } from "../../tag/model/tagTypes"
 
 export const usePostsQuery = () => {
