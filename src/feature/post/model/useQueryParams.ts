@@ -23,7 +23,7 @@ export const useQueryParams = () => {
   });
 
   const setQueryParams = (newParams: Partial<QueryParams>) => {
-``    const updatedParams = { ...queryParams, ...newParams };
+    const updatedParams = { ...queryParams, ...newParams };
     setQueryParamsState(updatedParams);
 
     const searchParams = new URLSearchParams();
