@@ -6,10 +6,8 @@ import { usePostsQuery } from "../../../features/post/model/postStore"
 import { PostIsLoading } from "./PostIsLoading"
 
 export const PostTable: React.FC<{
-  setSelectedPost: (post: Post) => void
   openUserModal: (userId: number) => void
 }> = ({
-  setSelectedPost,
   openUserModal,
 }) => {
   const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = useRouterQueries()
@@ -41,7 +39,6 @@ export const PostTable: React.FC<{
               <PostTableRow
                 key={post.id}
                 post={post}
-                setSelectedPost={setSelectedPost}
                 openUserModal={openUserModal}
               />
             ))}

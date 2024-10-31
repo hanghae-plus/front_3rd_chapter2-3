@@ -4,6 +4,7 @@ import { queryKeys } from "../../../lib/query/queryKeys"
 import { queryClient } from "../../../lib/query/queryClient"
 import { Post } from "../../../entities/post/model/types"
 import { removeFromPosts, updateInPosts } from "../../../entities/post/model/utils"
+import { atom, useAtom } from "jotai"
 
 interface PostsQueryFilters {
   skip?: number
@@ -34,16 +35,13 @@ export const usePostMutations = () => {
     mutationFn: postsApi.create,
     onSuccess: (newPost: Post) => {
       // 목록 쿼리 데이터 업데이트
-      queryClient.setQueriesData<PostsResponse>(
-        queryKeys.posts.lists(),
-        (prev) => {
-          if (!prev) return prev
-          return {
-            posts: [newPost, ...prev.posts],
-            total: prev.total + 1
-          }
+      queryClient.setQueriesData<PostsResponse>(queryKeys.posts.lists(), (prev) => {
+        if (!prev) return prev
+        return {
+          posts: [newPost, ...prev.posts],
+          total: prev.total + 1,
         }
-      )
+      })
     },
   })
 
@@ -51,22 +49,16 @@ export const usePostMutations = () => {
     mutationFn: postsApi.update,
     onSuccess: (updatedPost) => {
       // 상세 쿼리 데이터 업데이트
-      queryClient.setQueryData(
-        queryKeys.posts.detail(updatedPost.id),
-        updatedPost
-      )
+      queryClient.setQueryData(queryKeys.posts.detail(updatedPost.id), updatedPost)
 
       // 목록 쿼리 데이터 업데이트
-      queryClient.setQueriesData<PostsResponse>(
-        queryKeys.posts.lists(),
-        (prev) => {
-          if (!prev) return prev
-          return {
-            ...prev,
-            posts: updateInPosts(prev.posts, updatedPost)
-          }
+      queryClient.setQueriesData<PostsResponse>(queryKeys.posts.lists(), (prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          posts: updateInPosts(prev.posts, updatedPost),
         }
-      )
+      })
     },
   })
 
@@ -77,16 +69,13 @@ export const usePostMutations = () => {
       queryClient.removeQueries(queryKeys.posts.detail(deletedPostId))
 
       // 목록 쿼리 데이터 업데이트
-      queryClient.setQueriesData<PostsResponse>(
-        queryKeys.posts.lists(),
-        (prev) => {
-          if (!prev) return prev
-          return {
-            posts: removeFromPosts(prev.posts, deletedPostId),
-            total: prev.total - 1
-          }
+      queryClient.setQueriesData<PostsResponse>(queryKeys.posts.lists(), (prev) => {
+        if (!prev) return prev
+        return {
+          posts: removeFromPosts(prev.posts, deletedPostId),
+          total: prev.total - 1,
         }
-      )
+      })
     },
   })
 
@@ -99,4 +88,15 @@ export const invalidatePostQueries = () => {
 
 export const prefetchPost = async (id: number) => {
   await queryClient.prefetchQuery(queryKeys.posts.detail(id), () => postsApi.fetchOne(id))
+}
+
+const seletedPostAtom = atom<Post | null>(null)
+
+export const usePosts = () => {
+  const [selectedPost, setSelectedPost] = useAtom(seletedPostAtom)
+
+  return {
+    selectedPost,
+    setSelectedPost,
+  }
 }

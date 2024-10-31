@@ -2,19 +2,18 @@ import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react
 import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { Post } from "../model/types"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
-import { usePostMutations } from "../../../features/post/model/postStore"
+import { usePostMutations, usePosts } from "../../../features/post/model/postStore"
 import { useDialog } from "../../../features/post/model/dialogStore"
 import { useRouterQueries } from "../../../features/post/model/routerStore"
 
 export const PostTableRow: React.FC<{
   post: Post
-  setSelectedPost: (post: Post) => void
   openUserModal: (userId: number) => void
-}> = ({ post, setSelectedPost, openUserModal }) => {
-  const { searchQuery, selectedTag, setSelectedTag, updateURL } = useRouterQueries()
+}> = ({ post, openUserModal }) => {
+  const { searchQuery, selectedTag, setSelectedTag } = useRouterQueries()
   const { setShowPostUpdateDialog, setShowPostDetailDialog } = useDialog()
-
   const { deletePost } = usePostMutations()
+  const { setSelectedPost } = usePosts()
 
   // 게시물 상세 보기
   const handlePostDetailDialogOpen = () => {
@@ -53,7 +52,6 @@ export const PostTableRow: React.FC<{
                 }`}
                 onClick={() => {
                   setSelectedTag(tag)
-                  // updateURL()
                 }}
               >
                 {tag}

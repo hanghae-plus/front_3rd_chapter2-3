@@ -4,14 +4,14 @@ import { Button, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { useDialog } from "../../post/model/dialogStore"
 import { useCommentMutations } from "../model/commentStore"
+import { usePosts } from "../../post/model/postStore"
 
 const initialNewComment: NewComment = { body: "", postId: null, userId: 1 }
-export const CommentAddDialog: React.FC<{
-  postId: number
-}> = ({ postId }) => {
+export const CommentAddDialog = () => {
+  const { selectedPost } = usePosts()
   const { showCommentAddDialog, setShowCommentAddDialog } = useDialog()
-
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment)
+  const postId = selectedPost?.id ?? 0
 
   const { createComment } = useCommentMutations(postId)
 

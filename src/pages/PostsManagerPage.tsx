@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
-import { Post } from "../entities/post/model/types"
 import { fetchUserApi } from "../entities/user/api"
 import { User } from "../entities/user/model/types"
 import { PostSearch } from "../features/post/ui/PostSearch"
@@ -22,13 +21,9 @@ import { useDialog } from "../features/post/model/dialogStore"
 import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
-  const {
-    setShowPostAddDialog,
-    setShowUserDetailDialog,
-  } = useDialog()
+  const { setShowPostAddDialog, setShowUserDetailDialog } = useDialog()
 
   // 상태 관리
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
@@ -39,12 +34,17 @@ const PostsManager = () => {
     setShowUserDetailDialog(true)
   }
 
+  // 게시물 추가 모달 열기
+  const handlePostAddDialogOpen = () => {
+    setShowPostAddDialog(true)
+  }
+
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowPostAddDialog(true)}>
+          <Button onClick={handlePostAddDialogOpen}>
             <Plus className="w-4 h-4 mr-2" />
             게시물 추가
           </Button>
@@ -63,10 +63,7 @@ const PostsManager = () => {
           </ContentControls>
 
           {/* 게시물 테이블 */}
-          <PostTable
-            setSelectedPost={setSelectedPost}
-            openUserModal={openUserModal}
-          />
+          <PostTable openUserModal={openUserModal} />
 
           {/* 페이지네이션 */}
           <PostPagination />
@@ -77,21 +74,16 @@ const PostsManager = () => {
       <PostAddDialog />
 
       {/* 게시물 수정 대화상자 */}
-      {selectedPost && <PostUpdateDialog selectedPost={selectedPost} />}
+      <PostUpdateDialog />
 
       {/* 댓글 추가 대화상자 */}
-      {selectedPost && <CommentAddDialog postId={selectedPost.id} />}
+      <CommentAddDialog />
 
       {/* 댓글 수정 대화상자 */}
       {selectedComment && <CommentUpdateDialog selectedComment={selectedComment} />}
 
       {/* 게시물 상세 보기 대화상자 */}
-      {selectedPost && (
-        <PostDetailDialog
-          selectedPost={selectedPost}
-          setSelectedComment={setSelectedComment}
-        />
-      )}
+      <PostDetailDialog setSelectedComment={setSelectedComment} />
 
       {/* 사용자 모달 */}
       {selectedUser && <UserDetailDialog selectedUser={selectedUser} />}
