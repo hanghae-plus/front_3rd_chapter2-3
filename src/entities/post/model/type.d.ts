@@ -1,23 +1,23 @@
 type ResPostsList = {
-  posts: Post[]
-  total: number
-  skip: number
-  limit: number
-}
+  posts: Post[];
+  total: number;
+  skip: number;
+  limit: number;
+};
 
 type Post = {
-  id: number
-  title: string
-  body: string
-  tags: string[]
-  reactions: Reaction
-  views: number
-  userId: number
-}
+  id: number;
+  title: string;
+  body: string;
+  tags: string[];
+  reactions: Reaction;
+  views: number;
+  userId: number;
+};
 
 type Reaction = {
-  likes: number
-  dislikes: number
-}
+  likes: number;
+  dislikes: number;
+};
 
-type AddPost = Omit<Post, "id", "views">
+type AddPost = Omit<Post, "id" | "views">;
