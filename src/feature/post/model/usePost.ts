@@ -2,6 +2,7 @@ import { NewPost, Post, Tag } from "../../../entities/post/model/types.ts";
 import { atom } from "jotai/index";
 import { useAtom } from "jotai";
 import { QueryParams } from "./useQueryParams.ts";
+import { useEffect } from "react";
 
 interface PostAtomState {
   posts: Post[];
@@ -57,7 +58,8 @@ export const queryParamsAtom = atom<QueryParams>({
 
 export const setQueryParamsAtom = atom(null, (get, set, newParams: Partial<QueryParams>) => {
   const currentParams = get(queryParamsAtom);
-  set(queryParamsAtom, { ...currentParams, ...newParams });
+  const updatedParams = { ...currentParams, ...newParams };
+  set(queryParamsAtom, updatedParams);
 });
 
 export const usePost = (): PostAtomState => {
@@ -71,8 +73,13 @@ export const usePost = (): PostAtomState => {
   const [tags, setTags] = useAtom(tagsAtom);
   const [showPostDetailDialog, setShowPostDetailDialog] = useAtom(showPostDetailDialogAtom);
 
-  const [queryParams] = useAtom(queryParamsAtom);
+  const [queryParams, setQueryParams] = useAtom(queryParamsAtom);
   const [, updateQueryParams] = useAtom(setQueryParamsAtom);
+
+  useEffect(() => {
+    // sortBy나 sortOrder가 변경될 때마다 URL 동기화
+    setQueryParams(queryParams);
+  }, [queryParams.sortBy, queryParams.sortOrder]);
 
   return {
     posts,
@@ -81,6 +88,7 @@ export const usePost = (): PostAtomState => {
     setLoading,
     tags,
     setTags,
+
     selectedTag: queryParams.selectedTag,
     selectedPost,
     newPost,

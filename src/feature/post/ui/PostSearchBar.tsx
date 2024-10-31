@@ -1,98 +1,43 @@
 import { Search } from "lucide-react";
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
-import { usePost, useQueryParams } from "../model";
-import { getPosts, getPostsByTag, getSearchPosts } from "../../../entities/post/api";
+import { useGetPosts, useGetSearchPosts, usePost, useQueryParams } from "../model";
 import { Post } from "../../../entities/post/model/types.ts";
 import { User } from "../../../entities/user/model/types.ts";
 import { useEffect } from "react";
+import { PostSearchBarTagSelectBox } from "./PostSearchBarTagSelectBox.tsx";
 
 export const PostSearchBar = () => {
-  const {
-    selectedTag,
-    tags,
-    setSelectedTag,
-    sortBy,
-    sortOrder,
-    setSortOrder,
-    setSortBy,
-    searchQuery,
-    setSearchQuery,
-    setPosts,
-    setTotal,
-    setLoading,
-  } = usePost();
+  const { sortBy, sortOrder, setSortOrder, setSortBy, searchQuery, setSearchQuery, setPosts, setTotal } = usePost();
 
-  const { setQueryParams, queryParams } = useQueryParams();
+  const { queryParams } = useQueryParams();
 
-  const fetchPosts = async () => {
-    setLoading(true);
-
-    const response = await getPosts(queryParams.limit, queryParams.skip);
-
-    if (response) {
-      const { postsData, usersData } = response;
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }));
-
-      setPosts(postsWithUsers);
-      setTotal(postsData.total);
-    }
-
-    setLoading(false);
-  };
-
-  const fetchPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      await fetchPosts();
-      return;
-    }
-
-    setLoading(true);
-
-    const data = await getPostsByTag(tag);
-
-    if (data) {
-      const { postsData, usersData } = data;
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }));
-
-      setPosts(postsWithUsers);
-      setTotal(postsData.total);
-    }
-
-    setLoading(false);
-  };
-
-  const handleEnterKeyPress = async () => {
-    if (!queryParams.searchQuery) {
-      await fetchPosts();
-      return;
-    }
-
-    setLoading(true);
-
-    const data = await getSearchPosts(queryParams.searchQuery);
-
-    if (data) {
-      setPosts(data.posts);
-      setTotal(data.total);
-    }
-    setLoading(false);
-  };
+  const { data: postsData } = useGetPosts(queryParams.limit, queryParams.skip, sortBy, sortOrder);
+  const { data: searchData } = useGetSearchPosts(searchQuery);
 
   useEffect(() => {
-    if (queryParams.selectedTag) {
-      fetchPostsByTag(queryParams.selectedTag);
-    } else {
-      fetchPosts();
+    if (postsData) {
+      const postsWithUsers = postsData.postsData.posts.map((post: Post) => ({
+        ...post,
+        author: postsData.usersData.users.find((user: User) => user.id === post.userId),
+      }));
+
+      setPosts(postsWithUsers);
+      setTotal(postsData.postsData.total);
     }
-  }, [queryParams.searchQuery, queryParams.selectedTag, queryParams.sortBy, queryParams.sortOrder]);
+  }, [postsData]);
+
+  useEffect(() => {
+    if (searchQuery && searchData) {
+      setPosts(searchData.posts);
+      setTotal(searchData.total);
+    }
+  }, [searchData, searchQuery]);
+
+  const handleEnterKeyPress = () => {
+    if (!searchQuery) {
+      return;
+    }
+  };
 
   return (
     <div className="flex gap-4">
@@ -108,26 +53,7 @@ export const PostSearchBar = () => {
           />
         </div>
       </div>
-      <Select
-        value={selectedTag}
-        onValueChange={async (value) => {
-          setSelectedTag(value);
-          await fetchPostsByTag(value);
-          setQueryParams({ selectedTag: value });
-        }}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="태그 선택" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">모든 태그</SelectItem>
-          {tags.map((tag) => (
-            <SelectItem key={tag.url} value={tag.slug}>
-              {tag.slug}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <PostSearchBarTagSelectBox />
       <Select value={sortBy} onValueChange={setSortBy}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />

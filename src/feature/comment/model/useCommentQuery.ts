@@ -5,48 +5,46 @@ import {
   postNewComment,
   putExistingComment,
 } from "../../../entities/comment/api";
-import useCustomQuery from "../../../shared/model/useCustomQuery.ts";
-import useCustomMutation from "../../../shared/model/useCustomMutation.ts";
-import { Comments, NewComment } from "../../../entities/comment/model/types.ts";
+import { CommentResponse, Comments, NewComment } from "../../../entities/comment/model/types.ts";
 
-export const useGetComment = (postId: number) => {
-  return useCustomQuery(["comment", postId], () => getComments(postId));
-};
+import { useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 
-export const useAddComment = () => {
-  return useCustomMutation<Comments | undefined, Error, NewComment>((newComment) => postNewComment(newComment), {
-    onError: (error) => {
-      console.error("댓글 추가 실패:", error);
-    },
+export const useGetComment = (postId: number | undefined) => {
+  return useQuery<CommentResponse | undefined, unknown>({
+    queryKey: ["comment", postId],
+    queryFn: () => getComments(postId as number),
+    enabled: !!postId,
   });
 };
 
-export const useUpdateComment = () => {
-  return useCustomMutation<Comments | undefined, Error, { id: number; body: string }>(
-    ({ id, body }) => putExistingComment(id, body),
-    {
-      onError: (error) => {
-        console.error("댓글 업데이트 실패:", error);
-      },
-    },
-  );
-};
-
-export const useDeleteComment = () => {
-  return useCustomMutation<unknown, Error, { id: number }>(({ id }) => deleteExistingComment(id), {
-    onError: (error) => {
-      console.error("댓글 삭제 실패:", error);
-    },
+export const useAddComment = (options?: UseMutationOptions<Comments | undefined, Error, NewComment>) => {
+  return useMutation({
+    mutationFn: postNewComment,
+    ...options,
   });
 };
 
-export const useUpdateLike = () => {
-  return useCustomMutation<Comments | undefined, Error, { id: number; likes: number }>(
-    ({ id, likes }) => patchLikeComment(id, likes),
-    {
-      onError: (error) => {
-        console.error("좋아요 업데이트 실패:", error);
-      },
-    },
-  );
+export const useUpdateComment = (
+  options?: UseMutationOptions<Comments | undefined, Error, { id: number; body: string }>,
+) => {
+  return useMutation({
+    mutationFn: ({ id, body }) => putExistingComment(id, body),
+    ...options,
+  });
+};
+
+export const useDeleteComment = (options?: UseMutationOptions<void, Error, { id: number }>) => {
+  return useMutation({
+    mutationFn: ({ id }) => deleteExistingComment(id),
+    ...options,
+  });
+};
+
+export const useUpdateLike = (
+  options?: UseMutationOptions<Comments | undefined, Error, { id: number; body: number }>,
+) => {
+  return useMutation({
+    mutationFn: ({ id, body }) => patchLikeComment(id, body),
+    ...options,
+  });
 };

@@ -23,6 +23,7 @@ export const useQueryParams = () => {
   });
 
   const setQueryParams = (newParams: Partial<QueryParams>) => {
+    console.log(newParams);
     const updatedParams = { ...queryParams, ...newParams };
     setQueryParamsState(updatedParams);
 

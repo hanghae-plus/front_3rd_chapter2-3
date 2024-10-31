@@ -1,9 +1,9 @@
 import { Button, HighlightText } from "../../../shared/ui";
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
 import { Comments } from "../../../entities/comment/model/types.ts";
-import { deleteExistingComment, patchLikeComment } from "../../../entities/comment/api";
-import { useComment } from "../model";
+import { useComment, useDeleteComment, useUpdateLike } from "../model";
 import { usePost } from "../../post/model";
+import { useState } from "react";
 
 interface CommentSectionProps {
   postId: number;
@@ -21,13 +21,31 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
 
   const { searchQuery } = usePost();
 
-  const handleDeleteComment = async (id: number, postId: number) => {
-    await deleteExistingComment(id);
+  const [id, setId] = useState<number>();
 
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].filter((comment: Comments) => comment.id !== id),
-    }));
+  const { mutate: deleteComment } = useDeleteComment({
+    onSuccess: () => {
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].filter((comment: Comments) => comment.id !== id),
+      }));
+    },
+  });
+
+  const { mutate: updateLike } = useUpdateLike({
+    onSuccess: (data) => {
+      if (data) {
+        setComments((prev) => ({
+          ...prev,
+          [postId]: prev[postId].map((comment: Comments) => (comment.id === data.id ? data : comment)),
+        }));
+      }
+    },
+  });
+
+  const handleDeleteComment = async (id: number, postId: number) => {
+    setId(id);
+    deleteComment({ id: id });
   };
 
   const handleLikeComment = async (id: number, postId: number) => {
@@ -38,13 +56,7 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
       return;
     }
 
-    const data = await patchLikeComment(id, comment.likes);
-    if (data) {
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment: Comments) => (comment.id === data.id ? data : comment)),
-      }));
-    }
+    updateLike({ id: id, body: comment.likes });
   };
 
   return (

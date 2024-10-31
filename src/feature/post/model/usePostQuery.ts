@@ -10,21 +10,22 @@ import {
 } from "../../../entities/post/api";
 import useCustomMutation from "../../../shared/model/useCustomMutation.ts";
 import { NewPost, Post } from "../../../entities/post/model/types.ts";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useGetPosts = (limit: number, skip: number) => {
-  return useCustomQuery(["post"], () => getPosts(limit, skip));
+export const useGetPosts = (limit: number, skip: number, sortBy, sortOrder) => {
+  return useQuery({ queryKey: ["post", { limit, skip, sortBy, sortOrder }], queryFn: () => getPosts(limit, skip) });
 };
 
 export const useGetPostByTag = (tag: string) => {
-  return useCustomQuery(["post", "tag"], () => getPostsByTag(tag));
+  return useQuery({ queryKey: ["post", "tag"], queryFn: () => getPostsByTag(tag) });
 };
 
 export const useGetSearchPosts = (searchQuery: string) => {
-  return useCustomQuery(["post", searchQuery], () => getSearchPosts(searchQuery));
+  return useQuery({ queryKey: ["post", searchQuery], queryFn: () => getSearchPosts(searchQuery) });
 };
 
 export const usePostNewPost = () => {
-  return useCustomMutation((newPost: NewPost) => postNewPost(newPost), {
+  return useMutation((newPost: NewPost) => postNewPost(newPost), {
     onError: (error) => {
       console.error("게시글 추가 실패:", error);
     },

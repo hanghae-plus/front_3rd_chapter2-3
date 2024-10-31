@@ -1,21 +1,24 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
-import { postNewComment } from "../../../entities/comment/api";
-import { useComment } from "../model";
+import { useAddComment, useComment } from "../model";
 
 export const AddCommentDialog = () => {
   const { newComment, setComments, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useComment();
 
-  const handeAddComment = async () => {
-    const data = await postNewComment(newComment);
+  const { mutate: addComment } = useAddComment({
+    onSuccess: (data) => {
+      if (data) {
+        setComments((prev) => ({
+          ...prev,
+          [data.postId]: [...(prev[data?.postId] || []), data],
+        }));
+        setShowAddCommentDialog(false);
+        setNewComment({ body: "", postId: null, userId: 1 });
+      }
+    },
+  });
 
-    if (data) {
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data?.postId] || []), data],
-      }));
-      setShowAddCommentDialog(false);
-      setNewComment({ body: "", postId: null, userId: 1 });
-    }
+  const handeAddComment = () => {
+    addComment(newComment);
   };
 
   return (

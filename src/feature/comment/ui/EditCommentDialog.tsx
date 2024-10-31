@@ -1,22 +1,26 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
-import { putExistingComment } from "../../../entities/comment/api";
-import { useComment } from "../model";
+import { useComment, useUpdateComment } from "../model";
 
 export const EditCommentDialog = () => {
   const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog, setComments } =
     useComment();
 
-  const updateComment = async () => {
-    if (selectedComment) {
-      const data = await putExistingComment(selectedComment.id, selectedComment.body);
-
+  const { mutate: updateComment } = useUpdateComment({
+    onSuccess: (data) => {
       if (data) {
         setComments((prev) => ({
           ...prev,
           [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
         }));
+
         setShowEditCommentDialog(false);
       }
+    },
+  });
+
+  const handleUpdateComment = () => {
+    if (selectedComment?.id && selectedComment?.body) {
+      updateComment({ id: selectedComment.id, body: selectedComment.body });
     }
   };
 
@@ -33,7 +37,7 @@ export const EditCommentDialog = () => {
               value={selectedComment?.body || ""}
               onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
             />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
+            <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
           </div>
         )}
       </DialogContent>

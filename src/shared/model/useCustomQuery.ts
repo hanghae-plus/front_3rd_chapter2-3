@@ -1,15 +1,11 @@
-import { useQuery, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions, QueryKey } from "@tanstack/react-query";
 
-const useCustomQuery = <TData, TError = unknown>(
-  key: (string | number)[],
-  queryFn: () => Promise<TData>,
-  options?: UseQueryOptions<TData, TError>,
-): UseQueryResult<TData, TError> => {
-  return useQuery<TData, TError>({
-    queryKey: [key],
-    queryFn,
-    ...options,
-  });
-};
+function useCustomQuery<TData = unknown, TError = unknown, TQueryFnData = TData>(
+  queryKey: QueryKey,
+  queryFn: () => Promise<TQueryFnData>,
+  options?: UseQueryOptions<TQueryFnData, TError, TData>,
+) {
+  return useQuery<TQueryFnData, TError, TData>(queryKey, queryFn, options);
+}
 
 export default useCustomQuery;

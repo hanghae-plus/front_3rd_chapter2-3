@@ -5,3 +5,5 @@ export * from "./DetailPostDialog.tsx";
 export * from "./PostPagination.tsx";
 export * from "./PostSearchBar.tsx";
 export * from "./PostHeader.tsx";
+export * from "./PostTableContent.tsx";
+export * from "./PostSearchBarTagSelectBox.tsx";
