@@ -3,7 +3,7 @@ import { Button, Input, Textarea } from "../../../shared/ui"
 import { usePostForm } from "../model/usePostForm"
 
 interface PostFormProps {
-  post?: Post
+  post?: Post | null
   onSubmit: () => void
   onCancel: () => void
 }

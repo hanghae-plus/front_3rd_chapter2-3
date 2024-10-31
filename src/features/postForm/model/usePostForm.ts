@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Post, postsAPI } from "../../../entities/post"
 import { PostFormData } from "./types"
 
-export const usePostForm = (post?: Post) => {
+export const usePostForm = (post?: Post | null) => {
   const [formData, setFormData] = useState<PostFormData>({
     title: post?.title || "",
     body: post?.body || "",
