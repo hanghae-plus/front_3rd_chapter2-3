@@ -1,14 +1,12 @@
 import { Plus } from "lucide-react"
 import { Button } from "../../../shared/ui"
-import { Comment, NewComment } from "../model/types"
+import { Comment } from "../model/types"
 import { CommentView } from "./CommentView"
 
 export const Comments: React.FC<{
   comments: Record<number, Comment[]>
   postId: number
-  newComment: NewComment
   searchQuery: string
-  setNewComment: (prev: NewComment) => void
   setShowCommentAddDialog: (value: boolean) => void
   setSelectedComment: (comment: Comment) => void
   setShowCommentUpdateDialog: (value: boolean) => void
@@ -17,9 +15,7 @@ export const Comments: React.FC<{
 }> = ({
   comments,
   postId,
-  newComment,
   searchQuery,
-  setNewComment,
   setShowCommentAddDialog,
   setSelectedComment,
   setShowCommentUpdateDialog,
@@ -33,7 +29,6 @@ export const Comments: React.FC<{
         <Button
           size="sm"
           onClick={() => {
-            setNewComment({ ...newComment, postId })
             setShowCommentAddDialog(true)
           }}
         >
@@ -44,6 +39,7 @@ export const Comments: React.FC<{
       <div className="space-y-1">
         {comments[postId]?.map((comment) => (
           <CommentView
+            key={comment.id}
             postId={postId}
             comment={comment}
             searchQuery={searchQuery}

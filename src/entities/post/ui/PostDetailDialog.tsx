@@ -1,7 +1,7 @@
 import { useDialog } from "../../../features/post/model/dialogStore"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
-import { NewComment, Comment } from "../../comment/model/types"
+import { Comment } from "../../comment/model/types"
 import { Comments } from "../../comment/ui/Comments"
 import { Post } from "../model/types"
 
@@ -9,8 +9,6 @@ export const PostDetailDialog: React.FC<{
   selectedPost: Post
   searchQuery: string
   comments: Record<number, Comment[]>
-  newComment: NewComment
-  setNewComment: (prev: NewComment) => void
   setShowCommentAddDialog: (value: boolean) => void
   setSelectedComment: (comment: Comment) => void
   setShowCommentUpdateDialog: (value: boolean) => void
@@ -20,8 +18,6 @@ export const PostDetailDialog: React.FC<{
   selectedPost,
   searchQuery,
   comments,
-  newComment,
-  setNewComment,
   setShowCommentAddDialog,
   setSelectedComment,
   setShowCommentUpdateDialog,
@@ -49,9 +45,7 @@ export const PostDetailDialog: React.FC<{
         <Comments
           comments={comments}
           postId={selectedPost.id}
-          newComment={newComment}
           searchQuery={searchQuery}
-          setNewComment={setNewComment}
           setShowCommentAddDialog={setShowCommentAddDialog}
           setSelectedComment={setSelectedComment}
           setShowCommentUpdateDialog={setShowCommentUpdateDialog}

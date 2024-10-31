@@ -40,7 +40,6 @@ import {
 import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
 
-const initialNewComment: NewComment = { body: "", postId: null, userId: 1, likes: 0 }
 const PostsManager = () => {
   const {
     skip,
@@ -73,7 +72,6 @@ const PostsManager = () => {
   const [tags, setTags] = useState<Tag[]>([])
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [newComment, setNewComment] = useState<NewComment>({ ...initialNewComment })
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // 게시물 가져오기
@@ -153,8 +151,6 @@ const PostsManager = () => {
       ...prev,
       [commentData.postId]: [...(prev[commentData.postId] || []), commentData],
     }))
-    setShowCommentAddDialog(false)
-    setNewComment({ ...initialNewComment })
   }
 
   // 댓글 업데이트
@@ -277,25 +273,15 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <PostAddDialog
-        addPost={addPost}
-      />
+      <PostAddDialog addPost={addPost} />
 
       {/* 게시물 수정 대화상자 */}
       {selectedPost && (
-        <PostUpdateDialog
-          selectedPost={selectedPost}
-          setSelectedPost={setSelectedPost}
-          updatePost={updatePost}
-        />
+        <PostUpdateDialog selectedPost={selectedPost} setSelectedPost={setSelectedPost} updatePost={updatePost} />
       )}
 
       {/* 댓글 추가 대화상자 */}
-      <CommentAddDialog
-        newComment={newComment}
-        setNewComment={setNewComment}
-        addComment={addComment}
-      />
+      {selectedPost && <CommentAddDialog postId={selectedPost.id} addComment={addComment} />}
 
       {/* 댓글 수정 대화상자 */}
       {selectedComment && (
@@ -312,8 +298,6 @@ const PostsManager = () => {
           selectedPost={selectedPost}
           searchQuery={searchQuery}
           comments={comments}
-          newComment={newComment}
-          setNewComment={setNewComment}
           setShowCommentAddDialog={setShowCommentAddDialog}
           setSelectedComment={setSelectedComment}
           setShowCommentUpdateDialog={setShowCommentUpdateDialog}
@@ -323,11 +307,7 @@ const PostsManager = () => {
       )}
 
       {/* 사용자 모달 */}
-      {selectedUser && (
-        <UserDetailDialog
-          selectedUser={selectedUser}
-        />
-      )}
+      {selectedUser && <UserDetailDialog selectedUser={selectedUser} />}
     </Card>
   )
 }
