@@ -1,13 +1,12 @@
 import { atom, useAtom } from "jotai"
-import { User } from "../../../entities/user/model/types"
 
-const selectedUserAtom = atom<User | null>(null)
+const selectedUserIdAtom = atom<number | null>(null)
 
 export const useUser = () => {
-  const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom)
+  const [selectedUserId, setSelectedUserId] = useAtom(selectedUserIdAtom)
 
   return new (class {
-    selectedUser = selectedUser
-    setSelectedUser = setSelectedUser
+    selectedUserId = selectedUserId
+    setSelectedUserId = setSelectedUserId
   })()
 }

@@ -4,22 +4,21 @@ import { Post } from "../../../entities/post/model/types"
 import HighlightText from "../../../shared/ui/HighlightText"
 import { useTag } from "../../tags/model/useTag"
 import { usePost } from "../model/usePost"
-import { openUserModal } from "../../user/api/openUserModal"
-import { User } from "../../../entities/user/model/types"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { Button } from "../../../shared/ui/Button"
 import useMutationDeletePost from "../api/useMutationDeletePost"
+import { useUser } from "../../user/model/useUser"
 
 interface Props {
   updateURL: () => void
   post: Post
-  setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const PostTableRow = ({ post, updateURL, setSelectedUser, setShowUserModal }: Props) => {
+const PostTableRow = ({ post, updateURL, setShowUserModal }: Props) => {
   const { setSelectedPost, setShowEditDialog, searchQuery, setShowPostDetailDialog } = usePost()
   const { selectedTag, setSelectedTag } = useTag()
+  const { setSelectedUserId } = useUser()
   const { mutate: mutateDeletePost } = useMutationDeletePost(post.id)
 
   // 게시물 상세 보기
@@ -30,6 +29,11 @@ const PostTableRow = ({ post, updateURL, setSelectedUser, setShowUserModal }: Pr
 
   const handleDeletePost = () => {
     mutateDeletePost()
+  }
+
+  const handleOpenUserModal = () => {
+    setSelectedUserId(post.author?.id || null)
+    setShowUserModal(true)
   }
 
   return (
@@ -61,10 +65,7 @@ const PostTableRow = ({ post, updateURL, setSelectedUser, setShowUserModal }: Pr
         </div>
       </TableCell>
       <TableCell>
-        <div
-          className="flex items-center space-x-2 cursor-pointer"
-          onClick={() => openUserModal({ user: post.author as User, setSelectedUser, setShowUserModal })}
-        >
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={handleOpenUserModal}>
           <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
           <span>{post.author?.username}</span>
         </div>

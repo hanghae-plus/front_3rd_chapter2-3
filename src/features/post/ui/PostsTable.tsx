@@ -1,15 +1,13 @@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui/Table"
 import { usePost } from "../model/usePost"
-import { User } from "../../../entities/user/model/types"
 import PostTableRow from "./PostTableRow"
 
 interface Props {
   updateURL: () => void
-  setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const PostsTable = ({ updateURL, setSelectedUser, setShowUserModal }: Props) => {
+const PostsTable = ({ updateURL, setShowUserModal }: Props) => {
   const { posts } = usePost()
 
   return (
@@ -25,12 +23,7 @@ const PostsTable = ({ updateURL, setSelectedUser, setShowUserModal }: Props) => 
       </TableHeader>
       <TableBody>
         {posts.map((post) => (
-          <PostTableRow
-            post={post}
-            setSelectedUser={setSelectedUser}
-            setShowUserModal={setShowUserModal}
-            updateURL={updateURL}
-          />
+          <PostTableRow post={post} setShowUserModal={setShowUserModal} updateURL={updateURL} />
         ))}
       </TableBody>
     </Table>

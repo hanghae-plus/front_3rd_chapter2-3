@@ -6,7 +6,6 @@ import PostsTable from "../../features/post/ui/PostsTable"
 import Pagination from "../../features/post/ui/Pagination"
 import { usePost } from "../../features/post/model/usePost"
 import { useTag } from "../../features/tags/model/useTag"
-import { useUser } from "../../features/user/model/useUser"
 import { useUserDialog } from "../../features/user/model/useUserDialog"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -42,7 +41,6 @@ const PostsManagerContent = () => {
     setLimit,
   } = usePost()
   const { tags, setTags, selectedTag, setSelectedTag } = useTag()
-  const { setSelectedUser } = useUser()
   const { setShowUserModal } = useUserDialog()
 
   const [loading, setLoading] = useState(false)
@@ -216,7 +214,7 @@ const PostsManagerContent = () => {
         {loading ? (
           <div className="flex justify-center p-4">로딩 중...</div>
         ) : (
-          <PostsTable updateURL={updateURL} setSelectedUser={setSelectedUser} setShowUserModal={setShowUserModal} />
+          <PostsTable updateURL={updateURL} setShowUserModal={setShowUserModal} />
         )}
 
         <Pagination />

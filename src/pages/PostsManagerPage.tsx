@@ -7,8 +7,10 @@ import UserModal from "../features/user/ui/UserModal"
 import { Card } from "../shared/ui/Card"
 import AddPostDialog from "../features/post/ui/AddPostDialog"
 import UpdatePostDialog from "../features/post/ui/UpdatePostDialog"
+import { useUser } from "../features/user/model/useUser"
 
 const PostsManager = () => {
+  const { selectedUserId } = useUser()
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <PostsManagerHeader />
@@ -18,7 +20,7 @@ const PostsManager = () => {
       <AddCommentDialog />
       <UpdateCommentDialog />
       <PostDetailDialog />
-      <UserModal />
+      {selectedUserId && <UserModal />}
     </Card>
   )
 }
