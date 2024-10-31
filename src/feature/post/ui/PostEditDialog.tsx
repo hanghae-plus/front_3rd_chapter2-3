@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
 import { usePost, useUpdatePost } from "../model";
 
-export const EditPostDialog = () => {
+export const PostEditDialog = () => {
   const { selectedPost, setSelectedPost, setPosts, posts, showEditDialog, setShowEditDialog } = usePost();
 
   const { mutate: updatePost } = useUpdatePost({

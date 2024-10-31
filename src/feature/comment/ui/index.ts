@@ -1,3 +1,3 @@
 export * from "./CommentSection.tsx";
-export * from "./AddCommentDialog.tsx";
-export * from "./EditCommentDialog.tsx";
+export * from "./CommentAddDialog.tsx";
+export * from "./CommentEditDialog.tsx";

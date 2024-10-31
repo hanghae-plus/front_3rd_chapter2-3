@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, HighlightText } from 
 import { CommentSection } from "../../comment/ui";
 import { usePost } from "../model";
 
-export const DetailPostDialog = () => {
+export const PostDetailDialog = () => {
   const { searchQuery, selectedPost, showPostDetailDialog, setShowPostDetailDialog } = usePost();
 
   return (

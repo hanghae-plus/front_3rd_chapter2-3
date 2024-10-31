@@ -1,14 +1,14 @@
 import { Card, CardContent } from "../shared/ui";
 import { UserModal } from "../feature/user/ui";
 import {
-  AddPostDialog,
-  DetailPostDialog,
-  EditPostDialog,
+  PostAddDialog,
+  PostDetailDialog,
+  PostEditDialog,
   PostHeader,
   PostPagination,
   PostSearchBar,
 } from "../feature/post/ui";
-import { AddCommentDialog, EditCommentDialog } from "../feature/comment/ui";
+import { CommentAddDialog, CommentEditDialog } from "../feature/comment/ui";
 import { PostTableWidget } from "../widgets/post/ui";
 
 const PostsManager = () => {
@@ -29,19 +29,19 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <AddPostDialog />
+      <PostAddDialog />
 
       {/* 게시물 수정 대화상자 */}
-      <EditPostDialog />
+      <PostEditDialog />
 
       {/* 댓글 추가 대화상자 */}
-      <AddCommentDialog />
+      <CommentAddDialog />
 
       {/* 댓글 수정 대화상자 */}
-      <EditCommentDialog />
+      <CommentEditDialog />
 
       {/* 게시물 상세 보기 대화상자 */}
-      <DetailPostDialog />
+      <PostDetailDialog />
 
       {/* 사용자 모달 */}
       <UserModal />

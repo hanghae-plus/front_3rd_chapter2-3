@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui";
 import { useAddComment, useComment } from "../model";
 
-export const AddCommentDialog = () => {
+export const CommentAddDialog = () => {
   const { newComment, setComments, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useComment();
 
   const { mutate: addComment } = useAddComment({
