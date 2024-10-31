@@ -1,18 +1,21 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
-import { putExistingPost } from "../../../entities/post/api";
-import { usePost } from "../model";
+import { usePost, useUpdatePost } from "../model";
 
 export const EditPostDialog = () => {
   const { selectedPost, setSelectedPost, setPosts, posts, showEditDialog, setShowEditDialog } = usePost();
 
-  const handleUpdatePost = async () => {
-    if (selectedPost) {
-      const data = await putExistingPost(selectedPost);
-
+  const { mutate: updatePost } = useUpdatePost({
+    onSuccess: (data) => {
       if (data) {
         setPosts(posts.map((post) => (post.id === data.id ? data : post)));
         setShowEditDialog(false);
       }
+    },
+  });
+
+  const handleUpdatePost = async () => {
+    if (selectedPost) {
+      updatePost(selectedPost);
     }
   };
 

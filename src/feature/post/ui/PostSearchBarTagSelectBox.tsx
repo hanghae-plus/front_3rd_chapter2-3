@@ -1,12 +1,20 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
-import { useGetPostByTag, usePost, useQueryParams } from "../model";
+import { useGetPostByTag, useGetTags, usePost, useQueryParams } from "../model";
 import { Post } from "../../../entities/post/model/types.ts";
 import { User } from "../../../entities/user/model/types.ts";
 import { useEffect } from "react";
 
 export const PostSearchBarTagSelectBox = () => {
-  const { selectedTag, tags, setSelectedTag, setPosts, setTotal } = usePost();
+  const { selectedTag, tags, setSelectedTag, setPosts, setTotal, setTags } = usePost();
   const { setQueryParams } = useQueryParams();
+
+  const { data: tagsData } = useGetTags();
+
+  useEffect(() => {
+    if (tagsData) {
+      setTags(tagsData);
+    }
+  }, [tagsData]);
 
   const { data: postByTagData } = useGetPostByTag(selectedTag || "all");
 
@@ -34,11 +42,12 @@ export const PostSearchBarTagSelectBox = () => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">모든 태그</SelectItem>
-        {tags.map((tag) => (
-          <SelectItem key={tag.url} value={tag.slug}>
-            {tag.slug}
-          </SelectItem>
-        ))}
+        {tags &&
+          tags?.map((tag) => (
+            <SelectItem key={tag.url} value={tag.slug}>
+              {tag.slug}
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   );

@@ -1,18 +1,21 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui";
-import { postNewPost } from "../../../entities/post/api";
-import { usePost } from "../model";
+import { usePost, usePostNewPost } from "../model";
 
 export const AddPostDialog = () => {
   const { setNewPost, newPost, showAddDialog, setShowAddDialog, setPosts, posts } = usePost();
 
-  const handleAddPost = async () => {
-    const data = await postNewPost(newPost);
+  const { mutate: postNewPost } = usePostNewPost({
+    onSuccess: (data) => {
+      if (data) {
+        setPosts([data, ...posts]);
+        setShowAddDialog(false);
+        setNewPost({ title: "", body: "", userId: 1 });
+      }
+    },
+  });
 
-    if (data) {
-      setPosts([data, ...posts]);
-      setShowAddDialog(false);
-      setNewPost({ title: "", body: "", userId: 1 });
-    }
+  const handleAddPost = () => {
+    postNewPost(newPost);
   };
 
   return (
