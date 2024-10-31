@@ -1,5 +1,4 @@
-import { Plus } from "lucide-react"
-import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
+import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { PostSearch } from "../features/post/ui/PostSearch"
 import { ContentSearch } from "../widgets/ui/ContentSearch"
 import { ContentControls } from "../widgets/ui/ContentControls"
@@ -13,26 +12,17 @@ import { CommentAddDialog } from "../features/comment/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
 import { UserDetailDialog } from "../entities/user/ui/UserDetailDialog"
-import { useDialog } from "../features/post/model/dialogStore"
 import { PostPagination } from "../features/post/ui/PostPagination"
+import { PostTitle } from "../features/post/ui/PostTitle"
 
 const PostsManager = () => {
-  const { setShowPostAddDialog } = useDialog()
-
-  // 게시물 추가 모달 열기
-  const handlePostAddDialogOpen = () => {
-    setShowPostAddDialog(true)
-  }
+  
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>게시물 관리자</span>
-          <Button onClick={handlePostAddDialogOpen}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
+          <PostTitle />
         </CardTitle>
       </CardHeader>
       <CardContent>
