@@ -1,4 +1,4 @@
-import { Post, PostsResponse } from "../model/types"
+import { Post, PostsResponse, Tag } from "../model/types"
 
 const BASE_URL = "/api/posts"
 
@@ -35,7 +35,7 @@ export const postsAPI = {
     await fetch(`${BASE_URL}/${id}`, { method: "DELETE" })
   },
 
-  getTags: async (): Promise<string[]> => {
+  getTags: async (): Promise<Tag[]> => {
     const response = await fetch(`${BASE_URL}/tags`)
     return response.json()
   },
