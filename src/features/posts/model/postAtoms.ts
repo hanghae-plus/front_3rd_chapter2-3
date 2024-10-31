@@ -1,5 +1,5 @@
 import { atom } from "jotai"
-import { Posts, SelectedPost, Tag } from "../../../entities/posts/model/Post"
+import { NewPost, Posts, SelectedPost, Tag } from "../../../entities/posts/model/Post"
 
 const postsAtom = atom<Posts>({
   limit: 10,
@@ -8,7 +8,7 @@ const postsAtom = atom<Posts>({
   posts: [],
 })
 const selectedPostAtom = atom<SelectedPost | null>(null)
-const newPostAtom = atom({ title: "", body: "", userId: 1 })
+const newPostAtom = atom<NewPost>({ title: "", body: "", userId: 1 })
 const tagsAtom = atom<Tag[]>([])
 const selectedTagAtom = atom<string>(new URLSearchParams(location.search).get("tag") || "")
 const showPostDetailDialogAtom = atom<boolean>(false)
