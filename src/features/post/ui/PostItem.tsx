@@ -8,7 +8,7 @@ import { usePostDialog } from "../model/usePostDialog.ts"
 import { useComments } from "../../comment/model/useComment.ts"
 import { User } from "../../../entities/user/model/types.ts"
 import { useUserModal } from "../../user/model/useUserModal.ts"
-import { fetchUserDetailApi } from "../../user/api"
+import { fetchUserDetailApi } from "../../../entities/user/api"
 
 interface Props {
   post: Post

@@ -1,7 +1,12 @@
 import { atom, useAtom } from "jotai"
 import { Comment, NewComment } from "../../../entities/comment/model/types"
-import { addCommentApi, deleteCommentApi, fetchCommentsApi, updateCommentApi } from "../../../entities/comment/api"
-import { likeCommentApi } from "../api"
+import {
+  addCommentApi,
+  deleteCommentApi,
+  fetchCommentsApi,
+  likeCommentApi,
+  updateCommentApi,
+} from "../../../entities/comment/api"
 
 const commentsAtom = atom<Record<Comment["postId"], Comment[]>>({})
 

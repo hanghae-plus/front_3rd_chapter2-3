@@ -1,9 +1,15 @@
 import { atom, useAtom } from "jotai"
-import { addPostApi, deletePostApi, fetchPostsApi, updatePostApi } from "../../../entities/post/api"
+import {
+  addPostApi,
+  deletePostApi,
+  fetchPostsApi,
+  updatePostApi,
+  fetchPostsByTagApi,
+  searchPostsApi,
+} from "../../../entities/post/api"
 import { NewPost, Post } from "../../../entities/post/model/types"
 import { fetchUsersApi } from "../../../entities/user/api"
 import { getPostsWithUsers } from "../../../entities/post/model"
-import { fetchPostsByTagApi, searchPostsApi } from "../api"
 
 const postsAtom = atom<Post[]>([])
 const totalAtom = atom(0)
