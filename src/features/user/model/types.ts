@@ -1,7 +1,5 @@
-import { UserData } from "../../../entities/user/model/types"
+import { ModalProps } from "../../../shared/model/type"
 
-export type UserInfoModalProps = {
-  showUserModal: boolean
-  setShowUserModal: (show: boolean) => void
-  selectedUser: UserData | null
+export type UserInfoModalProps = ModalProps & {
+  userId: number
 }

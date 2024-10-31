@@ -1,5 +1,5 @@
 import { baseApi } from "../../../shared/api/base"
-import { UserParams, UserResponse } from "../model/types"
+import { UserDetail, UserParams, UserResponse } from "../model/types"
 
 export const userApi = {
   get: {
@@ -7,6 +7,14 @@ export const userApi = {
       const response = await baseApi.get<UserResponse>("/users", {
         params: {
           limit,
+          select,
+        },
+      })
+      return response.data
+    },
+    userById: async ({ id, select }: UserParams & { id: number }) => {
+      const response = await baseApi.get<UserDetail>(`/users/${id}`, {
+        params: {
           select,
         },
       })

@@ -1,28 +1,22 @@
-import { updateComment } from "../../../entities/comment/api/put"
+import { useState } from "react"
 import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Textarea } from "../../../shared/ui/textarea"
 import { EditCommentDialogProps } from "../model/types"
 
-const EditCommentDialog = ({
-  showEditCommentDialog,
-  setShowEditCommentDialog,
-  selectedComment,
-  setSelectedComment,
-}: EditCommentDialogProps) => {
+const EditCommentDialog = ({ isOpen, close, comment }: EditCommentDialogProps) => {
+  const [body, setBody] = useState(comment.body)
+
+  //TODO: 댓글 수정 기능 구현
   return (
-    <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
+    <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>댓글 수정</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <Textarea
-            placeholder="댓글 내용"
-            value={selectedComment?.body || ""}
-            onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
-          />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Textarea placeholder="댓글 내용" value={body} onChange={(e) => setBody(e.target.value)} />
+          <Button onClick={() => {}}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

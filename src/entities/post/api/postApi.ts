@@ -17,12 +17,11 @@ export const postApi = {
         return postApi.get.posts({ limit, skip })
       }
 
-      const response = await baseApi.get<PostsResponse>(`/posts/tag/${tag}`, {
-        params: {
-          limit,
-          skip,
-        },
-      })
+      const response = await baseApi.get<PostsResponse>(`/posts/tag/${tag}`)
+      return response.data
+    },
+    searchPosts: async (query: string) => {
+      const response = await baseApi.get<PostsResponse>(`/posts/search?q=${query}`)
       return response.data
     },
   },

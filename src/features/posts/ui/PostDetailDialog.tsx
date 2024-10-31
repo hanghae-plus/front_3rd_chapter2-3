@@ -1,19 +1,23 @@
+import { useParams } from "react-router-dom"
 import { highlightText } from "../../../shared"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
-import CommentList from "../../comments/ui/CommentList/CommentList"
+import CommentList from "../../comments/ui/\bCommentList/CommentList"
+import { PostDetailDialogProps } from "../model/type"
 
-const PostDetailDialog = () => {
+const PostDetailDialog = ({ isOpen, close, post }: PostDetailDialogProps) => {
+  const { searchQuery } = useParams()
+
   return (
-    <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
+    <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
+          <DialogTitle>{highlightText(post?.title, searchQuery ?? "")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-          <CommentList comments={comments} postId={selectedPost?.id} />
+          <p>{highlightText(post?.body, searchQuery ?? "")}</p>
+          <CommentList postId={post?.id} />
         </div>
-      </DialogContent>
+      </DialogContent>s
     </Dialog>
   )
 }

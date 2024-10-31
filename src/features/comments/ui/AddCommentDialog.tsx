@@ -1,35 +1,26 @@
-import { CreateCommentRequest } from "../../../entities/comment"
-import { addComment } from "../../../entities/comment/api/post"
+import { useState } from "react"
 import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Textarea } from "../../../shared/ui/textarea"
+import { useAddComment } from "../api/queries"
 
 interface AddCommentDialogProps {
-  showAddCommentDialog: boolean
-  setShowAddCommentDialog: (show: boolean) => void
-  newComment: CreateCommentRequest
-  setNewComment: (comment: CreateCommentRequest) => void
+  isOpen: boolean
+  close: () => void
 }
 
-const AddCommentDialog = ({
-  showAddCommentDialog,
-  setShowAddCommentDialog,
-  newComment,
-  setNewComment,
-}: AddCommentDialogProps) => {
+const AddCommentDialog = ({ isOpen, close }: AddCommentDialogProps) => {
+  const [body, setBody] = useState("")
+  const { mutate: addComment } = useAddComment()
   return (
-    <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
+    <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 댓글 추가</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <Textarea
-            placeholder="댓글 내용"
-            value={newComment.body}
-            onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-          />
-          <Button onClick={addComment}>댓글 추가</Button>
+          <Textarea placeholder="댓글 내용" value={body} onChange={(e) => setBody(e.target.value)} />
+          <Button onClick={() => addComment({ body, postId, userId: 1 })}>댓글 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

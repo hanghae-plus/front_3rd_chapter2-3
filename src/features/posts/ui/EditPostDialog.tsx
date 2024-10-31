@@ -1,38 +1,45 @@
-import { PostWithUser } from "../../../entities/post"
+import { useForm } from "react-hook-form"
+import { Post } from "../../../entities/post/model/type"
+import { ModalProps } from "../../../shared/model/type"
 import { Button } from "../../../shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog"
 import { Input } from "../../../shared/ui/input"
 import { Textarea } from "../../../shared/ui/textarea"
-import { updatePost } from "../api/editPostApi"
 
-interface EditPostDialogProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  selectedPost: PostWithUser
-  setSelectedPost: (post: PostWithUser) => void
+interface EditPostFormData {
+  title: string
+  body: string
 }
 
-const EditPostDialog = ({ isOpen, onOpenChange, selectedPost, setSelectedPost }: EditPostDialogProps) => {
+interface EditPostDialogProps extends ModalProps {
+  post: Post
+}
+
+const EditPostDialog = ({ isOpen, close, post }: EditPostDialogProps) => {
+  const { register, handleSubmit } = useForm<EditPostFormData>({
+    defaultValues: {
+      title: post.title,
+      body: post.body,
+    },
+  })
+
+  const onSubmit = (data: EditPostFormData) => {
+    // TODO: updatePost 함수 구현 필요
+    console.log(data)
+    close()
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <Input
-            placeholder="제목"
-            value={selectedPost?.title || ""}
-            onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-          />
-          <Textarea
-            rows={15}
-            placeholder="내용"
-            value={selectedPost?.body || ""}
-            onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-          />
-          <Button onClick={updatePost}>게시물 업데이트</Button>
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input placeholder="제목" {...register("title", { required: "제목을 입력해주세요" })} />
+          <Textarea rows={15} placeholder="내용" {...register("body", { required: "내용을 입력해주세요" })} />
+          <Button type="submit">게시물 업데이트</Button>
+        </form>
       </DialogContent>
     </Dialog>
   )

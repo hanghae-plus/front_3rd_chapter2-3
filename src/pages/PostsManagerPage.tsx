@@ -1,48 +1,38 @@
 import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { fetchComments } from "../entities/comment"
-import { fetchPosts, fetchPostsByTag } from "../entities/post"
-import { fetchTags } from "../entities/tag/api/get"
-import { updatePost } from "../features/posts/api/editPostApi"
-import AddPostDialog from "../features/posts/ui/AddPostDialog"
-import EditPostDialog from "../features/posts/ui/EditPostDialog"
-import { PostsPagination } from "../features/posts/ui/PostPagination"
-import UserInfoModal from "../features/user/ui/UserInfoModal"
+import { Post } from "../entities/post/model/type"
+import { useComments } from "../features/comments/api/queries"
+import { usePostsByTag } from "../features/posts/api/query"
+import PostingTable from "../features/posts/ui/PostingTable"
+import { useTags } from "../features/tag/api/query"
+import { useUsers } from "../features/user/api/query"
+import { openModals } from "../shared/lib/modal/openModals"
 import { Button } from "../shared/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
 import { Input } from "../shared/ui/input"
 import { Select } from "../shared/ui/select"
-import PostTable from "../widgets/PostTable/ui/PostTable"
 
 const PostsManager = () => {
+  const { post } = openModals
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-
-  // 상태 관리 - 개별 타입 적용
-  const [posts, setPosts] = useState([])
-  const [total, setTotal] = useState(0)
+  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "all")
+  const { data: posts, isLoading } = usePostsByTag({ tag: selectedTag })
+  const { data: users } = useUsers()
+  const postsWithUsers = posts?.posts.map((post) => ({
+    ...post,
+    author: users?.users.find((user) => user.id === post.userId),
+  }))
+  const total = posts?.total
+  // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -56,55 +46,45 @@ const PostsManager = () => {
     navigate(`?${params.toString()}`)
   }
 
+  // 태그 가져오기
+  const { data: tags } = useTags()
+
   // 게시물 검색
   const searchPosts = async () => {
     if (!searchQuery) {
-      fetchPosts()
       return
     }
-    setLoading(true)
     try {
       const response = await fetch(`/api/posts/search?q=${searchQuery}`)
       const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
     } catch (error) {
       console.error("게시물 검색 오류:", error)
     }
-    setLoading(false)
   }
 
-  // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
+  // 게시물 추가
+  const addPost = async () => {}
 
-  // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
+  // 게시물 업데이트
+  const updatePost = async () => {}
 
-  useEffect(() => {
-    fetchTags()
-  }, [])
+  // 게시물 삭제
+  const deletePost = async (id) => {}
 
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
+  // 댓글 가져오기
+  const { data: comments } = useComments(selectedPost?.id ?? 1)
+
+  // 댓글 추가
+  const addComment = async () => {}
+
+  // 댓글 업데이트
+  const updateComment = async () => {}
+
+  // 댓글 삭제
+  const deleteComment = async (id, postId) => {}
+
+  // 댓글 좋아요
+  const likeComment = async (id, postId) => {}
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -121,7 +101,7 @@ const PostsManager = () => {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
+          <Button onClick={() => post.openAddDialog()}>
             <Plus className="w-4 h-4 mr-2" />
             게시물 추가
           </Button>
@@ -135,7 +115,7 @@ const PostsManager = () => {
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="게시물 검..."
+                  placeholder="게시물 검색..."
                   className="pl-8"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -145,15 +125,14 @@ const PostsManager = () => {
             </div>
             <Select
               value={selectedTag}
-              placeholder="태그 선택"
               onValueChange={(value) => {
                 setSelectedTag(value)
-                fetchPostsByTag(value)
                 updateURL()
               }}
+              placeholder="태그 선택"
               options={[
                 { value: "all", label: "모든 태그" },
-                ...tags.map((tag) => ({ value: tag.slug, label: tag.slug })),
+                ...(tags?.map((tag) => ({ value: tag.slug, label: tag.slug })) || []),
               ]}
             />
             <Select
@@ -169,7 +148,7 @@ const PostsManager = () => {
             />
             <Select
               value={sortOrder}
-              onValueChange={(value) => setSortOrder(value)}
+              onValueChange={setSortOrder}
               placeholder="정렬 순서"
               options={[
                 { value: "asc", label: "오름차순" },
@@ -179,45 +158,35 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
-          ) : (
-            <PostTable
-              posts={posts}
-              searchQuery={searchQuery}
-              selectedTag={selectedTag}
-              setSelectedTag={setSelectedTag}
-              updateURL={updateURL}
-              openUserModal={openUserModal}
-              openPostDetail={openPostDetail}
-              setSelectedPost={setSelectedPost}
-              setShowEditDialog={setShowEditDialog}
-            />
-          )}
-          <PostsPagination
-            total={total}
-            limit={limit}
-            skip={skip}
-            setSkip={setSkip}
-            setLimit={setLimit}
-            updateURL={updateURL}
-          />
+          {isLoading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostingTable />}
+
+          {/* 페이지네이션 */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <span>표시</span>
+              <Select
+                value={limit.toString()}
+                onValueChange={(value) => setLimit(Number(value))}
+                placeholder="10"
+                options={[
+                  { value: "10", label: "10" },
+                  { value: "20", label: "20" },
+                  { value: "30", label: "30" },
+                ]}
+              />
+              <span>항목</span>
+            </div>
+            <div className="flex gap-2">
+              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
+                이전
+              </Button>
+              <Button disabled={skip + limit >= (total ?? 0)} onClick={() => setSkip(skip + limit)}>
+                다음
+              </Button>
+            </div>
+          </div>
         </div>
       </CardContent>
-      <AddPostDialog
-        showAddDialog={showAddDialog}
-        setShowAddDialog={setShowAddDialog}
-        newPost={newPost}
-        setNewPost={setNewPost}
-      />
-      <EditPostDialog
-        isOpen={showEditDialog}
-        onOpenChange={setShowEditDialog}
-        selectedPost={selectedPost}
-        setSelectedPost={setSelectedPost}
-        updatePost={updatePost}
-      />
-      <UserInfoModal showUserModal={showUserModal} setShowUserModal={setShowUserModal} selectedUser={selectedUser} />
     </Card>
   )
 }
