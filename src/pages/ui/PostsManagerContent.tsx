@@ -2,7 +2,7 @@ import { Search } from "lucide-react"
 import { Input } from "../../shared/ui/Input"
 import { CardContent } from "../../shared/ui/Card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/Select"
-import PostTable from "./PostTable"
+import PostsTable from "./PostsTable"
 import Pagination from "./Pagination"
 import { usePost } from "../../features/post/model/usePost"
 import { useTag } from "../../features/tags/model/useTag"
@@ -209,7 +209,7 @@ const PostsManagerContent = () => {
         {loading ? (
           <div className="flex justify-center p-4">로딩 중...</div>
         ) : (
-          <PostTable updateURL={updateURL} setSelectedUser={setSelectedUser} setShowUserModal={setShowUserModal} />
+          <PostsTable updateURL={updateURL} setSelectedUser={setSelectedUser} setShowUserModal={setShowUserModal} />
         )}
 
         <Pagination />
