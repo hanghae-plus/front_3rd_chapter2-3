@@ -54,10 +54,6 @@ const PostsManager = () => {
     getTags()
   }, [])
 
-  useEffect(() => {
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
