@@ -12,7 +12,7 @@ interface Props {
   postId: number
 }
 
-const CommentArea = ({ comment, searchQuery, postId }: Props) => {
+const CommentComponent = ({ comment, searchQuery, postId }: Props) => {
   const { setSelectedComment, setShowEditCommentDialog } = useComment()
   const { mutate: mutateDeleteComment } = useMutationDeleteComment(comment.id, postId)
   const { mutate: mutateLikeComment } = useMutationLikeComment(comment.id, postId)
@@ -56,4 +56,4 @@ const CommentArea = ({ comment, searchQuery, postId }: Props) => {
   )
 }
 
-export default CommentArea
+export default CommentComponent
