@@ -19,13 +19,13 @@ export const commentApi = {
     const response = await axios.get(`/api/comments/post/${id}`)
     return response.data
   },
-  createComment: async (payload: CreateCommentPayload) => {
+  createComment: async (payload: CreateCommentPayload): Promise<Comment> => {
     const response = await axios.post("/api/comments/add", payload, {
       headers: { "Content-Type": "application/json" },
     })
     return response.data
   },
-  updateComment: async ({ id, payload }: UpdateCommentProps) => {
+  updateComment: async ({ id, payload }: UpdateCommentProps): Promise<Comment> => {
     const response = await axios.put(`/api/comments/${id}`, payload, {
       headers: { "Content-Type": "application/json" },
     })
