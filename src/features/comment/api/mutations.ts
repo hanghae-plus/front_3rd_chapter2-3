@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { addCommentApi, deleteCommentApi, updateCommentApi } from "../../../entities/comment/api"
+import { addCommentApi, deleteCommentApi, likeCommentApi, updateCommentApi } from "../../../entities/comment/api"
 import { NewComment, Comment } from "../../../entities/comment/model/types.ts"
 
 export const useAddCommentMutation = () => {
@@ -35,8 +35,23 @@ export const useDeleteCommentMutation = () => {
   return useMutation({
     mutationFn: deleteCommentApi,
     onSuccess: (deletedComment: Comment) => {
-      queryClient.setQueryData<Comment[]>(["comments", deletedComment.postId], (old = []) => {
-        return old.filter((comment) => comment.id !== deletedComment.id)
+      queryClient.setQueryData<Comment[]>(["comments", deletedComment.postId], (prevData = []) => {
+        return prevData.filter((comment) => comment.id !== deletedComment.id)
+      })
+    },
+  })
+}
+
+export const useLikeCommentMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: likeCommentApi,
+    onSuccess: (likedComment: Comment) => {
+      queryClient.setQueryData<Comment[]>(["comments", likedComment.postId], (prevData = []) => {
+        return prevData.map((comment) =>
+          comment.id === likedComment.id ? { ...likedComment, likes: comment.likes + 1 } : comment,
+        )
       })
     },
   })

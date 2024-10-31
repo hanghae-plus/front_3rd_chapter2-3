@@ -4,7 +4,6 @@ import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react
 import { Post } from "../../../entities/post/model/types.ts"
 import { usePostParams } from "../model/usePostParams.ts"
 import { usePostDialog } from "../model/usePostDialog.ts"
-import { useComments } from "../../comment/model/useComment.ts"
 import { User } from "../../../entities/user/model/types.ts"
 import { useUserModal } from "../../user/model/useUserModal.ts"
 import { fetchUserDetailApi } from "../../../entities/user/api"
@@ -24,12 +23,10 @@ export default function PostItem({ post }: Props) {
   const { setSelectedPost, setShowPostDetailDialog, setShowEditDialog } = usePostDialog()
   const { mutate: deletePost } = useDeletePostMutation()
   const { setShowUserModal, setSelectedUser } = useUserModal()
-  const { fetchComments } = useComments()
 
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     setShowPostDetailDialog(true)
-    fetchComments(post.id)
   }
 
   const openEditDialog = (post: Post) => {
