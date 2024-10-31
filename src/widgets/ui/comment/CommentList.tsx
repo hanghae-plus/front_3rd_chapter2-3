@@ -1,6 +1,6 @@
 import { useComment } from "../../../features/model/comment/useComment"
-import { CommentHeader } from "./CommentHeader"
-import { CommentItem } from "./CommentItem"
+import { CommentHeader } from "../../../features/ui/comment/CommentHeader"
+import { CommentItem } from "../../../features/ui/comment/CommentItem"
 import type { Comment } from "../../../shared/types"
 
 interface CommentListProps {
