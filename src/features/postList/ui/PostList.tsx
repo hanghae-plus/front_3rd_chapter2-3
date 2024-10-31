@@ -13,8 +13,6 @@ import {
 } from "../../../shared/ui/index"
 
 interface PostsListProps {
-  posts: Post[]
-  isLoading?: boolean
   searchQuery?: string
   selectedTag?: string
   onTagSelect: (tag: string) => void

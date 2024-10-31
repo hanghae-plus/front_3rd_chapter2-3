@@ -57,8 +57,6 @@ export const PostWidget = () => {
 
         {/* Post List */}
         <PostList
-          posts={posts}
-          isLoading={isLoading}
           onTagSelect={handleFilterChange}
           onEdit={() => setModalType("edit")}
           onDelete={() => {}}
