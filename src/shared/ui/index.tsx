@@ -5,3 +5,4 @@ export { Input } from "./Input";
 export { Button } from "./Button";
 export { Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle } from "./Dialog";
 export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem } from "./Select";
+export { HighlightText } from "./HighlightText";
