@@ -8,6 +8,7 @@ export default [
       ecmaVersion: 'latest', // 최신 ECMAScript 버전 사용
       sourceType: 'module', // ES 모듈을 지원하도록 설정
     },
+    plugins: ['react'], // react 플러그인 추가
     rules: {
       'no-console': 'error', // console.log 사용 금지
       'no-use-before-define': ['error', { functions: false }], // 함수 선언 전 사용 금지
