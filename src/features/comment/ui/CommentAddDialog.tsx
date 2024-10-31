@@ -17,7 +17,7 @@ export const CommentAddDialog: React.FC<{
 
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment)
   
-  const handleAddComment = () => {
+  const handleCommentAdd = () => {
     addComment({ ...newComment, postId })
     setShowCommentAddDialog(false)
     setNewComment({ ...initialNewComment, postId })
@@ -31,7 +31,7 @@ export const CommentAddDialog: React.FC<{
           value={newComment.body}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setNewComment({ ...newComment, body: e.target.value })}
         />
-        <Button onClick={handleAddComment}>댓글 추가</Button>
+        <Button onClick={handleCommentAdd}>댓글 추가</Button>
       </>
     </CustomDialog>
   )

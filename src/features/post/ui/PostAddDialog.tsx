@@ -15,8 +15,14 @@ export const PostAddDialog: React.FC<{
     setShowPostAddDialog,
   } = useDialog()
 
-  const [newPost, setNewPost] = useState<NewPost>({ ...initialNewPost })
+  const [newPost, setNewPost] = useState<NewPost>(initialNewPost)
   
+  const handlePostAdd = () => {
+    addPost(newPost)
+    setShowPostAddDialog(false)
+    setNewPost({ ...initialNewPost })
+  }
+
   return (
     <CustomDialog open={showPostAddDialog} onOpenChange={setShowPostAddDialog} title={"새 게시물 추가"}>
       <>
@@ -37,7 +43,7 @@ export const PostAddDialog: React.FC<{
           value={newPost.userId}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
         />
-        <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
+        <Button onClick={handlePostAdd}>게시물 추가</Button>
       </>
     </CustomDialog>
   )

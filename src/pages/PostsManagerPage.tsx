@@ -121,7 +121,6 @@ const PostsManager = () => {
   const addPost = async (newPost: NewPost) => {
     const postData = await createPostApi(newPost)
     setPosts(addToPosts(posts, postData))
-    setShowPostAddDialog(false)
   }
 
   // 게시물 업데이트
