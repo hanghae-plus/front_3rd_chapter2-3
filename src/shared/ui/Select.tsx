@@ -6,6 +6,7 @@ import { Check, ChevronDown } from "lucide-react"
 export const Select = SelectPrimitive.Root
 export const SelectGroup = SelectPrimitive.Group
 export const SelectValue = SelectPrimitive.Value
+export type SelectProps = SelectPrimitive.SelectProps
 
 interface SelectTriggerProps extends SelectPrimitive.SelectTriggerProps {
   className?: string

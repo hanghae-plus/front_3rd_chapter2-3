@@ -7,6 +7,7 @@ export const Dialog = DialogPrimitive.Root
 export const DialogTrigger = DialogPrimitive.Trigger
 export const DialogPortal = DialogPrimitive.Portal
 export const DialogOverlay = DialogPrimitive.Overlay
+export type DialogProps = DialogPrimitive.DialogProps
 
 interface DialogContentProps extends DialogPrimitive.DialogContentProps {
   className?: string
