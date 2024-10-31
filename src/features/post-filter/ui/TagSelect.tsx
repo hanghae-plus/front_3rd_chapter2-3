@@ -4,7 +4,7 @@ import { usePostQueryStore } from "../../post/model/postQueryStore"
 import { useTags } from "../../tag/model/useTags"
 
 export const TagSelect = () => {
-  const { selectedTag, setSelectedTag, setSkip, updateURL } = usePostParamsStore()
+  const { selectedTag, setSelectedTag, setSkip } = usePostParamsStore()
   const { tags } = useTags()
   const { setActiveQuery } = usePostQueryStore()
 
@@ -12,7 +12,6 @@ export const TagSelect = () => {
     setActiveQuery("tag")
     setSelectedTag(tag)
     setSkip(0)
-    updateURL()
   }
 
   return (

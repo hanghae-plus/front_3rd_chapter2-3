@@ -1,6 +1,5 @@
 import { atom, useAtom } from "jotai"
-import { useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const queryParams = new URLSearchParams(location.search)
 
@@ -13,7 +12,6 @@ const selectedTagAtom = atom(queryParams.get("tag") || "")
 
 export const usePostParamsStore = () => {
   const navigate = useNavigate()
-  const location = useLocation()
 
   const [skip, setSkip] = useAtom(skipAtom)
   const [limit, setLimit] = useAtom(limitAtom)
@@ -21,17 +19,6 @@ export const usePostParamsStore = () => {
   const [sortBy, setSortBy] = useAtom(sortByAtom)
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
 
   // URL 업데이트 함수
   const updateURL = () => {
