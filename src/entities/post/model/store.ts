@@ -83,10 +83,11 @@ export const usePostsStore = create<PostsState>((set, get) => ({
               ? String(a.title).localeCompare(String(b.title))
               : String(b.title).localeCompare(String(a.title))
 
-          case "reactions":
+          case "reactions": {
             const aLikes = a.reactions?.likes || 0
             const bLikes = b.reactions?.likes || 0
             return state.sortOrder === "asc" ? aLikes - bLikes : bLikes - aLikes
+          }
 
           default:
             return 0
