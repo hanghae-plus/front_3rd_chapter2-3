@@ -12,6 +12,10 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.59.16",
+    "@tanstack/react-query-devtools": "^5.59.16",
+    "jotai": "^2.10.1",
+    "jotai-devtools": "^0.10.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
