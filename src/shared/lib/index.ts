@@ -1,1 +1,1 @@
-export * from "./safeFetch"
+export * from "./queryParams"

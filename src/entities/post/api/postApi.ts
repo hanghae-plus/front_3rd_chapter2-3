@@ -1,4 +1,4 @@
-import { safeFetch } from "../../../shared/lib"
+import { safeFetch } from "../../../shared/api"
 import {
   AuthorsResponse,
   FetchPostsPayload,
