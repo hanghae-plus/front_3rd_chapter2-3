@@ -1,4 +1,4 @@
-import { CommentRecord } from "../../../entities/comment/model/types"
+import { Comment, CommentRecord } from "../../../entities/comment/model/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { commentsApi } from "../api"
 import { queryKeys } from "../../../lib/query/queryKeys"
@@ -8,6 +8,7 @@ import {
   removeFromCommentsRecord,
   updateInCommentsMap,
 } from "../../../entities/comment/model/utils"
+import { atom, useAtom } from "jotai"
 
 export const useCommentsQuery = (postId: number) => {
   return useQuery({
@@ -101,4 +102,15 @@ export const invalidateCommentQueries = (postId: number) => {
 
 export const prefetchComments = async (postId: number) => {
   await queryClient.prefetchQuery(queryKeys.comments.byPost(postId), () => commentsApi.fetchByPost(postId))
+}
+
+const seletedCommentAtom = atom<Comment|null>(null)
+
+export const useComments = () => {
+  const [selectedComment, setSelectedComment] = useAtom(seletedCommentAtom)
+
+  return {
+    selectedComment,
+    setSelectedComment
+  }
 }
