@@ -2,13 +2,14 @@ import { atom, useAtom } from "jotai"
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-// query parameter를 atom으로 선언
-const skipAtom = atom(0)
-const limitAtom = atom(10)
-const searchQueryAtom = atom("")
-const sortByAtom = atom("")
-const sortOrderAtom = atom("asc")
-const selectedTagAtom = atom("")
+const queryParams = new URLSearchParams(location.search)
+
+const skipAtom = atom(parseInt(queryParams.get("skip") || "0"))
+const limitAtom = atom(parseInt(queryParams.get("limit") || "10"))
+const searchQueryAtom = atom(queryParams.get("search") || "")
+const sortByAtom = atom(queryParams.get("sortBy") || "")
+const sortOrderAtom = atom(queryParams.get("sortOrder") || "asc")
+const selectedTagAtom = atom(queryParams.get("tag") || "")
 
 export const useRouterQueries = () => {
   const navigate = useNavigate()
@@ -22,7 +23,6 @@ export const useRouterQueries = () => {
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
   useEffect(() => {
-    // location.search가 변경될 때마다 query parameter 업데이트
     const params = new URLSearchParams(location.search)
 
     setSkip(parseInt(params.get("skip") || "0"))
