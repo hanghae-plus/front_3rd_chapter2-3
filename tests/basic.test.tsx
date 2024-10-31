@@ -5,9 +5,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { NuqsTestingAdapter, type OnUrlUpdateFunction } from "nuqs/adapters/testing";
 import { MemoryRouter } from "react-router-dom";
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
 // MSW 서버 설정
 const server = setupServer(
@@ -56,22 +55,16 @@ beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+const renderPostsManager = () => {
+  return render(
+    <AppProviders>
+      <MemoryRouter>
+        <PostsManager />
+      </MemoryRouter>
+    </AppProviders>,
+  );
+};
 describe("PostsManager", () => {
-  const user = userEvent.setup();
-  const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
-  // 테스트에 공통으로 사용될 render 함수
-  const renderPostsManager = () => {
-    return render(
-      <NuqsTestingAdapter searchParams="?count=42" onUrlUpdate={onUrlUpdate}>
-        <AppProviders>
-          <MemoryRouter>
-            <PostsManager />
-          </MemoryRouter>
-        </AppProviders>
-        ,
-      </NuqsTestingAdapter>,
-    );
-  };
   it("게시물을 렌더링하고 검색을 허용합니다", async () => {
     const user = userEvent.setup();
     renderPostsManager();
@@ -149,7 +142,23 @@ describe("PostsManager", () => {
   // 다른 테스트 케이스들. 참고용으로 작성된 것이며, 실제로는 작성하지 않았습니다.
   it("태그 필터링이 올바르게 작동해야 합니다", async () => {});
   it("정렬 기능이 올바르게 작동해야 합니다");
-  it("페이지네이션이 올바르게 작동해야 합니다");
+  it("페이지네이션이 올바르게 작동해야 합니다", async () => {
+    const user = userEvent.setup();
+    renderPostsManager();
+
+    // 로딩 상태 확인 (선택적)
+    expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument();
+
+    // 게시물이 로드되었는지 확인
+    await waitFor(() => {
+      TEST_POSTS.posts.forEach((post) => {
+        expect(screen.getByText(post.title)).toBeInTheDocument();
+      });
+    });
+
+    const nextButton = screen.getByRole("button", { name: /다음/i });
+    await user.click(nextButton);
+  });
   it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다");
   it("댓글 추가 기능이 올바르게 작동해야 합니다");
   it("댓글 수정 기능이 올바르게 작동해야 합니다");
