@@ -1,4 +1,4 @@
-import { Tag } from "../../../entities/tag/model/tagTypes"
+import { Tag } from '../../../entities/tag/model/tagTypes';
 
 export interface PostSearchParams {
   skip: number
@@ -25,4 +25,8 @@ export interface SearchStore {
   setLimit: (limit: number) => void
   updateSearchParams: (params: Partial<PostSearchParams>) => void
   syncWithUrl: () => void
+}
+
+export interface SearchParams {
+  search: string
 }
