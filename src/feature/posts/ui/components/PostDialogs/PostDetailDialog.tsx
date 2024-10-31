@@ -1,3 +1,6 @@
+import { PostContent } from "../../../../../entities/post/ui/components/PostContent/PostContent"
+import { PostHeader } from "../../../../../entities/post/ui/components/PostHeader/PostHeader"
+import { PostTags } from "../../../../../entities/post/ui/components/PostTags/PostTags"
 import {
   Dialog,
   DialogContent,
@@ -26,23 +29,11 @@ export const PostDetailDialog = ({
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>{post.title}</DialogTitle>
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>작성자: {post.author?.username}</span>
-            <PostReactionsContainer post={post} />
-          </div>
+          <PostHeader post={post} reactions={<PostReactionsContainer post={post} />} />
         </DialogHeader>
         <div className="space-y-4">
-          <div className="prose prose-sm max-w-none">{post.body}</div>
-          <div className="flex flex-wrap gap-1">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          <PostContent body={post.body} />
+          <PostTags tags={post.tags} />
           <div className="border-t pt-4">
             <CommentList postId={post.id} />
           </div>

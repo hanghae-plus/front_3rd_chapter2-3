@@ -7,7 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../../../shared"
-import { useTagsQuery } from "../../../lib/hooks/usePostsQuery"
+import { TagSelect } from "../../../../../entities/post/ui/components/PostFilters/TagSelect"
+import { SortSelect } from "../../../../../entities/post/ui/components/PostFilters/SortSelect"
+import { SORT_ORDER_LABELS, SORT_ORDERS } from "../../../../../entities/post/model/constants"
 
 interface PostFiltersProps {
   searchQuery: string
@@ -30,7 +32,6 @@ export const PostFilters = ({
   onSortByChange,
   onSortOrderChange,
 }: PostFiltersProps) => {
-  const { data: tagsData } = useTagsQuery()
   return (
     <div className="flex gap-4">
       <div className="flex-1">
@@ -44,37 +45,20 @@ export const PostFilters = ({
           />
         </div>
       </div>
-      <Select value={selectedTag} onValueChange={onTagChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="태그 선택" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">모든 태그</SelectItem>
-          {tagsData?.map((tag) => (
-            <SelectItem key={tag.slug} value={tag.slug}>
-              {tag.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select value={sortBy} onValueChange={onSortByChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="정렬 기준" />
-        </SelectTrigger>
-        <SelectContent className="w-[180px] mt-1">
-          <SelectItem value="none">없음</SelectItem>
-          <SelectItem value="id">ID</SelectItem>
-          <SelectItem value="title">제목</SelectItem>
-          <SelectItem value="reactions">반응</SelectItem>
-        </SelectContent>
-      </Select>
+
+      <TagSelect value={selectedTag} onChange={onTagChange} />
+      <SortSelect value={sortBy} onChange={onSortByChange} />
+
       <Select value={sortOrder} onValueChange={onSortOrderChange}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 순서" />
         </SelectTrigger>
         <SelectContent className="w-[180px] mt-1">
-          <SelectItem value="asc">오름차순</SelectItem>
-          <SelectItem value="desc">내림차순</SelectItem>
+          {Object.entries(SORT_ORDERS).map(([key, value]) => (
+              <SelectItem key={key} value={value}>
+                {SORT_ORDER_LABELS[value]}
+              </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

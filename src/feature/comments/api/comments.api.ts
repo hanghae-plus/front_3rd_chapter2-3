@@ -25,6 +25,10 @@ class CommentsApi extends BaseApi {
   async deleteComment(id: number) {
     return this.delete(`/comments/${id}`)
   }
+
+  async likeComment(id: number) {
+    return this.patch(`/comments/${id}`)
+  }
 }
 
 export const commentsApi = new CommentsApi()
