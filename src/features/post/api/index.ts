@@ -2,20 +2,20 @@ import { postApis } from "../../../entities/post/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 type ResPostsParams = {
-  skip?: number;
-  limit?: number;
-  query?: string;
-  search?: string;
+  skip: number;
+  limit: number;
+  searchQuery: string;
+  tag: string;
 };
 
-export const usePostsQuery = ({ skip = 0, limit = 10, query = "", search = "" }: ResPostsParams) => {
+export const usePostsQuery = ({ skip, limit, searchQuery, tag }: ResPostsParams) => {
   return useQuery<ResPostsList>({
-    queryKey: ["postList", limit, skip],
+    queryKey: ["posts", { skip, limit, searchQuery, tag }],
     queryFn: () => {
-      if (search) {
-        return postApis.fetchSearchPosts(search);
-      } else if (query) {
-        return postApis.fetchSearchPosts(query);
+      if (searchQuery) {
+        return postApis.fetchSearchPosts(searchQuery);
+      } else if (tag !== "all" && tag !== "") {
+        return postApis.fetchPostsWithTag(tag);
       }
       return postApis.fetchPosts(skip, limit);
     },
@@ -24,25 +24,25 @@ export const usePostsQuery = ({ skip = 0, limit = 10, query = "", search = "" }:
 
 export function useSearchPostListQuery(query: string) {
   return useQuery({
-    queryKey: ["postList", query],
+    queryKey: ["posts", query],
     queryFn: () => postApis.fetchSearchPosts(query),
   });
 }
 
-export function useAddPostQuery(post: Post) {
+export function useAddPostQuery() {
   return useMutation({
-    mutationFn: () => postApis.addPost(post),
+    mutationFn: (post: Post) => postApis.addPost(post),
   });
 }
 
-export function useUpdatePostQuery(post: Post) {
+export function useUpdatePostQuery() {
   return useMutation({
-    mutationFn: () => postApis.updatePost(post),
+    mutationFn: (post: Post) => postApis.updatePost(post),
   });
 }
 
-export function useDeletePostQuery(id: number) {
+export function useDeletePostMutation() {
   return useMutation({
-    mutationFn: () => postApis.deletePost(id),
+    mutationFn: (id: number) => postApis.deletePost(id),
   });
 }
