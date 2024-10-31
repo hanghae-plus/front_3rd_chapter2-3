@@ -25,27 +25,22 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
+import { TSortBy, TSortOrder, useQueryParamsStore } from "../features/queryParams/model/queryParamsStore.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
   const [posts, setPosts] = useState([])
   const [total, setTotal] = useState(0)
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [selectedPost, setSelectedPost] = useState(null)
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [comments, setComments] = useState({})
   const [selectedComment, setSelectedComment] = useState(null)
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
@@ -54,6 +49,9 @@ const PostsManager = () => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
+
+  const { queryParams, setQueryParams, parseParamsToObj } = useQueryParamsStore()
+  const { skip, limit, searchQuery, sortBy, sortOrder, selectedTag } = queryParams
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -66,6 +64,21 @@ const PostsManager = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
+
+  useEffect(() => {
+    if (selectedTag) {
+      fetchPostsByTag(selectedTag)
+    } else {
+      fetchPosts()
+    }
+    // updateURL()
+  }, [queryParams])
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const parsingData = parseParamsToObj(params)
+    setQueryParams(parsingData)
+  }, [location.search])
 
   // 게시물 가져오기
   const fetchPosts = () => {
@@ -306,25 +319,6 @@ const PostsManager = () => {
     fetchTags()
   }, [])
 
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
-
   // 하이라이트 함수 추가
   const highlightText = (text: string, highlight: string) => {
     if (!text) return null
@@ -361,22 +355,24 @@ const PostsManager = () => {
                 <div>{highlightText(post.title, searchQuery)}</div>
 
                 <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? "text-white bg-blue-500 hover:bg-blue-600"
-                          : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag)
-                        updateURL()
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {post &&
+                    post.tags &&
+                    post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
+                          selectedTag === tag
+                            ? "text-white bg-blue-500 hover:bg-blue-600"
+                            : "text-blue-800 bg-blue-100 hover:bg-blue-200"
+                        }`}
+                        onClick={() => {
+                          setQueryParams((prev) => ({ ...prev, selectedTag: tag }))
+                          updateURL()
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
                 </div>
               </div>
             </TableCell>
@@ -490,7 +486,7 @@ const PostsManager = () => {
                   placeholder="게시물 검색..."
                   className="pl-8"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => setQueryParams((prev) => ({ ...prev, searchQuery: e.target.value }))}
                   onKeyPress={(e) => e.key === "Enter" && searchPosts()}
                 />
               </div>
@@ -498,7 +494,7 @@ const PostsManager = () => {
             <Select
               value={selectedTag}
               onValueChange={(value) => {
-                setSelectedTag(value)
+                setQueryParams((prev) => ({ ...prev, selectedTag: value }))
                 fetchPostsByTag(value)
                 updateURL()
               }}
@@ -515,7 +511,10 @@ const PostsManager = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
+            <Select
+              value={sortBy}
+              onValueChange={(value) => setQueryParams((prev) => ({ ...prev, sortBy: value as TSortBy }))}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="정렬 기준" />
               </SelectTrigger>
@@ -526,7 +525,10 @@ const PostsManager = () => {
                 <SelectItem value="reactions">반응</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
+            <Select
+              value={sortOrder}
+              onValueChange={(value) => setQueryParams((prev) => ({ ...prev, sortOrder: value as TSortOrder }))}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="정렬 순서" />
               </SelectTrigger>
@@ -544,7 +546,10 @@ const PostsManager = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <span>표시</span>
-              <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
+              <Select
+                value={limit.toString()}
+                onValueChange={(value) => setQueryParams((prev) => ({ ...prev, limit: Number(value) }))}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="10" />
                 </SelectTrigger>
@@ -557,10 +562,13 @@ const PostsManager = () => {
               <span>항목</span>
             </div>
             <div className="flex gap-2">
-              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
+              <Button disabled={skip === 0} onClick={() => setQueryParams((prev) => ({ ...prev, skip: skip - limit }))}>
                 이전
               </Button>
-              <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
+              <Button
+                disabled={skip + limit >= total}
+                onClick={() => setQueryParams((prev) => ({ ...prev, skip: skip + limit }))}
+              >
                 다음
               </Button>
             </div>
