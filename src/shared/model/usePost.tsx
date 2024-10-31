@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts } from "../api/post"
-import type { NewPost, Post } from "../types"
+import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts, fetchUserDetail } from "../api/post"
+import type { NewPost, Post, User } from "../types"
 import { useComment } from "./useComment"
 
 interface UsePostProps {
@@ -13,7 +13,11 @@ interface UsePostProps {
   setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
   showPostDetailDialog: boolean
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
+  selectedUser: User | null
+  showUserModal: boolean
+  setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
   openPostDetail: (post: Post) => void
+  openUserModal: (user: User) => void
   handleAddPost: (newPost: NewPost) => Promise<void>
   handleUpdatePost: (post: Post) => Promise<void>
   handleDeletePost: (id: number) => Promise<void>
@@ -28,6 +32,8 @@ export const usePost = (): UsePostProps => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [showUserModal, setShowUserModal] = useState(false)
   const { handleFetchComments } = useComment()
   const handleAddPost = async (newPost: NewPost) => {
     const data = await addPost(newPost)
@@ -99,10 +105,23 @@ export const usePost = (): UsePostProps => {
       setIsLoading(false)
     }
   }
+
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     handleFetchComments(post.id)
     setShowPostDetailDialog(true)
+  }
+
+  const openUserModal = async (user: User) => {
+    try {
+      const userData = await fetchUserDetail(user.id)
+      if (userData) {
+        setSelectedUser(userData)
+        setShowUserModal(true)
+      }
+    } catch (error) {
+      console.error("사용자 정보 가져오기 오류:", error)
+    }
   }
 
   return {
@@ -116,6 +135,10 @@ export const usePost = (): UsePostProps => {
     showPostDetailDialog,
     setShowPostDetailDialog,
     openPostDetail,
+    selectedUser,
+    showUserModal,
+    setShowUserModal,
+    openUserModal,
     handleAddPost,
     handleUpdatePost,
     handleDeletePost,

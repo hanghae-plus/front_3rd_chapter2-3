@@ -25,7 +25,7 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import { User, NewComment, Comment } from "../shared/types"
+import { NewComment, Comment } from "../shared/types"
 import { useTags } from "../shared/model/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useComment } from "../shared/model/useComment"
@@ -53,8 +53,6 @@ const PostsManager = () => {
   })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const { tags, getTags } = useTags()
   const {
     posts,
@@ -70,7 +68,11 @@ const PostsManager = () => {
     setSelectedPost,
     showPostDetailDialog,
     setShowPostDetailDialog,
+    selectedUser,
+    showUserModal,
+    setShowUserModal,
     openPostDetail,
+    openUserModal,
   } = usePost()
   const { comments, handleAddComment, handleUpdateComment, handleDeleteComment, handleLikeComment } = useComment()
 
@@ -84,20 +86,6 @@ const PostsManager = () => {
     if (sortOrder) params.set("sortOrder", sortOrder)
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
-  }
-
-  // 게시물 상세 보기
-
-  // 사용자 모달 열기
-  const openUserModal = async (user: User) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
   }
 
   useEffect(() => {

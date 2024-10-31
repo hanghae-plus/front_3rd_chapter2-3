@@ -94,3 +94,12 @@ export const searchPosts = async (query: string) => {
     console.error("게시물 검색 오류:", error)
   }
 }
+
+export const fetchUserDetail = async (userId: number) => {
+  try {
+    const response = await fetch(`/api/users/${userId}`)
+    return await response.json()
+  } catch (error) {
+    console.error("사용자 정보 가져오기 오류:", error)
+  }
+}
