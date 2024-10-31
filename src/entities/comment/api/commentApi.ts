@@ -1,6 +1,6 @@
 import { apiClient } from '~/shared/api/base';
 
-import { CommentRequestDto, CommentResponseDto, CommentsResponseDto } from './type';
+import { CommentRequestDto, CommentResponseDto, CommentsResponseDto } from '../model/type';
 
 export const fetchAllCommentsByPostId = async (postId: number) => {
   const res = await apiClient.get<CommentsResponseDto>(`/api/comments/post/${postId}`);

@@ -20,3 +20,6 @@ export type CommentRequestDto = {
   postId: null;
   userId: number;
 };
+
+export type Comment = CommentResponseDto;
+export type Comments = Comment[];
