@@ -17,7 +17,6 @@ const useComment = () => {
     },
   });
 
-  return{fetchCommentsMutation, 
-  }
+  return{fetchCommentsMutation}
 }
 export default useComment;

@@ -3,13 +3,14 @@ import React from 'react';
 import { Dialog, DialogContents, DialogHeader, DialogTitle } from '../../../shared/ui/Dialog';
 import PostForm from './PostForm';
 import { useAtom } from 'jotai';
-import { showAddDialogAtom } from '../../../entities/post/model/postAtom';
+import { newPostAtom, showAddDialogAtom } from '../../../entities/post/model/postAtom';
 import { Post } from '../../../entities/post/api/types';
 import usePostMutations from '../model/usePostMutations';
 
 const AddPostDialog: React.FC = () => {
   const [showAddDialog, setShowAddDialog] = useAtom(showAddDialogAtom);
   const { addPostMutation } = usePostMutations();
+  const [, setNewPost] = useAtom(newPostAtom);
 
   const handleClose = () => {
     setShowAddDialog(false);
@@ -19,6 +20,7 @@ const AddPostDialog: React.FC = () => {
     addPostMutation.mutate(data, {
       onSuccess: () => {
         handleClose();
+        setNewPost({ title: '', body: '', userId: 1 });
       },
       onError: (error) => {
         console.error('게시물 추가 실패:', error);

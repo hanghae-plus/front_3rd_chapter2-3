@@ -11,6 +11,7 @@ import {
   sortByAtom,
   sortOrderAtom,
   showAddDialogAtom,
+  postsAtom,
 } from '../entities/post/model/postAtom';
 import { selectedTagAtom, tagsAtom } from '../entities/tag/model/tagAtom';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -42,6 +43,7 @@ const PostsManagerPage = () => {
   const [, setShowAddDialog] = useAtom(showAddDialogAtom);
 
   const [, setTags] = useAtom(tagsAtom);
+  const [, setPosts] = useAtom(postsAtom);
 
   // React Query Hooks
   const params = useMemo(() => ({
@@ -83,6 +85,7 @@ const PostsManagerPage = () => {
   useEffect(() => {
     if (postsData) {
       const uniqueTags = Array.from(new Set(postsData.posts.flatMap(post => post.tags)));
+      setPosts(postsData)
       setTags(uniqueTags);
     }
   }, [postsData, setTags]);

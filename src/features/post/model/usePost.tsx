@@ -7,10 +7,10 @@ export interface EnrichedPost extends Post {
 }
 
 const usePosts = (params: FetchPostsParams) => {
-  // const queryKey = useMemo(() => ['posts', params], [params]);
+
   return useQuery<Posts,Error>({
     queryKey:['posts', params],
-    queryFn: () =>  fetchPosts(params)
+    queryFn: () => fetchPosts(params)
   });
 };
 

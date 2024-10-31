@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { Post } from '../api/types';
+import { Post, Posts } from '../api/types';
 
 export const skipAtom = atom(0);
 export const limitAtom = atom(10);
@@ -10,6 +10,7 @@ export const showPostDetailDialogAtom = atom(false);
 
 // 게시물 상태
 export const postAtom = atom<Post | null>(null);
+export const postsAtom = atom<Posts | null>(null);
 
 // 선택된 게시물 상태
 export const selectedPostAtom = atom<Post | null>(null);

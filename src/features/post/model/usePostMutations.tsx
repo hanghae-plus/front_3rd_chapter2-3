@@ -14,6 +14,7 @@ const usePostMutations = () => {
       console.error(error.message);
     },
   });
+  
 
   const updatePostMutation = useMutation<Post, Error, Partial<Post> & { id: number }>({
     mutationFn: updatePost,
