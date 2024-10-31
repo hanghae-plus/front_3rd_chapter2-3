@@ -28,13 +28,11 @@ export const PostWidget = () => {
     total,
     skip,
     limit,
-    searchQuery,
     selectedPost,
     setModalType,
     setSelectedPost,
     setSkip,
     setLimit,
-    setSearchQuery,
     setSelectedTag,
   } = usePostsStore()
 
@@ -43,10 +41,6 @@ export const PostWidget = () => {
   const [selectedComment, setSelectedComment] = useState<Comment>()
 
   usePostsData()
-
-  const handleSearchSubmit = (query: string) => {
-    setSearchQuery(query)
-  }
 
   const handleFilterChange = (tag: string) => {
     setSelectedTag(tag)
@@ -68,7 +62,7 @@ export const PostWidget = () => {
         {/* Search & Filters */}
         <div className="flex gap-4">
           <div className="flex-1">
-            <PostSearch value={searchQuery} onSearch={handleSearchSubmit} />
+            <PostSearch />
           </div>
           <PostFilters onChange={handleFilterChange} />
         </div>
