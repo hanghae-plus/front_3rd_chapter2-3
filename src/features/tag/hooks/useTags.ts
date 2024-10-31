@@ -1,7 +1,7 @@
 import { useQueryTags } from "@features/tag/api"
 import { useLocation } from "react-router-dom"
 import { useEffect, useState, useMemo } from "react"
-import { Tag } from "../model"
+import { Tag } from "@entities/tag/model"
 
 export const useTags = () => {
   const location = useLocation()
