@@ -5,15 +5,14 @@ import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { useMutationPostDelete } from "../../post/api/useMutationPostDelete"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
 import { usePostsStore } from "../../post/model/postStore"
-import { useUserStore } from "../../user/model/userStore"
 import { PostEditButton } from "../../post-edit/ui/PostEditButton"
+import { UserDetailButton } from "../../user-detail/ui/UserDetailButton"
 
 interface Props {
   post: Post
 }
 
 export const PostItem = ({ post }: Props) => {
-  const { openUserModal } = useUserStore()
   const { openPostDetail } = usePostsStore()
   const { searchQuery, selectedTag, setSelectedTag, updateURL } = usePostParamsStore()
 
@@ -46,12 +45,11 @@ export const PostItem = ({ post }: Props) => {
           </div>
         </div>
       </TableCell>
+
       <TableCell>
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-          <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-          <span>{post.author?.username}</span>
-        </div>
+        <UserDetailButton post={post} />
       </TableCell>
+
       <TableCell>
         <div className="flex items-center gap-2">
           <ThumbsUp className="w-4 h-4" />
@@ -60,6 +58,7 @@ export const PostItem = ({ post }: Props) => {
           <span>{post.reactions?.dislikes || 0}</span>
         </div>
       </TableCell>
+
       <TableCell>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
