@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { usePostQuery } from "../features/post/model/postStateStore";
 import {
   Button,
   Card,
@@ -27,6 +28,8 @@ import {
 } from "../shared/ui";
 
 const PostsManager = () => {
+  const [searchQueryInput, setSearchQueryInput] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -110,6 +113,8 @@ const PostsManager = () => {
 
   // 게시물 검색
   const searchPosts = async () => {
+    setActiveQuery("search");
+    setSearchQuery(searchQueryInput);
     if (!searchQuery) {
       fetchPosts();
       return;
@@ -314,6 +319,7 @@ const PostsManager = () => {
     }
     updateURL();
   }, [skip, limit, sortBy, sortOrder, selectedTag]);
+  const { setActiveQuery } = usePostQuery();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -489,8 +495,8 @@ const PostsManager = () => {
                 <Input
                   placeholder="게시물 검색..."
                   className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQueryInput}
+                  onChange={(e) => setSearchQueryInput(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && searchPosts()}
                 />
               </div>
