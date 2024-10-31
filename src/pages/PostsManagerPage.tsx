@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { PostSearch } from "../features/post/ui/PostSearch"
@@ -10,7 +9,6 @@ import { PostFilter } from "../features/post/ui/PostFilter"
 import { PostTable } from "../entities/post/ui/PostTable"
 import { PostAddDialog } from "../features/post/ui/PostAddDialog"
 import { PostUpdateDialog } from "../features/post/ui/PostUpdateDialog"
-import { Comment } from "../entities/comment/model/types"
 import { CommentAddDialog } from "../features/comment/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
@@ -20,9 +18,6 @@ import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
   const { setShowPostAddDialog } = useDialog()
-
-  // 상태 관리
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
 
   // 게시물 추가 모달 열기
   const handlePostAddDialogOpen = () => {
@@ -70,10 +65,10 @@ const PostsManager = () => {
       <CommentAddDialog />
 
       {/* 댓글 수정 대화상자 */}
-      {selectedComment && <CommentUpdateDialog selectedComment={selectedComment} />}
+      <CommentUpdateDialog />
 
       {/* 게시물 상세 보기 대화상자 */}
-      <PostDetailDialog setSelectedComment={setSelectedComment} />
+      <PostDetailDialog />
 
       {/* 사용자 모달 */}
       <UserDetailDialog />

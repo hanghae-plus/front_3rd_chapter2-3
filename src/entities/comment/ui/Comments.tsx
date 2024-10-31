@@ -7,8 +7,7 @@ import { useDialog } from "../../../features/post/model/dialogStore"
 
 export const Comments: React.FC<{
   postId: number
-  setSelectedComment: (comment: Comment) => void
-}> = ({ postId, setSelectedComment }) => {
+}> = ({ postId }) => {
   const { setShowCommentAddDialog } = useDialog()
   const { data: commentsData, isLoading } = useCommentsQuery(postId)
 
@@ -36,7 +35,6 @@ export const Comments: React.FC<{
                 key={comment.id}
                 postId={postId}
                 comment={comment}
-                setSelectedComment={setSelectedComment}
               />
             ))}
           </div>

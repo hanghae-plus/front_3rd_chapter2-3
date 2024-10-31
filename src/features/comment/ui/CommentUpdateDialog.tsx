@@ -3,24 +3,27 @@ import { Comment } from "../../../entities/comment/model/types"
 import { Textarea, Button } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { useDialog } from "../../post/model/dialogStore"
-import { useCommentMutations } from "../model/commentStore"
+import { useCommentMutations, useComments } from "../model/commentStore"
 
-export const CommentUpdateDialog: React.FC<{
-  selectedComment: Comment
-}> = ({ selectedComment }) => {
+export const CommentUpdateDialog = () => {
   const { showCommentUpdateDialog, setShowCommentUpdateDialog } = useDialog()
-
-  const [updatingComment, setUpdatingComment] = useState({ ...selectedComment })
-
-  const { updateComment } = useCommentMutations(selectedComment.postId)
+  const { selectedComment } = useComments()
+  const [updatingComment, setUpdatingComment] = useState<Comment|null>(selectedComment)
+  const { updateComment } = useCommentMutations(selectedComment?.postId ?? 0)
 
   const handleCommentUpdate = () => {
+    if (!updatingComment) return
     updateComment.mutate(updatingComment)
     setShowCommentUpdateDialog(false)
   }
 
+  const handleCommentBodyUpdate = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (!updatingComment) return
+    setUpdatingComment({ ...updatingComment, body: e.target.value })
+  }
+
   useEffect(() => {
-    if (showCommentUpdateDialog) {
+    if (showCommentUpdateDialog && selectedComment) {
       setUpdatingComment({ ...selectedComment })
     }
   }, [showCommentUpdateDialog, selectedComment])
@@ -31,9 +34,7 @@ export const CommentUpdateDialog: React.FC<{
         <Textarea
           placeholder="댓글 내용"
           value={updatingComment?.body || ""}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setUpdatingComment((prevComment) => ({ ...prevComment, body: e.target.value }))
-          }
+          onChange={handleCommentBodyUpdate}
         />
         <Button onClick={handleCommentUpdate}>댓글 업데이트</Button>
       </>

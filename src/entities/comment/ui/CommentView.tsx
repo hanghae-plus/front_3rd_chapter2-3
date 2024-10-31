@@ -2,19 +2,18 @@ import { ThumbsUp, Edit2, Trash2 } from "lucide-react"
 import { Button } from "../../../shared/ui"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { Comment } from "../model/types"
-import { useCommentMutations } from "../../../features/comment/model/commentStore"
+import { useCommentMutations, useComments } from "../../../features/comment/model/commentStore"
 import { useRouterQueries } from "../../../features/post/model/routerStore"
 import { useDialog } from "../../../features/post/model/dialogStore"
 
 export const CommentView: React.FC<{
   postId: number
   comment: Comment
-  setSelectedComment: (comment: Comment) => void
-}> = ({ postId, comment, setSelectedComment }) => {
+}> = ({ postId, comment }) => {
   const { searchQuery, } = useRouterQueries()
   const { setShowCommentUpdateDialog } = useDialog()
-  
   const { likeComment, deleteComment } = useCommentMutations(postId)
+  const { setSelectedComment } = useComments()
 
   const handleLikeComment = () => {
     likeComment.mutate({ commentId: comment.id, likes: comment.likes })
