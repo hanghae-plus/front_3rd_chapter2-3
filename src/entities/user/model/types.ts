@@ -72,3 +72,5 @@ export type User = {
 export type FetchUsersProps = {
   select?: (keyof User)[];
 };
+
+export type UserSummary = Pick<User, "id" | "username" | "image">;

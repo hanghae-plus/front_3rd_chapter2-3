@@ -1,4 +1,4 @@
-import { User } from "@/entities/user/model/types";
+import { UserSummary } from "@/entities/user/model/types";
 
 export type Post = {
   id: number;
@@ -11,7 +11,7 @@ export type Post = {
     dislikes: number;
   };
   tags: string[];
-  author?: Pick<User, "id" | "username" | "image">;
+  author?: UserSummary;
 };
 
 export type PostsResponse = {
