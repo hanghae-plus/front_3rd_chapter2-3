@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../../shared/ui/index"
+import { PostWithUserInfo } from "../model/types"
 
 interface PostsListProps {
   searchQuery?: string
@@ -32,7 +33,7 @@ export const PostList = ({
   onUserClick,
 }: PostsListProps) => {
   const { getFilteredPosts, isLoading } = usePostsStore()
-  const posts = getFilteredPosts()
+  const posts: PostWithUserInfo[] = getFilteredPosts()
   if (isLoading) {
     return <div className="flex justify-center p-4">로딩 중...</div>
   }
@@ -74,8 +75,8 @@ export const PostList = ({
             </TableCell>
             <TableCell>
               <div className="flex items-center space-x-2 cursor-pointer" onClick={() => onUserClick(post.userId)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
+                <img src={post.userInfo?.image} alt={post.userInfo?.username} className="w-8 h-8 rounded-full" />
+                <span>{post.userInfo?.username}</span>
               </div>
             </TableCell>
             <TableCell>

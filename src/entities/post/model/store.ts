@@ -1,14 +1,17 @@
+import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { create } from "zustand"
+import { User } from "../../../entities/user"
 import { usePostsQuery } from "./queries"
 import { Post } from "./types"
 
 interface PostsState {
   // 서버 데이터
-  allPosts: Post[] // 전체 데이터
+  allPosts: Post[]
+  users: User[] // 추가
   total: number
 
-  // UI 상태
+  // UI 상태 (기존과 동일)
   isLoading: boolean
   skip: number
   limit: number
@@ -19,11 +22,9 @@ interface PostsState {
   modalType: "add" | "edit" | "comment" | "add-comment" | "edit-comment" | null
   selectedPost: Post | null
 
-  // computed value를 위한 getter
-  posts: Post[] // 현재 페이지에 보여줄 데이터
-
   // actions
   setAllPosts: (posts: Post[]) => void
+  setUsers: (users: User[]) => void // 추가
   setLoading: (isLoading: boolean) => void
   setSkip: (skip: number) => void
   setLimit: (limit: number) => void
@@ -31,13 +32,14 @@ interface PostsState {
   setSelectedTag: (tag: string) => void
   setSortBy: (sortBy: string) => void
   setSortOrder: (order: "asc" | "desc") => void
-  setModalType: (type: "add" | "edit" | "comment" | null) => void
+  setModalType: (type: "add" | "edit" | "comment" | "add-comment" | "edit-comment" | null) => void
   setSelectedPost: (post: Post | null) => void
   getFilteredPosts: () => Post[]
 }
 
 export const usePostsStore = create<PostsState>((set, get) => ({
   allPosts: [],
+  users: [], // 추가
   total: 0,
   isLoading: false,
   skip: 0,
@@ -48,7 +50,6 @@ export const usePostsStore = create<PostsState>((set, get) => ({
   sortOrder: "asc",
   modalType: null,
   selectedPost: null,
-  posts: [], // 일반 상태로 변경
 
   getFilteredPosts: () => {
     const state = get()
@@ -93,18 +94,26 @@ export const usePostsStore = create<PostsState>((set, get) => ({
       })
     }
 
+    // 사용자 정보 결합
+    filteredPosts = filteredPosts.map((post) => ({
+      ...post,
+      userInfo: state.users.find((user) => user.id === post.userId),
+    }))
+
     // 페이지네이션
     const start = state.skip
     const end = state.skip + state.limit
     return filteredPosts.slice(start, end)
   },
 
+  // 기존 actions
   setAllPosts: (posts) => set({ allPosts: posts, total: posts.length }),
+  setUsers: (users) => set({ users }), // 추가
   setLoading: (isLoading) => set({ isLoading }),
   setSkip: (skip) => set({ skip }),
   setLimit: (limit) => set({ limit }),
-  setSearchQuery: (searchQuery) => set({ searchQuery, skip: 0 }), // 검색시 첫 페이지로
-  setSelectedTag: (selectedTag) => set({ selectedTag, skip: 0 }), // 태그 변경시 첫 페이지로
+  setSearchQuery: (searchQuery) => set({ searchQuery, skip: 0 }),
+  setSelectedTag: (selectedTag) => set({ selectedTag, skip: 0 }),
   setSortBy: (sortBy) => set({ sortBy }),
   setSortOrder: (sortOrder) => set({ sortOrder }),
   setModalType: (modalType) => set({ modalType }),
@@ -112,17 +121,22 @@ export const usePostsStore = create<PostsState>((set, get) => ({
 }))
 
 export const usePostsData = () => {
-  const { setAllPosts, setLoading } = usePostsStore()
+  const { setAllPosts, setUsers, setLoading } = usePostsStore()
 
-  // 한 번에 모든 데이터를 가져옴
-  const postsQuery = usePostsQuery() // limit: 0으로 모든 데이터 요청
+  // 게시물과 사용자 데이터 동시에 가져오기
+  const postsQuery = usePostsQuery()
+  const usersQuery = useQuery({
+    queryKey: ["users"],
+    queryFn: () => fetch("/api/users?limit=0&select=username,image").then((res) => res.json()),
+  })
 
   useEffect(() => {
-    if (postsQuery.data) {
+    if (postsQuery.data && usersQuery.data) {
       setAllPosts(postsQuery.data.posts)
+      setUsers(usersQuery.data.users)
     }
-    setLoading(postsQuery.isLoading)
-  }, [postsQuery.data, postsQuery.isLoading])
+    setLoading(postsQuery.isLoading || usersQuery.isLoading)
+  }, [postsQuery.data, usersQuery.data, postsQuery.isLoading, usersQuery.isLoading])
 
-  return postsQuery
+  return { postsQuery, usersQuery }
 }

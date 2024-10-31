@@ -1,4 +1,5 @@
 import { Post } from "../../../entities/post"
+import { User } from "../../../entities/user"
 
 export interface PostsListState {
   posts: Post[]
@@ -10,4 +11,8 @@ export interface PostsListState {
   selectedTag: string
   sortBy: string
   sortOrder: "asc" | "desc"
+}
+
+export interface PostWithUserInfo extends Post {
+  userInfo?: User
 }
