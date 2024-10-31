@@ -73,10 +73,14 @@ export const usePostsStore = create<PostsState>((set, get) => ({
       filteredPosts.sort((a, b) => {
         switch (state.sortBy) {
           case "id":
+            return state.sortOrder === "asc"
+              ? a.id - b.id // 숫자 비교로 변경
+              : b.id - a.id
+
           case "title":
             return state.sortOrder === "asc"
-              ? String(a[state.sortBy]).localeCompare(String(b[state.sortBy]))
-              : String(b[state.sortBy]).localeCompare(String(a[state.sortBy]))
+              ? String(a.title).localeCompare(String(b.title))
+              : String(b.title).localeCompare(String(a.title))
 
           case "reactions":
             const aLikes = a.reactions?.likes || 0
@@ -111,7 +115,7 @@ export const usePostsData = () => {
   const { setAllPosts, setLoading } = usePostsStore()
 
   // 한 번에 모든 데이터를 가져옴
-  const postsQuery = usePostsQuery(0, 0) // limit: 0으로 모든 데이터 요청
+  const postsQuery = usePostsQuery() // limit: 0으로 모든 데이터 요청
 
   useEffect(() => {
     if (postsQuery.data) {
