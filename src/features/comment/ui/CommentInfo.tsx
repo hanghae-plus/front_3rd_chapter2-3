@@ -1,6 +1,6 @@
 import { Comment } from "@/entities/comment/model/types";
 
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import HighlightText from "@/shared/ui/HighlightText";
 
 type CommentInfoProps = {

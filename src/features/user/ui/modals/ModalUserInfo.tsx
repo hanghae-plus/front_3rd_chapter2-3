@@ -1,7 +1,7 @@
 import { UserSummary } from "@/entities/user/model/types";
 import UserInfo from "@/entities/user/ui/UserInfo";
 
-import useToggle from "@/shared/model/useToggle";
+import { useToggle } from "@/shared/model";
 import { Dialog, Loader } from "@/shared/ui";
 
 import { useGetUser } from "../../api/use-get-user";

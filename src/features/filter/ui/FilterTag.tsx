@@ -1,7 +1,7 @@
 import Tags from "@/entities/tag/ui/Tags";
 import useFetchTags from "@/features/filter/api/use-get-tags";
 
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import { Select } from "@/shared/ui/Select";
 
 const FilterTag = () => {

@@ -1,9 +1,10 @@
 import { Post } from "@/entities/post/model/types";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useShallow } from "zustand/shallow";
+
 import { useUpdatePost } from "../../api/use-update-post";
 import usePostsStore from "../../model/usePostsStore";
 

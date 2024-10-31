@@ -1,6 +1,6 @@
 import PostPagination from "@/features/post/ui/table/PostPagination";
 
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import { Loader, Table } from "@/shared/ui";
 
 import { useQueryPosts } from "@/features/post/api/use-get-post";

@@ -1,4 +1,4 @@
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import Pagination from "@/shared/ui/Pagination";
 
 type PostPaginationProps = {

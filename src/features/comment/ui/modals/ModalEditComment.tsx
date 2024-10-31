@@ -1,7 +1,7 @@
 import { Comment } from "@/entities/comment/model/types";
 
 import FormEditComment from "@/features/comment/ui/forms/FormEditComment";
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 
 import { Button, Dialog } from "@/shared/ui";
 

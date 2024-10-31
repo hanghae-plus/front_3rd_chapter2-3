@@ -2,7 +2,7 @@ import { Post } from "@/entities/post/model/types";
 
 import FormEditPost from "@/features/post/ui/forms/FormEditPost";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 import { Button, Dialog } from "@/shared/ui";
 
 import { Edit2 } from "lucide-react";

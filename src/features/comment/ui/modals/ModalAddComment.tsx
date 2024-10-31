@@ -1,5 +1,5 @@
 import FormAddComment from "@/features/comment/ui/forms/FormAddComment";
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 
 import { Button, Dialog } from "@/shared/ui";
 

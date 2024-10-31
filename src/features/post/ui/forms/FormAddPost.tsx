@@ -1,6 +1,6 @@
 import { NewPost } from "@/entities/post/model/types";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 import { Button, Input, Textarea } from "@/shared/ui";
 
 import { useState } from "react";

@@ -2,13 +2,13 @@ import { Post } from "@/entities/post/model/types";
 
 import PostDetail from "@/features/post/ui/PostDetail";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useGlobalModal, useQueryParams } from "@/shared/model";
 import { Button, Dialog } from "@/shared/ui";
 import HighlightText from "@/shared/ui/HighlightText";
 
 import { MessageSquare } from "lucide-react";
 import { useShallow } from "zustand/shallow";
+
 import usePostsStore from "../../model/usePostsStore";
 
 type ModalPostDetailProps = {

@@ -1,4 +1,4 @@
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import { Select } from "@/shared/ui/Select";
 
 const FilterSort = () => {

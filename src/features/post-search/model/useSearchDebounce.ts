@@ -1,4 +1,4 @@
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import { useCallback, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 

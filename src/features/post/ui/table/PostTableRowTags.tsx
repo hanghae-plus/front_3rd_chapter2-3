@@ -1,5 +1,5 @@
 import { Post } from "@/entities/post/model/types";
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 
 type PostTableRowTagsProps = {
   post: Post;

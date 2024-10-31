@@ -2,7 +2,7 @@ import { NewComment } from "@/entities/comment/model/types";
 
 import { Button, Textarea } from "@/shared/ui";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 import { useState } from "react";
 import { useAddComment } from "../../api/use-add-comment";
 import { initialNewComment } from "../../config/initialValues";

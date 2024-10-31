@@ -1,6 +1,6 @@
 import FormAddPost from "@/features/post/ui/forms/FormAddPost";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 import { Button, Dialog } from "@/shared/ui";
 
 import { Plus } from "lucide-react";

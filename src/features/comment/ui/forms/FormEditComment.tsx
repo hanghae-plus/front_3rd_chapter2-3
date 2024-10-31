@@ -1,7 +1,8 @@
 import { Comment } from "@/entities/comment/model/types";
 
-import { useGlobalModal } from "@/shared/model/useGlobalModal";
+import { useGlobalModal } from "@/shared/model";
 import { Button, Textarea } from "@/shared/ui";
+
 import { useEffect, useState } from "react";
 import { useUpdateComment } from "../../api/use-update-comment";
 

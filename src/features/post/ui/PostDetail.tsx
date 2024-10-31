@@ -2,7 +2,7 @@ import { Post } from "@/entities/post/model/types";
 
 import Comments from "@/features/comment/ui/Comments";
 
-import { useQueryParams } from "@/shared/model/useQueryParams";
+import { useQueryParams } from "@/shared/model";
 import HighlightText from "@/shared/ui/HighlightText";
 
 type PostDetailProps = {
