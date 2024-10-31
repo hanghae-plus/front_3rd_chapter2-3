@@ -2,6 +2,7 @@ import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react
 import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { Post } from "../model/types"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
+import { usePostMutations } from "../../../features/post/model/postStore"
 
 export const PostTableRow: React.FC<{
   post: Post
@@ -13,7 +14,6 @@ export const PostTableRow: React.FC<{
   openUserModal: (userId: number) => void
   setShowPostUpdateDialog: (value: boolean) => void
   openPostDetail: (post: Post) => void
-  deletePost: (postId: number) => void
 }> = ({
   post,
   searchQuery,
@@ -24,8 +24,14 @@ export const PostTableRow: React.FC<{
   openUserModal,
   setShowPostUpdateDialog,
   openPostDetail,
-  deletePost,
 }) => {
+
+  const { deletePost } = usePostMutations()
+
+  const handlePostDelete = (postId: number) => {
+    deletePost.mutate(postId)
+  }
+  
   return (
     <TableRow key={post.id}>
       <TableCell>{post.id}</TableCell>
@@ -84,7 +90,7 @@ export const PostTableRow: React.FC<{
           >
             <Edit2 className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+          <Button variant="ghost" size="sm" onClick={() => handlePostDelete(post.id)}>
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>

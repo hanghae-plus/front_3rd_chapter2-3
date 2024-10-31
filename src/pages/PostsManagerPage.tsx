@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
-import { NewPost, Post } from "../entities/post/model/types"
-import { fetchUserApi, fetchUsersApi } from "../entities/user/api"
-import {
-  fecthPostsByTagApi,
-  fetchPostsApi,
-  searchPostsApi,
-  createPostApi,
-  updatePostApi,
-  deletePostApi,
-} from "../entities/post/api"
+import { Post } from "../entities/post/model/types"
+import { fetchUserApi } from "../entities/user/api"
 import { fetchTagsApi } from "../entities/tag/api"
 import { Tag } from "../entities/tag/model/types"
-import { addToPosts, attachAuthorFromUser, attachAuthorsFromUsers, removeFromPosts, updateInPosts } from "../entities/post/model/utils"
 import { User } from "../entities/user/model/types"
 import { PostSearch } from "../features/post/ui/PostSearch"
 import { ContentSearch } from "../widgets/ui/ContentSearch"
@@ -21,7 +12,6 @@ import { ContentControls } from "../widgets/ui/ContentControls"
 import { Contents } from "../widgets/ui/Contents"
 import { ContentFilter } from "../widgets/ui/ContentFilter"
 import { PostFilter } from "../features/post/ui/PostFilter"
-import { Pagination } from "../features/page/ui/Pagination"
 import { PostTable } from "../entities/post/ui/PostTable"
 import { PostAddDialog } from "../features/post/ui/PostAddDialog"
 import { PostUpdateDialog } from "../features/post/ui/PostUpdateDialog"
@@ -39,14 +29,13 @@ import {
 } from "../entities/comment/api"
 import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
-import { addToCommentsRecord, findInCommentsRecord, removeFromCommentsRecord, updateInCommentsMap } from "../entities/comment/model/utils"
+import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
   const {
     skip,
     limit,
     searchQuery,
-    setSearchQuery,
     sortBy,
     setSortBy,
     sortOrder,
@@ -66,78 +55,18 @@ const PostsManager = () => {
   } = useDialog()
 
   // 상태 관리
-  const [posts, setPosts] = useState<Post[]>([])
-  const [total, setTotal] = useState(0)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
-  // 게시물 가져오기
-  const getPosts = async (limit = 0, skip = 0) => {
-    setLoading(true)
-    const usersData = await fetchUsersApi()
-    const postsData = await fetchPostsApi({ limit, skip })
-    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users)
-    setPosts(postsWithUsers)
-    setTotal(postsData.total)
-    setLoading(false)
-  }
+  // 쿼리 사용
 
   // 태그 가져오기
   const getTags = async () => {
     const tagsData = await fetchTagsApi()
     setTags(tagsData)
-  }
-
-  // 게시물 검색
-  const getSearchedPosts = async (searchQuery = "") => {
-    setLoading(true)
-    const usersData = await fetchUsersApi()
-    const postsData = await searchPostsApi(searchQuery)
-    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users)
-    setPosts(postsWithUsers)
-    setTotal(postsData.total)
-    setLoading(false)
-  }
-
-  // 태그별 게시물 가져오기
-  const getTaggedPosts = async (tag = "all") => {
-    if (!tag || tag === "all") {
-      getPosts(limit, skip)
-      return
-    }
-    setLoading(true)
-    const usersData = await fetchUsersApi()
-    const postsData = await fecthPostsByTagApi(tag)
-    const postsWithUsers = attachAuthorsFromUsers(postsData.posts, usersData.users)
-    setPosts(postsWithUsers)
-    setTotal(postsData.total)
-    setLoading(false)
-  }
-
-  // 게시물 추가
-  const addPost = async (newPost: NewPost) => {
-    const postData = await createPostApi(newPost)
-    const userData = await fetchUserApi(postData.userId)
-    const postWithUser = attachAuthorFromUser(postData, userData)
-    setPosts(addToPosts(posts, postWithUser))
-  }
-
-  // 게시물 업데이트
-  const updatePost = async (updatingPost: Post) => {
-    const postData = await updatePostApi(updatingPost)
-    const userData = await fetchUserApi(postData.userId)
-    const postWithUser = attachAuthorFromUser(postData, userData)
-    setPosts(updateInPosts(posts, postWithUser))
-  }
-
-  // 게시물 삭제
-  const deletePost = async (postId: number) => {
-    await deletePostApi(postId)
-    setPosts(removeFromPosts(posts, postId))
   }
 
   // 댓글 가져오기
@@ -167,7 +96,6 @@ const PostsManager = () => {
 
   // 댓글 좋아요
   const likeComment = async (commentId: number, postId: number) => {
-    // const likedComment = comments[postId].find((item) => item.id === id)
     const likedComment = findInCommentsRecord(comments, postId, commentId)
     if (!likedComment) return
     const commentData = await likeCommentApi(commentId, likedComment.likes + 1)
@@ -193,11 +121,6 @@ const PostsManager = () => {
   }, [])
 
   useEffect(() => {
-    if (selectedTag) {
-      getTaggedPosts(selectedTag)
-    } else {
-      getPosts(limit, skip)
-    }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
@@ -223,7 +146,6 @@ const PostsManager = () => {
               <PostFilter
                 selectedTag={selectedTag}
                 setSelectedTag={setSelectedTag}
-                getTaggedPosts={getTaggedPosts}
                 updateURL={updateURL}
                 tags={tags}
                 sortBy={sortBy}
@@ -235,46 +157,31 @@ const PostsManager = () => {
           </ContentControls>
 
           {/* 게시물 테이블 */}
-          {loading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
-          ) : (
             <PostTable
-              posts={posts}
               searchQuery={searchQuery}
-              selectedTag={selectedTag}
               updateURL={updateURL}
-              setSelectedTag={setSelectedTag}
               setSelectedPost={setSelectedPost}
               openUserModal={openUserModal}
               setShowPostUpdateDialog={setShowPostUpdateDialog}
               openPostDetail={openPostDetail}
-              deletePost={deletePost}
             />
-          )}
 
           {/* 페이지네이션 */}
-          <Pagination total={total} />
+          <PostPagination />
         </Contents>
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <PostAddDialog addPost={addPost} />
+      <PostAddDialog />
 
       {/* 게시물 수정 대화상자 */}
-      {selectedPost && (
-        <PostUpdateDialog selectedPost={selectedPost} updatePost={updatePost} />
-      )}
+      {selectedPost && <PostUpdateDialog selectedPost={selectedPost} />}
 
       {/* 댓글 추가 대화상자 */}
       {selectedPost && <CommentAddDialog postId={selectedPost.id} addComment={addComment} />}
 
       {/* 댓글 수정 대화상자 */}
-      {selectedComment && (
-        <CommentUpdateDialog
-          selectedComment={selectedComment}
-          updateComment={updateComment}
-        />
-      )}
+      {selectedComment && <CommentUpdateDialog selectedComment={selectedComment} updateComment={updateComment} />}
 
       {/* 게시물 상세 보기 대화상자 */}
       {selectedPost && (

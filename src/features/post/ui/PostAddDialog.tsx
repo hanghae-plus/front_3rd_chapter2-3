@@ -3,22 +3,23 @@ import { NewPost } from "../../../entities/post/model/types"
 import { Button, Input, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { useDialog } from "../model/dialogStore"
+import { usePostMutations } from "../model/postStore"
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
 
-export const PostAddDialog: React.FC<{
-  addPost: (newPost: NewPost) => void
-}> = ({ addPost }) => {
+export const PostAddDialog = () => {
   
   const {
     showPostAddDialog,
     setShowPostAddDialog,
   } = useDialog()
 
+  const { createPost } = usePostMutations()
+
   const [newPost, setNewPost] = useState<NewPost>({ ...initialNewPost})
 
   const handlePostAdd = () => {
-    addPost(newPost)
+    createPost.mutate(newPost)
     setShowPostAddDialog(false)
   }
 
@@ -37,7 +38,7 @@ export const PostAddDialog: React.FC<{
           onChange={(e: ChangeEvent<HTMLInputElement>) => setNewPost({ ...newPost, title: e.target.value })}
         />
         <Textarea
-          rows={30}
+          rows={15}
           placeholder="내용"
           value={newPost.body}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setNewPost({ ...newPost, body: e.target.value })}

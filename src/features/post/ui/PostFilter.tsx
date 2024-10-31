@@ -4,21 +4,19 @@ import { Selector } from "../../../shared/ui/Selector"
 export const PostFilter: React.FC<{
   selectedTag: string
   setSelectedTag: (tag: string) => void
-  getTaggedPosts: (tag: string) => void
   updateURL: () => void
   tags: Tag[]
   sortBy: string | undefined
   setSortBy: (value: string) => void
   sortOrder: string | undefined
   setSortOrder: (value: string) => void
-}> = ({ selectedTag, setSelectedTag, getTaggedPosts, updateURL, tags, sortBy, setSortBy, sortOrder, setSortOrder }) => {
+}> = ({ selectedTag, setSelectedTag, updateURL, tags, sortBy, setSortBy, sortOrder, setSortOrder }) => {
   return (
     <>
       <Selector
         value={selectedTag}
         onValueChange={(value) => {
           setSelectedTag(value)
-          getTaggedPosts(value)
           updateURL()
         }}
         placeHolder={"태그 선택"}
