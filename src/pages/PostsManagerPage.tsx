@@ -12,10 +12,12 @@ import { commentApi } from "../entities/comment/api/commentApi"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { SortOrder, usePostQueryParams, usePostsQuery } from "../entities/post"
 import { postApi } from "../entities/post/api/postApi"
+import { usePostsQueryProps } from "../entities/post/api/usePostsQuery"
 import { usePostTagsQuery } from "../entities/post/api/usePostTagsQuery"
 import { Author, NewPost, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
+import { useAddPostMutation } from "../features/post/api/useAddPostMutation"
 import {
   Button,
   Card,
@@ -80,12 +82,14 @@ const PostsManager = () => {
 
   const { data: tags = [] } = usePostTagsQuery()
 
-  const { data, isLoading } = usePostsQuery({
+  const payload: usePostsQueryProps = {
     limit,
     skip,
     searchQuery,
     selectedTag,
-  })
+  }
+
+  const { data, isLoading } = usePostsQuery(payload)
 
   // TODO: 점진적 마이그레이션을 위한 임시 useEffect
   useEffect(() => {
@@ -96,14 +100,16 @@ const PostsManager = () => {
     }
   }, [data])
 
+  const { mutate: addPostMutate } = useAddPostMutation()
+
   // 게시물 추가
-  const addPost = async () => {
-    const data = await postApi.addPost(newPost)
-    if (data) {
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    }
+  const addPost = (newPost: NewPost) => {
+    addPostMutate(newPost, {
+      onSuccess: () => {
+        setShowAddDialog(false)
+        setNewPost({ title: "", body: "", userId: 1 })
+      },
+    })
   }
 
   // 게시물 업데이트
@@ -523,7 +529,7 @@ const PostsManager = () => {
                 setNewPost({ ...newPost, userId: Number(e.target.value) })
               }
             />
-            <Button onClick={addPost}>게시물 추가</Button>
+            <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
           </div>
         </DialogContent>
       </Dialog>

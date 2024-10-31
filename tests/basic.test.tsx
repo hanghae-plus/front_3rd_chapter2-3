@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClientProvider } from "@tanstack/react-query"
 import "@testing-library/jest-dom"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -8,9 +8,8 @@ import * as React from "react"
 import { MemoryRouter } from "react-router-dom"
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 import PostsManager from "../src/pages/PostsManagerPage"
+import { queryClient } from "../src/shared/api"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
-
-const queryClient = new QueryClient()
 
 // MSW 서버 설정
 const server = setupServer(
