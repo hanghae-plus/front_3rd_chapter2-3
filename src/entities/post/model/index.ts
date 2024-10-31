@@ -18,3 +18,9 @@ export const deletePost = (prevData: PostDto, postId: number) => ({
   posts: prevData.posts.filter((post) => post.id !== postId),
   total: prevData.total - 1,
 })
+
+export const addPost = (prevData: PostDto, newPost: Post) => ({
+  ...prevData,
+  posts: [newPost, ...prevData.posts],
+  total: prevData.total + 1,
+})

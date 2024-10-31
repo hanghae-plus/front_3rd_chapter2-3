@@ -1,10 +1,10 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { usePostDialog } from "../model/usePostDialog.ts"
-import { usePosts } from "../model/usePosts.ts"
+import { useAddPostMutation } from "../api/mutations.ts"
 
 export default function PostAddDialog() {
-  const { addPost } = usePosts()
   const { newPost, setNewPost, showAddDialog, setShowAddDialog } = usePostDialog()
+  const { mutate: addPost } = useAddPostMutation()
 
   const submitAddPostForm = () => {
     addPost(newPost)
