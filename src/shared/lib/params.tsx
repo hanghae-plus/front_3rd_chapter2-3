@@ -1,11 +1,4 @@
-interface URLParams {
-  skip?: number
-  limit?: number
-  search?: string
-  sortBy?: string
-  sortOrder?: string
-  tag?: string
-}
+import { URLParams } from "../types"
 
 export const updateURLParams = (params: URLParams, navigate: (path: string) => void) => {
   const searchParams = new URLSearchParams()
@@ -21,8 +14,8 @@ export const updateURLParams = (params: URLParams, navigate: (path: string) => v
 
 export const getURLParams = (searchParams: URLSearchParams): URLParams => {
   return {
-    skip: parseInt(searchParams.get("skip") || "0"),
-    limit: parseInt(searchParams.get("limit") || "10"),
+    skip: Number(searchParams.get("skip") || "0"),
+    limit: Number(searchParams.get("limit") || "10"),
     search: searchParams.get("search") || "",
     sortBy: searchParams.get("sortBy") || "",
     sortOrder: searchParams.get("sortOrder") || "asc",

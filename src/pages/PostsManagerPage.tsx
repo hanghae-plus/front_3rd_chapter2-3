@@ -25,31 +25,21 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import { NewComment, Comment } from "../shared/types"
+import { NewComment, Comment, URLParams } from "../shared/types"
 import { useTags } from "../shared/model/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useComment } from "../shared/model/useComment"
 import { highlightText } from "../shared/lib/highlight"
-import { getURLParams, updateURLParams } from "../shared/lib/params"
+import { updateURLParams } from "../shared/lib/params"
+import { useURLParams } from "../shared/model/useURLParams"
 
 const PostsManager = () => {
   const navigate = useNavigate()
-  const location = useLocation()
-
-  const initialParams = getURLParams(new URLSearchParams(location.search))
-
-  const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
     body: "",
@@ -80,7 +70,8 @@ const PostsManager = () => {
     openUserModal,
   } = usePost()
   const { comments, handleAddComment, handleUpdateComment, handleDeleteComment, handleLikeComment } = useComment()
-
+  const { params, updateParams } = useURLParams()
+  const { skip = 0, limit = 10, search: searchQuery, sortBy, sortOrder, tag: selectedTag } = params as URLParams
   const updateURL = () => {
     updateURLParams(
       {
@@ -103,20 +94,10 @@ const PostsManager = () => {
     if (selectedTag) {
       handleFetchPostsByTag(selectedTag)
     } else {
-      handleFetchPosts({ limit, skip })
+      handleFetchPosts({ limit: limit as number, skip: skip as number })
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
@@ -136,7 +117,7 @@ const PostsManager = () => {
             <TableCell>{post.id}</TableCell>
             <TableCell>
               <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
+                <div>{highlightText(post.title, searchQuery as string)}</div>
 
                 <div className="flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
@@ -148,7 +129,7 @@ const PostsManager = () => {
                           : "text-blue-800 bg-blue-100 hover:bg-blue-200"
                       }`}
                       onClick={() => {
-                        setSelectedTag(tag)
+                        updateParams({ tag: tag as string })
                         updateURL()
                       }}
                     >
@@ -219,7 +200,7 @@ const PostsManager = () => {
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
             <div className="flex items-center space-x-2 overflow-hidden">
               <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+              <span className="truncate">{highlightText(comment.body, searchQuery as string)}</span>
             </div>
             <div className="flex items-center space-x-1">
               <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment.id, postId)}>
@@ -268,16 +249,15 @@ const PostsManager = () => {
                   placeholder="게시물 검색..."
                   className="pl-8"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSearchPosts(searchQuery)}
+                  onChange={(e) => updateParams({ search: e.target.value })}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearchPosts(searchQuery as string)}
                 />
               </div>
             </div>
             <Select
               value={selectedTag}
               onValueChange={(value) => {
-                setSelectedTag(value)
-                handleFetchPostsByTag(value)
+                updateParams({ tag: value })
                 updateURL()
               }}
             >
@@ -293,7 +273,7 @@ const PostsManager = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
+            <Select value={sortBy} onValueChange={(value) => updateParams({ sortBy: value })}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="정렬 기준" />
               </SelectTrigger>
@@ -304,7 +284,7 @@ const PostsManager = () => {
                 <SelectItem value="reactions">반응</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
+            <Select value={sortOrder} onValueChange={(value) => updateParams({ sortOrder: value })}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="정렬 순서" />
               </SelectTrigger>
@@ -322,7 +302,10 @@ const PostsManager = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <span>표시</span>
-              <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
+              <Select
+                value={limit?.toString() || "10"}
+                onValueChange={(value) => updateParams({ limit: Number(value) })}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="10" />
                 </SelectTrigger>
@@ -335,10 +318,13 @@ const PostsManager = () => {
               <span>항목</span>
             </div>
             <div className="flex gap-2">
-              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
+              <Button
+                disabled={skip === 0}
+                onClick={() => updateParams({ skip: Math.max(0, (skip - limit) as number) })}
+              >
                 이전
               </Button>
-              <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
+              <Button disabled={skip + limit >= total} onClick={() => updateParams({ skip: skip + limit })}>
                 다음
               </Button>
             </div>
@@ -436,10 +422,10 @@ const PostsManager = () => {
       <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
+            <DialogTitle>{highlightText(selectedPost?.title || "", searchQuery as string)}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
+            <p>{highlightText(selectedPost?.body, searchQuery as string)}</p>
             {renderComments(selectedPost?.id as number)}
           </div>
         </DialogContent>

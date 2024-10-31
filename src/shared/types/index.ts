@@ -67,4 +67,13 @@ interface NewPost {
   userId: number
 }
 
-export type { PostsData, Post, Reactions, User, Comment, NewComment, Tag, NewPost }
+interface URLParams {
+  skip?: number
+  limit?: number
+  search?: string
+  sortBy?: string
+  sortOrder?: string
+  tag?: string
+}
+
+export type { PostsData, Post, Reactions, User, Comment, NewComment, Tag, NewPost, URLParams }
