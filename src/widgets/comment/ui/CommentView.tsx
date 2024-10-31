@@ -10,8 +10,8 @@ interface Props {
 export const CommentView = ({ postId }: Props) => {
   return (
     <>
-      <CommentAddModal postId={postId} />
-      <CommentEditModal postId={postId} />
+      <CommentAddModal />
+      <CommentEditModal />
 
       <div className="mt-2">
         <div className="flex items-center justify-between mb-2">

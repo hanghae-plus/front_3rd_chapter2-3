@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const CommentAddButton = ({ postId }: Props) => {
-  const { setNewComment, setShowAddCommentDialog } = useCommentsStore(postId)
+  const { setNewComment, setShowAddCommentDialog } = useCommentsStore()
 
   return (
     <Button

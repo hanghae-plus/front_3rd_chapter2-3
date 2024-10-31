@@ -1,13 +1,23 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
+import { useMutationCommentUpdate } from "../../comment/api/useMutationCommentUpdate"
 import { useCommentsStore } from "../../comment/model/commentStore"
 
-interface Props {
-  postId: number
-}
+export const CommentEditModal = () => {
+  const { showEditCommentDialog, setShowEditCommentDialog, selectedComment, setSelectedComment } = useCommentsStore()
 
-export const CommentEditModal = ({ postId }: Props) => {
-  const { showEditCommentDialog, setShowEditCommentDialog, selectedComment, setSelectedComment, updateComment } =
-    useCommentsStore(postId)
+  const { mutate: updateCommentMutate } = useMutationCommentUpdate()
+
+  const handleUpdateComment = () => {
+    if (!selectedComment) return
+    if (selectedComment.body === "") {
+      alert("댓글을 입력해주세요.")
+      return
+    }
+
+    updateCommentMutate(selectedComment)
+
+    setShowEditCommentDialog(false)
+  }
 
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
@@ -23,7 +33,7 @@ export const CommentEditModal = ({ postId }: Props) => {
               setSelectedComment({ ...selectedComment!, body: e.target.value })
             }}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

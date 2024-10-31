@@ -1,9 +1,12 @@
 import { Edit2, ThumbsUp, Trash2 } from "lucide-react"
 import { Button } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/highlightText"
-import { Comment } from "../../../entities/comment/model/types"
+import { Comment, CommentDTO } from "../../../entities/comment/model/types"
 import { useCommentsStore } from "../../comment/model/commentStore"
 import { usePostParamsStore } from "../../post/model/postParamsStore"
+import { useQueryClient } from "@tanstack/react-query"
+import { useMutationCommentLike } from "../../comment/api/useMutationCommentLike"
+import { useMutationCommentDelete } from "../../comment/api/useMutationCommentDelete"
 
 interface Props {
   postId: number
@@ -11,14 +14,22 @@ interface Props {
 }
 
 export const CommentItem = ({ postId, comment }: Props) => {
-  const {
-    likeComment,
-    deleteComment,
+  const queryClient = useQueryClient()
 
-    setSelectedComment,
-    setShowEditCommentDialog,
-  } = useCommentsStore(postId)
+  const { setSelectedComment, setShowEditCommentDialog } = useCommentsStore()
   const { searchQuery } = usePostParamsStore()
+
+  const { mutate: deleteCommentMutate } = useMutationCommentDelete()
+  const { mutate: likeCommentMutate } = useMutationCommentLike()
+
+  const handleLikeComment = (commentId: number) => {
+    const data = queryClient.getQueryData<CommentDTO>(["comments", postId])
+    const targetComment = data?.comments.find((comment) => comment.id === commentId)
+    if (!targetComment) return
+
+    const newLike = targetComment.likes + 1
+    likeCommentMutate({ commentId, newLike })
+  }
 
   return (
     <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
@@ -27,7 +38,7 @@ export const CommentItem = ({ postId, comment }: Props) => {
         <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
       </div>
       <div className="flex items-center space-x-1">
-        <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id)}>
+        <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment.id)}>
           <ThumbsUp className="w-3 h-3" />
           <span className="ml-1 text-xs">{comment.likes}</span>
         </Button>
@@ -41,7 +52,7 @@ export const CommentItem = ({ postId, comment }: Props) => {
         >
           <Edit2 className="w-3 h-3" />
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id)}>
+        <Button variant="ghost" size="sm" onClick={() => deleteCommentMutate(comment.id)}>
           <Trash2 className="w-3 h-3" />
         </Button>
       </div>
