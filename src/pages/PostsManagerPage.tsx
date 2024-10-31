@@ -19,6 +19,7 @@ import useFetchPosts from "../features/post/api/useFetchPosts"
 import useManageComments from "../features/comment/api/useFetchComments"
 import useSelectedUserModal from "../features/user/api/useSelectedUserModal"
 import UserModal from "../features/user/ui/UserModal"
+import useSelectedPostModal from "../features/post/api/useSelectedPostModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -38,12 +39,12 @@ const PostsManager = () => {
   } = useFetchPosts()
   const { comments, fetchComments, createComment, updateComment, deleteComment, likeComment } = useManageComments()
   const { selectedUser, handleSetSelectedUser, showUserModal, handleCloseUserModal } = useSelectedUserModal()
+  const { selectedPost, handleSetSelectedPost, showPostModal, handleClosePostModal } = useSelectedPostModal()
 
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
@@ -55,7 +56,6 @@ const PostsManager = () => {
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -172,9 +172,8 @@ const PostsManager = () => {
 
   // 게시물 상세 보기
   const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
+    handleSetSelectedPost(post)
     handleFetchComments(post.id)
-    setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
@@ -275,7 +274,7 @@ const PostsManager = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    setSelectedPost(post)
+                    handleSetSelectedPost(post)
                     setShowEditDialog(true)
                   }}
                 >
@@ -481,13 +480,13 @@ const PostsManager = () => {
             <Input
               placeholder="제목"
               value={selectedPost?.title || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
+              onChange={(e) => selectedPost && handleSetSelectedPost({ ...selectedPost, title: e.target.value })}
             />
             <Textarea
               rows={15}
               placeholder="내용"
               value={selectedPost?.body || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
+              onChange={(e) => selectedPost && handleSetSelectedPost({ ...selectedPost, body: e.target.value })}
             />
             <Button onClick={updatePost}>게시물 업데이트</Button>
           </div>
@@ -529,7 +528,7 @@ const PostsManager = () => {
       </Dialog.Dialog>
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog.Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
+      <Dialog.Dialog open={showPostModal} onOpenChange={handleClosePostModal}>
         <Dialog.DialogContent className="max-w-3xl">
           <Dialog.DialogHeader>
             <Dialog.DialogTitle>
