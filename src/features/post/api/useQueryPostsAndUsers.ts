@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import { usePostsStore } from "../model/usePostsStore.ts"
+import { store } from "../../../entities/post/model/store.ts"
 import { getPostsAndUsers, getPostsByTagAndUsers } from "../../../entities/post/api"
 import { getPostsWithAuthors } from "../../../entities/post/model/getPostsWithAuthors.ts"
 import { useEffect } from "react"
 
 export const useQueryPostsAndUsers = (limit: number, skip: number, tag: string) => {
-  const { setPosts, setTotal, setIsLoading } = usePostsStore.getState()
+  const { setPosts, setTotal, setIsLoading } = store.getState()
 
   const { isLoading, isFetching } = useQuery(
     ["get-posts-and-users", limit, skip, tag],

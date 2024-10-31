@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { searchPost } from "../../../entities/post/api"
-import { usePostsStore } from "../../post/model/usePostsStore.ts"
+import { store } from "../../../entities/post/model/store.ts"
 import { useEffect } from "react"
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const useQuerySearchPost = ({ query }: Props) => {
-  const { setPosts, setTotal, setIsLoading } = usePostsStore.getState()
+  const { setPosts, setTotal, setIsLoading } = store.getState()
 
   const { isLoading } = useQuery(["post-search", query], () => searchPost(query), {
     onSuccess: (data) => {

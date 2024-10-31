@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query"
 import { deletePost } from "../../../entities/post/api"
-import { usePostsStore } from "../../post/model/usePostsStore.ts"
+import { store } from "../../../entities/post/model/store.ts"
 
 export const useMutateDeletePost = () => {
-  const { removePosts } = usePostsStore((state) => state)
+  const { removePosts } = store((state) => state)
 
   return useMutation({
     mutationFn: (postId: number) => deletePost(postId),

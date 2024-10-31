@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { Post } from "../../../entities/post/model/types.ts"
+import { Post } from "./types.ts"
 
 interface PostStoreState {
   posts: Post[]
@@ -18,7 +18,7 @@ interface PostStoreAction {
 
 type PostsStore = PostStoreAction & PostStoreState
 
-export const usePostsStore = create<PostsStore>((set) => ({
+export const store = create<PostsStore>((set) => ({
   posts: [],
   total: 0,
   isLoading: false,

@@ -1,9 +1,9 @@
 import { Table, TableHead, TableHeader, TableRow } from "../../../shared/ui/table/ui"
-import { usePostsStore } from "../../../features/post/model/usePostsStore.ts"
+import { store } from "../../../entities/post/model/store.ts"
 import PostItem from "../../../features/post-item/ui/PostItem.tsx"
 
 const PostTable = () => {
-  const { posts } = usePostsStore((state) => state)
+  const { posts } = store((state) => state)
 
   return (
     <Table>

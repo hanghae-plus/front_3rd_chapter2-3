@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card/ui"
 import PostTable from "../widgets/post/ui/PostTable.tsx"
-import { usePostsStore } from "../features/post/model/usePostsStore.ts"
+import { store } from "../entities/post/model/store.ts"
 import { useQueryPostsAndUsers } from "../features/post/api/useQueryPostsAndUsers.ts"
 import usePostQueryParams from "../features/post/model/usePostURLParams.ts"
 import PostAddButton from "../features/post-add/ui/PostAddButton.tsx"
@@ -9,7 +9,7 @@ import PostPagination from "../features/post-pagination/ui/PostPagination.tsx"
 
 const PostsManager = () => {
   const { skip, limit, searchQuery, sortBy, sortOrder, selectedTag, setParam } = usePostQueryParams()
-  const { isLoading } = usePostsStore((state) => state)
+  const { isLoading } = store((state) => state)
   useQueryPostsAndUsers(limit, skip, selectedTag)
 
   const postQueryParams = {
