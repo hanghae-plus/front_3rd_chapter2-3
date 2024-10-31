@@ -1,11 +1,18 @@
-import { NewPostDto } from '../api/types';
+import { NewPostDto, UpdatePostDto } from '../api/types';
 import { Post } from '../model/types';
 
-export const transformNewPost = (newPost: NewPostDto): Post => {
+export const transformNewPost = (post: NewPostDto): Post => {
   return {
-    ...newPost,
+    ...post,
     tags: [],
     reactions: { likes: 0, dislikes: 0 },
+    views: 0,
+  };
+};
+
+export const transformUpdatedPost = (post: UpdatePostDto): Post => {
+  return {
+    ...post,
     views: 0,
   };
 };

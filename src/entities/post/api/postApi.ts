@@ -1,5 +1,5 @@
 import { Post } from '../model/types';
-import { PostsDto, PostDto, NewPostDto } from './types';
+import { PostsDto, PostDto, NewPostDto, UpdatePostParams, UpdatePostDto } from './types';
 
 interface GetPostsParams {
   limit: number;
@@ -27,4 +27,14 @@ export const addPost = async (params: Pick<PostDto, 'title' | 'body' | 'userId'>
 
   const newPost = await response.json();
   return newPost as NewPostDto;
+};
+
+export const updatePost = async (params: UpdatePostParams): Promise<UpdatePostDto> => {
+  const response = await fetch(`/api/posts/${params.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  const data = await response.json();
+  return data as UpdatePostDto;
 };

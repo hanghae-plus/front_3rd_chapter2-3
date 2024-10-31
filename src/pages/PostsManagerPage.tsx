@@ -27,6 +27,8 @@ import {
 } from '../shared/ui';
 import { PostDeleteButton } from '../features/post/postDelete';
 import { PostAddDialog } from '../features/post/postAdd/ui/PostAddDialog';
+import { PostEditDialog } from '../features/post/postEdit/ui/PostEditDialog';
+import { Post } from '../entities/post/model/types';
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -34,12 +36,12 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search);
 
   // 상태 관리
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [total, setTotal] = useState(0);
   const [skip, setSkip] = useState(parseInt(queryParams.get('skip') || '0'));
   const [limit, setLimit] = useState(parseInt(queryParams.get('limit') || '10'));
   const [searchQuery, setSearchQuery] = useState(queryParams.get('search') || '');
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [sortBy, setSortBy] = useState(queryParams.get('sortBy') || '');
   const [sortOrder, setSortOrder] = useState(queryParams.get('sortOrder') || 'asc');
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -153,22 +155,6 @@ const PostsManager = () => {
       console.error('태그별 게시물 가져오기 오류:', error);
     }
     setLoading(false);
-  };
-
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedPost),
-      });
-      const data = await response.json();
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)));
-      setShowEditDialog(false);
-    } catch (error) {
-      console.error('게시물 업데이트 오류:', error);
-    }
   };
 
   // 댓글 가져오기
@@ -558,34 +544,24 @@ const PostsManager = () => {
       <PostAddDialog
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
-        onPostAdd={(post) => {
-          setPosts([post, ...posts]);
+        onPostAdd={(newPost) => {
+          setPosts([newPost, ...posts]);
           setShowAddDialog(false);
         }}
       />
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ''}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ''}
-              onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
-            />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {selectedPost && (
+        <PostEditDialog
+          open={showEditDialog}
+          onOpenChange={setShowEditDialog}
+          post={selectedPost}
+          onPostEdit={(updatedPost) => {
+            setPosts(posts.map((post) => (post.id === updatedPost.id ? updatedPost : post)));
+            setShowEditDialog(false);
+          }}
+        />
+      )}
 
       {/* 댓글 추가 대화상자 */}
       <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>

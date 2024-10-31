@@ -1,3 +1,5 @@
+import { Post } from '../model/types';
+
 export interface PostDto {
   id: number;
   title: string;
@@ -16,3 +18,6 @@ export interface PostsDto {
 }
 
 export type NewPostDto = Pick<PostDto, 'title' | 'body' | 'userId' | 'id'>;
+
+export type UpdatePostParams = Post;
+export type UpdatePostDto = Omit<Post, 'views' | 'author'>;
