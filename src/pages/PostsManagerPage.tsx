@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react"
 import { commentApi } from "../entities/comment/api/commentApi"
 import { Comment, NewComment } from "../entities/comment/model/types"
-import { SortOrder, usePostQueryParams } from "../entities/post"
+import { SortOrder, usePostQueryParams, usePostsQuery } from "../entities/post"
 import { postApi } from "../entities/post/api/postApi"
 import { Author, NewPost, Post, Tag } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
@@ -62,8 +62,6 @@ const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
 
-  const [loading, setLoading] = useState(false)
-
   const [tags, setTags] = useState<Tag[]>([])
 
   const [comments, setComments] = useState<Record<string, Comment[]>>({})
@@ -81,42 +79,28 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserDTO | null>(null)
 
-  // 게시물 가져오기
-  const fetchPosts = async () => {
-    setLoading(true)
-    try {
-      const { posts, total } = searchQuery
-        ? await postApi.searchPosts(searchQuery)
-        : await postApi.fetchPosts({ limit, skip })
+  // TODO: 오름차순, 내림차순
+  const { data, isLoading } = usePostsQuery({
+    limit,
+    skip,
+    searchQuery,
+    selectedTag,
+  })
 
+  // TODO: 점진적 마이그레이션을 위한 임시 useEffect
+  useEffect(() => {
+    if (data) {
+      const { posts, total } = data
       setPosts(posts)
       setTotal(total)
-    } finally {
-      setLoading(false)
     }
-  }
+  }, [data])
 
   // 태그 가져오기
   const fetchTags = async () => {
     const data = await postApi.fetchTags()
     if (data) {
       setTags(data)
-    }
-  }
-
-  // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const { posts, total } = await postApi.fetchPostsByTag(tag)
-      setPosts(posts)
-      setTotal(total)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -236,14 +220,6 @@ const PostsManager = () => {
   useEffect(() => {
     fetchTags()
   }, [])
-
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-  }, [skip, limit, sortBy, sortOrder, selectedTag, searchQuery])
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
@@ -438,7 +414,7 @@ const PostsManager = () => {
               value={selectedTag}
               onValueChange={(value) => {
                 updateQueryParam({ tag: value })
-                fetchPostsByTag(value)
+                // fetchPostsByTag(value)
               }}
             >
               <SelectTrigger className="w-[180px]">
@@ -484,7 +460,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? (
+          {isLoading ? (
             <div className="flex justify-center p-4">로딩 중...</div>
           ) : (
             renderPostTable()
