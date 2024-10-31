@@ -1,59 +1,55 @@
-import { useCommonMutation } from "../../../shared/lib/query/useCommonMutation"
-import { commentApi } from "../api/commentApi"
-import { CommentRequests } from "../model/commentTypes"
+import { useCommonMutation } from '../../../shared/lib/query/useCommonMutation';
+import { commentApi } from '../api/commentApi';
+import {
+  Comment,
+  CommentRequests,
+} from '../model/commentTypes';
+import { useCommentStore } from '../model/useCommentStore';
 
 export const useAddCommentMutation = () => {
   return useCommonMutation<Comment, CommentRequests["Create"]>({
     mutationFn: commentApi.addComment,
-    onSuccessCallback: (data) => {
-      // 새 댓글이 추가되면 해당 게시물의 댓글 목록을 무효화
-    },
   })
 }
 
 export const useUpdateCommentMutation = () => {
   return useCommonMutation<Comment, { id: number; comment: CommentRequests["Update"] }>({
     mutationFn: ({ id, comment }) => commentApi.updateComment(id, comment),
-    onSuccessCallback: (data) => {
-      // 댓글이 수정되면 해당 게시물의 댓글 목록을 무효화
-    },
   })
 }
 
 export const useDeleteCommentMutation = () => {
-  return useCommonMutation<void, number, { postId: number }>({
-    mutationFn: commentApi.deleteComment,
-    onSuccessCallback: (_, commentId, context) => {
-      // 댓글이 삭제되면 해당 게시물의 댓글 목록을 무효화
-      // if (context?.postId) {
-      // }
+  const { comments, setComments } = useCommentStore()
+
+  return useCommonMutation<void, { id: number; postId: number }>({
+    mutationFn: ({ id }) => commentApi.deleteComment(id),
+    onSuccessCallback: (_, { id }: { id: number; postId: number }) => {
+      const updatedComments = comments.filter((comment) => comment.id !== id)
+      setComments(updatedComments)
     },
   })
 }
 
 export const useLikeCommentMutation = () => {
-  return useCommonMutation<Comment, { id: number; likes: number }>({
-    mutationFn: ({ id, likes }) => commentApi.likeComment(id, likes),
-    onSuccessCallback: (data) => {
-      // 좋아요가 업데이트되면 해당 게시물의 댓글 목록을 무효화
+  const { comments, setComments } = useCommentStore()
+
+  return useCommonMutation<Comment, { id: number; postId: number }>({
+    mutationFn: ({ id }) => {
+      const currentLikes = comments.find((c) => c.id === id)?.likes ?? 0
+      return commentApi.likeComment(id, currentLikes)
+    },
+    onSuccessCallback: (updatedComment, { id }) => {
+      const updatedComments = comments.map((comment) =>
+        comment.id === id
+          ? {
+              ...comment,
+              ...updatedComment,
+              likes: (comment.likes ?? 0) + 1,
+            }
+          : comment,
+      )
+
+      setComments(updatedComments)
     },
   })
 }
-
-/**
- * 
- * export const useCommentActions = (postId: number) => {
-  const deleteComment = useDeleteCommentMutation();
-
-  const handleDelete = async (commentId: number) => {
-    await deleteComment.mutateAsync(commentId, {
-      context: { postId }
-    });
-  };
-
-  return {
-    deleteComment: handleDelete,
-    isDeleting: deleteComment.isLoading
-  };
-};
- */

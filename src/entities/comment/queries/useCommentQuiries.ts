@@ -1,10 +1,11 @@
-import { commentApi } from "../api/commentApi"
-import { useCommonQuery } from "../../../shared/lib/query/useCommonQuery"
-import { Comment } from "../model/commentTypes"
+import { useCommonDetailQuery } from '../../../shared';
+import { commentApi } from '../api/commentApi';
+import { CommentResponse } from '../model/commentTypes';
 
 export const useCommentsByPost = (postId: number) => {
-  return useCommonQuery<Comment[]>({
+  return useCommonDetailQuery<CommentResponse>({
     queryKey: ["comments", postId],
     queryFn: () => commentApi.getCommentsByPost(postId),
+    id: postId,
   })
 }

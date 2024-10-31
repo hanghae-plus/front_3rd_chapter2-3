@@ -12,6 +12,12 @@ export interface Comment {
   user: CommentUser
 }
 
+export interface NewComment {
+  body: string
+  postId: number | null
+  userId: number
+}
+
 export interface CommentRequests {
   Create: {
     body: string
@@ -26,10 +32,23 @@ export interface CommentRequests {
   }
 }
 
+export interface CommentResponse {
+  comments: Comment[]
+  limit: number
+  skip: number
+  total: number
+}
+
 export interface CommentState {
-  byPostId: Record<number, Comment[]> // 게시물 ID별 댓글 목록
-  totalByPostId: Record<number, number> // 게시물 ID별 전체 댓글 수
-  selected: Comment | null // 선택된 댓글
-  loading: boolean
-  error: string | null
+  comments: Comment[] // postId를 key로 사용
+  selectedComment: Comment | null
+  newComment: {
+    body: string
+    postId: number | null
+    userId: number
+  }
+  setComments: (comments: Comment[]) => void
+  setSelectedComment: (comment: Comment | null) => void
+  setNewComment: (comment: Partial<NewComment>) => void
+  resetNewComment: () => void
 }
