@@ -29,11 +29,6 @@ TableHeader.displayName = 'TableHeader';
 interface TableBodyProps extends ComponentPropsWithoutRef<'tbody'> {
   className?: string;
 }
-
-interface TableRowProps extends ComponentPropsWithoutRef<'tr'> {
-  className?: string;
-}
-
 const TableBody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className = '', ...props }, ref) => (
     <tbody
@@ -45,7 +40,7 @@ const TableBody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
 );
 TableBody.displayName = 'TableBody';
 
-interface TableHeadProps extends ComponentPropsWithoutRef<'th'> {
+interface TableRowProps extends ComponentPropsWithoutRef<'tr'> {
   className?: string;
 }
 const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
@@ -59,7 +54,7 @@ const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
 );
 TableRow.displayName = 'TableRow';
 
-interface TableCellProps extends ComponentPropsWithoutRef<'td'> {
+interface TableHeadProps extends ComponentPropsWithoutRef<'th'> {
   className?: string;
 }
 const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
@@ -73,6 +68,9 @@ const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
 );
 TableHead.displayName = 'TableHead';
 
+interface TableCellProps extends ComponentPropsWithoutRef<'td'> {
+  className?: string;
+}
 const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(
   ({ className = '', ...props }, ref) => (
     <td
