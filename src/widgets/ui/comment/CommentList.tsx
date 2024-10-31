@@ -19,14 +19,14 @@ export const CommentList = ({ postId, searchQuery, onAddClick, onEditClick }: Co
     <div className="mt-2">
       <CommentHeader onAddClick={onAddClick} />
       <div className="space-y-1">
-        {postComments.map((comment) => (
+        {postComments.map((comment: Comment) => (
           <CommentItem
             key={comment.id}
             comment={comment}
             searchQuery={searchQuery}
             onLike={() => handleLikeComment(comment.id, postId)}
             onEdit={() => onEditClick(comment)}
-            onDelete={() => handleDeleteComment(comment.id, postId)}
+            onDelete={() => handleDeleteComment(comment.id)}
           />
         ))}
       </div>
