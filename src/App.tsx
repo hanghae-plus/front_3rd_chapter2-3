@@ -1,4 +1,5 @@
 import { BrowserRouter as Router } from "react-router-dom"
+import { withQuery } from "./app/providers"
 import PostsManagerPage from "./pages/postsManager/ui/PostsManagerPage.tsx"
 import Footer from "./widgets/common/ui/Footer.tsx"
 import Header from "./widgets/common/ui/Header.tsx"
@@ -17,4 +18,4 @@ const App = () => {
   )
 }
 
-export default App
+export default withQuery(App)
