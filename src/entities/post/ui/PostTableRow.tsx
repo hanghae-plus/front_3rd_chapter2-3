@@ -5,15 +5,24 @@ import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { usePostMutations, usePosts } from "../../../features/post/model/postStore"
 import { useDialog } from "../../../features/post/model/dialogStore"
 import { useRouterQueries } from "../../../features/post/model/routerStore"
+import { usersApi } from "../../../features/user/api"
+import { useUsers } from "../../../features/user/model/userStore"
 
 export const PostTableRow: React.FC<{
   post: Post
-  openUserModal: (userId: number) => void
-}> = ({ post, openUserModal }) => {
+}> = ({ post }) => {
   const { searchQuery, selectedTag, setSelectedTag } = useRouterQueries()
-  const { setShowPostUpdateDialog, setShowPostDetailDialog } = useDialog()
+  const { setShowPostUpdateDialog, setShowPostDetailDialog, setShowUserDetailDialog } = useDialog()
   const { deletePost } = usePostMutations()
   const { setSelectedPost } = usePosts()
+  const { setSelectedUser } = useUsers()
+
+  // 사용자 상세 보기
+  const handleUserDetailDialogOpen = async () => {
+    const userData = await usersApi.fetch(post.author.id)
+    setSelectedUser(userData)
+    setShowUserDetailDialog(true)
+  }
 
   // 게시물 상세 보기
   const handlePostDetailDialogOpen = () => {
@@ -61,7 +70,7 @@ export const PostTableRow: React.FC<{
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author.id)}>
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={handleUserDetailDialogOpen}>
           <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
           <span>{post.author?.username}</span>
         </div>

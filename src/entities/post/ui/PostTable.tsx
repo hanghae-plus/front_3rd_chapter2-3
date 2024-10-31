@@ -1,15 +1,10 @@
-import { Post } from "../model/types"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui"
 import { PostTableRow } from "./PostTableRow"
 import { useRouterQueries } from "../../../features/post/model/routerStore"
 import { usePostsQuery } from "../../../features/post/model/postStore"
 import { PostIsLoading } from "./PostIsLoading"
 
-export const PostTable: React.FC<{
-  openUserModal: (userId: number) => void
-}> = ({
-  openUserModal,
-}) => {
+export const PostTable = () => {
   const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = useRouterQueries()
   const { data: postsData, isLoading } = usePostsQuery({
     skip,
@@ -34,15 +29,7 @@ export const PostTable: React.FC<{
               <TableHead className="w-[150px]">작업</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {postsData?.posts.map((post) => (
-              <PostTableRow
-                key={post.id}
-                post={post}
-                openUserModal={openUserModal}
-              />
-            ))}
-          </TableBody>
+          <TableBody>{postsData?.posts.map((post) => <PostTableRow key={post.id} post={post} />)}</TableBody>
         </Table>
       )}
     </>

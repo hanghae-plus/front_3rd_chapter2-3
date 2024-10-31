@@ -1,8 +1,6 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
-import { fetchUserApi } from "../entities/user/api"
-import { User } from "../entities/user/model/types"
 import { PostSearch } from "../features/post/ui/PostSearch"
 import { ContentSearch } from "../widgets/ui/ContentSearch"
 import { ContentControls } from "../widgets/ui/ContentControls"
@@ -21,18 +19,10 @@ import { useDialog } from "../features/post/model/dialogStore"
 import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
-  const { setShowPostAddDialog, setShowUserDetailDialog } = useDialog()
+  const { setShowPostAddDialog } = useDialog()
 
   // 상태 관리
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
-
-  // 사용자 모달 열기
-  const openUserModal = async (userId: number) => {
-    const userData = await fetchUserApi(userId)
-    setSelectedUser(userData)
-    setShowUserDetailDialog(true)
-  }
 
   // 게시물 추가 모달 열기
   const handlePostAddDialogOpen = () => {
@@ -63,7 +53,7 @@ const PostsManager = () => {
           </ContentControls>
 
           {/* 게시물 테이블 */}
-          <PostTable openUserModal={openUserModal} />
+          <PostTable />
 
           {/* 페이지네이션 */}
           <PostPagination />
@@ -86,7 +76,7 @@ const PostsManager = () => {
       <PostDetailDialog setSelectedComment={setSelectedComment} />
 
       {/* 사용자 모달 */}
-      {selectedUser && <UserDetailDialog selectedUser={selectedUser} />}
+      <UserDetailDialog />
     </Card>
   )
 }
