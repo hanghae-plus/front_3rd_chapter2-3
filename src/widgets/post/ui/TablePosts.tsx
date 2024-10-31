@@ -8,6 +8,7 @@ import { useMemo } from "react";
 const TablePosts = () => {
   const { queries } = useQueryParams();
   const { data, isLoading, isError } = useQueryPosts(queries);
+
   const hasPosts = useMemo(() => data?.posts?.length && data.posts.length > 0, [data?.posts]);
 
   const tableBody = hasPosts ? (
@@ -32,7 +33,7 @@ const TablePosts = () => {
           <Table.Body>{tableBody}</Table.Body>
         </Table.Container>
       )}
-      <PostTablePagination total={data?.total || 0} size={queries.limit} skip={queries.skip} />
+      <PostTablePagination total={data?.total || 0} />
     </>
   );
 };

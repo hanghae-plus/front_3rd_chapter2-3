@@ -3,12 +3,10 @@ import Pagination from "@/shared/ui/Pagination";
 
 type PostPaginationProps = {
   total: number;
-  size: number;
-  skip: number;
 };
 
-export const PostTablePagination = ({ total, size, skip }: PostPaginationProps) => {
-  const { handleUpdateQuery } = useQueryParams();
+export const PostTablePagination = ({ total }: PostPaginationProps) => {
+  const { handleUpdateQuery, queries } = useQueryParams();
 
   const handlePageChange = (page: number) => {
     handleUpdateQuery("skip", page.toString());
@@ -19,6 +17,12 @@ export const PostTablePagination = ({ total, size, skip }: PostPaginationProps) 
   };
 
   return (
-    <Pagination size={size} onSizeChange={handleSizeChange} page={skip} onPageChange={handlePageChange} total={total} />
+    <Pagination
+      total={total}
+      size={queries.limit}
+      page={queries.skip}
+      onSizeChange={handleSizeChange}
+      onPageChange={handlePageChange}
+    />
   );
 };
