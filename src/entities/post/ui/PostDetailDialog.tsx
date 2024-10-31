@@ -1,5 +1,7 @@
 import { CustomDialog } from "../../../widgets/ui/CustomDialog"
 import { HighlightedText } from "../../../widgets/ui/HighlightedText"
+import { NewComment, Comment } from "../../comment/model/types"
+import { Comments } from "../../comment/ui/Comments"
 import { Post } from "../model/types"
 
 export const PostDetailDialog: React.FC<{
@@ -7,8 +9,28 @@ export const PostDetailDialog: React.FC<{
   setShowPostDetailDialog: (value: boolean) => void
   selectedPost: Post
   searchQuery: string
-  renderComments: (postId: number) => React.ReactNode
-}> = ({ showPostDetailDialog, setShowPostDetailDialog, selectedPost, searchQuery, renderComments }) => {
+  comments: Record<number, Comment[]>
+  newComment: NewComment
+  setNewComment: (prev: NewComment) => void
+  setShowAddCommentDialog: (value: boolean) => void
+  setSelectedComment: (comment: Comment) => void
+  setShowEditCommentDialog: (value: boolean) => void
+  likeComment: (commentId: number, postId: number) => void
+  deleteComment: (commentId: number, postId: number) => void
+}> = ({
+  showPostDetailDialog,
+  setShowPostDetailDialog,
+  selectedPost,
+  searchQuery,
+  comments,
+  newComment,
+  setNewComment,
+  setShowAddCommentDialog,
+  setSelectedComment,
+  setShowEditCommentDialog,
+  likeComment,
+  deleteComment,
+}) => {
   return (
     <CustomDialog
       open={showPostDetailDialog}
@@ -21,7 +43,18 @@ export const PostDetailDialog: React.FC<{
         <p>
           <HighlightedText text={selectedPost.body} highlight={searchQuery} />
         </p>
-        {renderComments(selectedPost.id)}
+        <Comments
+          comments={comments}
+          postId={selectedPost.id}
+          newComment={newComment}
+          searchQuery={searchQuery}
+          setNewComment={setNewComment}
+          setShowAddCommentDialog={setShowAddCommentDialog}
+          setSelectedComment={setSelectedComment}
+          setShowEditCommentDialog={setShowEditCommentDialog}
+          likeComment={likeComment}
+          deleteComment={deleteComment}
+        />
       </>
     </CustomDialog>
   )
