@@ -15,9 +15,14 @@ export interface User {
   image: string
   firstName?: string
   lastName?: string
+  fullName?: string
   age?: number
   email?: string
   phone?: string
   address?: Address
   company?: Company
+}
+
+export interface GetUserParams {
+  userId: number
 }
