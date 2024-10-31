@@ -1,9 +1,10 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 import { useCommentDialog } from "../model/useCommentDialog.ts"
 import { useComments } from "../model/useComment.ts"
+import { useUpdateCommentMutation } from "../api/mutations.ts"
 
 export default function CommentEditDialog() {
-  const { updateComment } = useComments()
+  const { mutate: updateComment } = useUpdateCommentMutation()
   const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } = useCommentDialog()
 
   const submitUpdateCommentForm = async () => {
