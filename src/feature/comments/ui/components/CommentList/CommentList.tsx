@@ -4,12 +4,11 @@ import {
   useDeleteCommentMutation,
   useLikeCommentMutation,
 } from "../../../lib/hooks/useCommentsQuery"
-import { Button } from "../../../../../shared"
-import { Plus } from "lucide-react"
-import { CommentItem } from "../Comments/CommentItem"
-import { Comment } from "../../../model/types"
 import { AddCommentDialog } from "../CommentDialogs/AddCommentDialog"
 import { EditCommentDialog } from "../CommentDialogs/EditCommentDialog"
+import { CommentHeader } from "../../../../../entities/comment/ui/components"
+import { CommentsList } from "../../../../../entities/comment/ui/components/CommentList/CommentsList"
+import { Comment } from "../../../model/types"
 
 interface CommentListProps {
   postId: number
@@ -30,30 +29,17 @@ export const CommentList = ({ postId, searchQuery }: CommentListProps) => {
 
   return (
     <div className="mt-2">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold">댓글</h3>
-        <Button size="sm" onClick={() => setShowAddDialog(true)}>
-          <Plus className="w-3 h-3 mr-1" />
-          댓글 추가
-        </Button>
-      </div>
-      <div className="space-y-1">
-        {commentsData?.comments.map((comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            searchQuery={searchQuery}
-            onLike={() => {
-              likeComment(comment.id)
-            }}
-            onEdit={() => {
-              setSelectedComment(comment)
-              setShowEditDialog(true)
-            }}
-            onDelete={() => deleteComment(comment.id)}
-          />
-        ))}
-      </div>
+      <CommentHeader onAddClick={() => setShowAddDialog(true)} />
+      <CommentsList
+        comments={commentsData?.comments || []}
+        searchQuery={searchQuery}
+        onLike={likeComment}
+        onEdit={(comment) => {
+          setSelectedComment(comment)
+          setShowEditDialog(true)
+        }}
+        onDelete={deleteComment}
+      />
 
       <AddCommentDialog
         postId={postId}

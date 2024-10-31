@@ -29,7 +29,9 @@ export const PostReactions = ({
       <div
         className={cn(
           "flex items-center gap-1",
-          interactive && "cursor-pointer hover:text-blue-500 transition-colors",
+          interactive
+            ? "cursor-pointer hover:text-blue-500 transition-colors"
+            : "",
         )}
         onClick={interactive ? onLike : undefined}
       >
@@ -39,7 +41,9 @@ export const PostReactions = ({
       <div
         className={cn(
           "flex items-center gap-1",
-          interactive && "cursor-pointer hover:text-red-500 transition-colors",
+          interactive
+            ? "cursor-pointer hover:text-red-500 transition-colors"
+            : "",
         )}
         onClick={interactive ? onDislike : undefined}
       >

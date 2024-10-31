@@ -1,9 +1,8 @@
 import { Plus } from "lucide-react"
 import { Button, CardHeader, CardTitle } from "../../../../../shared"
-import { Dispatch, SetStateAction } from "react"
 
 interface PostCardProps {
-  setShowAddDialog: Dispatch<SetStateAction<boolean>>
+  setShowAddDialog: (show: boolean) => void
 }
 
 export const PostCard = ({ setShowAddDialog }: PostCardProps) => {

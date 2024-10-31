@@ -1,4 +1,5 @@
 import { BaseApi } from "../../../shared/api"
+import { API_ENDPOINTS } from "../config/comment.config"
 import { Comment } from "../model/types"
 
 class CommentsApi extends BaseApi {
@@ -7,7 +8,9 @@ class CommentsApi extends BaseApi {
   }
 
   async getComments(postId: number) {
-    return this.get<{ comments: Comment[] }>(`/comments/post/${postId}`)
+    return this.get<{ comments: Comment[] }>(
+      `${API_ENDPOINTS.COMMNETS_POST}/${postId}`,
+    )
   }
 
   async addComment(comment: {
@@ -15,19 +18,19 @@ class CommentsApi extends BaseApi {
     postId: number | null
     userId: number
   }) {
-    return this.post("/comments/add", comment)
+    return this.post(`${API_ENDPOINTS.COMMENTS_ADD}`, comment)
   }
 
   async updateComment(id: number, body: string) {
-    return this.put(`/comments/${id}`, { body })
+    return this.put(`${API_ENDPOINTS.COMMENTS}/${id}`, { body })
   }
 
   async deleteComment(id: number) {
-    return this.delete(`/comments/${id}`)
+    return this.delete(`${API_ENDPOINTS.COMMENTS}/${id}`)
   }
 
   async likeComment(id: number) {
-    return this.patch(`/comments/${id}`)
+    return this.patch(`${API_ENDPOINTS.COMMENTS}/${id}`)
   }
 }
 

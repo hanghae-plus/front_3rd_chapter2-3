@@ -29,7 +29,7 @@ export const PostReactionButton = ({
       onClick={onClick}
       className={cn(
         "flex items-center gap-1",
-        active && activeColor,
+        active ? activeColor : "",
         className,
       )}
     >

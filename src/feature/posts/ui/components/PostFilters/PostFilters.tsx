@@ -9,7 +9,7 @@ import {
 } from "../../../../../shared"
 import { TagSelect } from "../../../../../entities/post/ui/components/PostFilters/TagSelect"
 import { SortSelect } from "../../../../../entities/post/ui/components/PostFilters/SortSelect"
-import { SORT_ORDER_LABELS, SORT_ORDERS } from "../../../../../entities/post/model/constants"
+import { SORT_ORDER_LABELS, SORT_ORDERS } from "../../../../../entities/post"
 
 interface PostFiltersProps {
   searchQuery: string
@@ -55,9 +55,9 @@ export const PostFilters = ({
         </SelectTrigger>
         <SelectContent className="w-[180px] mt-1">
           {Object.entries(SORT_ORDERS).map(([key, value]) => (
-              <SelectItem key={key} value={value}>
-                {SORT_ORDER_LABELS[value]}
-              </SelectItem>
+            <SelectItem key={key} value={value}>
+              {SORT_ORDER_LABELS[value]}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>

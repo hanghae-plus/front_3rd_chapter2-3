@@ -1,5 +1,5 @@
 import { TableHead, TableHeader, TableRow } from "../../../../../shared"
-import { POST_TABLE_HEADERS } from "../../../model/constants"
+import { POST_TABLE_HEADERS } from "../../../config/post.config"
 
 export const PostTableHeader = () => {
   return (

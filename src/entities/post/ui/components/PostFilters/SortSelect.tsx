@@ -1,6 +1,11 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../../shared"
-import { SORT_LABELS, SORT_OPTIONS } from "../../../model/constants"
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../../shared"
+import { SORT_LABELS, SORT_OPTIONS } from "../../../config/post.config"
 
 interface SortSelectProps {
   value: string

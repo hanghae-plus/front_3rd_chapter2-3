@@ -1,20 +1,14 @@
-import {
-  Card,
-  CardContent,
-} from "../shared"
-import { Pagination } from "../feature/posts/ui/components/Controls/Pagination"
-import { PostTable } from "../feature/posts/ui/components/PostTable"
+import { PostCard } from "../entities/post"
 import {
   AddPostDialog,
   EditPostDialog,
   PostDetailDialog,
-} from "../feature/posts/ui/components/PostDialogs"
-import { PostFilters } from "../feature/posts/ui"
-import { UserDetailModal } from "../feature/users/ui"
-import { PostCard } from "../entities/post/ui/components/PostCard/PostCard"
-import { usePostsState } from "../feature/posts/lib/hooks/usePostsState"
-import { usePostsModalStore } from "../feature/posts/model/stores/postsStore"
-import { useUserModal } from "../feature/users/lib/hooks/useUserModal"
+  PostsContent,
+  usePostsModalStore,
+  usePostsState,
+} from "../feature/posts"
+import { UserDetailModal, useUserModal } from "../feature/users"
+import { Card } from "../shared"
 
 const PostsManager = () => {
   const {
@@ -42,14 +36,14 @@ const PostsManager = () => {
     setShowAddDialog,
     setShowEditDialog,
     setShowPostDetailDialog,
-    setSelectedPost
+    setSelectedPost,
   } = usePostsModalStore()
 
   const {
     isOpen: showUserModal,
     userId: selectedUserId,
     openModal: openUserModal,
-    onOpenChange: setShowUserModal
+    onOpenChange: setShowUserModal,
   } = useUserModal()
 
   if (postsPending) {
@@ -59,46 +53,33 @@ const PostsManager = () => {
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <PostCard setShowAddDialog={setShowAddDialog} />
-      <CardContent>
-        <div className="flex flex-col gap-4">
-          {/* 검색 및 필터 컨트롤 */}
-          <PostFilters
-            searchQuery={searchQuery}
-            selectedTag={selectedTag}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            onSearchChange={setSearchQuery}
-            onTagChange={setSelectedTag}
-            onSortByChange={setSortBy}
-            onSortOrderChange={setSortOrder}
-          />
-
-          {/* 게시물 테이블 */}
-          <PostTable
-            posts={posts}
-            searchQuery={searchQuery}
-            selectedTag={selectedTag}
-            onPostDetail={(post) => {
-              setSelectedPost(post)
-              setShowPostDetailDialog(true)
-            }}
-            onPostEdit={(post) => {
-              setSelectedPost(post)
-              setShowEditDialog(true)
-            }}
-            onUserClick={openUserModal}
-          />
-
-          {/* 페이지네이션 */}
-          <Pagination
-            total={total}
-            limit={limit}
-            skip={skip}
-            setSkip={setSkip}
-            setLimit={setLimit}
-          />
-        </div>
-      </CardContent>
+      <PostsContent
+        posts={posts || []}
+        searchQuery={searchQuery}
+        selectedTag={selectedTag}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        pagination={{
+          total: total || 0,
+          limit,
+          skip,
+          setSkip,
+          setLimit,
+        }}
+        onSearchChange={setSearchQuery}
+        onTagChange={setSelectedTag}
+        onSortByChange={setSortBy}
+        onSortOrderChange={setSortOrder}
+        onPostDetail={(post) => {
+          setSelectedPost(post)
+          setShowPostDetailDialog(true)
+        }}
+        onPostEdit={(post) => {
+          setSelectedPost(post)
+          setShowEditDialog(true)
+        }}
+        onUserClick={openUserModal}
+      />
 
       {/* 게시물 추가 대화상자 */}
       <AddPostDialog
@@ -124,7 +105,7 @@ const PostsManager = () => {
       />
 
       {/* 사용자 모달 */}
-      <UserDetailModal 
+      <UserDetailModal
         userId={selectedUserId}
         open={showUserModal}
         onOpenChange={setShowUserModal}

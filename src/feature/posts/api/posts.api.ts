@@ -1,7 +1,7 @@
 import { BaseApi } from "../../../shared/api"
 import { API_ENDPOINTS } from "../config/posts.config"
 import { Post } from "../model/types"
-import { PostsResponse, TagsResponse } from "./types"
+import { AddPostRequest, PostsResponse, TagsResponse } from "./types"
 
 class PostsApi extends BaseApi {
   constructor() {
@@ -9,7 +9,9 @@ class PostsApi extends BaseApi {
   }
 
   async getPosts(limit: number, skip: number): Promise<PostsResponse> {
-    return this.get<PostsResponse>(`${API_ENDPOINTS.POSTS}?limit=${limit}&skip=${skip}`)
+    return this.get<PostsResponse>(
+      `${API_ENDPOINTS.POSTS}?limit=${limit}&skip=${skip}`,
+    )
   }
 
   async searchPosts(query: string): Promise<PostsResponse> {
@@ -24,16 +26,8 @@ class PostsApi extends BaseApi {
     return this.get<TagsResponse[]>(`${API_ENDPOINTS.POSTS_TAGS}`)
   }
 
-  async addPost({
-    title,
-    body,
-    userId,
-  }: {
-    title: string
-    body: string
-    userId: number
-  }): Promise<{ title; body; userId }> {
-    return this.post(`${API_ENDPOINTS.POSTS_ADD}`, { title, body, userId })
+  async addPost(data: AddPostRequest) {
+    return this.post(API_ENDPOINTS.POSTS_ADD, data)
   }
 
   async updatePost(id: number, post: Partial<Post>): Promise<Post> {

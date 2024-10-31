@@ -20,3 +20,16 @@ export interface TagsResponse {
 export interface CommentsResponse {
   comments: Comment[]
 }
+
+export interface AddPostRequest {
+  title: string
+  body: string
+  userId: number
+}
+
+export interface AddPostResponse {
+  id: number
+  title: string
+  body: string
+  userId: number
+}

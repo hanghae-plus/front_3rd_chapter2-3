@@ -1,7 +1,7 @@
 import { Edit2, ThumbsUp, Trash2 } from "lucide-react"
 import { Button } from "../../../../../shared"
-import { Comment } from "../../../model/types"
 import highlightText from "../../../../../shared/lib/helper/highlight-text"
+import { Comment } from "../../../model/types"
 
 interface CommentItemProps {
   comment: Comment
