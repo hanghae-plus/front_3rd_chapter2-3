@@ -1,23 +1,19 @@
-import { Tag } from "../../../entities/tag/model/types"
 import { Selector } from "../../../shared/ui/Selector"
+import { useTagsQuery } from "../../tag/model/tagStore"
 import { useRouterQueries } from "../model/routerStore"
 
-export const PostFilter: React.FC<{
-  tags: Tag[]
-}> = ({ tags }) => {
+export const PostFilter = () => {
   const { sortBy, sortOrder, selectedTag, setSelectedTag, updateURL, setSortBy, setSortOrder } = useRouterQueries()
+  const { data: tagsData } = useTagsQuery()
   return (
     <>
       <Selector
         value={selectedTag}
-        onValueChange={(value) => {
-          setSelectedTag(value)
-          // updateURL()
-        }}
+        onValueChange={setSelectedTag}
         placeHolder={"태그 선택"}
         hasDefault={true}
         defaultItem={{ key: "all", value: "all", text: "모든 태그" }}
-        optionItems={tags.map((tag) => ({ value: tag.slug, text: tag.slug, key: tag.url }))}
+        optionItems={tagsData?.tags.map((tag) => ({ value: tag.slug, text: tag.slug, key: tag.url })) || []}
       />
       <Selector
         value={sortBy}

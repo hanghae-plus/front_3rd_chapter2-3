@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { Post } from "../entities/post/model/types"
 import { fetchUserApi } from "../entities/user/api"
-import { fetchTagsApi } from "../entities/tag/api"
-import { Tag } from "../entities/tag/model/types"
 import { User } from "../entities/user/model/types"
 import { PostSearch } from "../features/post/ui/PostSearch"
 import { ContentSearch } from "../widgets/ui/ContentSearch"
@@ -31,17 +29,8 @@ const PostsManager = () => {
 
   // 상태 관리
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [tags, setTags] = useState<Tag[]>([])
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
-
-  // 쿼리 사용
-
-  // 태그 가져오기
-  const getTags = async () => {
-    const tagsData = await fetchTagsApi()
-    setTags(tagsData)
-  }
 
   // 사용자 모달 열기
   const openUserModal = async (userId: number) => {
@@ -49,10 +38,6 @@ const PostsManager = () => {
     setSelectedUser(userData)
     setShowUserDetailDialog(true)
   }
-
-  useEffect(() => {
-    getTags()
-  }, [])
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -73,17 +58,15 @@ const PostsManager = () => {
               <PostSearch />
             </ContentSearch>
             <ContentFilter>
-              <PostFilter
-                tags={tags}
-              />
+              <PostFilter />
             </ContentFilter>
           </ContentControls>
 
           {/* 게시물 테이블 */}
-            <PostTable
-              setSelectedPost={setSelectedPost}
-              openUserModal={openUserModal}
-            />
+          <PostTable
+            setSelectedPost={setSelectedPost}
+            openUserModal={openUserModal}
+          />
 
           {/* 페이지네이션 */}
           <PostPagination />
