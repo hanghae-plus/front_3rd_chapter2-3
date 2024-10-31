@@ -1,4 +1,5 @@
 import { DialogProps } from "@radix-ui/react-dialog"
+import { useUserQuery } from "../../../entities/user"
 import { UserDTO } from "../../../entities/user/model/types"
 import {
   Dialog,
@@ -8,10 +9,12 @@ import {
 } from "../../../shared/ui"
 
 type Props = Pick<DialogProps, "open" | "onOpenChange"> & {
-  selectedUser: UserDTO
+  userId: UserDTO["id"]
 }
 
-export const UserModal = ({ onOpenChange, open, selectedUser }: Props) => {
+export const UserModal = ({ onOpenChange, open, userId }: Props) => {
+  const { data: selectedUser } = useUserQuery(userId)
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
