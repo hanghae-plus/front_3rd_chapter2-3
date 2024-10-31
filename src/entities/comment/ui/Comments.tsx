@@ -3,15 +3,18 @@ import { Button } from "../../../shared/ui"
 import { Comment } from "../model/types"
 import { CommentView } from "./CommentView"
 import { useCommentsQuery } from "../../../features/comment/model/commentStore"
+import { useDialog } from "../../../features/post/model/dialogStore"
 
 export const Comments: React.FC<{
   postId: number
-  searchQuery: string
-  setShowCommentAddDialog: (value: boolean) => void
   setSelectedComment: (comment: Comment) => void
-  setShowCommentUpdateDialog: (value: boolean) => void
-}> = ({ postId, searchQuery, setShowCommentAddDialog, setSelectedComment, setShowCommentUpdateDialog }) => {
+}> = ({ postId, setSelectedComment }) => {
+  const { setShowCommentAddDialog } = useDialog()
   const { data: commentsData, isLoading } = useCommentsQuery(postId)
+
+  const handleCommentAddDialogOpen = () => {
+    setShowCommentAddDialog(true)
+  }
 
   return (
     <>
@@ -21,9 +24,7 @@ export const Comments: React.FC<{
             <h3 className="text-sm font-semibold">댓글</h3>
             <Button
               size="sm"
-              onClick={() => {
-                setShowCommentAddDialog(true)
-              }}
+              onClick={handleCommentAddDialogOpen}
             >
               <Plus className="w-3 h-3 mr-1" />
               댓글 추가
@@ -35,9 +36,7 @@ export const Comments: React.FC<{
                 key={comment.id}
                 postId={postId}
                 comment={comment}
-                searchQuery={searchQuery}
                 setSelectedComment={setSelectedComment}
-                setShowCommentUpdateDialog={setShowCommentUpdateDialog}
               />
             ))}
           </div>

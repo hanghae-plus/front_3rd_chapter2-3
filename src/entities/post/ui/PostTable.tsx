@@ -6,21 +6,13 @@ import { usePostsQuery } from "../../../features/post/model/postStore"
 import { PostIsLoading } from "./PostIsLoading"
 
 export const PostTable: React.FC<{
-  searchQuery: string
-  updateURL: () => void
   setSelectedPost: (post: Post) => void
   openUserModal: (userId: number) => void
-  setShowPostUpdateDialog: (value: boolean) => void
-  openPostDetail: (post: Post) => void
 }> = ({
-  searchQuery,
-  updateURL,
   setSelectedPost,
   openUserModal,
-  setShowPostUpdateDialog,
-  openPostDetail,
 }) => {
-  const { skip, limit, sortBy, sortOrder, selectedTag, setSelectedTag } = useRouterQueries()
+  const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = useRouterQueries()
   const { data: postsData, isLoading } = usePostsQuery({
     skip,
     limit,
@@ -49,14 +41,8 @@ export const PostTable: React.FC<{
               <PostTableRow
                 key={post.id}
                 post={post}
-                searchQuery={searchQuery}
-                selectedTag={selectedTag}
-                updateURL={updateURL}
-                setSelectedTag={setSelectedTag}
                 setSelectedPost={setSelectedPost}
                 openUserModal={openUserModal}
-                setShowPostUpdateDialog={setShowPostUpdateDialog}
-                openPostDetail={openPostDetail}
               />
             ))}
           </TableBody>

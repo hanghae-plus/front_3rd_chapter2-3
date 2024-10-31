@@ -1,23 +1,18 @@
 import { Tag } from "../../../entities/tag/model/types"
 import { Selector } from "../../../shared/ui/Selector"
+import { useRouterQueries } from "../model/routerStore"
 
 export const PostFilter: React.FC<{
-  selectedTag: string
-  setSelectedTag: (tag: string) => void
-  updateURL: () => void
   tags: Tag[]
-  sortBy: string | undefined
-  setSortBy: (value: string) => void
-  sortOrder: string | undefined
-  setSortOrder: (value: string) => void
-}> = ({ selectedTag, setSelectedTag, updateURL, tags, sortBy, setSortBy, sortOrder, setSortOrder }) => {
+}> = ({ tags }) => {
+  const { sortBy, sortOrder, selectedTag, setSelectedTag, updateURL, setSortBy, setSortOrder } = useRouterQueries()
   return (
     <>
       <Selector
         value={selectedTag}
         onValueChange={(value) => {
           setSelectedTag(value)
-          updateURL()
+          // updateURL()
         }}
         placeHolder={"태그 선택"}
         hasDefault={true}

@@ -3,35 +3,36 @@ import { Button, TableCell, TableRow } from "../../../shared/ui"
 import { Post } from "../model/types"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { usePostMutations } from "../../../features/post/model/postStore"
+import { useDialog } from "../../../features/post/model/dialogStore"
+import { useRouterQueries } from "../../../features/post/model/routerStore"
 
 export const PostTableRow: React.FC<{
   post: Post
-  searchQuery: string
-  selectedTag: string
-  updateURL: () => void
-  setSelectedTag: (tag: string) => void
   setSelectedPost: (post: Post) => void
   openUserModal: (userId: number) => void
-  setShowPostUpdateDialog: (value: boolean) => void
-  openPostDetail: (post: Post) => void
-}> = ({
-  post,
-  searchQuery,
-  selectedTag,
-  updateURL,
-  setSelectedTag,
-  setSelectedPost,
-  openUserModal,
-  setShowPostUpdateDialog,
-  openPostDetail,
-}) => {
+}> = ({ post, setSelectedPost, openUserModal }) => {
+  const { searchQuery, selectedTag, setSelectedTag, updateURL } = useRouterQueries()
+  const { setShowPostUpdateDialog, setShowPostDetailDialog } = useDialog()
 
   const { deletePost } = usePostMutations()
 
-  const handlePostDelete = (postId: number) => {
-    deletePost.mutate(postId)
+  // 게시물 상세 보기
+  const handlePostDetailDialogOpen = () => {
+    setSelectedPost(post)
+    setShowPostDetailDialog(true)
   }
-  
+
+  // 게시물 수정 모달 보기
+  const handlePostUpdateDialogOpen = () => {
+    setSelectedPost(post)
+    setShowPostUpdateDialog(true)
+  }
+
+  // 게시물 삭제
+  const handlePostDelete = () => {
+    deletePost.mutate(post.id)
+  }
+
   return (
     <TableRow key={post.id}>
       <TableCell>{post.id}</TableCell>
@@ -52,7 +53,7 @@ export const PostTableRow: React.FC<{
                 }`}
                 onClick={() => {
                   setSelectedTag(tag)
-                  updateURL()
+                  // updateURL()
                 }}
               >
                 {tag}
@@ -77,20 +78,13 @@ export const PostTableRow: React.FC<{
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+          <Button variant="ghost" size="sm" onClick={handlePostDetailDialogOpen}>
             <MessageSquare className="w-4 h-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setSelectedPost(post)
-              setShowPostUpdateDialog(true)
-            }}
-          >
+          <Button variant="ghost" size="sm" onClick={handlePostUpdateDialogOpen}>
             <Edit2 className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => handlePostDelete(post.id)}>
+          <Button variant="ghost" size="sm" onClick={handlePostDelete}>
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>

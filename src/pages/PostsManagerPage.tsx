@@ -20,30 +20,12 @@ import { CommentAddDialog } from "../features/comment/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../features/comment/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "../entities/post/ui/PostDetailDialog"
 import { UserDetailDialog } from "../entities/user/ui/UserDetailDialog"
-import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
 import { PostPagination } from "../features/post/ui/PostPagination"
 
 const PostsManager = () => {
   const {
-    skip,
-    limit,
-    searchQuery,
-    sortBy,
-    setSortBy,
-    sortOrder,
-    setSortOrder,
-    selectedTag,
-    setSelectedTag,
-    updateURL,
-  } = useRouterQueries()
-
-  const {
     setShowPostAddDialog,
-    setShowPostUpdateDialog,
-    setShowCommentAddDialog,
-    setShowCommentUpdateDialog,
-    setShowPostDetailDialog,
     setShowUserDetailDialog,
   } = useDialog()
 
@@ -59,12 +41,6 @@ const PostsManager = () => {
   const getTags = async () => {
     const tagsData = await fetchTagsApi()
     setTags(tagsData)
-  }
-
-  // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
-    setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
@@ -102,26 +78,15 @@ const PostsManager = () => {
             </ContentSearch>
             <ContentFilter>
               <PostFilter
-                selectedTag={selectedTag}
-                setSelectedTag={setSelectedTag}
-                updateURL={updateURL}
                 tags={tags}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                setSortOrder={setSortOrder}
-                sortOrder={sortOrder}
               />
             </ContentFilter>
           </ContentControls>
 
           {/* 게시물 테이블 */}
             <PostTable
-              searchQuery={searchQuery}
-              updateURL={updateURL}
               setSelectedPost={setSelectedPost}
               openUserModal={openUserModal}
-              setShowPostUpdateDialog={setShowPostUpdateDialog}
-              openPostDetail={openPostDetail}
             />
 
           {/* 페이지네이션 */}
@@ -145,10 +110,7 @@ const PostsManager = () => {
       {selectedPost && (
         <PostDetailDialog
           selectedPost={selectedPost}
-          searchQuery={searchQuery}
-          setShowCommentAddDialog={setShowCommentAddDialog}
           setSelectedComment={setSelectedComment}
-          setShowCommentUpdateDialog={setShowCommentUpdateDialog}
         />
       )}
 

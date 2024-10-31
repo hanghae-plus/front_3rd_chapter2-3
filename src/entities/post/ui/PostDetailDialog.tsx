@@ -1,4 +1,5 @@
 import { useDialog } from "../../../features/post/model/dialogStore"
+import { useRouterQueries } from "../../../features/post/model/routerStore"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { HighlightedText } from "../../../shared/ui/HighlightedText"
 import { Comment } from "../../comment/model/types"
@@ -7,11 +8,9 @@ import { Post } from "../model/types"
 
 export const PostDetailDialog: React.FC<{
   selectedPost: Post
-  searchQuery: string
-  setShowCommentAddDialog: (value: boolean) => void
   setSelectedComment: (comment: Comment) => void
-  setShowCommentUpdateDialog: (value: boolean) => void
-}> = ({ selectedPost, searchQuery, setShowCommentAddDialog, setSelectedComment, setShowCommentUpdateDialog }) => {
+}> = ({ selectedPost, setSelectedComment }) => {
+  const { searchQuery } = useRouterQueries()
   const { showPostDetailDialog, setShowPostDetailDialog } = useDialog()
   return (
     <CustomDialog
@@ -28,10 +27,7 @@ export const PostDetailDialog: React.FC<{
         {
           <Comments
             postId={selectedPost.id}
-            searchQuery={searchQuery}
-            setShowCommentAddDialog={setShowCommentAddDialog}
             setSelectedComment={setSelectedComment}
-            setShowCommentUpdateDialog={setShowCommentUpdateDialog}
           />
         }
       </>
