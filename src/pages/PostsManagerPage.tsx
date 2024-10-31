@@ -25,7 +25,7 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import { Post, User, NewComment, Comment } from "../shared/types"
+import { User, NewComment, Comment } from "../shared/types"
 import { useTags } from "../shared/model/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useComment } from "../shared/model/useComment"
@@ -39,7 +39,6 @@ const PostsManager = () => {
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
@@ -54,7 +53,6 @@ const PostsManager = () => {
   })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const { tags, getTags } = useTags()
@@ -68,15 +66,13 @@ const PostsManager = () => {
     handleFetchPostsByTag,
     handleFetchPosts,
     handleSearchPosts,
+    selectedPost,
+    setSelectedPost,
+    showPostDetailDialog,
+    setShowPostDetailDialog,
+    openPostDetail,
   } = usePost()
-  const {
-    comments,
-    handleFetchComments,
-    handleAddComment,
-    handleUpdateComment,
-    handleDeleteComment,
-    handleLikeComment,
-  } = useComment()
+  const { comments, handleAddComment, handleUpdateComment, handleDeleteComment, handleLikeComment } = useComment()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -91,11 +87,6 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
-    handleFetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
 
   // 사용자 모달 열기
   const openUserModal = async (user: User) => {

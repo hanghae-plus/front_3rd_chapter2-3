@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts } from "../api/post"
 import type { NewPost, Post } from "../types"
+import { useComment } from "./useComment"
 
 interface UsePostProps {
   posts: Post[]
@@ -8,6 +9,11 @@ interface UsePostProps {
   total: number
   setTotal: React.Dispatch<React.SetStateAction<number>>
   isLoading: boolean
+  selectedPost: Post | null
+  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
+  showPostDetailDialog: boolean
+  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
+  openPostDetail: (post: Post) => void
   handleAddPost: (newPost: NewPost) => Promise<void>
   handleUpdatePost: (post: Post) => Promise<void>
   handleDeletePost: (id: number) => Promise<void>
@@ -20,7 +26,9 @@ export const usePost = (): UsePostProps => {
   const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+  const { handleFetchComments } = useComment()
   const handleAddPost = async (newPost: NewPost) => {
     const data = await addPost(newPost)
     if (data) {
@@ -91,6 +99,11 @@ export const usePost = (): UsePostProps => {
       setIsLoading(false)
     }
   }
+  const openPostDetail = (post: Post) => {
+    setSelectedPost(post)
+    handleFetchComments(post.id)
+    setShowPostDetailDialog(true)
+  }
 
   return {
     posts,
@@ -98,6 +111,11 @@ export const usePost = (): UsePostProps => {
     total,
     setTotal,
     isLoading,
+    selectedPost,
+    setSelectedPost,
+    showPostDetailDialog,
+    setShowPostDetailDialog,
+    openPostDetail,
     handleAddPost,
     handleUpdatePost,
     handleDeletePost,
