@@ -11,7 +11,7 @@ export const PostTableRow: React.FC<{
   setSelectedTag: (tag: string) => void
   setSelectedPost: (post: Post) => void
   openUserModal: (userId: number) => void
-  setShowEditDialog: (value: boolean) => void
+  setShowPostUpdateDialog: (value: boolean) => void
   openPostDetail: (post: Post) => void
   deletePost: (postId: number) => void
 }> = ({
@@ -22,7 +22,7 @@ export const PostTableRow: React.FC<{
   setSelectedTag,
   setSelectedPost,
   openUserModal,
-  setShowEditDialog,
+  setShowPostUpdateDialog,
   openPostDetail,
   deletePost,
 }) => {
@@ -79,7 +79,7 @@ export const PostTableRow: React.FC<{
             size="sm"
             onClick={() => {
               setSelectedPost(post)
-              setShowEditDialog(true)
+              setShowPostUpdateDialog(true)
             }}
           >
             <Edit2 className="w-4 h-4" />

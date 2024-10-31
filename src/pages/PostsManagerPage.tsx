@@ -38,15 +38,14 @@ import {
   updateCommentApi,
 } from "../entities/comment/api"
 import { useRouterQueries } from "../features/post/model/routerStore"
+import { useDialog } from "../features/post/model/dialogStore"
 
 const initialNewPost: NewPost = { title: "", body: "", userId: 1, tags: [], reactions: { likes: 0, dislikes: 0 } }
 const initialNewComment: NewComment = { body: "", postId: null, userId: 1, likes: 0 }
 const PostsManager = () => {
   const {
     skip,
-    setSkip,
     limit,
-    setLimit,
     searchQuery,
     setSearchQuery,
     sortBy,
@@ -56,24 +55,33 @@ const PostsManager = () => {
     selectedTag,
     setSelectedTag,
     updateURL,
-  } = useRouterQueries();
+  } = useRouterQueries()
+
+  const {
+    showPostAddDialog,
+    setShowPostAddDialog,
+    showPostUpdateDialog,
+    setShowPostUpdateDialog,
+    showCommentAddDialog,
+    setShowCommentAddDialog,
+    showCommentUpdateDialog,
+    setShowCommentUpdateDialog,
+    showPostDetailDialog,
+    setShowPostDetailDialog,
+    showUserDetailDialog,
+    setShowUserDetailDialog,
+  } = useDialog()
 
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([])
   const [total, setTotal] = useState(0)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState<NewPost>({ ...initialNewPost })
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({ ...initialNewComment })
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // 게시물 가져오기
@@ -123,7 +131,7 @@ const PostsManager = () => {
   const addPost = async (newPost: NewPost) => {
     const postData = await createPostApi(newPost)
     setPosts(addToPosts(posts, postData))
-    setShowAddDialog(false)
+    setShowPostAddDialog(false)
     setNewPost({ ...initialNewPost })
   }
 
@@ -131,7 +139,7 @@ const PostsManager = () => {
   const updatePost = async (updatingPost: Post) => {
     const postData = await updatePostApi(updatingPost)
     setPosts(updateInPosts(posts, postData))
-    setShowEditDialog(false)
+    setShowPostUpdateDialog(false)
   }
 
   // 게시물 삭제
@@ -154,7 +162,7 @@ const PostsManager = () => {
       ...prev,
       [commentData.postId]: [...(prev[commentData.postId] || []), commentData],
     }))
-    setShowAddCommentDialog(false)
+    setShowCommentAddDialog(false)
     setNewComment({ ...initialNewComment })
   }
 
@@ -167,7 +175,7 @@ const PostsManager = () => {
         comment.id === commentData.id ? commentData : comment,
       ),
     }))
-    setShowEditCommentDialog(false)
+    setShowCommentUpdateDialog(false)
   }
 
   // 댓글 삭제
@@ -201,7 +209,7 @@ const PostsManager = () => {
   const openUserModal = async (userId: number) => {
     const userData = await fetchUserApi(userId)
     setSelectedUser(userData)
-    setShowUserModal(true)
+    setShowUserDetailDialog(true)
   }
 
   useEffect(() => {
@@ -222,7 +230,7 @@ const PostsManager = () => {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
+          <Button onClick={() => setShowPostAddDialog(true)}>
             <Plus className="w-4 h-4 mr-2" />
             게시물 추가
           </Button>
@@ -266,7 +274,7 @@ const PostsManager = () => {
               setSelectedTag={setSelectedTag}
               setSelectedPost={setSelectedPost}
               openUserModal={openUserModal}
-              setShowEditDialog={setShowEditDialog}
+              setShowPostUpdateDialog={setShowPostUpdateDialog}
               openPostDetail={openPostDetail}
               deletePost={deletePost}
             />
@@ -279,8 +287,8 @@ const PostsManager = () => {
 
       {/* 게시물 추가 대화상자 */}
       <PostAddDialog
-        showAddDialog={showAddDialog}
-        setShowAddDialog={setShowAddDialog}
+        showPostAddDialog={showPostAddDialog}
+        setShowPostAddDialog={setShowPostAddDialog}
         newPost={newPost}
         setNewPost={setNewPost}
         addPost={addPost}
@@ -289,8 +297,8 @@ const PostsManager = () => {
       {/* 게시물 수정 대화상자 */}
       {selectedPost && (
         <PostUpdateDialog
-          showEditDialog={showEditDialog}
-          setShowEditDialog={setShowEditDialog}
+          showPostUpdateDialog={showPostUpdateDialog}
+          setShowPostUpdateDialog={setShowPostUpdateDialog}
           selectedPost={selectedPost}
           setSelectedPost={setSelectedPost}
           updatePost={updatePost}
@@ -299,8 +307,8 @@ const PostsManager = () => {
 
       {/* 댓글 추가 대화상자 */}
       <CommentAddDialog
-        showAddCommentDialog={showAddCommentDialog}
-        setShowAddCommentDialog={setShowAddCommentDialog}
+        showCommentAddDialog={showCommentAddDialog}
+        setShowCommentAddDialog={setShowCommentAddDialog}
         newComment={newComment}
         setNewComment={setNewComment}
         addComment={addComment}
@@ -309,8 +317,8 @@ const PostsManager = () => {
       {/* 댓글 수정 대화상자 */}
       {selectedComment && (
         <CommentUpdateDialog
-          showEditCommentDialog={showEditCommentDialog}
-          setShowEditCommentDialog={setShowEditCommentDialog}
+          showCommentUpdateDialog={showCommentUpdateDialog}
+          setShowCommentUpdateDialog={setShowCommentUpdateDialog}
           selectedComment={selectedComment}
           setSelectedComment={setSelectedComment}
           updateComment={updateComment}
@@ -327,9 +335,9 @@ const PostsManager = () => {
           comments={comments}
           newComment={newComment}
           setNewComment={setNewComment}
-          setShowAddCommentDialog={setShowAddCommentDialog}
+          setShowCommentAddDialog={setShowCommentAddDialog}
           setSelectedComment={setSelectedComment}
-          setShowEditCommentDialog={setShowEditCommentDialog}
+          setShowCommentUpdateDialog={setShowCommentUpdateDialog}
           likeComment={likeComment}
           deleteComment={deleteComment}
         />
@@ -338,8 +346,8 @@ const PostsManager = () => {
       {/* 사용자 모달 */}
       {selectedUser && (
         <UserDetailDialog
-          showUserModal={showUserModal}
-          setShowUserModal={setShowUserModal}
+          showUserDetailDialog={showUserDetailDialog}
+          setShowUserModal={setShowUserDetailDialog}
           selectedUser={selectedUser}
         />
       )}

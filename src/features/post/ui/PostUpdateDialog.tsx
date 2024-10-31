@@ -4,14 +4,14 @@ import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { Post } from "../../../entities/post/model/types"
 
 export const PostUpdateDialog: React.FC<{
-  showEditDialog: boolean
-  setShowEditDialog: (value: boolean) => void
+  showPostUpdateDialog: boolean
+  setShowPostUpdateDialog: (value: boolean) => void
   selectedPost: Post
   setSelectedPost: (post: Post) => void
   updatePost: (post: Post) => void
-}> = ({ showEditDialog, setShowEditDialog, selectedPost, setSelectedPost, updatePost }) => {
+}> = ({ showPostUpdateDialog, setShowPostUpdateDialog, selectedPost, setSelectedPost, updatePost }) => {
   return (
-    <CustomDialog open={showEditDialog} onOpenChange={setShowEditDialog} title={"게시물 수정"}>
+    <CustomDialog open={showPostUpdateDialog} onOpenChange={setShowPostUpdateDialog} title={"게시물 수정"}>
       <>
         <Input
           placeholder="제목"

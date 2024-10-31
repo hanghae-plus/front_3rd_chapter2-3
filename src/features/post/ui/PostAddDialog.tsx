@@ -4,14 +4,14 @@ import { Button, Input, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 
 export const PostAddDialog: React.FC<{
-  showAddDialog: boolean
-  setShowAddDialog: (value: boolean) => void
+  showPostAddDialog: boolean
+  setShowPostAddDialog: (value: boolean) => void
   newPost: NewPost
   setNewPost: (newPost: NewPost) => void
   addPost: (newPost: NewPost) => void
-}> = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, addPost }) => {
+}> = ({ showPostAddDialog, setShowPostAddDialog, newPost, setNewPost, addPost }) => {
   return (
-    <CustomDialog open={showAddDialog} onOpenChange={setShowAddDialog} title={"새 게시물 추가"}>
+    <CustomDialog open={showPostAddDialog} onOpenChange={setShowPostAddDialog} title={"새 게시물 추가"}>
       <>
         <Input
           placeholder="제목"

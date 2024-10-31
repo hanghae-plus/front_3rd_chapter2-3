@@ -2,12 +2,12 @@ import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { User } from "../model/types"
 
 export const UserDetailDialog: React.FC<{
-  showUserModal: boolean
+  showUserDetailDialog: boolean
   setShowUserModal: (value: boolean) => void
   selectedUser: User
-}> = ({ showUserModal, setShowUserModal, selectedUser }) => {
+}> = ({ showUserDetailDialog, setShowUserModal, selectedUser }) => {
   return (
-    <CustomDialog open={showUserModal} onOpenChange={setShowUserModal} title={"사용자 정보"}>
+    <CustomDialog open={showUserDetailDialog} onOpenChange={setShowUserModal} title={"사용자 정보"}>
       <>
         <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
         <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>

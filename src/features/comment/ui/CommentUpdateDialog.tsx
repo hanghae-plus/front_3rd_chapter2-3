@@ -4,20 +4,20 @@ import { Textarea, Button } from "../../../shared/ui";
 import { CustomDialog } from "../../../shared/ui/CustomDialog";
 
 export const CommentUpdateDialog : React.FC<{
-  showEditCommentDialog: boolean
-  setShowEditCommentDialog: (value: boolean) => void
+  showCommentUpdateDialog: boolean
+  setShowCommentUpdateDialog: (value: boolean) => void
   selectedComment: Comment
   setSelectedComment: (comment: Comment) => void
   updateComment: (comment: Comment) => void
 }> = ({
-  showEditCommentDialog,
-  setShowEditCommentDialog,
+  showCommentUpdateDialog,
+  setShowCommentUpdateDialog,
   selectedComment,
   setSelectedComment,
   updateComment
 }) => {
   return(
-    <CustomDialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog} title={"댓글 수정"}>
+    <CustomDialog open={showCommentUpdateDialog} onOpenChange={setShowCommentUpdateDialog} title={"댓글 수정"}>
         <>
           <Textarea
             placeholder="댓글 내용"

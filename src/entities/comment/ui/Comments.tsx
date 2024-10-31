@@ -9,9 +9,9 @@ export const Comments: React.FC<{
   newComment: NewComment
   searchQuery: string
   setNewComment: (prev: NewComment) => void
-  setShowAddCommentDialog: (value: boolean) => void
+  setShowCommentAddDialog: (value: boolean) => void
   setSelectedComment: (comment: Comment) => void
-  setShowEditCommentDialog: (value: boolean) => void
+  setShowCommentUpdateDialog: (value: boolean) => void
   likeComment: (commentId: number, postId: number) => void
   deleteComment: (commentId: number, postId: number) => void
 }> = ({
@@ -20,9 +20,9 @@ export const Comments: React.FC<{
   newComment,
   searchQuery,
   setNewComment,
-  setShowAddCommentDialog,
+  setShowCommentAddDialog,
   setSelectedComment,
-  setShowEditCommentDialog,
+  setShowCommentUpdateDialog,
   likeComment,
   deleteComment,
 }) => {
@@ -34,7 +34,7 @@ export const Comments: React.FC<{
           size="sm"
           onClick={() => {
             setNewComment({ ...newComment, postId })
-            setShowAddCommentDialog(true)
+            setShowCommentAddDialog(true)
           }}
         >
           <Plus className="w-3 h-3 mr-1" />
@@ -48,7 +48,7 @@ export const Comments: React.FC<{
             comment={comment}
             searchQuery={searchQuery}
             setSelectedComment={setSelectedComment}
-            setShowEditCommentDialog={setShowEditCommentDialog}
+            setShowCommentUpdateDialog={setShowCommentUpdateDialog}
             likeComment={likeComment}
             deleteComment={deleteComment}
           />

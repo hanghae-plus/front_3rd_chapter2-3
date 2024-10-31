@@ -4,14 +4,14 @@ import { Button, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 
 export const CommentAddDialog: React.FC<{
-  showAddCommentDialog: boolean
-  setShowAddCommentDialog: (value: boolean) => void
+  showCommentAddDialog: boolean
+  setShowCommentAddDialog: (value: boolean) => void
   newComment: NewComment
   setNewComment: (newComment: NewComment) => void
   addComment: (newComment: NewComment) => void
-}> = ({ showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment, addComment }) => {
+}> = ({ showCommentAddDialog, setShowCommentAddDialog, newComment, setNewComment, addComment }) => {
   return (
-    <CustomDialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog} title={"새 댓글 추가"}>
+    <CustomDialog open={showCommentAddDialog} onOpenChange={setShowCommentAddDialog} title={"새 댓글 추가"}>
       <>
         <Textarea
           placeholder="댓글 내용"

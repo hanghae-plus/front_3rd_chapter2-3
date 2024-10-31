@@ -8,10 +8,10 @@ export const CommentView: React.FC<{
   comment: Comment
   searchQuery: string
   setSelectedComment: (comment: Comment) => void
-  setShowEditCommentDialog: (value: boolean) => void
+  setShowCommentUpdateDialog: (value: boolean) => void
   likeComment: (commentId: number, postId: number) => void
   deleteComment: (commentId: number, postId: number) => void
-}> = ({ postId, comment, searchQuery, setSelectedComment, setShowEditCommentDialog, likeComment, deleteComment }) => {
+}> = ({ postId, comment, searchQuery, setSelectedComment, setShowCommentUpdateDialog, likeComment, deleteComment }) => {
   return (
     <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
       <div className="flex items-center space-x-2 overflow-hidden">
@@ -30,7 +30,7 @@ export const CommentView: React.FC<{
           size="sm"
           onClick={() => {
             setSelectedComment(comment)
-            setShowEditCommentDialog(true)
+            setShowCommentUpdateDialog(true)
           }}
         >
           <Edit2 className="w-3 h-3" />

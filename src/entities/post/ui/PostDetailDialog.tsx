@@ -12,9 +12,9 @@ export const PostDetailDialog: React.FC<{
   comments: Record<number, Comment[]>
   newComment: NewComment
   setNewComment: (prev: NewComment) => void
-  setShowAddCommentDialog: (value: boolean) => void
+  setShowCommentAddDialog: (value: boolean) => void
   setSelectedComment: (comment: Comment) => void
-  setShowEditCommentDialog: (value: boolean) => void
+  setShowCommentUpdateDialog: (value: boolean) => void
   likeComment: (commentId: number, postId: number) => void
   deleteComment: (commentId: number, postId: number) => void
 }> = ({
@@ -25,9 +25,9 @@ export const PostDetailDialog: React.FC<{
   comments,
   newComment,
   setNewComment,
-  setShowAddCommentDialog,
+  setShowCommentAddDialog,
   setSelectedComment,
-  setShowEditCommentDialog,
+  setShowCommentUpdateDialog,
   likeComment,
   deleteComment,
 }) => {
@@ -49,9 +49,9 @@ export const PostDetailDialog: React.FC<{
           newComment={newComment}
           searchQuery={searchQuery}
           setNewComment={setNewComment}
-          setShowAddCommentDialog={setShowAddCommentDialog}
+          setShowCommentAddDialog={setShowCommentAddDialog}
           setSelectedComment={setSelectedComment}
-          setShowEditCommentDialog={setShowEditCommentDialog}
+          setShowCommentUpdateDialog={setShowCommentUpdateDialog}
           likeComment={likeComment}
           deleteComment={deleteComment}
         />
