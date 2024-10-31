@@ -3,8 +3,9 @@ import { overlay } from "overlay-kit";
 import { Button, TableCell } from "@/shared/ui";
 import { PostDetailDialog } from "@/widgets/post/ui/post-detail-dialog";
 import { PostItemType } from "@/entities/post/model/post-type";
-import { Edit2, MessageSquare, Trash2 } from "lucide-react";
 import { useDeletePost } from "../model/use-delete-post";
+import { PostUpdateDialog } from "./post-update-dialog";
+import { Edit2, MessageSquare, Trash2 } from "lucide-react";
 
 export const PostControl = ({ post }: PostItemType) => {
   const { handleDeletePost } = useDeletePost(post.id);
@@ -26,8 +27,9 @@ export const PostControl = ({ post }: PostItemType) => {
           variant="ghost"
           size="sm"
           onClick={() => {
-            // setSelectedPost(post);
-            // setShowEditDialog(true);
+            overlay.open(({ isOpen, close }) => {
+              return <PostUpdateDialog isOpen={isOpen} close={close} post={post} />;
+            });
           }}
         >
           <Edit2 className="w-4 h-4" />

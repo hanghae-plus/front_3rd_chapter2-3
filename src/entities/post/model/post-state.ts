@@ -1,13 +1,14 @@
 import { create } from "zustand";
 
-import { PostWithAuthorType } from "./post-type";
 import { NewPostType } from "@/features/post/model/type";
+import { PostWithAuthorType } from "./post-type";
 
 interface PostListState {
   postList: PostWithAuthorType[];
   addNewPost: (post: NewPostType) => void;
   setNewPostList: (newPostList: PostWithAuthorType[]) => void;
   deletePost: (postId: number) => void;
+  updatePost: (newPost: PostWithAuthorType) => void;
 }
 
 const postDetail = (newPost: NewPostType): PostWithAuthorType => {
@@ -39,6 +40,12 @@ const expectPost = (prev: PostWithAuthorType[], postId: number) => {
   return prev.filter(post => post.id !== postId);
 };
 
+const updatePostList = (prev: PostWithAuthorType[], newPost: PostWithAuthorType) => {
+  return prev.map(post => {
+    return post.id === newPost.id ? newPost : post;
+  });
+};
+
 export const postListState = create<PostListState>(set => ({
   postList: [],
   addNewPost: newPost => {
@@ -51,5 +58,8 @@ export const postListState = create<PostListState>(set => ({
   },
   deletePost: postId => {
     set(prev => ({ postList: expectPost(prev.postList, postId) }));
+  },
+  updatePost: newPost => {
+    set(prev => ({ postList: updatePostList(prev.postList, newPost) }));
   },
 }));
