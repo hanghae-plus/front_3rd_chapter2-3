@@ -1,27 +1,65 @@
-import { baseApi } from "../../../shared/api/baseApi"
-import { API_ENDPOINTS } from "../../../shared/config/constants"
-import type { Post, PostsResponse, Tag } from "../model/post"
+import { User } from "../../user/model/user"
+import { Post } from "../model/post"
 
-export const postService = {
-  getPosts: (limit: number, skip: number) =>
-    baseApi.get<PostsResponse>(
-      `${API_ENDPOINTS.POSTS}?limit=${limit}&skip=${skip}`,
-    ),
+// 게시물 가져오기
+export const fetchPosts = (
+  limit: number,
+  skip: number,
+  setLoading: (Loading: boolean) => void,
+  setPosts: (posts: Post[]) => void,
+  setTotal: (total: number) => void,
+) => {
+  setLoading(true)
+  let postsData: { posts: any[]; total: number }
+  let usersData: User[]
 
-  searchPosts: (query: string) =>
-    baseApi.get<PostsResponse>(`${API_ENDPOINTS.POSTS}/search?q=${query}`),
+  fetch(`/api/posts?limit=${limit}&skip=${skip}`)
+    .then((response) => response.json())
+    .then((data) => {
+      postsData = data
+      return fetch("/api/users?limit=0&select=username,image")
+    })
+    .then((response) => response.json())
+    .then((users) => {
+      usersData = users.users
+      const postsWithUsers = postsData.posts.map((post) => ({
+        ...post,
+        author: usersData.find((user) => user.id === post.userId),
+      }))
+      setPosts(postsWithUsers)
+      setTotal(postsData.total)
+    })
+    .catch((error) => {
+      console.error("게시물 가져오기 오류:", error)
+    })
+    .finally(() => {
+      setLoading(false)
+    })
+}
 
-  getPostsByTag: (tag: string) =>
-    baseApi.get<PostsResponse>(`${API_ENDPOINTS.POSTS}/tag/${tag}`),
+interface PostSearchResponse {
+  posts: Post[]
+  total: number
+}
 
-  createPost: (post: Omit<Post, "id">) =>
-    baseApi.post<Post>(API_ENDPOINTS.POSTS, post),
-
-  updatePost: (id: number, post: Partial<Post>) =>
-    baseApi.put<Post>(`${API_ENDPOINTS.POSTS}/${id}`, post),
-
-  deletePost: (id: number) =>
-    baseApi.delete<void>(`${API_ENDPOINTS.POSTS}/${id}`),
-
-  getTags: () => baseApi.get<Tag[]>(API_ENDPOINTS.TAGS),
+export const searchPosts = async (
+  query: string,
+): Promise<PostSearchResponse> => {
+  try {
+    const response = await fetch(`/api/posts/search?q=${query}`)
+    if (!response.ok) {
+      throw new Error("Failed to search posts")
+    }
+    const data = await response.json()
+    return {
+      posts: data.posts,
+      total: data.total,
+    }
+  } catch (error) {
+    console.error("게시물 검색 오류:", error)
+    return {
+      posts: [],
+      total: 0,
+    }
+  }
 }

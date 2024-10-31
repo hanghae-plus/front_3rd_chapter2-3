@@ -10,13 +10,14 @@ import { highlightText } from "../../../shared/lib/highlightText"
 import { TableBody, TableCell, TableRow } from "../../../shared/ui/Table"
 import { Button } from "../../../shared/ui/Button"
 import { User } from "../../../entities/user/model/user"
+import { PostListParams } from "../../../features/post/model/type"
 
 interface Props {
   posts: Post[]
   selectedTag: string
   searchQuery: string
   setSelectedTag: (tag: string) => void
-  updateURL: () => void
+  updateURL: (params: PostListParams) => void
   openUserModal: (user: User) => Promise<void>
   openPostDetail: (post: Post) => void
   setSelectedPost: (selectedPost: Post | null) => void
@@ -56,7 +57,7 @@ export const PostTableRows = ({
                     }`}
                     onClick={() => {
                       setSelectedTag(tag)
-                      updateURL()
+                      updateURL({selectedTag})
                     }}
                   >
                     {tag}

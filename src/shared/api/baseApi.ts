@@ -1,7 +1,7 @@
 export const baseApi = {
   get: async <T>(endpoint: string): Promise<T> => {
     const response = await fetch(endpoint)
-    if (!response.ok) throw new Error("API Error")
+    if (!response.ok) throw new Error("GET API Error")
     return response.json()
   },
 
@@ -11,7 +11,7 @@ export const baseApi = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-    if (!response.ok) throw new Error("API Error")
+    if (!response.ok) throw new Error("POST API Error")
     return response.json()
   },
 
@@ -21,7 +21,7 @@ export const baseApi = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-    if (!response.ok) throw new Error("API Error")
+    if (!response.ok) throw new Error("PUT API Error")
     return response.json()
   },
 
@@ -29,7 +29,7 @@ export const baseApi = {
     const response = await fetch(endpoint, {
       method: "DELETE",
     })
-    if (!response.ok) throw new Error("API Error")
+    if (!response.ok) throw new Error("DELETE API Error")
     return response.json()
   },
 }

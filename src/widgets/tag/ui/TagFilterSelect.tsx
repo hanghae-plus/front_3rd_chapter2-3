@@ -1,4 +1,5 @@
 import { Tag } from "../../../entities/post/model/post"
+import { PostListParams } from "../../../features/post/model/type"
 import {
   Select,
   SelectContent,
@@ -12,7 +13,7 @@ interface Props {
   selectedTag: string
   setSelectedTag: (selectedTag: string) => void
   fetchPostsByTag: (tag: string) => Promise<void>
-  updateURL: () => void
+  updateURL: (params: PostListParams) => void
 }
 
 export const TagFilterSelect = ({
@@ -28,7 +29,7 @@ export const TagFilterSelect = ({
       onValueChange={(value) => {
         setSelectedTag(value)
         fetchPostsByTag(value)
-        updateURL()
+        updateURL({ selectedTag })
       }}
     >
       <SelectTrigger className="w-[180px]">
