@@ -5,22 +5,17 @@ import { Input } from "../../shared/ui/Input"
 import { Textarea } from "../../shared/ui/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { usePost } from "../../features/post/model/usePost"
-import { putPostFetch } from "../../entities/post/api"
 import { Post } from "../../entities/post/model/types"
+import useMutationUpdatePost from "../../features/post/api/useMutationUpdatePost"
 
 const UpdatePostDialog = () => {
-  const { posts, setPosts, selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePost()
+  const { selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePost()
+  const { mutate: mutateUpdatePost } = useMutationUpdatePost()
 
   // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      if (!selectedPost) throw new Error("do not selected Post")
-      const data = await putPostFetch(selectedPost)
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
+  const handleUpdatePost = () => {
+    if (!selectedPost) return
+    mutateUpdatePost(selectedPost)
   }
 
   return (
@@ -41,7 +36,7 @@ const UpdatePostDialog = () => {
             value={selectedPost?.body || ""}
             onChange={(e) => setSelectedPost({ ...(selectedPost as Post), body: e.target.value })}
           />
-          <Button onClick={updatePost}>게시물 업데이트</Button>
+          <Button onClick={handleUpdatePost}>게시물 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

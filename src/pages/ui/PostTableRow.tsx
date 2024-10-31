@@ -28,7 +28,7 @@ const PostTableRow = ({ post, updateURL, setSelectedUser, setShowUserModal }: Pr
     setShowPostDetailDialog(true)
   }
 
-  const deletePost = () => {
+  const handleDeletePost = () => {
     mutateDeletePost()
   }
 
@@ -92,7 +92,7 @@ const PostTableRow = ({ post, updateURL, setSelectedUser, setShowUserModal }: Pr
           >
             <Edit2 className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={deletePost}>
+          <Button variant="ghost" size="sm" onClick={handleDeletePost}>
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>
