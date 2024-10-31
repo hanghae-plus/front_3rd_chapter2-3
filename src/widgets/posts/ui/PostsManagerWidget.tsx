@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { Card, CardContent } from "../../../shared/ui"
 import PostSearchHeader from "./PostSearchHeader"
 import PostSearchFilter from "./PostSeacrFilter"
@@ -9,7 +9,7 @@ import { useFilter } from "../../../shared/model/useFilter"
 import { Pagination } from "../../../shared/ui/Pagination"
 import { PostAddDialog } from "../../../features/posts/ui/PostAddDialog"
 import { PostUpdateDialog } from "../../../features/posts/ui/PostUpdateDialog"
-import { Comment, CommentPayload } from "../../../entities/comments/model/types"
+import { CommentPayload } from "../../../entities/comments/model/types"
 import { CommentAddDialog } from "../../../features/comments/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../../../features/comments/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "./PostDetailDialog"
@@ -25,6 +25,7 @@ import { usePostDialogs } from "../../../features/posts/model/usePostDialogs"
 import { useCommentDialogs } from "../../../features/comments/model/useCommentDialogs"
 import { useUserDialogs } from "../../../features/users/model/useUserDialogs"
 import { usePostManager } from "../../../features/posts/model/usePostManager"
+import { usePostSelectionStates } from "../../../features/posts/model/usePostSelectionStates"
 
 const PostsManagerWidget = () => {
   // useFilter 훅 사용
@@ -54,13 +55,10 @@ const PostsManagerWidget = () => {
   const { showDetailDialog, handlers: userDialogHandlers } = useUserDialogs()
 
   // 선택된 항목 상태
-
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [selectedUserId, setSelectedUserId] = useState<number>()
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
+  const { selectedPost, setSelectedPost, selectedUserId, setSelectedUserId, selectedComment, setSelectedComment } =
+    usePostSelectionStates()
 
   // Queries
-
   const { posts, postsLoading, searchResults, taggedPosts, users } = usePostManager({
     skip,
     limit,

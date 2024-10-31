@@ -1,7 +1,6 @@
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { Search } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import { fetchTags } from "../../../entities/tags/api"
+import { getTags } from "../../../features/tags/api/getTags"
 
 interface PostSearchFilterProps {
   searchQuery: string
@@ -27,10 +26,7 @@ const PostSearchFilter = ({
   updateURL,
 }: PostSearchFilterProps) => {
   // 태그 데이터 가져오기
-  const { data: tags } = useQuery({
-    queryKey: ["tags"],
-    queryFn: () => fetchTags(),
-  })
+  const { data: tags } = getTags()
 
   return (
     <div className="flex gap-4">
