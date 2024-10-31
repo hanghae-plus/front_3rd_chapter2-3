@@ -1,8 +1,7 @@
-import { Plus } from "lucide-react"
 import { useState } from "react"
 import { usePostQueryParams, usePostsQuery } from "../entities/post"
-import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
-import { PostAddDialog, PostFilterBar, PostTable } from "../widgets/post"
+import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
+import { PostAddDialogButton, PostFilterBar, PostTable } from "../widgets/post"
 import { Pagination } from "../widgets/ui/Pagination"
 
 const PostsManager = () => {
@@ -25,17 +24,14 @@ const PostsManager = () => {
     sortOrder,
   })
 
-  const [showAddDialog, setShowAddDialog] = useState(false)
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
+
+          {/* 게시물 추가 대화상자 버튼*/}
+          <PostAddDialogButton />
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -70,9 +66,6 @@ const PostsManager = () => {
           />
         </div>
       </CardContent>
-
-      {/* 게시물 추가 대화상자 */}
-      <PostAddDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
     </Card>
   )
 }

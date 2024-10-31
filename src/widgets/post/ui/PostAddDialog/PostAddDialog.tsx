@@ -1,7 +1,7 @@
 import { DialogProps } from "@radix-ui/react-dialog"
 import { useState } from "react"
-import { NewPost } from "../../../entities/post/model/types"
-import { PostAddButton } from "../../../features/post"
+import { NewPost } from "../../../../entities/post/model/types"
+import { PostAddButton } from "../../../../features/post"
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,7 @@ import {
   DialogTitle,
   Input,
   Textarea,
-} from "../../../shared/ui"
+} from "../../../../shared/ui"
 
 type Props = Required<Pick<DialogProps, "open" | "onOpenChange">> & {}
 
