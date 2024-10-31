@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/select/ui"
 import { Button } from "../../../shared/ui/button/ui/Button.tsx"
-import { store } from "../../../entities/post/model/store.ts"
+import { usePostStore } from "../../../entities/post/model/store.ts"
 
 interface Props {
   skip: number
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const PostPagination = ({ skip, limit, setParam }: Props) => {
-  const { total } = store((state) => state)
+  const { total } = usePostStore((state) => state)
 
   return (
     <div className="flex justify-between items-center">

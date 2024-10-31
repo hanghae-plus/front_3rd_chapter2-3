@@ -2,14 +2,14 @@ import { useMutation } from "@tanstack/react-query"
 import { Dispatch } from "react"
 import { editPost } from "../../../entities/post/api"
 import { Post } from "../../../entities/post/model/types.ts"
-import { store } from "../../../entities/post/model/store.ts"
+import { usePostStore } from "../../../entities/post/model/store.ts"
 
 interface Props {
   setShowEditPostDialog: Dispatch<React.SetStateAction<boolean>>
 }
 
 export const useMutateEditPost = ({ setShowEditPostDialog }: Props) => {
-  const { editPosts } = store((state) => state)
+  const { editPosts } = usePostStore((state) => state)
 
   return useMutation({
     mutationFn: ({ postId, post }: { postId: number; post: Post }) => editPost(postId, post),

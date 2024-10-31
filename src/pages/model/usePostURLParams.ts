@@ -1,4 +1,4 @@
-import useQueryParams from "../../../shared/lib/useURLParams.ts"
+import useQueryParams from "../../shared/lib/useURLParams.ts"
 
 const defaultPostParams = {
   skip: 0,

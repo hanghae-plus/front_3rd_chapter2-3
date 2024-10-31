@@ -1,10 +1,17 @@
 import { Table, TableHead, TableHeader, TableRow } from "../../../shared/ui/table/ui"
-import { store } from "../../../entities/post/model/store.ts"
 import PostItem from "../../../features/post-item/ui/PostItem.tsx"
+import { Post } from "../../../entities/post/model/types.ts"
 
-const PostTable = () => {
-  const { posts } = store((state) => state)
+interface Props {
+  posts: Post[]
+  postTableParams: {
+    selectedTag: string
+    searchQuery: string
+    setParam: (key: "searchQuery" | "selectedTag", value?: string | number) => void
+  }
+}
 
+const PostTable = ({ posts, postTableParams }: Props) => {
   return (
     <Table>
       <TableHeader>
@@ -17,7 +24,7 @@ const PostTable = () => {
         </TableRow>
       </TableHeader>
       {posts.map((post) => (
-        <PostItem key={post.id} post={post} />
+        <PostItem key={post.id} post={post} {...postTableParams} />
       ))}
     </Table>
   )

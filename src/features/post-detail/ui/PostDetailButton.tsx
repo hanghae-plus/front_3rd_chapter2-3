@@ -1,8 +1,7 @@
 import { Button } from "../../../shared/ui/button/ui/Button.tsx"
 import { MessageSquare } from "lucide-react"
 import { Post } from "../../../entities/post/model/types.ts"
-import usePostQueryParams from "../../post/model/usePostURLParams.ts"
-import { Dialog } from "../../../shared/ui/dialog/ui/Dialog.tsx"
+import { Dialog } from "../../../shared/ui/dialog/ui"
 import { DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog/ui"
 import { highlightText } from "../../../shared/lib/highlightText.tsx"
 import { useState } from "react"
@@ -13,9 +12,10 @@ interface Props {
 }
 
 const PostDetailButton = ({ post }: Props) => {
-  const { searchQuery } = usePostQueryParams()
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [selectedPost, setSelectedPost] = useState<Post | undefined>()
+  const params = new URLSearchParams(location.search)
+  const searchQuery = params.get("searchQuery") as string
 
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)

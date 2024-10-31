@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query"
 import { addPost } from "../../../entities/post/api"
 import { Dispatch, SetStateAction } from "react"
-import { store } from "../../../entities/post/model/store.ts"
+import { usePostStore } from "../../../entities/post/model/store.ts"
 
 interface UseAddPostMutationProps {
   setShowAddPostDialog: Dispatch<SetStateAction<boolean>>
 }
 
 export const useAddPostMutation = ({ setShowAddPostDialog }: UseAddPostMutationProps) => {
-  const { addPosts } = store((state) => state)
+  const { addPosts } = usePostStore((state) => state)
 
   return useMutation({
     mutationFn: (newPost: { title: string; body: string; userId: number }) => addPost(newPost),

@@ -18,7 +18,7 @@ interface PostStoreAction {
 
 type PostsStore = PostStoreAction & PostStoreState
 
-export const store = create<PostsStore>((set) => ({
+export const usePostStore = create<PostsStore>((set) => ({
   posts: [],
   total: 0,
   isLoading: false,
