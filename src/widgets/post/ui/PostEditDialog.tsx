@@ -1,8 +1,7 @@
 import { DialogProps } from "@radix-ui/react-dialog"
 import { Post } from "../../../entities/post/model/types"
-import { useUpdatePostMutation } from "../../../features/post"
+import { PostUpdateButton } from "../../../features/post"
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -22,18 +21,6 @@ export const PostEditDialog = ({
   selectedPost,
   setSelectedPost,
 }: Props) => {
-  const { mutate: updatePostMutate } = useUpdatePostMutation()
-
-  const updatePost = (selectedPost: Post | null) => {
-    if (!selectedPost) return
-
-    updatePostMutate(selectedPost, {
-      onSuccess: () => {
-        onOpenChange(false)
-      },
-    })
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -62,9 +49,12 @@ export const PostEditDialog = ({
             }}
           />
 
-          <Button onClick={() => updatePost(selectedPost)}>
-            게시물 업데이트
-          </Button>
+          <PostUpdateButton
+            selectedPost={selectedPost}
+            onUpdateSuccess={() => {
+              onOpenChange(false)
+            }}
+          />
         </div>
       </DialogContent>
     </Dialog>
