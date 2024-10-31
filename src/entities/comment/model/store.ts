@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { Comment } from "../../../entities/comment/model/types.ts"
+import { Comment } from "./types.ts"
 
 type CommentsByPostId = {
   [postId: number]: Comment[]

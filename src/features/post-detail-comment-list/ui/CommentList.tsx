@@ -1,10 +1,10 @@
 import { useQueryCommentList } from "../api/useQueryCommentList.ts"
-import { useCommentStore } from "../../comment/model/store.ts"
 import { highlightText } from "../../../shared/lib/highlightText.tsx"
 import usePostURLParams from "../../post/model/usePostURLParams.ts"
 import CommentLikeButton from "../../post-detail-comment-like/ui/CommentLikeButton.tsx"
 import CommentEditButton from "../../post-detail-comment-edit/ui/CommentEditButton.tsx"
 import CommentDeleteButton from "../../post-detail-comment-delete/ui/CommentDeleteButton.tsx"
+import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 const CommentList = () => {
   const { searchQuery } = usePostURLParams()

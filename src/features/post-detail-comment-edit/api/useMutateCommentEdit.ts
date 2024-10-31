@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { editComment } from "../../../entities/comment/api/commentApi.ts"
-import { useCommentStore } from "../../comment/model/store.ts"
+import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 interface EditCommentParams {
   commentId: number

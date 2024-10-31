@@ -18,7 +18,6 @@ const PostDetailButton = ({ post }: Props) => {
   const [selectedPost, setSelectedPost] = useState<Post | undefined>()
 
   const openPostDetail = (post: Post) => {
-    console.log(post, "pts")
     setSelectedPost(post)
     setShowPostDetailDialog(true)
   }

@@ -2,8 +2,8 @@ import React, { Dispatch, useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/dialog/ui"
 import { Textarea } from "../../../shared/ui/textarea/ui/Textarea.tsx"
 import { Button } from "../../../shared/ui/button/ui/Button.tsx"
-import { useCommentStore } from "../../comment/model/store.ts"
 import { useAddCommentMutation } from "../api/useMutateCommentAdd.ts"
+import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 interface Props {
   showAddCommentDialog: boolean

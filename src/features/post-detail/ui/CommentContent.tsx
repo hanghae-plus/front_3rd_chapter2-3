@@ -1,6 +1,6 @@
-import { useCommentStore } from "../../comment/model/store.ts"
 import CommentList from "../../post-detail-comment-list/ui/CommentList.tsx"
 import CommentAddButton from "../../post-detail-comment-add/ui/CommentAddButton.tsx"
+import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 interface Props {
   postId: number

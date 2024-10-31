@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
-import { useCommentStore } from "../../comment/model/store.ts"
 import { addComment } from "../../../entities/comment/api/commentApi.ts"
 import React, { Dispatch } from "react"
+import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 interface Props {
   setShowAddCommentDialog: Dispatch<React.SetStateAction<boolean>>

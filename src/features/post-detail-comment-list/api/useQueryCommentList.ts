@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getComments } from "../../../entities/comment/api/commentApi.ts"
-import { useCommentStore } from "../../comment/model/store.ts"
+import { useCommentStore } from "../../../entities/comment/model/store.ts"
 
 export const useQueryCommentList = () => {
   const { postId, comments, setComments } = useCommentStore((state) => state)
