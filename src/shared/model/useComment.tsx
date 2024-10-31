@@ -4,6 +4,14 @@ import type { Comment, NewComment } from "../types"
 
 interface UseCommentProps {
   comments: Record<number, Comment[]>
+  newComment: NewComment
+  showAddCommentDialog: boolean
+  showEditCommentDialog: boolean
+  selectedComment: Comment | null
+  setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
+  setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
+  setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedComment: React.Dispatch<React.SetStateAction<Comment | null>>
   handleFetchComments: (postId: number) => Promise<void>
   handleAddComment: (newComment: NewComment) => Promise<Comment | undefined>
   handleUpdateComment: (comment: Comment) => Promise<Comment | undefined>
@@ -13,6 +21,14 @@ interface UseCommentProps {
 
 export const useComment = (): UseCommentProps => {
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
+  const [newComment, setNewComment] = useState<NewComment>({
+    body: "",
+    postId: null,
+    userId: 1,
+  })
+  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
 
   const handleFetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
@@ -70,6 +86,14 @@ export const useComment = (): UseCommentProps => {
 
   return {
     comments,
+    newComment,
+    setNewComment,
+    showAddCommentDialog,
+    setShowAddCommentDialog,
+    showEditCommentDialog,
+    setShowEditCommentDialog,
+    selectedComment,
+    setSelectedComment,
     handleFetchComments,
     handleAddComment,
     handleUpdateComment,

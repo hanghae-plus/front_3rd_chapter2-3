@@ -17,10 +17,14 @@ export const useURLParams = () => {
     updateURLParams(updatedParams, navigate)
   }
 
+  const updateURL = () => {
+    updateURLParams(params, navigate)
+  }
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     setParams(getURLParams(searchParams))
   }, [location.search])
 
-  return { params, updateParams }
+  return { params, updateParams, updateURL }
 }

@@ -52,7 +52,7 @@ interface Comment {
 
 interface NewComment {
   body: string
-  postId: number | null
+  postId: number | null | undefined
   userId: number
 }
 

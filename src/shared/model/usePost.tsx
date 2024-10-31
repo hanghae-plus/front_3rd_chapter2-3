@@ -16,6 +16,12 @@ interface UsePostProps {
   selectedUser: User | null
   showUserModal: boolean
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
+  showAddDialog: boolean
+  setShowAddDialog: React.Dispatch<React.SetStateAction<boolean>>
+  showEditDialog: boolean
+  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
+  newPost: NewPost
+  setNewPost: React.Dispatch<React.SetStateAction<NewPost>>
   openPostDetail: (post: Post) => void
   openUserModal: (user: User) => void
   handleAddPost: (newPost: NewPost) => Promise<void>
@@ -34,6 +40,14 @@ export const usePost = (): UsePostProps => {
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [showUserModal, setShowUserModal] = useState(false)
+  const [showAddDialog, setShowAddDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const [newPost, setNewPost] = useState<NewPost>({
+    title: "",
+    body: "",
+    userId: 0,
+  })
+
   const { handleFetchComments } = useComment()
   const handleAddPost = async (newPost: NewPost) => {
     const data = await addPost(newPost)
@@ -138,6 +152,12 @@ export const usePost = (): UsePostProps => {
     selectedUser,
     showUserModal,
     setShowUserModal,
+    showAddDialog,
+    setShowAddDialog,
+    showEditDialog,
+    setShowEditDialog,
+    newPost,
+    setNewPost,
     openUserModal,
     handleAddPost,
     handleUpdatePost,
