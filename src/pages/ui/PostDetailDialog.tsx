@@ -6,6 +6,8 @@ import { usePost } from "../../features/post/model/usePost"
 import { useComment } from "../../features/comment/model/useComment"
 import { usePostDialog } from "../../features/post/model/usePostDialog"
 import { deleteCommentFetch, patchCommentFetch } from "../../entities/comment/api"
+import useQueryComments from "../../features/comment/api/useQueryComments"
+import { useEffect } from "react"
 
 interface Props {
   searchQuery: string
@@ -22,6 +24,12 @@ const PostDetailDialog = ({ searchQuery }: Props) => {
     setShowEditCommentDialog,
   } = useComment()
   const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
+  const { data } = useQueryComments(selectedPost?.id as number)
+
+  useEffect(() => {
+    if (!data || comments?.[selectedPost?.id as number]) return
+    setComments((prev) => ({ ...prev, [selectedPost?.id as number]: data.comments }))
+  }, [data])
 
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {

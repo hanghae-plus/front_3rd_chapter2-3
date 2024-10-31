@@ -4,9 +4,7 @@ import HighlightText from "./HighlightText"
 import { Button } from "../../shared/ui/button/Button"
 import { deletePost } from "../api/deletePost"
 import { openUserModal } from "../api/openUserModal"
-import { fetchComments } from "../api/fetchComments"
 import { usePost } from "../../features/post/model/usePost"
-import { useComment } from "../../features/comment/model/useComment"
 import { useTag } from "../../features/tags/model/useTag"
 import { User } from "../../entities/user/model/types"
 import { Post } from "../../entities/post/model/types"
@@ -29,15 +27,11 @@ const PostTable = ({
   setShowPostDetailDialog,
 }: Props) => {
   const { posts, setPosts, setSelectedPost } = usePost()
-  const { comments, setComments } = useComment()
   const { selectedTag, setSelectedTag } = useTag()
 
   // 게시물 상세 보기
-  //? openPostDetail에서 useQuery 를 사용해 jotai에 업데이트를 하려고 할때 문제가 생김. 일단 이곳은 패치로 해놓을 예정
-  //todo data가 있으면 useEffect에서 업데이트 하는 방식으로 가야할듯?
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
-    fetchComments({ postId: post.id, comments, setComments })
     setShowPostDetailDialog(true)
   }
 
