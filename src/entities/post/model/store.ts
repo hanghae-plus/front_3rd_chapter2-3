@@ -1,11 +1,11 @@
 import { useEffect } from "react"
 import { create } from "zustand"
-import { usePostsByTagQuery, usePostsQuery, useSearchPostsQuery } from "./queries"
+import { usePostsQuery } from "./queries"
 import { Post } from "./types"
 
 interface PostsState {
   // 서버 데이터
-  posts: Post[]
+  allPosts: Post[] // 전체 데이터
   total: number
 
   // UI 상태
@@ -19,8 +19,11 @@ interface PostsState {
   modalType: "add" | "edit" | "comment" | null
   selectedPost: Post | null
 
+  // computed value를 위한 getter
+  posts: Post[] // 현재 페이지에 보여줄 데이터
+
   // actions
-  setPosts: (posts: Post[], total: number) => void
+  setAllPosts: (posts: Post[]) => void
   setLoading: (isLoading: boolean) => void
   setSkip: (skip: number) => void
   setLimit: (limit: number) => void
@@ -30,11 +33,11 @@ interface PostsState {
   setSortOrder: (order: "asc" | "desc") => void
   setModalType: (type: "add" | "edit" | "comment" | null) => void
   setSelectedPost: (post: Post | null) => void
+  getFilteredPosts: () => Post[]
 }
 
-export const usePostsStore = create<PostsState>((set) => ({
-  // 초기 상태
-  posts: [],
+export const usePostsStore = create<PostsState>((set, get) => ({
+  allPosts: [],
   total: 0,
   isLoading: false,
   skip: 0,
@@ -45,36 +48,77 @@ export const usePostsStore = create<PostsState>((set) => ({
   sortOrder: "asc",
   modalType: null,
   selectedPost: null,
+  posts: [], // 일반 상태로 변경
 
-  // actions
-  setPosts: (posts, total) => set({ posts, total }),
+  getFilteredPosts: () => {
+    const state = get()
+    let filteredPosts = [...state.allPosts]
+
+    // 검색어 필터링
+    if (state.searchQuery) {
+      filteredPosts = filteredPosts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+          post.body.toLowerCase().includes(state.searchQuery.toLowerCase()),
+      )
+    }
+
+    // 태그 필터링
+    if (state.selectedTag && state.selectedTag !== "all") {
+      filteredPosts = filteredPosts.filter((post) => post.tags.includes(state.selectedTag))
+    }
+
+    // 정렬
+    if (state.sortBy) {
+      filteredPosts.sort((a, b) => {
+        switch (state.sortBy) {
+          case "id":
+          case "title":
+            return state.sortOrder === "asc"
+              ? String(a[state.sortBy]).localeCompare(String(b[state.sortBy]))
+              : String(b[state.sortBy]).localeCompare(String(a[state.sortBy]))
+
+          case "reactions":
+            const aLikes = a.reactions?.likes || 0
+            const bLikes = b.reactions?.likes || 0
+            return state.sortOrder === "asc" ? aLikes - bLikes : bLikes - aLikes
+
+          default:
+            return 0
+        }
+      })
+    }
+
+    // 페이지네이션
+    const start = state.skip
+    const end = state.skip + state.limit
+    return filteredPosts.slice(start, end)
+  },
+
+  setAllPosts: (posts) => set({ allPosts: posts, total: posts.length }),
   setLoading: (isLoading) => set({ isLoading }),
   setSkip: (skip) => set({ skip }),
   setLimit: (limit) => set({ limit }),
-  setSearchQuery: (searchQuery) => set({ searchQuery }),
-  setSelectedTag: (selectedTag) => set({ selectedTag }),
+  setSearchQuery: (searchQuery) => set({ searchQuery, skip: 0 }), // 검색시 첫 페이지로
+  setSelectedTag: (selectedTag) => set({ selectedTag, skip: 0 }), // 태그 변경시 첫 페이지로
   setSortBy: (sortBy) => set({ sortBy }),
   setSortOrder: (sortOrder) => set({ sortOrder }),
   setModalType: (modalType) => set({ modalType }),
   setSelectedPost: (selectedPost) => set({ selectedPost }),
 }))
 
-// 커스텀 훅: TanStack Query와 Zustand를 연결
 export const usePostsData = () => {
-  const { skip, limit, searchQuery: query, selectedTag, setPosts, setLoading } = usePostsStore()
+  const { setAllPosts, setLoading } = usePostsStore()
 
-  const postsQuery = usePostsQuery(limit, skip)
-  const searchPostsQuery = useSearchPostsQuery(query)
-  const tagPostsQuery = usePostsByTagQuery(selectedTag, limit, skip)
-
-  const activeQuery = query ? searchPostsQuery : selectedTag ? tagPostsQuery : postsQuery
+  // 한 번에 모든 데이터를 가져옴
+  const postsQuery = usePostsQuery(0, 0) // limit: 0으로 모든 데이터 요청
 
   useEffect(() => {
-    if (activeQuery.data) {
-      setPosts(activeQuery.data.posts, activeQuery.data.total)
+    if (postsQuery.data) {
+      setAllPosts(postsQuery.data.posts)
     }
-    setLoading(activeQuery.isLoading)
-  }, [activeQuery.data, activeQuery.isLoading, setPosts, setLoading])
+    setLoading(postsQuery.isLoading)
+  }, [postsQuery.data, postsQuery.isLoading])
 
-  return activeQuery // 필요한 경우 쿼리 상태 반환
+  return postsQuery
 }

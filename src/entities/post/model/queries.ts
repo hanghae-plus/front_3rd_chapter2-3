@@ -9,10 +9,10 @@ export const postKeys = {
   search: (query: string) => [...postKeys.lists(), "search", query] as const,
 }
 
-export const usePostsQuery = (limit: number, skip: number) => {
+export const usePostsQuery = () => {
   return useQuery({
-    queryKey: postKeys.list({ limit, skip }),
-    queryFn: () => postsAPI.getPosts(limit, skip),
+    queryKey: postKeys.all,
+    queryFn: () => postsAPI.getPosts(0, 0), // 전체 데이터 요청
   })
 }
 
@@ -38,7 +38,7 @@ export const useAddPostMutation = () => {
   return useMutation({
     mutationFn: (newPost: Omit<Post, "id">) => postsAPI.addPost(newPost),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: postKeys.all })
     },
   })
 }
@@ -49,7 +49,7 @@ export const useUpdatePostMutation = () => {
   return useMutation({
     mutationFn: (post: Post) => postsAPI.updatePost(post),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: postKeys.all })
     },
   })
 }
@@ -60,7 +60,7 @@ export const useDeletePostMutation = () => {
   return useMutation({
     mutationFn: (id: number) => postsAPI.deletePost(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: postKeys.all })
     },
   })
 }

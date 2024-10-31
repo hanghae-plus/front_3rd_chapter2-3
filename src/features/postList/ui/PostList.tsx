@@ -1,6 +1,6 @@
 // src/features/postsList/ui/PostsList.tsx
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { Post } from "../../../entities/post/index"
+import { Post, usePostsStore } from "../../../entities/post/index"
 import {
   Button,
   highlightText,
@@ -25,8 +25,6 @@ interface PostsListProps {
 }
 
 export const PostList = ({
-  posts,
-  isLoading,
   searchQuery = "",
   selectedTag,
   onTagSelect,
@@ -35,6 +33,8 @@ export const PostList = ({
   onCommentClick,
   onUserClick,
 }: PostsListProps) => {
+  const { getFilteredPosts, isLoading } = usePostsStore()
+  const posts = getFilteredPosts()
   if (isLoading) {
     return <div className="flex justify-center p-4">로딩 중...</div>
   }
