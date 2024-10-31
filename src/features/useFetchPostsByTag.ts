@@ -3,14 +3,13 @@ import { loadingAtom } from "../app/atom"
 import useFetchPosts from "./useFetchPosts"
 import usePosts from "./usePosts"
 import { Post, User } from "../app/type"
-type FetchPostsByTag = (tag: string) => Promise<void>
 
-const useFetchPostsByTag = (): { fetchPostsByTag: FetchPostsByTag } => {
+const useFetchPostsByTag = () => {
   const [, setLoading] = useAtom(loadingAtom)
   const { fetchPosts } = useFetchPosts()
   const { setPosts, setTotal } = usePosts()
 
-  const fetchPostsByTag: FetchPostsByTag = async (tag: string) => {
+  const fetchPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
       fetchPosts()
       return
@@ -40,7 +39,7 @@ const useFetchPostsByTag = (): { fetchPostsByTag: FetchPostsByTag } => {
     }
   }
 
-  return { fetchPostsByTag } // 타입에 맞춰 객체로 반환
+  return { fetchPostsByTag } // fetchPostsByTag 함수를 반환
 }
 
 export default useFetchPostsByTag
