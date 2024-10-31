@@ -217,11 +217,7 @@ const PostsManager = () => {
           {/* 검색 및 필터 컨트롤 */}
           <ContentControls>
             <ContentSearch>
-              <PostSearch
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                getSearchedPosts={getSearchedPosts}
-              />
+              <PostSearch />
             </ContentSearch>
             <ContentFilter>
               <PostFilter

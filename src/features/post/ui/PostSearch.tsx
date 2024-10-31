@@ -1,18 +1,19 @@
-import { ChangeEvent, KeyboardEvent } from "react"
+import { ChangeEvent, KeyboardEvent, useState } from "react"
 import { Input } from "../../../shared/ui"
+import { useRouterQueries } from "../model/routerStore"
 
-export const PostSearch: React.FC<{
-  searchQuery: string
-  setSearchQuery: (value: string) => void
-  getSearchedPosts: (value: string) => void
-}> = ({ searchQuery, setSearchQuery, getSearchedPosts }) => {
+export const PostSearch = () => {
+  const { searchQuery, setSearchQuery } = useRouterQueries()
+
+  const [query, setQuery] = useState(searchQuery)
+
   return (
     <Input
       placeholder="게시물 검색..."
       className="pl-8"
-      value={searchQuery}
-      onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-      onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && getSearchedPosts(searchQuery)}
+      value={query}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+      onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && setSearchQuery(query)}
     />
   )
 }
