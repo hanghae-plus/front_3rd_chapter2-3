@@ -11,13 +11,13 @@ import { useEffect, useState } from "react"
 import { commentApi } from "../entities/comment/api/commentApi"
 import { Comment, NewComment } from "../entities/comment/model/types"
 import { SortOrder, usePostQueryParams, usePostsQuery } from "../entities/post"
-import { postApi } from "../entities/post/api/postApi"
 import { usePostsQueryProps } from "../entities/post/api/usePostsQuery"
 import { usePostTagsQuery } from "../entities/post/api/usePostTagsQuery"
 import { Author, NewPost, Post } from "../entities/post/model/types"
 import { userApi } from "../entities/user/api/userApi"
 import { UserDTO } from "../entities/user/model/types"
 import { useAddPostMutation } from "../features/post/api/useAddPostMutation"
+import { useDeletePostMutation } from "../features/post/api/useDeletePostMutation"
 import { useUpdatePostMutation } from "../features/post/api/useUpdatePostMutation"
 import {
   Button,
@@ -126,13 +126,7 @@ const PostsManager = () => {
     })
   }
 
-  // 게시물 삭제
-  const deletePost = async (id: number) => {
-    const data = await postApi.deletePost(id)
-    if (data) {
-      setPosts(posts.filter((post) => post.id !== data.id))
-    }
-  }
+  const { mutate: deletePostMutate } = useDeletePostMutation()
 
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {
@@ -302,7 +296,7 @@ const PostsManager = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => deletePost(post.id)}
+                  onClick={() => deletePostMutate(post.id)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
