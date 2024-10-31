@@ -14,3 +14,5 @@ export interface PostsDto {
   total: number;
   posts: PostDto[];
 }
+
+export type NewPostDto = Pick<PostDto, 'title' | 'body' | 'userId' | 'id'>;

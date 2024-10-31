@@ -26,6 +26,7 @@ import {
   Textarea,
 } from '../shared/ui';
 import { PostDeleteButton } from '../features/post/postDelete';
+import PostAddDialog from '../features/post/postAdd/ui/PostAddDialog';
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -43,7 +44,6 @@ const PostsManager = () => {
   const [sortOrder, setSortOrder] = useState(queryParams.get('sortOrder') || 'asc');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [newPost, setNewPost] = useState({ title: '', body: '', userId: 1 });
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '');
@@ -153,23 +153,6 @@ const PostsManager = () => {
       console.error('태그별 게시물 가져오기 오류:', error);
     }
     setLoading(false);
-  };
-
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch('/api/posts/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPost),
-      });
-      const data = await response.json();
-      setPosts([data, ...posts]);
-      setShowAddDialog(false);
-      setNewPost({ title: '', body: '', userId: 1 });
-    } catch (error) {
-      console.error('게시물 추가 오류:', error);
-    }
   };
 
   // 게시물 업데이트
@@ -349,8 +332,9 @@ const PostsManager = () => {
               <div className="space-y-1">
                 <div>{highlightText(post.title, searchQuery)}</div>
 
+                {/* 태그 목록 */}
                 <div className="flex flex-wrap gap-1">
-                  {post.tags.map((tag) => (
+                  {post.tags?.map((tag) => (
                     <span
                       key={tag}
                       className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
@@ -369,12 +353,16 @@ const PostsManager = () => {
                 </div>
               </div>
             </TableCell>
+
+            {/* 아바타 */}
             <TableCell>
               <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>
             </TableCell>
+
+            {/* 좋아요 & 싫어요 개수 */}
             <TableCell>
               <div className="flex items-center gap-2">
                 <ThumbsUp className="w-4 h-4" />
@@ -383,11 +371,15 @@ const PostsManager = () => {
                 <span>{post.reactions?.dislikes || 0}</span>
               </div>
             </TableCell>
+
             <TableCell>
               <div className="flex items-center gap-2">
+                {/* 게시글 상세 보기 */}
                 <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
+
+                {/* 게시글 수정 */}
                 <Button
                   variant="ghost"
                   size="sm"
@@ -398,6 +390,8 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
+
+                {/* 게시글 삭제 */}
                 <PostDeleteButton
                   post={post}
                   onDelete={(deletedPost) => {
@@ -561,33 +555,14 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-            />
-            <Button onClick={addPost}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <PostAddDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onPostAdd={(post) => {
+          setPosts([post, ...posts]);
+          setShowAddDialog(false);
+        }}
+      />
 
       {/* 게시물 수정 대화상자 */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
