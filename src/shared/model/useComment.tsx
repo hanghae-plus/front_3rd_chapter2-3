@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { fetchComments, addComment, updateComment, deleteComment, likeComment } from "../api/comment"
 import type { Comment, NewComment } from "../types"
 import { atom, useAtom } from "jotai"
