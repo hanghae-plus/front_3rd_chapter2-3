@@ -10,7 +10,6 @@ import { usePost } from "../../features/post/model/usePost"
 import { useTag } from "../../features/tags/model/useTag"
 import { useUser } from "../../features/user/model/useUser"
 import { useUserDialog } from "../../features/user/model/useUserDialog"
-import { usePostDialog } from "../../features/post/model/usePostDialog"
 
 interface Props {
   searchQuery: string
@@ -47,11 +46,10 @@ const PostsManagerContent = ({
   setSkip,
   total,
 }: Props) => {
-  const { setPosts } = usePost()
+  const { setPosts, setShowEditDialog, setShowPostDetailDialog } = usePost()
   const { tags, selectedTag, setSelectedTag } = useTag()
   const { setSelectedUser } = useUser()
   const { setShowUserModal } = useUserDialog()
-  const { setShowEditDialog, setShowPostDetailDialog } = usePostDialog()
 
   return (
     <CardContent>

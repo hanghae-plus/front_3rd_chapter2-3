@@ -1,10 +1,4 @@
-import { Post } from "../model/types"
-
-export interface NewPost {
-  title: string
-  body: string
-  userId: number
-}
+import { NewPost, Post } from "../model/types"
 
 export const postPostFetch = async (newPost: NewPost) => {
   try {

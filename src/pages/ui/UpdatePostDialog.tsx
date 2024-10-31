@@ -5,13 +5,11 @@ import { Input } from "../../shared/ui/Input"
 import { Textarea } from "../../shared/ui/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { usePost } from "../../features/post/model/usePost"
-import { usePostDialog } from "../../features/post/model/usePostDialog"
 import { putPostFetch } from "../../entities/post/api"
 import { Post } from "../../entities/post/model/types"
 
 const UpdatePostDialog = () => {
-  const { posts, setPosts, selectedPost, setSelectedPost } = usePost()
-  const { showEditDialog, setShowEditDialog } = usePostDialog()
+  const { posts, setPosts, selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePost()
 
   // 게시물 업데이트
   const updatePost = async () => {

@@ -1,7 +1,6 @@
 import HighlightText from "../../shared/ui/HighlightText"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { usePost } from "../../features/post/model/usePost"
-import { usePostDialog } from "../../features/post/model/usePostDialog"
 import CommentsComponent from "../../features/comment/ui/CommentsComponent"
 
 interface Props {
@@ -9,8 +8,7 @@ interface Props {
 }
 
 const PostDetailDialog = ({ searchQuery }: Props) => {
-  const { selectedPost } = usePost()
-  const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
+  const { selectedPost, showPostDetailDialog, setShowPostDetailDialog } = usePost()
 
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>

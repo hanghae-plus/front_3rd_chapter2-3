@@ -1,29 +1,19 @@
 // 게시물 추가 대화상자
 
-import { useState } from "react"
 import { Button } from "../../shared/ui/Button"
 import { Input } from "../../shared/ui/Input"
 import { Textarea } from "../../shared/ui/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { usePost } from "../../features/post/model/usePost"
-import { usePostDialog } from "../../features/post/model/usePostDialog"
-import { postPostFetch } from "../../entities/post/api"
+import useMutationAddPost from "../../features/post/api/useMutationAddPost"
 
 const AddPostDialog = () => {
-  const { posts, setPosts } = usePost()
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const { showAddDialog, setShowAddDialog } = usePostDialog()
+  const { newPost, setNewPost, showAddDialog, setShowAddDialog } = usePost()
+  const { mutate: mutateAddPost } = useMutationAddPost()
 
   // 게시물 추가
-  const addPost = async () => {
-    try {
-      const data = await postPostFetch(newPost)
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
+  const handleAddPost = () => {
+    mutateAddPost()
   }
 
   return (
@@ -50,7 +40,7 @@ const AddPostDialog = () => {
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

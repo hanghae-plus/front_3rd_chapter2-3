@@ -15,3 +15,9 @@ interface Reactions {
   likes: number
   dislikes: number
 }
+
+export interface NewPost {
+  title: string
+  body: string
+  userId: number
+}
