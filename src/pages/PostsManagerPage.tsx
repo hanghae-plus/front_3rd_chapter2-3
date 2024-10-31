@@ -39,6 +39,7 @@ import {
 } from "../entities/comment/api"
 import { useRouterQueries } from "../features/post/model/routerStore"
 import { useDialog } from "../features/post/model/dialogStore"
+import { addToCommentsRecord, findInCommentsRecord, removeFromCommentsRecord, updateInCommentsMap } from "../entities/comment/model/utils"
 
 const PostsManager = () => {
   const {
@@ -149,42 +150,28 @@ const PostsManager = () => {
   // 댓글 추가
   const addComment = async (newComment: NewComment) => {
     const commentData = await createCommentApi(newComment)
-    setComments((prev) => ({
-      ...prev,
-      [commentData.postId]: [...(prev[commentData.postId] || []), commentData],
-    }))
+    setComments((prev) => addToCommentsRecord(prev, commentData.postId, commentData))
   }
 
   // 댓글 업데이트
   const updateComment = async (updatingComment: Comment) => {
     const commentData = await updateCommentApi(updatingComment)
-    setComments((prev) => ({
-      ...prev,
-      [commentData.postId]: prev[commentData.postId].map((comment) =>
-        comment.id === commentData.id ? commentData : comment,
-      ),
-    }))
-    setShowCommentUpdateDialog(false)
+    setComments((prev) => updateInCommentsMap(prev, commentData.postId, updatingComment))
   }
 
   // 댓글 삭제
-  const deleteComment = async (id: number, postId: number) => {
-    await deleteCommentApi(id)
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].filter((comment) => comment.id !== id),
-    }))
+  const deleteComment = async (commentId: number, postId: number) => {
+    await deleteCommentApi(commentId)
+    setComments((prev) => removeFromCommentsRecord(prev, postId, commentId))
   }
 
   // 댓글 좋아요
-  const likeComment = async (id: number, postId: number) => {
-    const likedComment = comments[postId].find((item) => item.id === id)
+  const likeComment = async (commentId: number, postId: number) => {
+    // const likedComment = comments[postId].find((item) => item.id === id)
+    const likedComment = findInCommentsRecord(comments, postId, commentId)
     if (!likedComment) return
-    const commentData = await likeCommentApi(id, likedComment.likes + 1)
-    setComments((prev) => ({
-      ...prev,
-      [postId]: prev[postId].map((comment) => (comment.id === commentData.id ? commentData : comment)),
-    }))
+    const commentData = await likeCommentApi(commentId, likedComment.likes + 1)
+    setComments((prev) => updateInCommentsMap(prev, postId, commentData))
   }
 
   // 게시물 상세 보기
@@ -289,7 +276,6 @@ const PostsManager = () => {
       {selectedComment && (
         <CommentUpdateDialog
           selectedComment={selectedComment}
-          setSelectedComment={setSelectedComment}
           updateComment={updateComment}
         />
       )}

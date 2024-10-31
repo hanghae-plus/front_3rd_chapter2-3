@@ -1,10 +1,10 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { NewComment } from "../../../entities/comment/model/types"
 import { Button, Textarea } from "../../../shared/ui"
 import { CustomDialog } from "../../../shared/ui/CustomDialog"
 import { useDialog } from "../../post/model/dialogStore"
 
-const initialNewComment: NewComment = { body: "", postId: null, userId: 1, likes: 0 }
+const initialNewComment: NewComment = { body: "", postId: null, userId: 1 }
 export const CommentAddDialog: React.FC<{
   postId: number
   addComment: (newComment: NewComment) => void
@@ -18,10 +18,15 @@ export const CommentAddDialog: React.FC<{
   const [newComment, setNewComment] = useState<NewComment>(initialNewComment)
   
   const handleCommentAdd = () => {
-    addComment({ ...newComment, postId })
+    addComment(newComment)
     setShowCommentAddDialog(false)
-    setNewComment({ ...initialNewComment, postId })
   }
+
+  useEffect(() => {
+    if (showCommentAddDialog) {
+      setNewComment({ ...initialNewComment, postId })
+    }
+  }, [showCommentAddDialog, postId])
 
   return (
     <CustomDialog open={showCommentAddDialog} onOpenChange={setShowCommentAddDialog} title={"새 댓글 추가"}>
