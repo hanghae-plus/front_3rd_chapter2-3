@@ -77,7 +77,6 @@ export const usePost = (): PostAtomState => {
   const [, updateQueryParams] = useAtom(setQueryParamsAtom);
 
   useEffect(() => {
-    // sortBy나 sortOrder가 변경될 때마다 URL 동기화
     setQueryParams(queryParams);
   }, [queryParams.sortBy, queryParams.sortOrder]);
 
