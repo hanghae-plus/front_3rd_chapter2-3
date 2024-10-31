@@ -1,18 +1,17 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
-import { updatePostApi } from "../../../entities/post/api"
 import { usePostsStore } from "../../post/model/postStore"
 import { usePostEditModalStore } from "../../post/model/postEditModalStore"
+import { useMutationPostUpdate } from "../../post/api/useMutationPostUpdate"
 
 export const PostEditModal = () => {
-  const { posts, setPosts, selectedPost, setSelectedPost } = usePostsStore()
+  const { selectedPost, setSelectedPost } = usePostsStore()
   const { showPostEditModal, setShowPostEditModal } = usePostEditModalStore()
 
+  const { mutate: updatePostMutate } = useMutationPostUpdate()
   const updatePost = async () => {
     if (!selectedPost) return
 
-    const data = await updatePostApi(selectedPost)
-
-    setPosts(posts.map((post) => (post.id === data.id ? data : post)))
+    updatePostMutate(selectedPost)
     setShowPostEditModal(false)
   }
 

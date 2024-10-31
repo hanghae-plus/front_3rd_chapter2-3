@@ -3,7 +3,6 @@ import { atom, useAtom } from "jotai"
 import { useMutationPostAdd } from "../api/useMutationPostAdd"
 import { useMutationPostDelete } from "../api/useMutationPostDelete"
 
-const postsAtom = atom<Post[]>([])
 const showAddDialogAtom = atom(false)
 const selectedPostAtom = atom<Post | null>(null)
 const totalAtom = atom(0)
@@ -11,7 +10,6 @@ const totalAtom = atom(0)
 const showPostDetailDialogAtom = atom(false)
 
 export const usePostsStore = () => {
-  const [posts, setPosts] = useAtom(postsAtom)
   const [selectedPost, setSelectedPost] = useAtom<Post | null>(selectedPostAtom)
   const [total, setTotal] = useAtom(totalAtom)
 
@@ -35,8 +33,6 @@ export const usePostsStore = () => {
   }
 
   return {
-    posts,
-    setPosts,
     showAddDialog,
     setShowAddDialog,
     selectedPost,
