@@ -1,0 +1,15 @@
+export type {
+  Post,
+  PostId,
+  NewPost,
+  Tag,
+  TagSlug,
+  Author,
+  PostComments,
+  NewComment,
+  Comment,
+  CommentId,
+  FetchPostsProps,
+  User,
+  UserId,
+} from "./types"
