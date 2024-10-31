@@ -17,6 +17,7 @@ const PostDetailDialog = ({ searchQuery }: Props) => {
   const { selectedPost } = usePost()
   const { comments, setComments, setNewComment, setShowAddCommentDialog } = useComment()
   const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()
+  // todo selectedPost 값이 undefined일때 해결필요
   const { data, error } = useQueryComments(selectedPost?.id as number)
 
   useEffect(() => {
