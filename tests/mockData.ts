@@ -125,7 +125,7 @@ export const TEST_POSTS = {
   total: 251,
   skip: 0,
   limit: 10,
-}
+};
 
 export const TEST_USERS = {
   users: [
@@ -1173,7 +1173,7 @@ export const TEST_USERS = {
   total: 208,
   skip: 0,
   limit: 208,
-}
+};
 
 export const TEST_SEARCH_POST = {
   posts: [
@@ -1190,4 +1190,45 @@ export const TEST_SEARCH_POST = {
   total: 1,
   skip: 0,
   limit: 1,
-}
+};
+
+export const TEST_COMMENTS = {
+  comments: [
+    {
+      id: 93,
+      body: "These are fabulous ideas!",
+      postId: 1,
+      likes: 7,
+      user: {
+        id: 190,
+        username: "leahw",
+        fullName: "Leah Gutierrez",
+      },
+    },
+    {
+      id: 107,
+      body: "You are a symbol of beauty.",
+      postId: 1,
+      likes: 7,
+      user: {
+        id: 131,
+        username: "jacksonm",
+        fullName: "Jackson Morales",
+      },
+    },
+    {
+      id: 209,
+      body: "Your eyes are like stars.",
+      postId: 1,
+      likes: 10,
+      user: {
+        id: 95,
+        username: "miless",
+        fullName: "Miles Stevenson",
+      },
+    },
+  ],
+  total: 3,
+  skip: 0,
+  limit: 3,
+};
