@@ -25,6 +25,15 @@ import {
   TableRow,
 } from "../shared/ui"
 import PostTable from "../features/posts/components/PostTable"
+import PostSearchBar from "./PostSearchBar"
+import PostPagination from "./PostPagination"
+import PostAddButton from "../features/posts/components/PostAddButton"
+import UserModalDialog from "../features/users/components/UserModalDialog"
+import PostDetailDialog from "../entities/posts/ui/PostDetailDialog"
+import CommentsEditDialog from "../features/comments/components/CommentsEditDialog"
+import CommentsAddDialog from "../features/comments/components/CommentsAddDialog"
+import PostEditDialog from "../features/posts/components/PostEditDialog"
+import PostAddDialog from "../features/posts/components/PostAddDialog"
 
 const PostsManager = () => {
   const location = useLocation()
@@ -212,73 +221,7 @@ const PostsManager = () => {
   )
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>게시물 관리자</span>
-          {/* 게시물 추가 버튼 */}
-          {/* <PostAddButton setShowAddDialog={setShowAddDialog}> */}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-4">
-          {/* 검색 및 필터 컨트롤 */}
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                {/* 게시물 검색 버튼 */}
-                {/* <PostSearchInput  searchQuery={searchQuery} setSearchQuery={setSearchQuery} searchPosts={searchPosts}/> */}
-              </div>
-            </div>
 
-            {/* 게시물 검색의 태그 선택 */}
-
-            {/* <PostSearchTagSelect selectedTag={selectedTag} setSelectedTag={setSelectedTag} tags={tags} fetchPostsByTag={fetchPostsByTag} updateURL={updateURL}/>*/}
-
-            {/*게시물 검색의 정렬 선택   */}
-            {/* <PostSearchSortSelect sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder}/>  */}
-          </div>
-
-          {/* 게시물 테이블 renderPostTable()은 사용되는 컴포넌트에서 useEffect안에 추가 예정*/}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
-
-          {/* 페이지네이션 */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span>표시</span>
-              {/* <PostPaginationSelectLimit limit={limit} setLimit={setLimit} > */}
-              <span>항목</span>
-            </div>
-            <div className="flex gap-2">
-              {/* <PostPaginationButton skip={skip} limit={limit} total={total} setSkip={setSkip} /> */}
-            </div>
-          </div>
-        </div>
-      </CardContent>
-
-      {/* 게시물 추가 대화상자 */}
-      {/* <PostAddDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} newPost={newPost} setNewPost={setNewPost} addPost={addPost}/> */}
-
-      {/* 게시물 수정 대화상자 */}
-      {/* <PostEditDialog showEditCommentDialog={showEditCommentDialog} setShowEditCommentDialog={setShowEditCommentDialog} selectedComment={selectedComment} setSelectedComment={setSelectedComment} updateComment={updateComment}/> */}
-
-      {/* 댓글 추가 대화상자 */}
-      {/* <CommentsAddDialog showAddCommentDialog={showAddCommentDialog} setShowAddCommentDialog={setShowAddCommentDialog} newComment={newComment} setNewComment={setNewComment} addComment={addComment}/ > */}
-
-      {/* 댓글 수정 대화상자 */}
-      {/* <CommentsEditDialog showEditCommentDialog={showEditCommentDialog} setShowEditCommentDialog={setShowEditCommentDialog} selectedComment={selectedComment} setSelectedComment={setSelectedComment} updateComment={updateComment}/> */}
-
-      {/* 게시물 상세 보기 대화상자 */}
-      {/* <PostDetailDialog   showPostDetailDialog={showPostDetailDialog}
-  setShowPostDetailDialog={setShowPostDetailDialog}
-  selectedPost={selectedPost}
-  searchQuery={searchQuery} /> */}
-
-      {/* 사용자 모달 */}
-      {/* UserModal */}
-      {/* -- entities에 userModal로 넣을 예정 <UserModal showUserModal={showUserModal}, setShowUserModal={setShowUserModal}, selectedUser={selectedUser}> */}
-    </Card>
   )
 }
 
