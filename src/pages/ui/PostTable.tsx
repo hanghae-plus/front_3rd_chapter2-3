@@ -10,23 +10,13 @@ import { User } from "../../entities/user/model/types"
 import { Post } from "../../entities/post/model/types"
 
 interface Props {
-  searchQuery: string
   updateURL: () => void
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>
   setShowUserModal: React.Dispatch<React.SetStateAction<boolean>>
-  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>
-  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const PostTable = ({
-  searchQuery,
-  updateURL,
-  setSelectedUser,
-  setShowUserModal,
-  setShowEditDialog,
-  setShowPostDetailDialog,
-}: Props) => {
-  const { posts, setPosts, setSelectedPost } = usePost()
+const PostTable = ({ updateURL, setSelectedUser, setShowUserModal }: Props) => {
+  const { posts, setPosts, setSelectedPost, setShowEditDialog, setShowPostDetailDialog, searchQuery } = usePost()
   const { selectedTag, setSelectedTag } = useTag()
 
   // 게시물 상세 보기

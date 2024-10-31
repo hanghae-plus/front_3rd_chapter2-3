@@ -12,41 +12,14 @@ import { useUser } from "../../features/user/model/useUser"
 import { useUserDialog } from "../../features/user/model/useUserDialog"
 
 interface Props {
-  searchQuery: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  setTotal: React.Dispatch<React.SetStateAction<number>>
   updateURL: () => void
-  setSearchQuery: React.Dispatch<React.SetStateAction<string>>
-  sortBy: string
-  setSortBy: React.Dispatch<React.SetStateAction<string>>
-  sortOrder: string
-  setSortOrder: React.Dispatch<React.SetStateAction<string>>
   loading: boolean
-  limit: number
-  setLimit: React.Dispatch<React.SetStateAction<number>>
-  skip: number
-  setSkip: React.Dispatch<React.SetStateAction<number>>
-  total: number
 }
 
-const PostsManagerContent = ({
-  searchQuery,
-  setLoading,
-  setTotal,
-  updateURL,
-  setSearchQuery,
-  sortBy,
-  setSortBy,
-  sortOrder,
-  setSortOrder,
-  loading,
-  limit,
-  setLimit,
-  skip,
-  setSkip,
-  total,
-}: Props) => {
-  const { setPosts, setShowEditDialog, setShowPostDetailDialog } = usePost()
+const PostsManagerContent = ({ setLoading, updateURL, loading }: Props) => {
+  const { setPosts, setTotal, skip, limit, searchQuery, setSearchQuery, sortBy, setSortBy, sortOrder, setSortOrder } =
+    usePost()
   const { tags, selectedTag, setSelectedTag } = useTag()
   const { setSelectedUser } = useUser()
   const { setShowUserModal } = useUserDialog()
@@ -116,17 +89,10 @@ const PostsManagerContent = ({
         {loading ? (
           <div className="flex justify-center p-4">로딩 중...</div>
         ) : (
-          <PostTable
-            searchQuery={searchQuery}
-            updateURL={updateURL}
-            setSelectedUser={setSelectedUser}
-            setShowUserModal={setShowUserModal}
-            setShowEditDialog={setShowEditDialog}
-            setShowPostDetailDialog={setShowPostDetailDialog}
-          />
+          <PostTable updateURL={updateURL} setSelectedUser={setSelectedUser} setShowUserModal={setShowUserModal} />
         )}
 
-        <Pagination limit={limit} setLimit={setLimit} skip={skip} setSkip={setSkip} total={total} />
+        <Pagination />
       </div>
     </CardContent>
   )

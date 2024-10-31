@@ -3,12 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { usePost } from "../../features/post/model/usePost"
 import CommentsComponent from "../../features/comment/ui/CommentsComponent"
 
-interface Props {
-  searchQuery: string
-}
-
-const PostDetailDialog = ({ searchQuery }: Props) => {
-  const { selectedPost, showPostDetailDialog, setShowPostDetailDialog } = usePost()
+const PostDetailDialog = () => {
+  const { selectedPost, showPostDetailDialog, setShowPostDetailDialog, searchQuery } = usePost()
 
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>

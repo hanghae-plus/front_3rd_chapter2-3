@@ -18,19 +18,25 @@ import { useTag } from "../features/tags/model/useTag"
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const { setPosts } = usePost()
+  const {
+    setPosts,
+    setTotal,
+    skip,
+    setSkip,
+    limit,
+    setLimit,
+    searchQuery,
+    setSearchQuery,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+  } = usePost()
   const { setTags, selectedTag, setSelectedTag } = useTag()
 
   const [loading, setLoading] = useState(false)
-  const [total, setTotal] = useState(0)
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -70,23 +76,7 @@ const PostsManager = () => {
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <PostsManagerHeader />
-      <PostsManagerContent
-        searchQuery={searchQuery}
-        setLoading={setLoading}
-        setTotal={setTotal}
-        updateURL={updateURL}
-        setSearchQuery={setSearchQuery}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
-        loading={loading}
-        limit={limit}
-        setLimit={setLimit}
-        skip={skip}
-        setSkip={setSkip}
-        total={total}
-      />
+      <PostsManagerContent setLoading={setLoading} updateURL={updateURL} loading={loading} />
 
       <AddPostDialog />
 
@@ -95,7 +85,7 @@ const PostsManager = () => {
       <AddCommentDialog />
 
       <UpdateCommentDialog />
-      <PostDetailDialog searchQuery={searchQuery} />
+      <PostDetailDialog />
 
       <UserModal />
     </Card>

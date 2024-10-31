@@ -1,15 +1,9 @@
+import { usePost } from "../../features/post/model/usePost"
 import { Button } from "../../shared/ui/Button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/Select"
 
-interface Props {
-  limit: number
-  setLimit: React.Dispatch<React.SetStateAction<number>>
-  skip: number
-  setSkip: React.Dispatch<React.SetStateAction<number>>
-  total: number
-}
-
-const Pagination = ({ limit, setLimit, skip, setSkip, total }: Props) => {
+const Pagination = () => {
+  const { total, skip, setSkip, limit, setLimit } = usePost()
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
