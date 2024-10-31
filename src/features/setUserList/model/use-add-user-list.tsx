@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useQueryUserList } from "@/entities/user/api/fetch-user";
+import { useQueryUserList } from "@/entities/user/api/fetch-user-list";
 import { userListState } from "@/entities/user/model/user-state";
 
 export function useAddNewUser() {
