@@ -7,7 +7,7 @@ export const addCommentApi = async (newComment: NewComment) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newComment),
     })
-    const data = await response.json()
+    const data: NewComment = await response.json()
 
     return data
   } catch (error) {

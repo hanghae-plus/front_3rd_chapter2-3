@@ -4,5 +4,8 @@ import { fetchCommentsApi } from "../../../entities/comment/api"
 export const useCommentsQuery = (postId: number) =>
   useQuery({
     queryKey: ["comments", postId],
-    queryFn: () => fetchCommentsApi(postId),
+    queryFn: async () => {
+      const { comments } = await fetchCommentsApi(postId)
+      return comments
+    },
   })

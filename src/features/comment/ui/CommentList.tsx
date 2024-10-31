@@ -28,7 +28,7 @@ export default function CommentList({ postId }: Props) {
         </Button>
       </div>
       <div className="space-y-1">
-        {commentsData?.comments.map((comment) => <CommentItem key={comment.id} comment={comment} postId={postId} />)}
+        {commentsData?.map((comment) => <CommentItem key={comment.id} comment={comment} postId={postId} />)}
       </div>
     </div>
   )
