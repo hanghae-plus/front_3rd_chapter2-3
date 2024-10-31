@@ -6,7 +6,7 @@ import { setupServer } from "msw/node"
 import * as React from "react"
 import { MemoryRouter } from "react-router-dom"
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
-import PostsManagerPage from "../src/pages/PostsManager"
+import PostsManagerPage from "../src/pages/PostsManager/ui/PostsManagerPage"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
 
 // MSW 서버 설정
