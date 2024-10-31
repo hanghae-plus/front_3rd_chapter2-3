@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { Edit2, Plus, Search, ThumbsUp, Trash2 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -17,20 +17,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
   Textarea,
 } from '../shared/ui';
-import { PostDeleteButton } from '../features/post/postDelete';
 import { PostAddDialog } from '../features/post/postAdd/ui/PostAddDialog';
 import { PostEditDialog } from '../features/post/postEdit/ui/PostEditDialog';
 import { Post } from '../entities/post/model/types';
-import { PostEditButton } from '../features/post/postEdit/ui/PostEditButton';
-import { UserDetailDialog } from '../features/user/userDetail/ui/UserDetailDialog';
+import { PostTable } from '../widgets/post/ui/PostTable';
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -285,86 +277,6 @@ const PostsManager = () => {
     );
   };
 
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">ID</TableHead>
-          <TableHead>제목</TableHead>
-          <TableHead className="w-[150px]">작성자</TableHead>
-          <TableHead className="w-[150px]">반응</TableHead>
-          <TableHead className="w-[150px]">작업</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {posts.map((post) => (
-          <TableRow key={post.id}>
-            <TableCell>{post.id}</TableCell>
-            <TableCell>
-              <div className="space-y-1">
-                <div>{highlightText(post.title, searchQuery)}</div>
-
-                {/* 태그 목록 */}
-                <div className="flex flex-wrap gap-1">
-                  {post.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                        selectedTag === tag
-                          ? 'text-white bg-blue-500 hover:bg-blue-600'
-                          : 'text-blue-800 bg-blue-100 hover:bg-blue-200'
-                      }`}
-                      onClick={() => {
-                        setSelectedTag(tag);
-                        updateURL();
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </TableCell>
-
-            {/* 아바타 */}
-            <TableCell>{post.author && <UserDetailDialog user={post.author} />}</TableCell>
-
-            {/* 좋아요 & 싫어요 개수 */}
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
-                <span>{post.reactions?.likes || 0}</span>
-                <ThumbsDown className="w-4 h-4" />
-                <span>{post.reactions?.dislikes || 0}</span>
-              </div>
-            </TableCell>
-
-            <TableCell>
-              <div className="flex items-center gap-2">
-                {/* 게시글 상세 보기 */}
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-
-                {/* 게시글 수정 */}
-                <PostEditButton post={post} />
-
-                {/* 게시글 삭제 */}
-                <PostDeleteButton
-                  post={post}
-                  onDelete={(deletedPost) => {
-                    setPosts(posts.filter((p) => p.id !== deletedPost.id));
-                  }}
-                />
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-
   // 댓글 렌더링
   const renderComments = (postId) => (
     <div className="mt-2">
@@ -483,7 +395,23 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? (
+            <div className="flex justify-center p-4">로딩 중...</div>
+          ) : (
+            <PostTable
+              posts={posts}
+              searchQuery={searchQuery}
+              selectedTag={selectedTag}
+              onClickTag={(tag) => {
+                setSelectedTag(tag);
+                updateURL();
+              }}
+              onClickCommentButton={openPostDetail}
+              onDeletePost={(deletedPost) => {
+                setPosts(posts.filter((p) => p.id !== deletedPost.id));
+              }}
+            />
+          )}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">

@@ -1,16 +1,17 @@
-import { PostWithUser } from '../../../entities/post/model/types';
+import { Post } from '../../../entities/post/model/types';
+import { PostDeleteButton } from '../../../features/post/postDelete';
+import { PostEditButton } from '../../../features/post/postEdit/ui/PostEditButton';
+import { UserDetailDialog } from '../../../features/user/userDetail/ui/UserDetailDialog';
 import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../shared/ui';
-import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { MessageSquare, ThumbsDown, ThumbsUp } from 'lucide-react';
 
 interface Props {
-  posts: PostWithUser[];
+  posts: Post[];
   searchQuery: string;
   selectedTag: string;
   onClickTag: (tag: string) => void;
-  onClickUser: (postAuthor: PostWithUser['author']) => void;
-  onClickCommentButton: (post: PostWithUser) => void;
-  onClickEditButton: (post: PostWithUser) => void;
-  onClickDeleteButton: (postId: PostWithUser['id']) => void;
+  onClickCommentButton: (post: Post) => void;
+  onDeletePost: (deletedPost: Post) => void;
 }
 
 export const PostTable = ({
@@ -18,10 +19,8 @@ export const PostTable = ({
   searchQuery,
   selectedTag,
   onClickTag,
-  onClickUser,
   onClickCommentButton,
-  onClickEditButton,
-  onClickDeleteButton,
+  onDeletePost,
 }: Props) => {
   const highlightText = (text: string, highlight: string) => {
     if (!text) return null;
@@ -73,12 +72,10 @@ export const PostTable = ({
                 </div>
               </div>
             </TableCell>
-            <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => onClickUser(post.author)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </TableCell>
+
+            {/* 아바타 */}
+            <TableCell>{post.author && <UserDetailDialog user={post.author} />}</TableCell>
+
             <TableCell>
               <div className="flex items-center gap-2">
                 <ThumbsUp className="w-4 h-4" />
@@ -89,15 +86,16 @@ export const PostTable = ({
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
+                {/* 게시글 상세 보기 */}
                 <Button variant="ghost" size="sm" onClick={() => onClickCommentButton(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => onClickEditButton(post)}>
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => onClickDeleteButton(post.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+
+                {/* 게시글 수정 */}
+                <PostEditButton post={post} />
+
+                {/* 게시글 삭제 */}
+                <PostDeleteButton post={post} onDelete={onDeletePost} />
               </div>
             </TableCell>
           </TableRow>
