@@ -10,8 +10,8 @@ export const PostTable = () => {
   const { skip, limit, sortBy, sortOrder, selectedTag, searchQuery } = usePostParamsStore()
   const { setTotal } = usePostsStore()
 
-  const { data: usersDTO } = useQueryUsers()
-  const { data: posts, isLoading } = useQueryPosts(usersDTO?.users || [], {
+  const { data: usersDTO, isLoading: isLoadingUser } = useQueryUsers()
+  const { data: posts, isLoading: isLoadingPosts } = useQueryPosts(usersDTO?.users || [], {
     skip,
     limit,
     sortBy,
@@ -24,22 +24,20 @@ export const PostTable = () => {
     setTotal(posts?.length || 0)
   }, [posts, setTotal])
 
-  return (
-    <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]">ID</TableHead>
-            <TableHead>제목</TableHead>
-            <TableHead className="w-[150px]">작성자</TableHead>
-            <TableHead className="w-[150px]">반응</TableHead>
-            <TableHead className="w-[150px]">작업</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>{posts?.map((post) => <PostItem key={post.id} post={post} />)}</TableBody>
-      </Table>
+  if (isLoadingUser || isLoadingPosts) return <Loader />
 
-      {isLoading && <Loader />}
-    </>
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[50px]">ID</TableHead>
+          <TableHead>제목</TableHead>
+          <TableHead className="w-[150px]">작성자</TableHead>
+          <TableHead className="w-[150px]">반응</TableHead>
+          <TableHead className="w-[150px]">작업</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>{posts?.map((post) => <PostItem key={post.id} post={post} />)}</TableBody>
+    </Table>
   )
 }

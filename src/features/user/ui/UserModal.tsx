@@ -1,10 +1,10 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, Loader } from "../../../shared/ui"
 import { useQueryUser } from "../api/useQueryUser"
 import { useUserStore } from "../model/userStore"
 
 export const UserModal = () => {
   const { selectedUser, showUserModal, setShowUserModal } = useUserStore()
-  const { data: userInfo } = useQueryUser(selectedUser?.id || -1)
+  const { data: userInfo, isLoading } = useQueryUser(selectedUser?.id || -1)
 
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
@@ -12,6 +12,8 @@ export const UserModal = () => {
         <DialogHeader>
           <DialogTitle>사용자 정보</DialogTitle>
         </DialogHeader>
+
+        {isLoading && <Loader />}
 
         <div className="space-y-4">
           <img src={userInfo?.image} alt={userInfo?.username} className="w-24 h-24 rounded-full mx-auto" />
