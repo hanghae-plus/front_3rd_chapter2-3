@@ -1,37 +1,41 @@
+// src/features/postFilters/ui/PostFilters.tsx
+import { useEffect, useState } from "react"
+import { postsAPI, Tag, usePostsStore } from "../../../entities/post"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { PostFiltersState } from "../model/types"
-import { usePostFilters } from "../model/usePostFilters"
 
 interface PostFiltersProps {
-  tags: string[]
-  onChange: (filters: PostFiltersState) => void
+  onChange: (tag: string) => void
 }
 
-export const PostFilters = ({ tags, onChange }: PostFiltersProps) => {
-  const { filters, updateFilter } = usePostFilters()
+export const PostFilters = ({ onChange }: PostFiltersProps) => {
+  const [tags, setTags] = useState<Tag[]>([])
+  const { selectedTag, sortBy, sortOrder, setSortBy, setSortOrder } = usePostsStore()
 
-  const handleFilterChange = <K extends keyof PostFiltersState>(key: K, value: PostFiltersState[K]) => {
-    updateFilter(key, value)
-    onChange(filters)
-  }
+  useEffect(() => {
+    const fetchTags = async () => {
+      const tagList = await postsAPI.getTags()
+      setTags(tagList)
+    }
+    fetchTags()
+  }, [])
 
   return (
     <div className="flex gap-4">
-      <Select value={filters.selectedTag} onValueChange={(value) => handleFilterChange("selectedTag", value)}>
+      <Select value={selectedTag} onValueChange={onChange}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="태그 선택" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">모든 태그</SelectItem>
           {tags.map((tag) => (
-            <SelectItem key={tag} value={tag}>
-              {tag}
+            <SelectItem key={tag.slug} value={tag}>
+              {tag.name}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
 
-      <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange("sortBy", value)}>
+      <Select value={sortBy} onValueChange={setSortBy}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />
         </SelectTrigger>
@@ -43,10 +47,7 @@ export const PostFilters = ({ tags, onChange }: PostFiltersProps) => {
         </SelectContent>
       </Select>
 
-      <Select
-        value={filters.sortOrder}
-        onValueChange={(value) => handleFilterChange("sortOrder", value as "asc" | "desc")}
-      >
+      <Select value={sortOrder} onValueChange={setSortOrder}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 순서" />
         </SelectTrigger>

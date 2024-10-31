@@ -1,13 +1,13 @@
 import { Search } from "lucide-react"
+import { usePostsStore } from "../../../entities/post"
 import { Input } from "../../../shared/ui"
-import { usePostSearch } from "../model/usePostSearch"
 
-interface PostSearchProps {
-  onSearch: (query: string) => void
-}
+export const PostSearch = () => {
+  const { searchQuery, setSearchQuery } = usePostsStore()
 
-export const PostSearch = ({ onSearch }: PostSearchProps) => {
-  const { searchQuery, isSearching, setSearchQuery, handleSearch } = usePostSearch(onSearch)
+  const handleSearch = (value: string) => {
+    setSearchQuery(value)
+  }
 
   return (
     <div className="relative">
@@ -16,9 +16,8 @@ export const PostSearch = ({ onSearch }: PostSearchProps) => {
         placeholder="게시물 검색..."
         className="pl-8"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-        disabled={isSearching}
+        onChange={(e) => handleSearch(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleSearch(e.currentTarget.value)}
       />
     </div>
   )
