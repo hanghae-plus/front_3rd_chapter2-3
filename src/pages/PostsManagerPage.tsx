@@ -29,6 +29,7 @@ import { NewComment, Comment } from "../shared/types"
 import { useTags } from "../shared/model/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useComment } from "../shared/model/useComment"
+import { highlightText } from "../shared/lib/highlight"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -110,21 +111,6 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
-
-  // 하이라이트 함수 추가
-  const highlightText = (text: string | undefined, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
