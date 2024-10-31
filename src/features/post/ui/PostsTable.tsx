@@ -1,6 +1,6 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../shared/ui/Table"
-import { usePost } from "../../features/post/model/usePost"
-import { User } from "../../entities/user/model/types"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../../shared/ui/Table"
+import { usePost } from "../model/usePost"
+import { User } from "../../../entities/user/model/types"
 import PostTableRow from "./PostTableRow"
 
 interface Props {

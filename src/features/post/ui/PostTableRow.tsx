@@ -1,14 +1,14 @@
 import React from "react"
-import { TableCell, TableRow } from "../../shared/ui/Table"
-import { Post } from "../../entities/post/model/types"
-import HighlightText from "../../shared/ui/HighlightText"
-import { useTag } from "../../features/tags/model/useTag"
-import { usePost } from "../../features/post/model/usePost"
-import { openUserModal } from "../api/openUserModal"
-import { User } from "../../entities/user/model/types"
+import { TableCell, TableRow } from "../../../shared/ui/Table"
+import { Post } from "../../../entities/post/model/types"
+import HighlightText from "../../../shared/ui/HighlightText"
+import { useTag } from "../../tags/model/useTag"
+import { usePost } from "../model/usePost"
+import { openUserModal } from "../../user/api/openUserModal"
+import { User } from "../../../entities/user/model/types"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { Button } from "../../shared/ui/Button"
-import useMutationDeletePost from "../../features/post/api/useMutationDeletePost"
+import { Button } from "../../../shared/ui/Button"
+import useMutationDeletePost from "../api/useMutationDeletePost"
 
 interface Props {
   updateURL: () => void

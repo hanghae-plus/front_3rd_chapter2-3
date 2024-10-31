@@ -1,6 +1,6 @@
-import { usePost } from "../../features/post/model/usePost"
-import { Button } from "../../shared/ui/Button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui/Select"
+import { usePost } from "../model/usePost"
+import { Button } from "../../../shared/ui/Button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/Select"
 
 const Pagination = () => {
   const { total, skip, setSkip, limit, setLimit } = usePost()

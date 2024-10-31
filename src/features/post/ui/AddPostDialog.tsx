@@ -1,11 +1,11 @@
 // 게시물 추가 대화상자
 
-import { Button } from "../../shared/ui/Button"
-import { Input } from "../../shared/ui/Input"
-import { Textarea } from "../../shared/ui/Textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
-import { usePost } from "../../features/post/model/usePost"
-import useMutationAddPost from "../../features/post/api/useMutationAddPost"
+import { Button } from "../../../shared/ui/Button"
+import { Input } from "../../../shared/ui/Input"
+import { Textarea } from "../../../shared/ui/Textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/Dialog"
+import { usePost } from "../model/usePost"
+import useMutationAddPost from "../api/useMutationAddPost"
 
 const AddPostDialog = () => {
   const { newPost, setNewPost, showAddDialog, setShowAddDialog } = usePost()

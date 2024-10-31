@@ -1,7 +1,7 @@
-import HighlightText from "../../shared/ui/HighlightText"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
-import { usePost } from "../../features/post/model/usePost"
-import CommentsComponent from "../../features/comment/ui/CommentsComponent"
+import HighlightText from "../../../shared/ui/HighlightText"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/Dialog"
+import { usePost } from "../model/usePost"
+import CommentsComponent from "../../comment/ui/CommentsComponent"
 
 const PostDetailDialog = () => {
   const { selectedPost, showPostDetailDialog, setShowPostDetailDialog, searchQuery } = usePost()

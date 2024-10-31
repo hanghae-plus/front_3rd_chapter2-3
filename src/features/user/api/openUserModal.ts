@@ -1,5 +1,5 @@
-import { fetchUserFetch } from "../../entities/user/api"
-import { User } from "../../entities/user/model/types"
+import { fetchUserFetch } from "../../../entities/user/api"
+import { User } from "../../../entities/user/model/types"
 
 interface Props {
   user: User

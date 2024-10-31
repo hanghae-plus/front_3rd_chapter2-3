@@ -1,12 +1,12 @@
 // 게시물 수정 대화상자
 
-import { Button } from "../../shared/ui/Button"
-import { Input } from "../../shared/ui/Input"
-import { Textarea } from "../../shared/ui/Textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
-import { usePost } from "../../features/post/model/usePost"
-import { Post } from "../../entities/post/model/types"
-import useMutationUpdatePost from "../../features/post/api/useMutationUpdatePost"
+import { Button } from "../../../shared/ui/Button"
+import { Input } from "../../../shared/ui/Input"
+import { Textarea } from "../../../shared/ui/Textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/Dialog"
+import { usePost } from "../model/usePost"
+import { Post } from "../../../entities/post/model/types"
+import useMutationUpdatePost from "../api/useMutationUpdatePost"
 
 const UpdatePostDialog = () => {
   const { selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePost()

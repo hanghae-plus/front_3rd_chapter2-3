@@ -1,10 +1,10 @@
 // 댓글 수정 대화상자
-import { Button } from "../../shared/ui/Button"
-import { Textarea } from "../../shared/ui/Textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
-import { useComment } from "../../features/comment/model/useComment"
-import { Comment } from "../../features/comment/model/types"
-import useMutationUpdateComment from "../../features/comment/api/useMutationUpdateComment"
+import { Button } from "../../../shared/ui/Button"
+import { Textarea } from "../../../shared/ui/Textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/Dialog"
+import { useComment } from "../model/useComment"
+import { Comment } from "../model/types"
+import useMutationUpdateComment from "../api/useMutationUpdateComment"
 
 const UpdateCommentDialog = () => {
   const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } = useComment()

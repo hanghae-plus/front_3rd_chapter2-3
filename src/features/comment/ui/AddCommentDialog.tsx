@@ -1,8 +1,8 @@
-import useMutationAddComment from "../../features/comment/api/useMutationAddComment"
-import { useComment } from "../../features/comment/model/useComment"
-import { Button } from "../../shared/ui/Button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
-import { Textarea } from "../../shared/ui/Textarea"
+import useMutationAddComment from "../api/useMutationAddComment"
+import { useComment } from "../model/useComment"
+import { Button } from "../../../shared/ui/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/Dialog"
+import { Textarea } from "../../../shared/ui/Textarea"
 
 const AddCommentDialog = () => {
   const { newComment, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useComment()
