@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { fetchTags } from "../api/tag"
 import { Tag } from "../types"
 
@@ -16,6 +16,10 @@ export const useTags = (): UseTagsProps => {
       setTags(newTags)
     }
   }
+
+  useEffect(() => {
+    getTags()
+  }, [])
 
   return { tags, getTags }
 }

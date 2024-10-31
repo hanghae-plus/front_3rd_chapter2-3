@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { addPost, updatePost, deletePost, fetchPostsByTag, fetchPosts, searchPosts, fetchUserDetail } from "../api/post"
-import type { NewPost, Post, User } from "../types"
+import type { NewPost, Post, URLParams, User } from "../types"
 import { useComment } from "./useComment"
+import { useURLParams } from "./useURLParams"
 
 interface UsePostProps {
   posts: Post[]
@@ -49,6 +50,9 @@ export const usePost = (): UsePostProps => {
   })
 
   const { handleFetchComments } = useComment()
+  const { params, updateURL } = useURLParams()
+  const { skip = 0, limit = 10, sortBy, sortOrder, tag: selectedTag, search: searchQuery } = params as URLParams
+
   const handleAddPost = async (newPost: NewPost) => {
     const data = await addPost(newPost)
     if (data) {
@@ -137,6 +141,29 @@ export const usePost = (): UsePostProps => {
       console.error("사용자 정보 가져오기 오류:", error)
     }
   }
+
+  useEffect(() => {
+    if (selectedTag) {
+      handleFetchPostsByTag(selectedTag)
+    } else {
+      handleFetchPosts({ limit: limit as number, skip: skip as number })
+    }
+    updateURL()
+  }, [skip, limit, sortBy, sortOrder, selectedTag])
+
+  // 검색 디바운싱
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery) {
+        handleSearchPosts(searchQuery)
+      }
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  useEffect(() => {
+    console.log("showAddDialog", showAddDialog)
+  }, [showAddDialog])
 
   return {
     posts,

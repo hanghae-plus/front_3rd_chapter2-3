@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import { URLParams } from "../shared/types"
@@ -18,23 +17,10 @@ import { CommentEditDialog } from "../widgets/ui/comment/CommentEditDialog"
 import { UserDetailDialog } from "../widgets/ui/user/UserDetailDialog"
 
 const PostsManager = () => {
-  const { tags, getTags } = useTags()
-  const { handleFetchPostsByTag, handleFetchPosts, handleSearchPosts, setShowAddDialog } = usePost()
+  const { tags } = useTags()
+  const { handleSearchPosts, setShowAddDialog } = usePost()
   const { params, updateParams, updateURL } = useURLParams()
-  const { skip = 0, limit = 10, search: searchQuery, sortBy, sortOrder, tag: selectedTag } = params as URLParams
-
-  useEffect(() => {
-    getTags()
-  }, [])
-
-  useEffect(() => {
-    if (selectedTag) {
-      handleFetchPostsByTag(selectedTag)
-    } else {
-      handleFetchPosts({ limit: limit as number, skip: skip as number })
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
+  const { search: searchQuery, sortBy, sortOrder, tag: selectedTag } = params as URLParams
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
