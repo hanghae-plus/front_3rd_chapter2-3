@@ -30,10 +30,14 @@ import { useTags } from "../shared/model/useTag"
 import { usePost } from "../shared/model/usePost"
 import { useComment } from "../shared/model/useComment"
 import { highlightText } from "../shared/lib/highlight"
+import { getURLParams, updateURLParams } from "../shared/lib/params"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
+
+  const initialParams = getURLParams(new URLSearchParams(location.search))
+
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
@@ -77,16 +81,18 @@ const PostsManager = () => {
   } = usePost()
   const { comments, handleAddComment, handleUpdateComment, handleDeleteComment, handleLikeComment } = useComment()
 
-  // URL 업데이트 함수
   const updateURL = () => {
-    const params = new URLSearchParams()
-    if (skip) params.set("skip", skip.toString())
-    if (limit) params.set("limit", limit.toString())
-    if (searchQuery) params.set("search", searchQuery)
-    if (sortBy) params.set("sortBy", sortBy)
-    if (sortOrder) params.set("sortOrder", sortOrder)
-    if (selectedTag) params.set("tag", selectedTag)
-    navigate(`?${params.toString()}`)
+    updateURLParams(
+      {
+        skip,
+        limit,
+        search: searchQuery,
+        sortBy,
+        sortOrder,
+        tag: selectedTag,
+      },
+      navigate,
+    )
   }
 
   useEffect(() => {
