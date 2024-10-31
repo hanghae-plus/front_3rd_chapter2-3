@@ -1,11 +1,12 @@
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui";
 import { Search } from "lucide-react";
-import { useSearchQuery } from "../model/use-search-query";
 import { tagListState } from "@/entities/tag/model/tag-state";
+import { useSearchQuery } from "../model/use-search-query";
 
 const PostListSearch = () => {
   const { searchQuery, handleChangeQuery, handleSearchPostList } = useSearchQuery();
   const { tagList } = tagListState();
+
   return (
     <div className="flex gap-4">
       <div className="flex-1">
@@ -21,14 +22,7 @@ const PostListSearch = () => {
         </div>
       </div>
 
-      <Select
-        value={searchQuery.tag}
-        onValueChange={value => {
-          handleChangeQuery("tag", value);
-          // fetchPostsByTag(value);
-          // updateURL();
-        }}
-      >
+      <Select value={searchQuery.tag} onValueChange={value => handleChangeQuery("tag", value)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="태그 선택" />
         </SelectTrigger>
