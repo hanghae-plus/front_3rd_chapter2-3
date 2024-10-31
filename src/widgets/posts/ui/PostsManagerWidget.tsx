@@ -21,7 +21,6 @@ import {
   likeCommentMutation,
   updateCommentMutation,
 } from "../../../features/comments/api"
-import { fetchUser } from "../../../entities/user/api"
 import { usePostDialogs } from "../../../features/posts/model/usePostDialogs"
 import { useCommentDialogs } from "../../../features/comments/model/useCommentDialogs"
 import { useUserDialogs } from "../../../features/users/model/useUserDialogs"
@@ -57,7 +56,7 @@ const PostsManagerWidget = () => {
   // 선택된 항목 상태
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [selectedUserId, setSelectedUserId] = useState<number>()
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
 
   // Queries
@@ -125,9 +124,7 @@ const PostsManagerWidget = () => {
   }
 
   const handleUserModal = async (user: User) => {
-    const userData = await fetchUser(user.id)
-
-    setSelectedUser(userData)
+    setSelectedUserId(user.id)
     userDialogHandlers.handleDetailDialog()
   }
 
@@ -173,42 +170,54 @@ const PostsManagerWidget = () => {
         </div>
       </CardContent>
 
-      <PostDetailDialog
-        isShow={showPostDetailDialog}
-        handleDialog={dialogHandlers.handlePostDetail}
-        selectedPost={selectedPost}
-        likeComment={() => selectedComment && likeCommentMutate(selectedComment)}
-        deleteComment={() => selectedComment && deleteCommentMutate(selectedComment.id)}
-        searchQuery={searchQuery}
-        setSelectedComment={setSelectedComment}
-        setShowEditCommentDialog={commentDialogHandlers.handleEditDialog}
-        handleAddComment={commentDialogHandlers.handleAddDialog}
-      />
-      <PostAddDialog isShow={showAddDialog} handleDialog={dialogHandlers.handleAddDialog} addPost={addPost} />
-      <PostUpdateDialog
-        isShow={showEditDialog}
-        handleDialog={dialogHandlers.handleEditDialog}
-        selectedPost={selectedPost}
-        setSelectedPost={setSelectedPost}
-        updatePost={() => selectedPost && updatePost(selectedPost)}
-      />
-      <CommentAddDialog
-        isShow={showAddCommentDialog}
-        handleDialog={commentDialogHandlers.handleAddDialog}
-        addComment={(newComment: CommentPayload) => addComment(newComment)}
-      />
-      <CommentUpdateDialog
-        isShow={showEditCommentDialog}
-        handleDialog={commentDialogHandlers.handleEditDialog}
-        selectedComment={selectedComment}
-        setSelectedComment={setSelectedComment}
-        updateComment={() => selectedComment && updateCommentMutate(selectedComment)}
-      />
-      <UserDialog
-        isShow={showDetailDialog}
-        handleDialog={userDialogHandlers.handleDetailDialog}
-        selectedUser={selectedUser}
-      />
+      {showPostDetailDialog && (
+        <PostDetailDialog
+          isShow={showPostDetailDialog}
+          handleDialog={dialogHandlers.handlePostDetail}
+          selectedPost={selectedPost}
+          likeComment={() => selectedComment && likeCommentMutate(selectedComment)}
+          deleteComment={() => selectedComment && deleteCommentMutate(selectedComment.id)}
+          searchQuery={searchQuery}
+          setSelectedComment={setSelectedComment}
+          setShowEditCommentDialog={commentDialogHandlers.handleEditDialog}
+          handleAddComment={commentDialogHandlers.handleAddDialog}
+        />
+      )}
+      {showAddDialog && (
+        <PostAddDialog isShow={showAddDialog} handleDialog={dialogHandlers.handleAddDialog} addPost={addPost} />
+      )}
+      {showEditDialog && (
+        <PostUpdateDialog
+          isShow={showEditDialog}
+          handleDialog={dialogHandlers.handleEditDialog}
+          selectedPost={selectedPost}
+          setSelectedPost={setSelectedPost}
+          updatePost={() => selectedPost && updatePost(selectedPost)}
+        />
+      )}
+      {showAddCommentDialog && (
+        <CommentAddDialog
+          isShow={showAddCommentDialog}
+          handleDialog={commentDialogHandlers.handleAddDialog}
+          addComment={(newComment: CommentPayload) => addComment(newComment)}
+        />
+      )}
+      {showEditCommentDialog && (
+        <CommentUpdateDialog
+          isShow={showEditCommentDialog}
+          handleDialog={commentDialogHandlers.handleEditDialog}
+          selectedComment={selectedComment}
+          setSelectedComment={setSelectedComment}
+          updateComment={() => selectedComment && updateCommentMutate(selectedComment)}
+        />
+      )}
+      {selectedUserId && (
+        <UserDialog
+          isShow={showDetailDialog}
+          handleDialog={userDialogHandlers.handleDetailDialog}
+          selectedUserId={selectedUserId}
+        />
+      )}
     </Card>
   )
 }

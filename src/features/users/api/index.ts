@@ -1,3 +1,4 @@
 import { getUsers } from "./getUsers"
+import { getUser } from "./getUser"
 
-export { getUsers }
+export { getUsers, getUser }

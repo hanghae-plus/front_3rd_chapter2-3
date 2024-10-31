@@ -1,13 +1,15 @@
+import { getUser } from "../../../features/users/api"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
-import { UserDetail } from "../model/types"
 
 interface UserDialogProps {
   isShow: boolean
   handleDialog: () => void
-  selectedUser: UserDetail | null
+  selectedUserId: number
 }
 
-export const UserDialog = ({ isShow, handleDialog, selectedUser }: UserDialogProps) => {
+export const UserDialog = ({ isShow, handleDialog, selectedUserId }: UserDialogProps) => {
+  const { data: selectedUser } = getUser(selectedUserId)
+
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>
       <DialogContent>

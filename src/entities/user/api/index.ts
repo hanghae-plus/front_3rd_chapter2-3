@@ -1,6 +1,6 @@
 import { instance } from "../../../shared/api"
 import { ListResponse } from "../../../shared/model/types"
-import { User } from "../model/types"
+import { User, UserDetail } from "../model/types"
 
 export const fetchUsers = async (): Promise<ListResponse<User, "users">> => {
   const response = await instance.get(`/users?limit=0&select=username,image`)
@@ -11,7 +11,7 @@ export const searchUsers = async (keyword: string) => {
   return response.data
 }
 
-export const fetchUser = async (userId: number): Promise<User> => {
+export const fetchUser = async (userId: number): Promise<UserDetail> => {
   const response = await instance.get(`/users/${userId}`)
   return response.data
 }
