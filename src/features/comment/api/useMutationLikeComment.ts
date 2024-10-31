@@ -5,11 +5,9 @@ import { useComment } from "../model/useComment"
 const useMutationLikeComment = (id: number, postId: number) => {
   const { setComments, comments } = useComment()
   const likes = (comments[postId].find((c) => c.id === id)?.likes || 0) + 1
-  console.log(likes, "likes")
   return useMutation({
     mutationFn: () => patchCommentFetch(id, likes),
     onSuccess: (data) => {
-      console.log(data)
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment) => (comment.id === data.id ? data : comment)),

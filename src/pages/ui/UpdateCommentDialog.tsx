@@ -4,22 +4,16 @@ import { Textarea } from "../../shared/ui/Textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui/Dialog"
 import { useComment } from "../../features/comment/model/useComment"
 import { Comment } from "../../features/comment/model/types"
-import { putCommentFetch } from "../../entities/comment/api"
+import useMutationUpdateComment from "../../features/comment/api/useMutationUpdateComment"
 
 const UpdateCommentDialog = () => {
-  const { setComments, selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } =
-    useComment()
+  const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } = useComment()
+  const { mutate: mutateUpdateComment } = useMutationUpdateComment()
 
   // 댓글 업데이트
-  const updateComment = async () => {
+  const handleUpdateComment = () => {
     try {
-      if (!selectedComment) throw new Error("do not selected comment")
-      const data = await putCommentFetch(selectedComment.id, selectedComment.body)
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-      setShowEditCommentDialog(false)
+      mutateUpdateComment()
     } catch (error) {
       console.error("댓글 업데이트 오류:", error)
     }
@@ -36,7 +30,7 @@ const UpdateCommentDialog = () => {
             value={selectedComment?.body || ""}
             onChange={(e) => setSelectedComment({ ...(selectedComment as Comment), body: e.target.value })}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>
