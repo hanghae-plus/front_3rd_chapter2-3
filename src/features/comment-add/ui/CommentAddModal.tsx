@@ -1,20 +1,20 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 import { useMutationCommentAdd } from "../../comment/api/useMutationCommentAdd"
-import { useCommentsStore } from "../../comment/model/commentStore"
+import { useCommentAddModalStore } from "../../comment/model/commentAddModalStore"
 
 export const CommentAddModal = () => {
-  const { showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment } = useCommentsStore()
+  const { showAddCommentModal, setShowAddCommentModal, newComment, setNewComment } = useCommentAddModalStore()
 
   const { mutate: addCommentMutate } = useMutationCommentAdd()
   const handleAddComment = () => {
     addCommentMutate(newComment)
 
-    setShowAddCommentDialog(false)
+    setShowAddCommentModal(false)
     setNewComment({ body: "", postId: null, userId: 1 })
   }
 
   return (
-    <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
+    <Dialog open={showAddCommentModal} onOpenChange={setShowAddCommentModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 댓글 추가</DialogTitle>
