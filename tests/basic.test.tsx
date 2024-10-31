@@ -25,7 +25,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import PostsManager from '../src/pages/PostsManagerPage';
+import PostsManager from '../src/pages/NewPostsManagerPage';
 import { queryClient } from '../src/shared/api/queryClient';
 import {
   TEST_POSTS,
