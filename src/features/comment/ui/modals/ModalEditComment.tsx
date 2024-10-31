@@ -16,7 +16,7 @@ const ModalEditComment = ({ comment }: ModalEditCommentProps) => {
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" data-testid="edit-comment-button">
           <Edit2 className="w-3 h-3" />
         </Button>
       </Dialog.Trigger>

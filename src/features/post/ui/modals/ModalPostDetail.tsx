@@ -18,7 +18,7 @@ const ModalPostDetail = ({ post }: ModalPostDetailProps) => {
   return (
     <Dialog.Container open={isOpen} onOpenChange={toggle}>
       <Dialog.Trigger asChild>
-        <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+        <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)} data-testid="open-post-detail">
           <MessageSquare className="w-4 h-4" />
         </Button>
       </Dialog.Trigger>

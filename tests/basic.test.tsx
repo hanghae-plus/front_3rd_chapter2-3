@@ -1,13 +1,13 @@
 import { AppProviders } from "@/app/providers";
 import PostsManager from "@/pages/post-manager/ui/PostsManagerPage";
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter } from "react-router-dom";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
+import { TEST_COMMENTS, TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData";
 // MSW 서버 설정
 const server = setupServer(
   http.get("/api/posts", () => {
@@ -20,6 +20,10 @@ const server = setupServer(
 
   http.get("/api/users", () => {
     return HttpResponse.json(TEST_USERS);
+  }),
+
+  http.get("/api/comments/post/1", () => {
+    return HttpResponse.json(TEST_COMMENTS);
   }),
 
   http.get("/api/posts/tags", () => {
@@ -158,10 +162,173 @@ describe("PostsManager", () => {
 
     const nextButton = screen.getByRole("button", { name: /다음/i });
     await user.click(nextButton);
+
+    //TODO: next 페이지 테스트
+
+    const previousButton = screen.getByRole("button", { name: /이전/i });
+    await user.click(previousButton);
+
+    //TODO: previous 페이지 테스트
   });
-  it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다");
-  it("댓글 추가 기능이 올바르게 작동해야 합니다");
-  it("댓글 수정 기능이 올바르게 작동해야 합니다");
+  it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다", async () => {
+    const postIndex = 0;
+    const user = userEvent.setup();
+
+    renderPostsManager();
+
+    // 로딩 상태 확인 (선택적)
+    expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument();
+
+    // 게시물이 로드되었는지 확인
+    await waitFor(() => {
+      TEST_POSTS.posts.forEach((post) => {
+        expect(screen.getByText(post.title)).toBeInTheDocument();
+      });
+    });
+
+    // 게시물 상세 보기 대화상자 열기
+    const openButton = screen.getAllByTestId("open-post-detail");
+    await user.click(openButton[postIndex]);
+
+    // 게시물 내용 확인
+    const bodyText = screen.queryAllByText(TEST_POSTS.posts[postIndex].body);
+    expect(bodyText[postIndex]).toBeDefined();
+
+    // 게시물 상세 보기 대화상자 닫기
+    const closeButton = screen.getByRole("button", { name: /닫기/i });
+    await user.click(closeButton);
+  });
+  it("댓글 추가 기능이 올바르게 작동해야 합니다", async () => {
+    const postIndex = 0;
+    const NEW_COMMENT = {
+      userId: TEST_USERS.users[0].id,
+      body: "This is a new comment",
+      postId: TEST_POSTS.posts[postIndex].id,
+    };
+    const user = userEvent.setup();
+
+    // POST 요청에 대한 핸들러 추가
+    server.use(
+      http.post("/api/comments/add", async ({ request }) => {
+        const body = await request.json();
+        // 요청 body 검증 (선택적)
+        expect(body).toMatchObject({
+          body: NEW_COMMENT.body,
+          postId: NEW_COMMENT.postId,
+          userId: NEW_COMMENT.userId,
+        });
+        return HttpResponse.json({ ...NEW_COMMENT, user: TEST_USERS.users[0] });
+      }),
+    );
+
+    renderPostsManager();
+
+    // 로딩 상태 확인 (선택적)
+    expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument();
+
+    // 게시물이 로드되었는지 확인
+    await waitFor(() => {
+      TEST_POSTS.posts.forEach((post) => {
+        expect(screen.getByText(post.title)).toBeInTheDocument();
+      });
+    });
+
+    // 게시물 상세 보기 대화상자 열기
+    const openButton = screen.getAllByTestId("open-post-detail");
+    await user.click(openButton[postIndex]);
+
+    // 게시물 내용 확인
+    const bodyText = screen.queryAllByText(TEST_POSTS.posts[postIndex].body);
+    expect(bodyText[postIndex]).toBeDefined();
+
+    // 댓글 추가 버튼 클릭
+    const addCommentButton = screen.getByRole("button", { name: /댓글 추가/i });
+    await user.click(addCommentButton);
+
+    // 댓글 입력 확인
+    const commentInput = screen.getByPlaceholderText(/댓글 내용/i);
+    await user.type(commentInput, NEW_COMMENT.body);
+
+    // 댓글 추가 버튼 클릭
+    const submitButton = screen.getByRole("button", { name: /댓글 추가/i });
+    await user.click(submitButton);
+
+    // 댓글 추가 확인
+    await waitFor(() => {
+      expect(screen.getByText(NEW_COMMENT.body)).toBeInTheDocument();
+    });
+
+    // 게시물 상세 보기 대화상자 닫기
+    const closeButton = screen.getByRole("button", { name: /닫기/i });
+    await user.click(closeButton);
+  });
+  it("댓글 수정 기능이 올바르게 작동해야 합니다", async () => {
+    const postIndex = 0;
+    const EDIT_COMMENT = {
+      userId: TEST_USERS.users[0].id,
+      body: "This is a edited comment",
+      postId: TEST_POSTS.posts[postIndex].id,
+    };
+    const user = userEvent.setup();
+
+    // POST 요청에 대한 핸들러 추가
+    server.use(
+      http.put(`/api/comments/${TEST_COMMENTS.comments[0].id}`, async ({ request }) => {
+        const body = await request.json();
+        // 요청 body 검증 (선택적)
+        expect(body).toMatchObject({
+          body: EDIT_COMMENT.body,
+        });
+        return HttpResponse.json({ ...EDIT_COMMENT, user: TEST_USERS.users[0] });
+      }),
+    );
+
+    renderPostsManager();
+
+    // 로딩 상태 확인 (선택적)
+    expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument();
+
+    // 게시물이 로드되었는지 확인
+    await waitFor(() => {
+      TEST_POSTS.posts.forEach((post) => {
+        expect(screen.getByText(post.title)).toBeInTheDocument();
+      });
+    });
+
+    // 게시물 상세 보기 대화상자 열기
+    const openButton = screen.getAllByTestId("open-post-detail");
+    await user.click(openButton[postIndex]);
+
+    // 게시물 내용 확인
+    const bodyText = screen.queryAllByText(TEST_POSTS.posts[postIndex].body);
+    expect(bodyText[postIndex]).toBeDefined();
+
+    // 댓글 수정 버튼 클릭
+    const editButton = screen.getAllByTestId("edit-comment-button");
+    await user.click(editButton[0]);
+
+    // 댓글에 기본 값이 표기되어 있는지?
+    const input = screen.getByDisplayValue(TEST_COMMENTS.comments[0].body);
+
+    // 댓글 내용 수정
+    act(async () => {
+      await user.clear(input);
+    });
+    await user.type(input, EDIT_COMMENT.body);
+
+    // 댓글 업데이트 버튼 클릭
+    const submitButton = screen.getByRole("button", { name: /댓글 업데이트/i });
+    await user.click(submitButton);
+
+    // 댓글 업데이트 확인
+    await waitFor(() => {
+      expect(screen.getByText(EDIT_COMMENT.body)).toBeInTheDocument();
+    });
+
+    // 게시물 상세 보기 대화상자 닫기
+    const closeButton = screen.getByRole("button", { name: /닫기/i });
+    await user.click(closeButton);
+  });
   it("댓글 삭제 기능이 올바르게 작동해야 합니다");
   it("댓글 좋아요 기능이 올바르게 작동해야 합니다");
   it("사용자 모달이 올바르게 열리고 사용자 정보를 표시해야 합니다");
