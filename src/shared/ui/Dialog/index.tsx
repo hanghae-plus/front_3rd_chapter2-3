@@ -1,12 +1,12 @@
-import { forwardRef } from "react"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { X } from "lucide-react"
+import { forwardRef } from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
 
 // 대화상자 컴포넌트
-export const Dialog = DialogPrimitive.Root
-export const DialogTrigger = DialogPrimitive.Trigger
-export const DialogPortal = DialogPrimitive.Portal
-export const DialogOverlay = DialogPrimitive.Overlay
+export const Dialog = DialogPrimitive.Root;
+export const DialogTrigger = DialogPrimitive.Trigger;
+export const DialogPortal = DialogPrimitive.Portal;
+export const DialogOverlay = DialogPrimitive.Overlay;
 
 export const DialogContent: DivForwardRef = forwardRef(({ className, children, ...props }, ref) => (
   <DialogPortal>
@@ -23,13 +23,13 @@ export const DialogContent: DivForwardRef = forwardRef(({ className, children, .
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-))
-DialogContent.displayName = DialogPrimitive.Content.displayName
+));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={`flex flex-col space-y-1.5 text-center sm:text-left ${className}`} {...props} />
-)
-DialogHeader.displayName = "DialogHeader"
+);
+DialogHeader.displayName = "DialogHeader";
 
 export const DialogTitle: HeadingForwardRef = forwardRef(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
@@ -37,5 +37,5 @@ export const DialogTitle: HeadingForwardRef = forwardRef(({ className, ...props 
     className={`text-lg font-semibold leading-none tracking-tight ${className}`}
     {...props}
   />
-))
-DialogTitle.displayName = DialogPrimitive.Title.displayName
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;

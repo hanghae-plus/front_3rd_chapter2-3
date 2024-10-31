@@ -1,4 +1,4 @@
-import { forwardRef } from "react"
+import { forwardRef } from "react";
 
 export const Textarea: ForwardRefElement<HTMLTextAreaElement> = forwardRef(({ className, ...props }, ref) => {
   return (
@@ -7,6 +7,6 @@ export const Textarea: ForwardRefElement<HTMLTextAreaElement> = forwardRef(({ cl
       ref={ref}
       {...props}
     />
-  )
-})
-Textarea.displayName = "Textarea"
+  );
+});
+Textarea.displayName = "Textarea";

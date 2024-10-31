@@ -1,4 +1,4 @@
-import { forwardRef } from "react"
+import { forwardRef } from "react";
 
 export const Input: ForwardRefElement<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>> = forwardRef(
   ({ className, type, ...props }, ref) => {
@@ -9,8 +9,8 @@ export const Input: ForwardRefElement<HTMLInputElement, React.InputHTMLAttribute
         ref={ref}
         {...props}
       />
-    )
+    );
   },
-)
+);
 
-Input.displayName = "Input"
+Input.displayName = "Input";

@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 const Footer: React.FC = () => {
   return (
@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
         <p>&copy; 2023 Post Management System. All rights reserved.</p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

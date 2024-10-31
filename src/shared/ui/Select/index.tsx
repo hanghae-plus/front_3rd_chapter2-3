@@ -1,11 +1,11 @@
-import * as SelectPrimitive from "@radix-ui/react-select"
-import { Check, ChevronDown } from "lucide-react"
-import { forwardRef } from "react"
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { Check, ChevronDown } from "lucide-react";
+import { forwardRef } from "react";
 
 // 선택 컴포넌트
-export const Select = SelectPrimitive.Root
-export const SelectGroup = SelectPrimitive.Group
-export const SelectValue = SelectPrimitive.Value
+export const Select = SelectPrimitive.Root;
+export const SelectGroup = SelectPrimitive.Group;
+export const SelectValue = SelectPrimitive.Value;
 
 export const SelectTrigger: ForwardRefElement<HTMLButtonElement> = forwardRef(
   ({ className, children, ...props }, ref) => (
@@ -18,8 +18,8 @@ export const SelectTrigger: ForwardRefElement<HTMLButtonElement> = forwardRef(
       <ChevronDown className="h-4 w-4 opacity-50" />
     </SelectPrimitive.Trigger>
   ),
-)
-SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
+);
+SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 export const SelectContent: ForwardRefElement<HTMLDivElement, SelectPrimitive.SelectContentProps> = forwardRef(
   ({ className, children, position = "popper", ...props }, ref) => (
@@ -34,8 +34,8 @@ export const SelectContent: ForwardRefElement<HTMLDivElement, SelectPrimitive.Se
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   ),
-)
-SelectContent.displayName = SelectPrimitive.Content.displayName
+);
+SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 export const SelectItem: ForwardRefElement<HTMLDivElement, SelectPrimitive.SelectItemProps> = forwardRef(
   ({ className, children, ...props }, ref) => (
@@ -52,5 +52,5 @@ export const SelectItem: ForwardRefElement<HTMLDivElement, SelectPrimitive.Selec
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   ),
-)
-SelectItem.displayName = SelectPrimitive.Item.displayName
+);
+SelectItem.displayName = SelectPrimitive.Item.displayName;
