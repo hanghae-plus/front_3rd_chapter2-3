@@ -43,12 +43,12 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
     },
   });
 
-  const handleDeleteComment = async (id: number, postId: number) => {
+  const handleDeleteComment = (id: number) => {
     setId(id);
     deleteComment({ id: id });
   };
 
-  const handleLikeComment = async (id: number, postId: number) => {
+  const handleLikeComment = (id: number, postId: number) => {
     const comment = comments[postId]?.find((c) => c.id === id);
 
     if (!comment) {
@@ -96,7 +96,7 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
               >
                 <Edit2 className="w-3 h-3" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment.id, postId)}>
+              <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment.id)}>
                 <Trash2 className="w-3 h-3" />
               </Button>
             </div>
