@@ -10,4 +10,7 @@ export const queryKeys = {
     byPost: (postId: number) => [...queryKeys.comments.all, postId] as const,
     detail: (id: number) => [...queryKeys.comments.all, 'detail', id] as const
   },
+  tags: {
+    all: ['tags'] as const
+  }
 }
