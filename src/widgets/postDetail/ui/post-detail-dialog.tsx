@@ -1,5 +1,6 @@
 import { PostWithAuthorType } from "@/entities/post/model/post-type";
 import { PostTitleHighlight } from "@/entities/post/ui/post-title-highlight";
+import { CommentContainer } from "@/widgets/comment/comment-container";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui";
 
 interface PostDetailDialogProps {
@@ -21,7 +22,7 @@ export const PostDetailDialog = ({ post, isOpen, close }: PostDetailDialogProps)
           <p>
             <PostTitleHighlight text={post.body} />
           </p>
-          {/* {renderComments(post?.id)} */}
+          <CommentContainer post={post} />
         </div>
       </DialogContent>
     </Dialog>
