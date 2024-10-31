@@ -1,18 +1,25 @@
-import { useEffect, useState } from "react"
+import { atom, useAtom } from "jotai"
+import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+
+const skipAtom = atom(0)
+const limitAtom = atom(10)
+const searchQueryAtom = atom("")
+const sortByAtom = atom("")
+const sortOrderAtom = atom("asc")
+const selectedTagAtom = atom("")
 
 export const useSearch = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
 
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+  const [skip, setSkip] = useAtom(skipAtom)
+  const [limit, setLimit] = useAtom(limitAtom)
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
+  const [sortBy, setSortBy] = useAtom(sortByAtom)
+  const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
+  const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
   const updateURL = () => {
     const params = new URLSearchParams()
@@ -26,14 +33,13 @@ export const useSearch = () => {
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
+    setSkip(parseInt(queryParams.get("skip") || "0"))
+    setLimit(parseInt(queryParams.get("limit") || "10"))
+    setSearchQuery(queryParams.get("search") || "")
+    setSortBy(queryParams.get("sortBy") || "")
+    setSortOrder(queryParams.get("sortOrder") || "asc")
+    setSelectedTag(queryParams.get("tag") || "")
+  }, [location.search, setSkip, setLimit, setSearchQuery, setSortBy, setSortOrder, setSelectedTag])
 
   return {
     skip,
@@ -48,7 +54,6 @@ export const useSearch = () => {
     setSortOrder,
     selectedTag,
     setSelectedTag,
-
     updateURL,
   }
 }

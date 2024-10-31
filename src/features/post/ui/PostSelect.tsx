@@ -1,27 +1,14 @@
 import { SelectContent } from "@radix-ui/react-select"
 import { Select, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import { TagSelect } from "../../../widgets/tag/TagSelect"
-import { usePost } from "../model/store"
+import { TagSelect } from "../../tag/ui/TagSelect"
 import { useSearch } from "../../../shared/model/useSearch"
 
 export const PostSelect = () => {
-  const { sortBy, sortOrder, selectedTag, updateURL, setSortBy, setSortOrder, setSelectedTag } = useSearch()
-  const { getPostsByTag } = usePost()
+  const { sortBy, sortOrder, setSortBy, setSortOrder } = useSearch()
+
   return (
     <>
-      <Select
-        value={selectedTag}
-        onValueChange={(value) => {
-          setSelectedTag(value)
-          getPostsByTag(value)
-          updateURL()
-        }}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="태그 선택" />
-        </SelectTrigger>
-        <TagSelect />
-      </Select>
+      <TagSelect />
       <Select value={sortBy} onValueChange={setSortBy}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />
