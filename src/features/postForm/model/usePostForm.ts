@@ -7,6 +7,7 @@ export const usePostForm = (post?: Post) => {
     title: post?.title || "",
     body: post?.body || "",
     userId: post?.userId || 1,
+    tags: post?.tags || [],
   })
 
   const handleSubmit = async () => {
