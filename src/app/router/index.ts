@@ -1,1 +1,1 @@
-export { BrowserRouter as Router } from "react-router-dom"
+export { AppRouter } from "@/app/router/AppRouter"
