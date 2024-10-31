@@ -7,6 +7,7 @@ interface PostListState {
   postList: PostWithAuthorType[];
   addNewPost: (post: NewPostType) => void;
   setNewPostList: (newPostList: PostWithAuthorType[]) => void;
+  deletePost: (postId: number) => void;
 }
 
 const postDetail = (newPost: NewPostType): PostWithAuthorType => {
@@ -34,6 +35,10 @@ const updateIndexList = (postList: PostWithAuthorType[]) => {
   }));
 };
 
+const expectPost = (prev: PostWithAuthorType[], postId: number) => {
+  return prev.filter(post => post.id !== postId);
+};
+
 export const postListState = create<PostListState>(set => ({
   postList: [],
   addNewPost: newPost => {
@@ -43,5 +48,8 @@ export const postListState = create<PostListState>(set => ({
   },
   setNewPostList: newPostList => {
     set(() => ({ postList: newPostList }));
+  },
+  deletePost: postId => {
+    set(prev => ({ postList: expectPost(prev.postList, postId) }));
   },
 }));

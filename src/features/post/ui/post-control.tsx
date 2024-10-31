@@ -4,8 +4,10 @@ import { Button, TableCell } from "@/shared/ui";
 import { PostDetailDialog } from "@/widgets/post/ui/post-detail-dialog";
 import { PostItemType } from "@/entities/post/model/post-type";
 import { Edit2, MessageSquare, Trash2 } from "lucide-react";
+import { useDeletePost } from "../model/use-delete-post";
 
 export const PostControl = ({ post }: PostItemType) => {
+  const { handleDeletePost } = useDeletePost(post.id);
   return (
     <TableCell>
       <div className="flex items-center gap-2">
@@ -30,11 +32,7 @@ export const PostControl = ({ post }: PostItemType) => {
         >
           <Edit2 className="w-4 h-4" />
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          // onClick={() => deletePost(post.id)}
-        >
+        <Button variant="ghost" size="sm" onClick={() => handleDeletePost()}>
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>
