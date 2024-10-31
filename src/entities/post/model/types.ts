@@ -1,8 +1,14 @@
 import { Tag } from "../../tag/model"
 
+// Types
 export interface Reaction {
   dislikes: number
   likes: number
+}
+
+export interface Author {
+  username: string
+  image: string
 }
 
 export interface Post {
@@ -12,8 +18,11 @@ export interface Post {
   title: string
   body: string
   reactions: Reaction
+  author: Author | undefined
   tags: Tag[]
 }
+
+// APIs
 
 export interface GetPostsParams {
   limit: number

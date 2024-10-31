@@ -1,50 +1,29 @@
-import { Plus } from "lucide-react"
+import { Post } from "../../../entities/post/model/types"
 import { highlightText } from "../../../shared/lib/text"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import CommentList from "../../comment/components/CommentList"
 
-const PostDetailDialog = () => {
-  // const renderComments = () => (
-  //     <div className="mt-2">
-  //       <div className="flex items-center justify-between mb-2">
-  //         <h3 className="text-sm font-semibold">댓글</h3>
-  //         <Button
-  //           size="sm"
-  //           onClick={() => {
-  //             setNewComment((prev) => ({ ...prev, postId }))
-  //             setShowAddCommentDialog(true)
-  //           }}
-  //         >
-  //           <Plus className="w-3 h-3 mr-1" />
-  //           댓글 추가
-  //         </Button>
-  //       </div>
-  //       <div className="space-y-1">
-  //         {comments.map((comment) => (
-  //           <CommentIte
-  //             key={comment.id}
-  //             comment={comment}
-  //             searchQuery={searchQuery}
-  //             onLikeClick={handleLikeComment}
-  //             onDeleteClick={handleDeleteComment}
-  //             onEditClick={(comment) => {
-  //               setSelectedComment(comment)
-  //               setShowEditCommentDialog(true)
-  //             }}
-  //           />
-  //         ))}
-  //       </div>
-  //     </div>
-  //   )
+export interface PostDetailDialogProps {
+  postId: number
+  post: Post | null
+  searchQuery: string
+  onOpenChange: (open: boolean) => void
+}
+
+const PostDetailDialog = ({ onOpenChange, post, postId, searchQuery }: PostDetailDialogProps) => {
+  if (!post) return
 
   return (
-    <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
+    <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
+          <DialogTitle>{highlightText(post.title, searchQuery)}</DialogTitle>
         </DialogHeader>
+
         <div className="space-y-4">
-          <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-          {renderComments(selectedPost?.id)}
+          <p>{highlightText(post.body, searchQuery)}</p>
+
+          <CommentList postId={postId} searchQuery={searchQuery} />
         </div>
       </DialogContent>
     </Dialog>

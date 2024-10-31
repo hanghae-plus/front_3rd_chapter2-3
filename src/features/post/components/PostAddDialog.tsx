@@ -3,12 +3,11 @@ import { Post } from "../../../entities/post/model/types"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 
 export interface PostAddDialogProps {
-  open: boolean
   onOpenChange: (open: boolean) => void
   onSubmit: (post: Pick<Post, "title" | "body" | "userId">) => void
 }
 
-const PostAddDialog = ({ open, onOpenChange, onSubmit }: PostAddDialogProps) => {
+const PostAddDialog = ({ onOpenChange, onSubmit }: PostAddDialogProps) => {
   const [value, setValue] = useState<Pick<Post, "title" | "body" | "userId">>({ title: "", body: "", userId: 1 })
 
   const handleChange = (id: string) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -22,7 +21,7 @@ const PostAddDialog = ({ open, onOpenChange, onSubmit }: PostAddDialogProps) => 
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 게시물 추가</DialogTitle>

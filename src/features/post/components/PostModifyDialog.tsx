@@ -3,13 +3,12 @@ import { Post } from "../../../entities/post/model/types"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 
 export interface PostModifyDialogProps {
-  open: boolean
   post: Post | null
   onOpenChange: (open: boolean) => void
   onSubmit: (post: Post) => void
 }
 
-const PostModifyDialog = ({ open, post, onOpenChange, onSubmit }: PostModifyDialogProps) => {
+const PostModifyDialog = ({ post, onOpenChange, onSubmit }: PostModifyDialogProps) => {
   if (!post) return
 
   const { title, body } = post
@@ -27,7 +26,7 @@ const PostModifyDialog = ({ open, post, onOpenChange, onSubmit }: PostModifyDial
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>

@@ -2,12 +2,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { User } from "../model/types"
 
 export interface UserInfoDialogProps {
-  open: boolean
   onOpenChange: (open: boolean) => void
   user: User | null
 }
 
-const UserInfoDialog = ({ open, onOpenChange, user }: UserInfoDialogProps) => {
+const UserInfoDialog = ({ onOpenChange, user }: UserInfoDialogProps) => {
   if (!user) {
     return
   }
@@ -15,7 +14,7 @@ const UserInfoDialog = ({ open, onOpenChange, user }: UserInfoDialogProps) => {
   const { username, image, firstName, lastName, age, email, phone, address, company } = user
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>사용자 정보</DialogTitle>
