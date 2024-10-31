@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { Edit2, Plus, Search, ThumbsUp, Trash2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Button,
@@ -17,15 +17,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
   Textarea,
 } from "../shared/ui";
-import { PostTable } from "../widgets/post";
+import { PostsTable } from "../widgets/post";
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -459,7 +453,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostsTable />}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">

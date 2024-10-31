@@ -1,1 +1,4 @@
-export * from "./PostTable";
+export * from "./PostsTable";
+export * from "./PostsTableHeader";
+export * from "./PostsTableBody";
+export * from "./Reaction";

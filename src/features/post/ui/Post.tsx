@@ -1,15 +1,25 @@
-import { TableCell } from "../../../shared/ui";
+import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react";
+import { Button, HighlightText, TableCell, TableRow } from "../../../shared/ui";
+import { Reaction } from "../../../widgets/post";
 
-export function Post() {
+type Props = {
+  post: Post & {
+    author?: User;
+  };
+};
+
+export function Post({ post }: Props) {
+  const { id, title, tags, author, reactions } = post;
   return (
-    <TableRow key={post.id}>
-      <TableCell>{post.id}</TableCell>
+    <TableRow>
+      <TableCell>{id}</TableCell>
       <TableCell>
         <div className="space-y-1">
-          <div>{highlightText(post.title, searchQuery)}</div>
-
+          <div>
+            <HighlightText text={title} highlight="searchQuery" />
+          </div>
           <div className="flex flex-wrap gap-1">
-            {post.tags.map((tag) => (
+            {tags.map((tag) => (
               <span
                 key={tag}
                 className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
@@ -29,18 +39,13 @@ export function Post() {
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
-          <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-          <span>{post.author?.username}</span>
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(author)}>
+          <img src={author?.image} alt={author?.username} className="w-8 h-8 rounded-full" />
+          <span>{author?.username}</span>
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center gap-2">
-          <ThumbsUp className="w-4 h-4" />
-          <span>{post.reactions?.likes || 0}</span>
-          <ThumbsDown className="w-4 h-4" />
-          <span>{post.reactions?.dislikes || 0}</span>
-        </div>
+        <Reaction reactions={reactions} />
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
@@ -57,7 +62,7 @@ export function Post() {
           >
             <Edit2 className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+          <Button variant="ghost" size="sm" onClick={() => deletePost(id)}>
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>

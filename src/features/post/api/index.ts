@@ -1,20 +1,23 @@
 import { postApis } from "../../../entities/post/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { userApis } from "../../../entities/user/api";
 
-export const usePostListQuery = (skip = 0, limit = 10) => {
-  return useQuery({
+type ResPostsParams = {
+  skip?: number;
+  limit?: number;
+  query?: string;
+  search?: string;
+};
+
+export const usePostsQuery = ({ skip = 0, limit = 10, query = "", search = "" }: ResPostsParams) => {
+  return useQuery<ResPostsList>({
     queryKey: ["postList", limit, skip],
-    queryFn: async () => {
-      const resPostList = await postApis.fetchPostList(skip, limit);
-      const resUserList = await userApis.fetchUserList();
-      const postsWithUsers = resPostList.posts.map((post) => ({
-        ...post,
-        author: resUserList.users.find((user) => {
-          return user.id === post.userId;
-        }),
-      }));
-      return { posts: postsWithUsers, total: resPostList.total, limit };
+    queryFn: () => {
+      if (search) {
+        return postApis.fetchSearchPosts(search);
+      } else if (query) {
+        return postApis.fetchSearchPosts(query);
+      }
+      return postApis.fetchPosts(skip, limit);
     },
   });
 };
@@ -22,7 +25,7 @@ export const usePostListQuery = (skip = 0, limit = 10) => {
 export function useSearchPostListQuery(query: string) {
   return useQuery({
     queryKey: ["postList", query],
-    queryFn: () => postApis.fetchSearchPostList(query),
+    queryFn: () => postApis.fetchSearchPosts(query),
   });
 }
 

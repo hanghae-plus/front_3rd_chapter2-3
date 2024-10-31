@@ -1,18 +1,19 @@
 export const postApis = {
-  fetchPostList: async (skip: number, limit: number): Promise<ResPostsList> => {
+  fetchPosts: async (skip: number, limit: number): Promise<ResPostsList> => {
     const response = await fetch(`/api/posts?skip=${skip}&limit=${limit}`);
     return await response.json();
   },
 
-  fetchSearchPostList: async (query: string): Promise<ResPostsList> => {
+  fetchSearchPosts: async (query: string): Promise<ResPostsList> => {
     const response = await fetch(`/api/posts/search?q=${query}`);
     return await response.json();
   },
 
-  fetchPostListWithTag: async (tag: string): Promise<ResPostsList> => {
+  fetchPostsWithTag: async (tag: string): Promise<ResPostsList> => {
     const response = await fetch(`/api/posts/tag/${tag}`);
     return await response.json();
   },
+
   addPost: async (post: ReqAddPostBody) => {
     const response = await fetch("/api/posts/add", {
       method: "POST",
