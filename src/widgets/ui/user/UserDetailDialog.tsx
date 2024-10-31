@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
-import { usePost } from "../../../shared/model/usePost"
+import { usePost } from "../../../features/model/post/usePost"
 
 export const UserDetailDialog = () => {
   const { showUserModal, setShowUserModal, selectedUser: user } = usePost()

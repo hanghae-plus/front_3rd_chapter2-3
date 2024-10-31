@@ -1,4 +1,4 @@
-import { usePost } from "../../../shared/model/usePost"
+import { usePost } from "../../../features/model/post/usePost"
 import { useURLParams } from "../../../features/model/url/useURLParams"
 import { URLParams } from "../../../shared/types"
 import { PostItemsPerPage } from "./PostItemsPerPage"

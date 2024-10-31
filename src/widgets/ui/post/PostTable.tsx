@@ -2,7 +2,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button }
 import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react"
 import { highlightText } from "../../../shared/lib/highlight"
 import type { URLParams } from "../../../shared/types"
-import { usePost } from "../../../shared/model/usePost"
+import { usePost } from "../../../features/model/post/usePost"
 import { useURLParams } from "../../../features/model/url/useURLParams"
 
 export const PostTable = () => {

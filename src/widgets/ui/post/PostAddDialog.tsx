@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea, Button } from "../../../shared/ui"
-import { usePost } from "../../../shared/model/usePost"
+import { usePost } from "../../../features/model/post/usePost"
 
 export const PostAddDialog = () => {
   const { handleAddPost, showAddDialog, setShowAddDialog, newPost, setNewPost } = usePost()
