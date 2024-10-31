@@ -34,9 +34,14 @@ export const useQuerySearchPosts = () => {
 
 // 태그별 게시물 가져오기
 export const useQueryPostsByTag = (tag: TagSlug) => {
+  const [searchParams] = useSearchParams()
+
+  const limit = Math.max(1, parseInt(searchParams.get("limit") || "10"))
+  const skip = Math.max(0, parseInt(searchParams.get("skip") || "0"))
+
   const query = useQuery({
     queryKey: ["postsByTag", tag],
-    queryFn: () => fetchPostsByTag(tag),
+    queryFn: () => (tag === "all" ? fetchPosts({ limit, skip }) : fetchPostsByTag(tag)),
   })
 
   return query

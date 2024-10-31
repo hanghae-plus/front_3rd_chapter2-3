@@ -28,8 +28,6 @@ import {
   Post,
   PostComments,
   PostId,
-  Tag,
-  TagSlug,
   User,
   UserId,
 } from "@/shared/types"
@@ -49,6 +47,8 @@ import { useAtom } from "jotai"
 import { QueryProvider } from "@/pages/PostsManagerPage/store"
 import { loadingAtom } from "@/shared/model"
 import { postsAtom } from "@/entities/post"
+import { PostsTagFilter } from "@/features/posts-tag-filter"
+import { tagAtom } from "@/entities/tag"
 
 const PostsManagerPage = () => {
   const navigate = useNavigate()
@@ -60,17 +60,15 @@ const PostsManagerPage = () => {
 
   const [skip, setSkip] = useState<number>(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState<number>(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState<string>(queryParams.get("search") || "")
+  const [searchQuery] = useState<string>(queryParams.get("search") || "")
   const [sortBy, setSortBy] = useState<string>(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState<string>(queryParams.get("sortOrder") || "asc")
-  const [selectedTag, setSelectedTag] = useState<string>(queryParams.get("tag") || "")
+  const [selectedTag, setSelectedTag] = useAtom<string>(tagAtom)
 
   const [posts, setPosts] = useAtom<Post[]>(postsAtom)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
   const [total, setTotal] = useState<number>(0)
-
-  const [tags, setTags] = useState<Tag[]>([])
 
   const [comments, setComments] = useState<PostComments>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
@@ -122,44 +120,9 @@ const PostsManagerPage = () => {
     }
   }
 
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch("/api/posts/tags")
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
-  }
-
-  // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag: TagSlug) => {
-    if (!tag || tag === "all") {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: Author) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
-    setLoading(false)
-  }
+  useEffect(() => {
+    fetchPosts()
+  }, [])
 
   // 게시물 추가
   const addPost = async () => {
@@ -334,29 +297,6 @@ const PostsManagerPage = () => {
     }
   }
 
-  useEffect(() => {
-    fetchTags()
-  }, [])
-
-  useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
-
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
     <Table>
@@ -491,26 +431,7 @@ const PostsManagerPage = () => {
             {/* 검색 및 필터 컨트롤 */}
             <div className="flex gap-4">
               <PostsSearch />
-              <Select
-                value={selectedTag}
-                onValueChange={(value) => {
-                  setSelectedTag(value)
-                  fetchPostsByTag(value)
-                  updateURL()
-                }}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="태그 선택" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">모든 태그</SelectItem>
-                  {tags.map((tag) => (
-                    <SelectItem key={tag.url} value={tag.slug}>
-                      {tag.slug}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <PostsTagFilter />
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="정렬 기준" />
