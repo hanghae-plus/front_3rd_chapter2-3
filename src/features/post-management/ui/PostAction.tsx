@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Edit2, MessageSquare, Search, Trash2 } from 'lucide-react';
+import { Edit2, MessageSquare, Search, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
 import { Button } from '../../../shared/ui/button/Button';
 import { Post, SortOrder } from '../../../entities/post/model/types';
 import { usePostStore } from '../../../entities/post/model/store';
@@ -33,6 +33,17 @@ export const PostActions: FC<PostActionsProps> = ({
     </div>
   );
 };
+
+export const PostReactions = ({ reactions }: { reactions?: { likes: number; dislikes: number } }) => {
+    return (
+      <div className="flex items-center gap-2">
+        <ThumbsUp className="w-4 h-4" />
+        <span>{reactions?.likes || 0}</span>
+        <ThumbsDown className="w-4 h-4" />
+        <span>{reactions?.dislikes || 0}</span>
+      </div>
+    );
+  };
 
 // features/post-management/ui/SearchFilter.tsx
 export const SearchFilter = () => {
