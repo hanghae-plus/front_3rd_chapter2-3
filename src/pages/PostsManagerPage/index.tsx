@@ -37,7 +37,7 @@ import { CommentEditDialog, CommentEditDialogOpenButton } from "@/features/comme
 import { CommentAddDialog, CommentAddDialogOpenButton } from "@/features/comment-add-dialog"
 import PostEditDialog from "@/features/post/ui/PostEditDialog"
 import { highlightText } from "@/shared/lib"
-import UserDetailDialog from "@/features/user/ui/UserDetailDialog"
+import { UserDetailDialog, UserDetailDialogOpenButton } from "@/features/user-detail-dialog"
 import PostDetailDialog from "@/features/post/ui/PostDetailDialog"
 import CommentEditDialogOpenButton from "@/features/comment/ui/CommentEditDialogOpenButton"
 import Pagination from "@/shared/ui/Pagination"
@@ -337,10 +337,7 @@ const PostsManagerPage = () => {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author.id)}>
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
+              <UserDetailDialogOpenButton post={post} onClick={() => openUserModal(post.author.id)} />
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
