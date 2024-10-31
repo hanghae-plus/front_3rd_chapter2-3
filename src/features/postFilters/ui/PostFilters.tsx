@@ -28,7 +28,7 @@ export const PostFilters = ({ onChange }: PostFiltersProps) => {
         <SelectContent>
           <SelectItem value="all">모든 태그</SelectItem>
           {tags.map((tag) => (
-            <SelectItem key={tag.slug} value={tag}>
+            <SelectItem key={tag.slug} value={tag.slug}>
               {tag.name}
             </SelectItem>
           ))}
