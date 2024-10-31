@@ -21,6 +21,8 @@ export interface Author {
 export interface Page {
   limit: number
   skip: number
+  sortBy: string
+  sortOrder: string
 }
 
 export interface NewPost {

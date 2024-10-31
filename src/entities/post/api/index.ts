@@ -12,9 +12,19 @@ export interface PostsData {
  * @param {Page} 게시물 페이지네이션 범위
  * @returns {Promise<Post[]>} 게시물 목록
  */
-export const fetchPostsApi = async ({ limit, skip }: Page): Promise<PostsData> => {
+export const fetchPostsApi = async ({ limit, skip, sortBy, sortOrder }: Page): Promise<PostsData> => {
   try {
-    const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
+    const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}&sortBy=${sortBy}&sortOrder=${sortOrder}`)
+    const data = await response.json()
+    return data
+  } catch (error) {
+    throw new Error(`게시물 목록 가져오기 오류: ${error}`)
+  }
+}
+
+export const fetchPostApi = async (postId: number): Promise<Post> => {
+  try {
+    const response = await fetch(`/api/posts/${postId}`)
     const data = await response.json()
     return data
   } catch (error) {
@@ -96,13 +106,14 @@ export const updatePostApi = async (updatingPost: Post): Promise<Post> => {
 /**
  * 게시물을 삭제합니다.
  * @param postId 게시물 번호
- * @returns {void}
+ * @returns {number}
  */
-export const deletePostApi = async (postId: number): Promise<void> => {
+export const deletePostApi = async (postId: number): Promise<number> => {
   try {
     await fetch(`/api/posts/${postId}`, {
       method: "DELETE",
     })
+    return postId
   } catch (error) {
     throw new Error(`게시물 삭제 오류: ${error}`)
   }
