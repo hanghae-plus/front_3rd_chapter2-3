@@ -1,14 +1,14 @@
 import { Search } from "lucide-react"
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { usePostParams } from "../model/usePostParams.ts"
-import { useTagsQuery } from "../../tags/api/useTagsQuery.ts"
 import { usePostSearch } from "../model/usePostSearch.ts"
+import { useTagsQuery } from "../../tags/api/queries.ts"
 
 export default function PostSearchFilter() {
   const { setSearchQuery, sortBy, setSortBy, sortOrder, setSortOrder, selectedTag, setSelectedTag, updateURL } =
     usePostParams()
 
-  const { data: tags, refetch } = useTagsQuery()
+  const { data: tags } = useTagsQuery()
   const { searchText, setSearchText } = usePostSearch()
 
   const searchPosts = () => {

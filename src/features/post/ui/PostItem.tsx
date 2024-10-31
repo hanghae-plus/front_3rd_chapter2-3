@@ -10,12 +10,15 @@ import { useUserModal } from "../../user/model/useUserModal.ts"
 import { fetchUserDetailApi } from "../../../entities/user/api"
 import { usePostSearch } from "../model/usePostSearch.ts"
 import { useDeletePostMutation } from "../api/mutations.ts"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface Props {
   post: Post
 }
 
 export default function PostItem({ post }: Props) {
+  const queryClient = useQueryClient()
+
   const { selectedTag, setSelectedTag, updateURL } = usePostParams()
   const { searchText } = usePostSearch()
   const { setSelectedPost, setShowPostDetailDialog, setShowEditDialog } = usePostDialog()
@@ -35,7 +38,11 @@ export default function PostItem({ post }: Props) {
   }
 
   const openUserModal = async (user: User) => {
-    const userDetailData = await fetchUserDetailApi(user)
+    const userDetailData = await queryClient.fetchQuery({
+      queryKey: ["user", user.id],
+      queryFn: () => fetchUserDetailApi(user.id),
+    })
+
     setSelectedUser(userDetailData)
     setShowUserModal(true)
   }

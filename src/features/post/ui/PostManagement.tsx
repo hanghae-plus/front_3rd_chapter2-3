@@ -4,16 +4,16 @@ import PostSearchFilter from "./PostSearchFilter.tsx"
 import PostTable from "../../../widgets/post/ui/PostTable.tsx"
 import PostPagination from "./PostPagination.tsx"
 import { usePostDialog } from "../model/usePostDialog.ts"
-import { useUsersQuery } from "../../user/api/useUsersQuery.ts"
 import { usePostsQuery } from "../api/queries.ts"
 import { createPosts } from "../../../entities/post/model"
+import { useUsersQuery } from "../../user/api/queries.ts"
 
 export default function PostManagement() {
   const { setShowAddDialog } = usePostDialog()
   const { data: usersData } = useUsersQuery()
   const { data: postsData, isLoading } = usePostsQuery()
 
-  const posts = postsData?.posts && createPosts(postsData.posts, usersData)
+  const posts = postsData?.posts && createPosts(postsData.posts, usersData.users)
 
   return (
     <>

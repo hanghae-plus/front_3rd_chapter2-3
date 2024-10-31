@@ -11,9 +11,9 @@ export const fetchUsersApi = async () => {
   }
 }
 
-export const fetchUserDetailApi = async (user: User) => {
+export const fetchUserDetailApi = async (id: number) => {
   try {
-    const response = await fetch(`/api/users/${user.id}`)
+    const response = await fetch(`/api/users/${id}`)
     const data: UserDetail = await response.json()
 
     return data
