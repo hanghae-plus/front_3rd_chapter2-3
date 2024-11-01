@@ -6,9 +6,9 @@ import { queryKeys } from "@/entities/post"
 export const Pagination = () => {
   const params = useQueryParam()
   const queryClient = useQueryClient()
-  const cachedData: { total: number } = queryClient.getQueryData(queryKeys.FETCH_POSTS_KEY(params.limit, params.skip))
-
-  console.log(cachedData)
+  const cachedData: {
+    total: number
+  } = queryClient.getQueryData(queryKeys.FETCH_POSTS_KEY(params.limit, params.skip)) ?? { total: 100 }
 
   return (
     <div className="flex justify-between items-center">
