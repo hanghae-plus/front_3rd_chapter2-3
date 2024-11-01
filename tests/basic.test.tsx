@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest"
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { http, HttpResponse } from "msw"
 import { setupServer } from "msw/node"
 import { MemoryRouter } from "react-router-dom"
-import PostsManager from "../src/pages/PostsManagerPage"
 import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
+import { PostContent } from "@/widgets/post"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -47,7 +47,7 @@ afterAll(() => server.close())
 const renderPostsManager = () => {
   return render(
     <MemoryRouter>
-      <PostsManager />
+      <PostContent />
     </MemoryRouter>,
   )
 }
@@ -82,7 +82,7 @@ describe("PostsManager", () => {
     const user = userEvent.setup()
     const NEW_POST = {
       id: TEST_POSTS.posts.length + 1,
-      title: "New Post",
+      title: "New Types",
       body: "This is a new post",
       userId: 1,
       tags: [],
