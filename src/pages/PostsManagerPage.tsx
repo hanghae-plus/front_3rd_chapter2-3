@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 
 import Card from "../shared/ui/Card"
@@ -26,17 +26,7 @@ import { usePostStore } from "../entities/post/model/postStore"
 import useSyncQueryParams from "../features/post/api/useSyncQueryParams"
 
 const PostsManager = () => {
-  const {
-    posts,
-    loading,
-    fetchPosts,
-    total,
-    searchPosts,
-    fetchPostsByTag,
-    appendLocalPost,
-    updateLocalPost,
-    removeLocalPost,
-  } = useFetchPosts()
+  const { posts, loading, total, addToPostQuery, removePostQuery, updatePostQuery } = useFetchPosts()
   const { comments, fetchComments, createComment, updateComment, deleteComment, likeComment } = useManageComments()
   const { selectedUser, handleSetSelectedUser, showUserModal, handleCloseUserModal } = useSelectedUserModal()
   const { selectedPost, handleSetSelectedPost, showPostModal, handleClosePostModal } = useSelectedPostModal()
@@ -66,36 +56,21 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
 
-  // 게시물 가져오기
-  const handleFetchPosts = () => {
-    fetchPosts({ limit, skip })
-  }
-
   // 게시물 검색
   const handleSearchPosts = async () => {
-    if (!searchQuery) {
-      handleFetchPosts()
-      return
-    }
-
-    searchPosts({ q: searchQuery })
+    setSearchQuery(searchQuery)
   }
 
   // 태그별 게시물 가져오기
   const handleFetchPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      handleFetchPosts()
-      return
-    }
-
-    fetchPostsByTag({ tag })
+    setSelectedTag(tag)
   }
 
   // 게시물 추가
   const addPost = async (post: Partial<Post>) => {
     try {
       const data = await postApi.createPost(post)
-      appendLocalPost(data)
+      addToPostQuery(data)
       setShowAddDialog(false)
     } catch (error) {
       console.error("게시물 추가 오류:", error)
@@ -107,7 +82,7 @@ const PostsManager = () => {
     if (!selectedPost) return
     try {
       const data = await postApi.updatePost({ id: selectedPost.id, payload: selectedPost })
-      updateLocalPost(data)
+      updatePostQuery(data)
       setShowEditDialog(false)
     } catch (error) {
       console.error("게시물 업데이트 오류:", error)
@@ -118,7 +93,7 @@ const PostsManager = () => {
   const deletePost = async (id: number) => {
     try {
       await postApi.deletePost(id)
-      removeLocalPost(id)
+      removePostQuery(id)
     } catch (error) {
       console.error("게시물 삭제 오류:", error)
     }
@@ -171,14 +146,6 @@ const PostsManager = () => {
       console.error("사용자 정보 가져오기 오류:", error)
     }
   }
-
-  useEffect(() => {
-    if (selectedTag) {
-      handleFetchPostsByTag(selectedTag)
-    } else {
-      handleFetchPosts()
-    }
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
