@@ -10,7 +10,7 @@ export const fetchPosts = (
   setTotal: (total: number) => void,
 ) => {
   setLoading(true)
-  let postsData: { posts: any[]; total: number }
+  let postsData: { posts: Post[]; total: number }
   let usersData: User[]
 
   fetch(`/api/posts?limit=${limit}&skip=${skip}`)

@@ -10,7 +10,7 @@ export interface Post {
     likes: number
     dislikes: number
   }
-  author: User
+  author?: User
 }
 
 // 수정용 타입 추가

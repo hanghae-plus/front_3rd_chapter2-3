@@ -57,7 +57,7 @@ export const PostTableRows = ({
                     }`}
                     onClick={() => {
                       setSelectedTag(tag)
-                      updateURL({selectedTag})
+                      updateURL({ selectedTag })
                     }}
                   >
                     {tag}
@@ -69,7 +69,7 @@ export const PostTableRows = ({
           <TableCell className="authorInfo">
             <div
               className="flex items-center space-x-2 cursor-pointer"
-              onClick={() => openUserModal(post.author)}
+              onClick={() => (post.author ? openUserModal(post.author) : null)}
             >
               <img
                 src={post.author?.image}

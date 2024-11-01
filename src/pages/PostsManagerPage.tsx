@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Table } from "../shared/ui/Table"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/Card"
@@ -67,6 +67,10 @@ const PostsManager = () => {
   // URL 업데이트 함수
   const updateURL = useListNavigation()
 
+  const handleFetchPosts = useCallback(() => {
+    fetchPosts(limit, skip, setLoading, setPosts, setTotal)
+  }, [limit, skip, setLoading, setPosts, setTotal])
+
   // 게시물 검색
   const searchPosts = async () => {
     if (!searchQuery) {
@@ -86,32 +90,35 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag: string) => {
-    if (!tag || tag === "all") {
-      fetchPosts(limit, skip, setLoading, setPosts, setTotal)
-      return
-    }
-    setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
+  const fetchPostsByTag = useCallback(
+    async (tag: string) => {
+      if (!tag || tag === "all") {
+        handleFetchPosts()
+        return
+      }
+      setLoading(true)
+      try {
+        const [postsResponse, usersResponse] = await Promise.all([
+          fetch(`/api/posts/tag/${tag}`),
+          fetch("/api/users?limit=0&select=username,image"),
+        ])
+        const postsData = await postsResponse.json()
+        const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }))
+        const postsWithUsers = postsData.posts.map((post: Post) => ({
+          ...post,
+          author: usersData.users.find((user: User) => user.id === post.userId),
+        }))
 
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
-    setLoading(false)
-  }
+        setPosts(postsWithUsers)
+        setTotal(postsData.total)
+      } catch (error) {
+        console.error("태그별 게시물 가져오기 오류:", error)
+      }
+      setLoading(false)
+    },
+    [limit, skip],
+  )
 
   // 게시물 추가
   const addPost = async () => {
@@ -141,7 +148,6 @@ const PostsManager = () => {
         body: JSON.stringify(selectedPost),
       })
       const data = await response.json()
-      console.log(data)
       setPosts(posts.map((post) => (post.id === data.id ? data : post)))
       setShowEditDialog(false)
     } catch (error) {
@@ -163,12 +169,10 @@ const PostsManager = () => {
 
   // 댓글 가져오기
   const fetchComments = async (postId: number) => {
-    console.log(comments)
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
       const response = await fetch(`/api/comments/post/${postId}`)
       const data = await response.json()
-      console.log(data)
       setComments((prev) => ({ ...prev, [postId]: data.comments }))
     } catch (error) {
       console.error("댓글 가져오기 오류:", error)
@@ -243,12 +247,6 @@ const PostsManager = () => {
 
       const newLikes = comment.likes + 1
 
-      console.log("Before API call:", {
-        commentId: id,
-        currentLikes: comment.likes,
-        newLikes,
-      })
-
       const response = await fetch(`/api/comments/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -287,7 +285,6 @@ const PostsManager = () => {
 
   // 사용자 모달 열기
   const openUserModal = async (user: User) => {
-    console.log(user)
     try {
       const response = await fetch(`/api/users/${user.id}`)
       const userData = await response.json()
@@ -311,9 +308,9 @@ const PostsManager = () => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag)
     } else {
-      fetchPosts(limit, skip, setLoading, setPosts, setTotal)
+      handleFetchPosts()
     }
-  }, [skip, limit, sortKey, sortOrder, selectedTag])
+  }, [selectedTag, fetchPostsByTag, handleFetchPosts])
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
