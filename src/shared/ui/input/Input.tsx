@@ -1,10 +1,9 @@
-import * as React from "react"
 import { forwardRef } from "react"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string
+  type?: "text" | "email" | "password" | "number" | "tel" | "search" | "url"
 }
-
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
   return (
     <input
@@ -15,5 +14,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type
     />
   )
 })
-
 Input.displayName = "Input"
