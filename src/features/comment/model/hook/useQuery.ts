@@ -25,3 +25,9 @@ export function useLikeCommentMutation() {
     mutationFn: (req: { id: number; likes: number }) => commentApis.likeComment(req),
   });
 }
+
+export function useAddCommentMutation() {
+  return useMutation({
+    mutationFn: (reqBody: ReqAddCommentBody) => commentApis.addComment(reqBody),
+  });
+}

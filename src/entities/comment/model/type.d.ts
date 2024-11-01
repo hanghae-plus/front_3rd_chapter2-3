@@ -18,3 +18,5 @@ type CommentUser = {
   username: string;
   fullName: string;
 };
+
+type ReqAddCommentBody = Pick<CommentDetail, "body" | "postId"> & { userId: number };

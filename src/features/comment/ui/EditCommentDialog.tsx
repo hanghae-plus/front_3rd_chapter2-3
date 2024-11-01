@@ -3,7 +3,7 @@ import { Button, DialogContainer, Textarea } from "../../../shared/ui";
 import { useCommentStore } from "../store/useCommentStore";
 import { useEditCommentMutation } from "../model/hook/useQuery";
 
-export default function EditCommentDialog() {
+export function EditCommentDialog() {
   const { selectedComment, showEditCommentDialog, setShowEditCommentDialog, setSelectedComment } = useCommentStore();
   const [updateComment, setUpdateComment] = useState(selectedComment);
 

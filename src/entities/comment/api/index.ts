@@ -4,7 +4,7 @@ export const commentApis = {
     return await response.json();
   },
 
-  addComment: async (comment: Comment) => {
+  addComment: async (comment: ReqAddCommentBody) => {
     const response = await fetch("/api/comments/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
