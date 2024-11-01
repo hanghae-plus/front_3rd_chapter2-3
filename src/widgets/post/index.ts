@@ -1,1 +1,1 @@
-export { PostTable } from "./ui/PostTable"
+export { PostContent } from "./ui/PostContent"
