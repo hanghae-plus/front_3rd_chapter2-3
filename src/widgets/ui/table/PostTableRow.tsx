@@ -15,15 +15,19 @@ const PostTableRow = ({ post }: PostTableRowProps) => {
       <TableRow key={post.id}>
         <TableCell>{post.id}</TableCell>
         <TableCell>
+          {/* 게시물 제목*/}
           <PostTableTitle post={post} />
         </TableCell>
         <TableCell>
+          {/* 게시물 작성자 */}
           <PostTableAuthor post={post} />
         </TableCell>
         <TableCell>
+          {/* 게시물 반응 */}
           <PostReactions post={post} />
         </TableCell>
         <TableCell>
+          {/* 게시물 이벤트, 댓글, 수정, 삭제 */}
           <PostTableEvents post={post} />
         </TableCell>
       </TableRow>
