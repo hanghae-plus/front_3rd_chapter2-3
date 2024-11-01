@@ -12,19 +12,20 @@ import {
   Textarea,
 } from "../../../shared/ui"
 
+const DEFAULT_NEW_COMMENT: NewComment = {
+  body: "",
+  postId: null,
+  userId: 1,
+}
+
 type CommentAddDialogProps = {
-  newComment: NewComment
-  setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
   postId: Post["id"]
 }
 
-export const CommentAddDialogButton = ({
-  newComment,
-  setNewComment,
-
-  postId,
-}: CommentAddDialogProps) => {
+export const CommentAddDialogButton = ({ postId }: CommentAddDialogProps) => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
+
+  const [newComment, setNewComment] = useState<NewComment>(DEFAULT_NEW_COMMENT)
 
   const handleOpenDialog = () => {
     setNewComment((prev) => ({ ...prev, postId }))
@@ -33,7 +34,7 @@ export const CommentAddDialogButton = ({
 
   const handleCloseDialog = () => {
     setShowAddCommentDialog(false)
-    setNewComment({ body: "", postId: null, userId: 1 })
+    setNewComment(DEFAULT_NEW_COMMENT)
   }
 
   return (

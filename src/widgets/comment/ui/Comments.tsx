@@ -1,6 +1,4 @@
-import { useState } from "react"
 import { useCommentsQuery } from "../../../entities/comment/api/useCommentsQuery"
-import { NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
@@ -22,22 +20,12 @@ export const Comments = ({ postId }: Props) => {
 
   const { data: comments = [] } = useCommentsQuery(postId)
 
-  const [newComment, setNewComment] = useState<NewComment>({
-    body: "",
-    postId: null,
-    userId: 1,
-  })
-
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
 
-        <CommentAddDialogButton
-          postId={postId}
-          newComment={newComment}
-          setNewComment={setNewComment}
-        />
+        <CommentAddDialogButton postId={postId} />
       </div>
 
       <div className="space-y-1">
