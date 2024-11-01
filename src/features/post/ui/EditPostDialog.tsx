@@ -4,7 +4,7 @@ import { usePostsStore } from "../store/usePostsStore";
 import { useEffect, useState } from "react";
 
 export function EditPostDialog() {
-  const { selectedPost, setSelectedPost, setShowEditPostDialog } = usePostsStore();
+  const { selectedPost, showEditDialog, setSelectedPost, setShowEditPostDialog } = usePostsStore();
 
   const [updatePost, setUpdatePost] = useState(selectedPost);
 
@@ -35,7 +35,7 @@ export function EditPostDialog() {
   }, [selectedPost]);
 
   return (
-    <DialogContainer open={!!selectedPost} onOpenChange={setShowEditPostDialog} title="게시물 수정">
+    <DialogContainer open={showEditDialog} onOpenChange={setShowEditPostDialog} title="게시물 수정">
       <div className="space-y-4">
         <Input placeholder="제목" name="title" value={updatePost?.title || ""} onChange={handleChangeEditPostInput} />
         <Textarea

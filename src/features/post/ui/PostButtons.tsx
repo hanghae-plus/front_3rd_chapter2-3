@@ -12,10 +12,11 @@ export function PostButtons({ post }: Props) {
   const { id } = post;
 
   const { deletePost } = usePosts();
-  const { setSelectedPost } = usePostsStore();
+  const { setSelectedPost, setShowEditPostDialog, setShowPostDetailDialog } = usePostsStore();
 
   const handleClickPostDetailButton = () => {
     setSelectedPost(post);
+    setShowPostDetailDialog(true);
   };
 
   const handleClickPostDeleteButton = async () => {
@@ -24,6 +25,7 @@ export function PostButtons({ post }: Props) {
 
   const handleClickPostEditButton = () => {
     setSelectedPost(post);
+    setShowEditPostDialog(true);
   };
 
   return (

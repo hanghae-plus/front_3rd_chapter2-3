@@ -13,7 +13,7 @@ export const commentApis = {
     return await response.json();
   },
 
-  updateComment: async (comment: CommentDetail) => {
+  editComment: async (comment: CommentDetail) => {
     const response = await fetch(`/api/comments/${comment.id}`, {
       method: "PUT",
       body: JSON.stringify(comment),
@@ -26,5 +26,14 @@ export const commentApis = {
       method: "DELETE",
     });
     return await response.json();
+  },
+
+  likeComment: async ({ id, likes }: { id: number; likes: number }) => {
+    const response = await fetch(`/api/comments/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ likes }),
+    });
+    return response;
   },
 };
