@@ -4,6 +4,7 @@ import { PostsResponse } from "../../../entities/post/model/types"
 import { queryClient } from "../../../shared/api"
 import { getPostsQueryData } from "./getPostsQueryData"
 
+/** 게시물 업데이트 */
 export const useUpdatePostMutation = () => {
   return useMutation({
     mutationFn: postApi.updatePost,

@@ -5,6 +5,7 @@ import { PostsResponse } from "../../../entities/post/model/types"
 import { queryClient } from "../../../shared/api"
 import { getPostsQueryData } from "./getPostsQueryData"
 
+/** 게시물 추가 */
 export const useAddPostMutation = () => {
   const { attachAuthor } = useAttachAuthorToPost()
 

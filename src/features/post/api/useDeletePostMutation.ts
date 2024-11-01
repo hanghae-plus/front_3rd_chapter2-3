@@ -4,6 +4,7 @@ import { PostsResponse } from "../../../entities/post/model/types"
 import { queryClient } from "../../../shared/api"
 import { getPostsQueryData } from "./getPostsQueryData"
 
+/** 게시물 삭제 */
 export const useDeletePostMutation = () => {
   return useMutation({
     mutationFn: postApi.deletePost,

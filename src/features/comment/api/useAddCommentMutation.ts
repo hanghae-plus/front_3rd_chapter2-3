@@ -4,6 +4,7 @@ import { FetchCommentResponse } from "../../../entities/comment/model/types"
 import { queryClient } from "../../../shared/api"
 import { getCommentsQueryData } from "./getCommentsQueryData"
 
+/** 댓글 추가 */
 export const useAddCommentMutation = () => {
   return useMutation({
     mutationFn: commentApi.addComment,

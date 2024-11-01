@@ -2,6 +2,9 @@ const DEFAULT_HEADERS = { "Content-Type": "application/json" }
 
 type FetchProps = Parameters<typeof fetch>
 
+/**
+ * type safe하게 fetch 요청을 보내는 함수.
+ */
 export const safeFetch = async <T>(
   input: FetchProps[0],
   init?: FetchProps[1],
@@ -15,6 +18,7 @@ export const safeFetch = async <T>(
   return (await response.json()) as T
 }
 
+/** fetch 요청을 위한 옵션을 생성하는 함수.*/
 const createOptions = (
   method: string,
   body?: Record<string, unknown> | null,

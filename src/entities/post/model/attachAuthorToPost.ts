@@ -6,6 +6,9 @@ const attachAuthorToPost = (post: PostDTO, authors: Author[]): Post => ({
   author: authors.find((user) => user.id === post.userId),
 })
 
+/**
+ * 게시물(post)에 저자(author)를 연결하는 훅.
+ */
 export const useAttachAuthorToPost = () => {
   const { data: authors = [], isLoading } = useAuthorsQuery()
 

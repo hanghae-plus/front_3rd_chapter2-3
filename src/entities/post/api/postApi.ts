@@ -99,6 +99,7 @@ export const postApi = {
     }
   },
 
+  /** 게시물 삭제 */
   deletePost: async (id: number) => {
     try {
       const response = await safeFetch.delete<PostDTO>(`/api/posts/${id}`)

@@ -4,6 +4,7 @@ import { FetchCommentResponse } from "../../../entities/comment/model/types"
 import { queryClient } from "../../../shared/api"
 import { getCommentsQueryData } from "./getCommentsQueryData"
 
+/** 댓글 삭제 */
 export const useDeleteComment = () => {
   return useMutation({
     mutationFn: commentApi.deleteComment,
