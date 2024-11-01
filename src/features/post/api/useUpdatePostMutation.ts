@@ -1,24 +1,24 @@
 import { useMutation } from "@tanstack/react-query"
+import { postQueryKeys } from "../../../entities/post/api/post.queries"
 import { postApi } from "../../../entities/post/api/postApi"
+import { useAttachAuthorToPost } from "../../../entities/post/model/attachAuthorToPost"
+import { updatePostsList } from "../../../entities/post/model/store"
 import { PostsResponse } from "../../../entities/post/model/types"
 import { queryClient } from "../../../shared/api"
-import { getPostsQueryData } from "./getPostsQueryData"
 
 /** 게시물 업데이트 */
 export const useUpdatePostMutation = () => {
+  const { attachAuthor } = useAttachAuthorToPost()
+
   return useMutation({
     mutationFn: postApi.updatePost,
-    onSuccess: (updatedPost) => {
-      const [queryKey, { posts, total }] = getPostsQueryData()
+    onSuccess: (updatedPostDTO) => {
+      const updatedPost = attachAuthor(updatedPostDTO)
 
-      const newData: PostsResponse = {
-        posts: posts.map((post) =>
-          post.id === updatedPost.id ? { ...post, ...updatedPost } : post,
-        ),
-        total,
-      }
-
-      queryClient.setQueriesData<PostsResponse>({ queryKey }, newData)
+      queryClient.setQueriesData<PostsResponse>(
+        { queryKey: postQueryKeys.lists() },
+        (oldData) => updatePostsList(oldData, updatedPost, "update"),
+      )
     },
   })
 }
