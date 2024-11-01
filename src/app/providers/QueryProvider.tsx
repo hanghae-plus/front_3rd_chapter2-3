@@ -6,7 +6,7 @@ export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
     () =>
       new QueryClient({
         mutationCache: new MutationCache({
-          onSuccess(data, variables, context, mutation) {
+          onSuccess: (_, __, ___, mutation) => {
             queryClient.invalidateQueries({ queryKey: mutation.options.mutationKey })
           },
         }),
