@@ -9,17 +9,11 @@ import { useFilter } from "../../../shared/model/useFilter"
 import { Pagination } from "../../../shared/ui/Pagination"
 import { PostAddDialog } from "../../../features/posts/ui/PostAddDialog"
 import { PostUpdateDialog } from "../../../features/posts/ui/PostUpdateDialog"
-import { CommentPayload } from "../../../entities/comments/model/types"
 import { CommentAddDialog } from "../../../features/comments/ui/CommentAddDialog"
 import { CommentUpdateDialog } from "../../../features/comments/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "./PostDetailDialog"
 import { UserDialog } from "../../../entities/user/ui/UserDialog"
-import {
-  addCommentMutation,
-  deleteCommentMutation,
-  likeCommentMutation,
-  updateCommentMutation,
-} from "../../../features/comments/api"
+import { deleteCommentMutation, likeCommentMutation } from "../../../features/comments/api"
 import { usePostDialogs } from "../../../features/posts/model/usePostDialogs"
 import { useCommentDialogs } from "../../../features/comments/model/useCommentDialogs"
 import { useUserDialogs } from "../../../features/users/model/useUserDialogs"
@@ -82,10 +76,6 @@ const PostsManagerWidget = () => {
 
   // Mutations
 
-  const { mutate: deleteCommentMutate } = deleteCommentMutation(selectedPost?.id as number)
-
-  const { mutate: likeCommentMutate } = likeCommentMutation(selectedPost?.id as number)
-
   // 핸들러 함수들
   const handlePostDetail = async (post: Post) => {
     setSelectedPost(post)
@@ -143,17 +133,13 @@ const PostsManagerWidget = () => {
           isShow={showPostDetailDialog}
           handleDialog={dialogHandlers.handlePostDetail}
           selectedPost={selectedPost}
-          likeComment={() => selectedComment && likeCommentMutate(selectedComment)}
-          deleteComment={() => selectedComment && deleteCommentMutate(selectedComment.id)}
           searchQuery={searchQuery}
           setSelectedComment={setSelectedComment}
           setShowEditCommentDialog={commentDialogHandlers.handleEditDialog}
           handleAddComment={commentDialogHandlers.handleAddDialog}
         />
       )}
-      {showAddDialog && (
-        <PostAddDialog isShow={showAddDialog} handleDialog={dialogHandlers.handleAddDialog} addPost={addPost} />
-      )}
+      {showAddDialog && <PostAddDialog isShow={showAddDialog} handleDialog={dialogHandlers.handleAddDialog} />}
       {showEditDialog && selectedPost && (
         <PostUpdateDialog
           isShow={showEditDialog}

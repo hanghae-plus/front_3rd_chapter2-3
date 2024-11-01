@@ -1,15 +1,13 @@
-import { useQuery } from "@tanstack/react-query"
 import { Button } from "../../../shared/ui"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import { fetchComments } from "../../../entities/comments/api"
 import highlightText from "../../../shared/ui/highlightText"
 import { Comment } from "../../../entities/comments/model/types"
+import { deleteCommentMutation, likeCommentMutation } from "../../../features/comments/api"
+import useGetComments from "../../../features/comments/model/useGetComments.ts"
 
 interface CommentsListViewProps {
   postId: number
   searchQuery: string
-  likeComment: (commentId: number) => void
-  deleteComment: (commentId: number) => void
   setSelectedComment: (comment: Comment) => void
   setShowEditCommentDialog: (show: boolean) => void
   handleAddComment: () => void
@@ -18,16 +16,15 @@ interface CommentsListViewProps {
 export const CommentsListView = ({
   postId,
   searchQuery,
-  likeComment,
-  deleteComment,
   setSelectedComment,
   setShowEditCommentDialog,
   handleAddComment,
 }: CommentsListViewProps) => {
-  const { data: comments } = useQuery({
-    queryKey: ["comments", postId],
-    queryFn: () => fetchComments(postId),
-  })
+  const { data: comments } = useGetComments(postId)
+
+  const { mutate: deleteCommentMutate } = deleteCommentMutation(postId)
+
+  const { mutate: likeCommentMutate } = likeCommentMutation(postId)
 
   return (
     <div className="mt-2">
@@ -46,7 +43,7 @@ export const CommentsListView = ({
               <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id)}>
+              <Button variant="ghost" size="sm" onClick={() => likeCommentMutate(comment)}>
                 <ThumbsUp className="w-3 h-3" />
                 <span className="ml-1 text-xs">{comment.likes}</span>
               </Button>
@@ -60,7 +57,7 @@ export const CommentsListView = ({
               >
                 <Edit2 className="w-3 h-3" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id)}>
+              <Button variant="ghost" size="sm" onClick={() => deleteCommentMutate(comment.id)}>
                 <Trash2 className="w-3 h-3" />
               </Button>
             </div>
