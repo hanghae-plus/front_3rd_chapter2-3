@@ -38,11 +38,6 @@ const fetchPostsByTag = async (tag: string) => {
   return { postsByTagData, usersByTagData }
 }
 
-const fetchSearchPosts = async () => {
-  const response = await fetch("/api/posts/search?q=${searchQuery}")
-  return await response.json()
-}
-
 const addPost = async (newPost: NewPost) => {
   const response = await fetch("/api/posts/add", {
     method: "POST",
@@ -68,13 +63,4 @@ const deletePost = async (id: number) => {
   return await response.json()
 }
 
-export {
-  fetchPosts,
-  fetchSearchQueryPosts,
-  fetchTags,
-  fetchPostsByTag,
-  fetchSearchPosts,
-  addPost,
-  updatePost,
-  deletePost,
-}
+export { fetchPosts, fetchSearchQueryPosts, fetchTags, fetchPostsByTag, addPost, updatePost, deletePost }
