@@ -1,6 +1,6 @@
 import { searchParamsAtom } from "@features/filter/model"
 import { useQuery } from "@tanstack/react-query"
-import { readPostApi } from "@entities/post/api"
+import { readPostApi } from "@features/post/api/readPost"
 import { PostResponse } from "@entities/post/model"
 import { useAtomValue } from "jotai"
 
