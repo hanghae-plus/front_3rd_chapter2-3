@@ -1,14 +1,14 @@
-import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
+import { Edit2, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useCommentsQuery } from "../../../entities/comment/api/useCommentsQuery"
 import { Comment, NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
+  CommentLikeButton,
   CommentUpdateButton,
   useAddCommentMutation,
   useDeleteComment,
-  useLikeComment,
 } from "../../../features/comment"
 import {
   Button,
@@ -43,7 +43,6 @@ export const Comments = ({ postId }: Props) => {
   const { mutate: addCommentMutate } = useAddCommentMutation()
 
   const { mutate: deleteComment } = useDeleteComment()
-  const { mutate: likeCommentMutate } = useLikeComment()
 
   const addComment = () => {
     addCommentMutate(newComment, {
@@ -52,11 +51,6 @@ export const Comments = ({ postId }: Props) => {
         setNewComment({ body: "", postId: null, userId: 1 })
       },
     })
-  }
-
-  // 댓글 좋아요
-  const likeComment = (id: Comment["id"]) => {
-    likeCommentMutate({ id, likes: comments?.find((c) => c.id === id)?.likes })
   }
 
   return (
@@ -89,14 +83,7 @@ export const Comments = ({ postId }: Props) => {
               </span>
             </div>
             <div className="flex items-center space-x-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => likeComment(comment.id)}
-              >
-                <ThumbsUp className="w-3 h-3" />
-                <span className="ml-1 text-xs">{comment.likes}</span>
-              </Button>
+              <CommentLikeButton comment={comment} />
               <Button
                 variant="ghost"
                 size="sm"
