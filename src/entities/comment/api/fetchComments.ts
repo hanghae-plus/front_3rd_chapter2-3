@@ -1,4 +1,4 @@
-import { Comment } from "../model"
+import { Comment } from "@entities/comment/model";
 
 export const fetchComments = async (postId: number): Promise<Comment[]> => {
   try {
