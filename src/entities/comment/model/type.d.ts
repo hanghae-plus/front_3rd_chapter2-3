@@ -1,4 +1,4 @@
-type CommentList = {
+type Comments = {
   comments: CommentDetail[];
   total: number;
   skip: number;

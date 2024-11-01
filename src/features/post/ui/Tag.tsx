@@ -1,11 +1,10 @@
-import { usePostsStore } from "../store/usePostsStore";
+import { useSearchFilterStore } from "../../search/model/store/useSearchFilterStore";
 
 export function Tag({ tag }: { tag: string }) {
-  const { selectedTag, setSelectedTag } = usePostsStore();
+  const { selectedTag, setSelectedTag } = useSearchFilterStore();
 
   const handlePostTagClick = () => {
     setSelectedTag(tag);
-    // updateURL();
   };
   return (
     <span

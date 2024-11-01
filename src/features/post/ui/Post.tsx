@@ -1,6 +1,6 @@
 import { HighlightText, TableCell, TableRow } from "../../../shared/ui";
 import { Reaction } from "../../../widgets/post";
-import { Tag } from "./Tags";
+import { Tag } from "./Tag";
 import { PostButtons } from "./PostButtons";
 import { UserAvatar } from "../../user/ui";
 

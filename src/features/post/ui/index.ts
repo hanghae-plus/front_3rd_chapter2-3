@@ -1,2 +1,3 @@
 export * from "./Post";
-export * from "./Tags";
+export * from "./Tag";
+export * from "./PostHeader";

@@ -1,5 +1,5 @@
 export const commentApis = {
-  fetchCommentList: async (postId: number) => {
+  fetchComments: async (postId: number): Promise<Comments> => {
     const response = await fetch(`/api/comments/post/${postId}`);
     return await response.json();
   },

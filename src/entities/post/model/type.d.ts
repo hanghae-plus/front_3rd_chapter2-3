@@ -20,4 +20,4 @@ type Reaction = {
   dislikes: number;
 };
 
-type ReqAddPostBody = Omit<Post, "id" | "views">;
+type ReqAddPostBody = Pick<Post, "title" | "body" | "userId">;

@@ -16,6 +16,7 @@ export const postApis = {
 
   addPost: async (post: ReqAddPostBody) => {
     const response = await fetch("/api/posts/add", {
+      headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify(post),
     });
@@ -24,6 +25,7 @@ export const postApis = {
 
   updatePost: async (post: Post) => {
     const response = await fetch(`/api/posts/${post.id}`, {
+      headers: { "Content-Type": "application/json" },
       method: "PUT",
       body: JSON.stringify(post),
     });

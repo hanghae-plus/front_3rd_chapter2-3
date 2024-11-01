@@ -1,5 +1,5 @@
-import { postApis } from "../../../entities/post/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { postApis } from "../../../../entities/post/api";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 type ResPostsParams = {
   skip: number;
@@ -9,7 +9,7 @@ type ResPostsParams = {
 };
 
 export const usePostsQuery = ({ skip, limit, searchQuery, tag }: ResPostsParams) => {
-  return useQuery<ResPostsList>({
+  return useSuspenseQuery<ResPostsList>({
     queryKey: ["posts", { skip, limit, searchQuery, tag }],
     queryFn: () => {
       if (searchQuery) {
@@ -29,9 +29,9 @@ export function useSearchPostListQuery(query: string) {
   });
 }
 
-export function useAddPostQuery() {
+export function useAddPostMutation() {
   return useMutation({
-    mutationFn: (post: Post) => postApis.addPost(post),
+    mutationFn: (post: ReqAddPostBody) => postApis.addPost(post),
   });
 }
 
