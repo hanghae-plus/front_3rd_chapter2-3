@@ -117,7 +117,7 @@ const PostsManager = () => {
       }
       setLoading(false)
     },
-    [limit, skip],
+    [handleFetchPosts],
   )
 
   // 게시물 추가
