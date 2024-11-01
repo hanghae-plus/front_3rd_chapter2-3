@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 type Props = {
@@ -10,23 +10,19 @@ type Props = {
 };
 
 export function QueryProvider({ children }: Props) {
-  const queryCache = new QueryCache({});
-
-  const mutationCache = new MutationCache({});
-
   const [queryClient] = useState(
     () =>
       new QueryClient({
-        queryCache,
-        mutationCache,
         defaultOptions: {
           queries: {
             retry: 0,
             refetchOnWindowFocus: false,
+            staleTime: Infinity,
           },
         },
       }),
   );
+
   return (
     <QueryClientProvider client={queryClient}>
       {children}

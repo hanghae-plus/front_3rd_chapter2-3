@@ -5,7 +5,6 @@ export function useUsersQuery() {
   return useQuery({
     queryKey: ["users"],
     queryFn: () => userApis.fetchUserList(),
-    gcTime: Infinity,
   });
 }
 
