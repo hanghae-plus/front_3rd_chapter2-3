@@ -34,6 +34,7 @@ export const highlightText = (text: string, searchTerm: string): JSX.Element | n
       </span>
     )
   } catch (error) {
+    console.error('하이라이트 처리 중 오류 발생:', error);
     return <span>{text}</span>
   }
 }
