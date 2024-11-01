@@ -8,32 +8,32 @@ import {
 } from "../../../entities/comments/api/commentsEntitiesApi"
 import { Comments, NewComment } from "../../../entities/comments/model/Comments"
 
-function useFetchComments(postId: number) {
+const useFetchComments = (postId: number) => {
   return useQuery({
     queryKey: ["comments", postId],
     queryFn: () => fetchComments(postId),
   })
 }
 
-function useAddComment() {
+const useAddComment = () => {
   return useMutation({
     mutationFn: (newComment: NewComment) => addComment(newComment),
   })
 }
 
-function useUpdateComment() {
+const useUpdateComment = () => {
   return useMutation<Comments, Error, Comments>({
     mutationFn: (selectedComment: Comments) => updateComment(selectedComment),
   })
 }
 
-function useDeleteComment() {
+const useDeleteComment = () => {
   return useMutation({
     mutationFn: (id: number) => deleteComment(id),
   })
 }
 
-function useLikeComment() {
+const useLikeComment = () => {
   return useMutation<Comments, Error, { id: number; updateLikes: number }>({
     mutationFn: ({ id, updateLikes }) => likeComment(id, updateLikes),
   })

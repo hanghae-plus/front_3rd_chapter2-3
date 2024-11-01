@@ -11,54 +11,54 @@ import {
 } from "../../../entities/posts/api/postEntitiesApi"
 import { NewPost, Post, SelectedPost } from "../../../entities/posts/model/Post"
 
-function useFetchPosts(limit: number, skip: number) {
+const useFetchPosts = (limit: number, skip: number) => {
   return useQuery({
     queryKey: ["posts", limit, skip],
     queryFn: () => fetchPosts(limit, skip),
   })
 }
 
-function useFetchSearchQueryPosts(searchQuery: string) {
+const useFetchSearchQueryPosts = (searchQuery: string) => {
   return useQuery({
     queryKey: ["searchQueryPosts", searchQuery],
     queryFn: () => fetchSearchQueryPosts(searchQuery),
   })
 }
 
-function useFetchTags() {
+const useFetchTags = () => {
   return useQuery({
     queryKey: ["tags"],
     queryFn: () => fetchTags(),
   })
 }
 
-function useFetchPostsByTag(tag: string) {
+const useFetchPostsByTag = (tag: string) => {
   return useQuery({
     queryKey: ["tags", tag],
     queryFn: () => fetchPostsByTag(tag),
   })
 }
 
-function useFetchSearchPosts() {
+const useFetchSearchPosts = () => {
   return useQuery({
     queryKey: ["searchPosts"],
     queryFn: () => fetchSearchPosts(),
   })
 }
 
-function useAddPost() {
+const useAddPost = () => {
   return useMutation({
     mutationFn: (newPost: NewPost) => addPost(newPost),
   })
 }
 
-function useUpdatePost() {
+const useUpdatePost = () => {
   return useMutation<Post, Error, SelectedPost>({
     mutationFn: (selectedPost: SelectedPost) => updatePost(selectedPost),
   })
 }
 
-function useDeletePost() {
+const useDeletePost = () => {
   return useMutation({
     mutationFn: (id: number) => deletePost(id),
   })
