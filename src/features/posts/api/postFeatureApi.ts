@@ -7,6 +7,7 @@ import {
   updatePost,
   deletePost,
   fetchPostsByTag,
+  fetchSearchQueryPosts,
 } from "../../../entities/posts/api/postEntitiesApi"
 import { NewPost, Post, SelectedPost } from "../../../entities/posts/model/Post"
 
@@ -16,6 +17,14 @@ function useFetchPosts(limit: number, skip: number) {
     queryFn: () => fetchPosts(limit, skip),
   })
 }
+
+function useFetchSearchQueryPosts(searchQuery: string) {
+  return useQuery({
+    queryKey: ["searchQueryPosts", searchQuery],
+    queryFn: () => fetchSearchQueryPosts(searchQuery),
+  })
+}
+
 function useFetchTags() {
   return useQuery({
     queryKey: ["tags"],
@@ -57,6 +66,7 @@ function useDeletePost() {
 
 export {
   useFetchPosts,
+  useFetchSearchQueryPosts,
   useFetchTags,
   useFetchPostsByTag,
   useFetchSearchPosts,

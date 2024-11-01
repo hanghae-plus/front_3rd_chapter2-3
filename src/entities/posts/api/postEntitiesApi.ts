@@ -11,10 +11,21 @@ const fetchPosts = async (limit: number, skip: number) => {
   return { postsSearchData, usersSearchData }
 }
 
+const fetchSearchQueryPosts = async (searchQuery: string) => {
+  const [postsResponse, usersResponse] = await Promise.all([
+    fetch(`/api/posts/search?q=${searchQuery}`),
+    fetch("/api/users?limit=0&select=username,image"),
+  ])
+
+  const postsSearchQueryData = await postsResponse.json()
+  const usersSearchQueryData = await usersResponse.json()
+  return { postsSearchQueryData, usersSearchQueryData }
+}
+
 const fetchTags = async () => {
   const response = await fetch("/api/posts/tags")
-  const data = await response.json()
-  return data
+
+  return await response.json()
 }
 
 const fetchPostsByTag = async (tag: string) => {
@@ -57,4 +68,13 @@ const deletePost = async (id: number) => {
   return await response.json()
 }
 
-export { fetchPosts, fetchTags, fetchPostsByTag, fetchSearchPosts, addPost, updatePost, deletePost }
+export {
+  fetchPosts,
+  fetchSearchQueryPosts,
+  fetchTags,
+  fetchPostsByTag,
+  fetchSearchPosts,
+  addPost,
+  updatePost,
+  deletePost,
+}

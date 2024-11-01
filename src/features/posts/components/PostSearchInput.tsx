@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Input } from "../../../shared/ui/"
 import usePost from "../hooks/usePost"
-import { useFetchPosts, useFetchPostsByTag } from "../api/postFeatureApi"
+import { useFetchPosts, useFetchPostsByTag, useFetchSearchQueryPosts } from "../api/postFeatureApi"
 import { Post, Posts } from "../../../entities/posts/model/Post"
 import { Users } from "../../../entities/users/model/User"
 
@@ -32,8 +32,13 @@ const PostSearchInput = () => {
   }
   const { data: postsByTag, isLoading: isPostByTagLoading, isError: isPostByTagError } = useFetchPostsByTag(selectedTag)
   const { data: postSearch, isLoading: isPostSearchLoading, isError: isPostSearchError } = useFetchPosts(limit, skip)
+  const {
+    data: searchQeuryPost,
+    isLoading: isSearchQeuryPostLoading,
+    isError: isSearchQeuryPostError,
+  } = useFetchSearchQueryPosts(searchQuery)
 
-  const fetchData = () => {
+  function fetchPostsData() {
     setLoading(true)
     const isTagSearch = selectedTag && selectedTag !== "all"
     const isSearchReady = !isTagSearch
@@ -53,8 +58,23 @@ const PostSearchInput = () => {
       setLoading(false)
     }
   }
+
+  function fetchSearchQueryData() {
+    if (!isSearchQeuryPostLoading && !isSearchQeuryPostError && searchQeuryPost) {
+      const { postsSearchQueryData, usersSearchQueryData } = searchQeuryPost
+      const postsWithUsers = postsToUsers(postsSearchQueryData, usersSearchQueryData.users)
+      setPosts(postsWithUsers)
+      setTotal(postsSearchQueryData.total)
+      updateURL()
+    }
+  }
+
   useEffect(() => {
-    fetchData()
+    if (searchQuery) {
+      fetchSearchQueryData()
+    } else {
+      fetchPostsData()
+    }
   }, [
     isPostByTagLoading,
     isPostByTagError,
