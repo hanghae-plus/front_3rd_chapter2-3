@@ -1,4 +1,4 @@
-import { Edit2, Plus, Trash2 } from "lucide-react"
+import { Edit2, Plus } from "lucide-react"
 import { useState } from "react"
 import { useCommentsQuery } from "../../../entities/comment/api/useCommentsQuery"
 import { Comment, NewComment } from "../../../entities/comment/model/types"
@@ -6,9 +6,9 @@ import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
   CommentAddButton,
+  CommentDeleteButton,
   CommentLikeButton,
   CommentUpdateButton,
-  useDeleteComment,
 } from "../../../features/comment"
 import {
   Button,
@@ -29,6 +29,8 @@ export const Comments = ({ postId }: Props) => {
     queryParams: { search: searchQuery },
   } = usePostQueryParams()
 
+  const { data: comments = [] } = useCommentsQuery(postId)
+
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
     body: "",
@@ -38,10 +40,6 @@ export const Comments = ({ postId }: Props) => {
 
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-
-  const { data: comments = [] } = useCommentsQuery(postId)
-
-  const { mutate: deleteComment } = useDeleteComment()
 
   return (
     <div className="mt-2">
@@ -84,13 +82,8 @@ export const Comments = ({ postId }: Props) => {
               >
                 <Edit2 className="w-3 h-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => deleteComment(comment.id)}
-              >
-                <Trash2 className="w-3 h-3" />
-              </Button>
+
+              <CommentDeleteButton commentId={comment.id} />
             </div>
           </div>
         ))}
