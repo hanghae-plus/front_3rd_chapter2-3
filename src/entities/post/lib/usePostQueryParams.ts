@@ -13,18 +13,23 @@ const DEFAULT_POST_QUERY_PARAMS: PostQueryParams = {
   tag: "",
 }
 
-/** 게시글(Post)과 관련된 URL 쿼리 매개변수 */
 type PostQueryParams = PaginationType &
   SortType & {
     search: string
     tag: string
   }
 
-/** 게시글(Post)과 관련된 URL 쿼리를 업데이트하는 함수 */
+/** 게시물(post) URL 쿼리를 업데이트하는 함수 */
 export type UpdatePostQueryParam = (params: Partial<PostQueryParams>) => void
 
 /**
  * 게시글(Post)과 관련된 URL 쿼리 매개변수를 관리하는 훅
+ *
+ * @example
+ * const { queryParams, updateQueryParam } = usePostQueryParams();
+ *
+ * console.log(queryParams.limit); // 현재 limit 값 출력
+ * updateQueryParam({ search: 'React' }); // 검색어를 'React'로 업데이트
  */
 export const usePostQueryParams = (): {
   queryParams: PostQueryParams
