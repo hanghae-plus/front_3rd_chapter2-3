@@ -1,2 +1,2 @@
-export * from "./ui/header.tsx";
-export * from "./ui/footer.tsx";
+export * from "./ui/header";
+export * from "./ui/footer";
