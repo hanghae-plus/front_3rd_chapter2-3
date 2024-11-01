@@ -5,10 +5,10 @@ import { Comment, NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
+  CommentUpdateButton,
   useAddCommentMutation,
   useDeleteComment,
   useLikeComment,
-  useUpdateCommentMutation,
 } from "../../../features/comment"
 import {
   Button,
@@ -41,7 +41,7 @@ export const Comments = ({ postId }: Props) => {
 
   const { data: comments = [] } = useCommentsQuery(postId)
   const { mutate: addCommentMutate } = useAddCommentMutation()
-  const { mutate: updateCommentMutate } = useUpdateCommentMutation()
+
   const { mutate: deleteComment } = useDeleteComment()
   const { mutate: likeCommentMutate } = useLikeComment()
 
@@ -50,16 +50,6 @@ export const Comments = ({ postId }: Props) => {
       onSuccess: () => {
         setShowAddCommentDialog(false)
         setNewComment({ body: "", postId: null, userId: 1 })
-      },
-    })
-  }
-
-  const updateComment = () => {
-    if (!selectedComment) return
-
-    updateCommentMutate(selectedComment, {
-      onSuccess: () => {
-        setShowEditCommentDialog(false)
       },
     })
   }
@@ -173,7 +163,12 @@ export const Comments = ({ postId }: Props) => {
                 }
               }}
             />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
+            <CommentUpdateButton
+              selectedComment={selectedComment}
+              onUpdateSuccess={() => {
+                setShowEditCommentDialog(false)
+              }}
+            />
           </div>
         </DialogContent>
       </Dialog>
