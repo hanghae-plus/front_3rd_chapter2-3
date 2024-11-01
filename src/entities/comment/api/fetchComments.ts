@@ -1,3 +1,5 @@
+import { Comment } from "../model"
+
 export const fetchComments = async (postId: number): Promise<Comment[]> => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
