@@ -16,8 +16,9 @@ export const postNewPost = async ({ newPost }: PostNewPostParamsType) => {
     // setShowAddDialog(false);
     // setNewPost({ title: "", body: "", userId: 1 });
     console.log(data);
-    return;
+    return data;
   } catch (error) {
     console.error("게시물 추가 오류:", error);
+    throw error;
   }
 };

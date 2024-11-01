@@ -15,10 +15,9 @@ import { usePost } from "../model/use-post";
 export const PostAddDialog = () => {
   const { showAddDialog, setShowAddDialog } = usePost();
 
-  const [newPost, setNewPost] = useState<Omit<PostType, "id">>({
+  const [newPost, setNewPost] = useState<Partial<PostType>>({
     title: "",
     body: "",
-    userId: 1,
     tags: [],
     views: 0,
     reactions: {

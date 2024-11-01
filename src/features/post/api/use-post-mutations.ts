@@ -8,8 +8,15 @@ export const usePostMutations = () => {
     mutationFn: async (newPost: Partial<PostType>) => {
       return postNewPost({ newPost: newPost as PostType });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["postList"] });
+    onSuccess: (newPost: PostType) => {
+      queryClient.setQueryData(["postList"], (prevData: any) => {
+        const oldPosts = prevData?.postList || [];
+        return {
+          ...prevData,
+          postList: [newPost, ...oldPosts],
+          total: (prevData?.total || 0) + 1
+        };
+      });
     },
   });
 
@@ -35,5 +42,8 @@ export const usePostMutations = () => {
     postNewPostMutation,
     updatePostMutation,
     deletePostMutation,
+    isLoading: postNewPostMutation.isPending || updatePostMutation.isPending || deletePostMutation.isPending,
+    isError: postNewPostMutation.isError || updatePostMutation.isError || deletePostMutation.isError,
+    error: postNewPostMutation.error || updatePostMutation.error || deletePostMutation.error
   };
 };
