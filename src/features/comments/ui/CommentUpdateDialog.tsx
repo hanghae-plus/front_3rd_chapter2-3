@@ -1,12 +1,13 @@
 import { Button, DialogHeader, Textarea, Dialog, DialogContent, DialogTitle } from "../../../shared/ui"
 import { Comment } from "../../../entities/comments/model/types"
+import { updateCommentMutation } from "../api"
 
 interface CommentUpdateDialogProps {
   isShow: boolean
   handleDialog: () => void
-  selectedComment: Comment | null
+  selectedComment: Comment
   setSelectedComment: (comment: Comment | null) => void
-  updateComment: () => void
+  selectedPostId: number
 }
 
 export const CommentUpdateDialog = ({
@@ -14,8 +15,10 @@ export const CommentUpdateDialog = ({
   handleDialog,
   selectedComment,
   setSelectedComment,
-  updateComment,
+  selectedPostId,
 }: CommentUpdateDialogProps) => {
+  const { mutate: updateCommentMutate } = updateCommentMutation(selectedPostId)
+
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>
       <DialogContent>
@@ -28,7 +31,7 @@ export const CommentUpdateDialog = ({
             value={selectedComment?.body || ""}
             onChange={(e) => selectedComment && setSelectedComment({ ...selectedComment, body: e.target.value })}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={() => updateCommentMutate(selectedComment)}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

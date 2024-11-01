@@ -1,15 +1,23 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui"
 import { CommentPayload } from "../../../entities/comments/model/types"
 import { useState } from "react"
+import { addCommentMutation } from "../api"
 
 interface CommentAddDialogProps {
   isShow: boolean
   handleDialog: () => void
-  addComment: (newComment: CommentPayload) => void
+  selectedPostId: number
 }
 
-export const CommentAddDialog = ({ isShow, handleDialog, addComment }: CommentAddDialogProps) => {
+export const CommentAddDialog = ({ isShow, handleDialog, selectedPostId }: CommentAddDialogProps) => {
   const [newComment, setNewComment] = useState<CommentPayload>({ body: "", postId: 1, userId: 1, likes: 0 })
+
+  const { mutate: addCommentMutate } = addCommentMutation(selectedPostId)
+
+  const addComment = () => {
+    addCommentMutate(newComment)
+    handleDialog()
+  }
 
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>
@@ -25,7 +33,7 @@ export const CommentAddDialog = ({ isShow, handleDialog, addComment }: CommentAd
           />
           <Button
             onClick={() => {
-              addComment(newComment)
+              addComment()
               setNewComment({ body: "", postId: 1, userId: 1, likes: 0 })
             }}
           >

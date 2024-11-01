@@ -1,15 +1,23 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { PostPayload } from "../../../entities/posts/model/types"
 import { useState } from "react"
+import { addPostMutation } from "../api"
 
 interface PostAddDialogProps {
   isShow: boolean
   handleDialog: () => void
-  addPost: (newPost: PostPayload) => void
+
 }
 
-export const PostAddDialog = ({ isShow, handleDialog, addPost }: PostAddDialogProps) => {
+export const PostAddDialog = ({ isShow, handleDialog }: PostAddDialogProps) => {
   const [newPost, setNewPost] = useState<PostPayload>({ title: "", body: "", userId: 1 })
+
+  const { mutate: addPostMutate } = addPostMutation()
+
+  const addPost = () => {
+    addPostMutate(newPost)
+    handleDialog()
+  }
 
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>

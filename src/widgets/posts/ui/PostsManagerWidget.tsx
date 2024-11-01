@@ -3,7 +3,7 @@ import { Card, CardContent } from "../../../shared/ui"
 import PostSearchHeader from "./PostSearchHeader"
 import PostSearchFilter from "./PostSeacrFilter"
 import PostTable from "./PostTable"
-import { Post, PostPayload } from "../../../entities/posts/model/types"
+import { Post } from "../../../entities/posts/model/types"
 import { User } from "../../../entities/user/model/types"
 import { useFilter } from "../../../shared/model/useFilter"
 import { Pagination } from "../../../shared/ui/Pagination"
@@ -14,7 +14,6 @@ import { CommentAddDialog } from "../../../features/comments/ui/CommentAddDialog
 import { CommentUpdateDialog } from "../../../features/comments/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "./PostDetailDialog"
 import { UserDialog } from "../../../entities/user/ui/UserDialog"
-import { addPostMutation, updatePostMutation, deletePostMutation } from "../../../features/posts/api"
 import {
   addCommentMutation,
   deleteCommentMutation,
@@ -66,12 +65,6 @@ const PostsManagerWidget = () => {
     selectedTag,
   })
 
-  const { mutate: addPostMutate } = addPostMutation()
-
-  const { mutate: updatePostMutate } = updatePostMutation()
-
-  const { mutate: deletePostMutate } = deletePostMutation()
-
   // posts에 author 추가
   const postsWithUsers = useMemo(() => {
     if (selectedTag === "all") {
@@ -88,32 +81,10 @@ const PostsManagerWidget = () => {
   }, [posts, users, taggedPosts])
 
   // Mutations
-  const addPost = (newPost: PostPayload) => {
-    addPostMutate(newPost)
-    dialogHandlers.handleAddDialog()
-  }
-
-  const updatePost = (selectedPost: Post) => {
-    updatePostMutate(selectedPost)
-    dialogHandlers.handleEditDialog()
-  }
-
-  const deletePost = (id: number) => {
-    deletePostMutate(id)
-  }
-
-  const { mutate: addCommentMutate } = addCommentMutation(selectedPost?.id as number)
-
-  const { mutate: updateCommentMutate } = updateCommentMutation(selectedPost?.id as number)
 
   const { mutate: deleteCommentMutate } = deleteCommentMutation(selectedPost?.id as number)
 
   const { mutate: likeCommentMutate } = likeCommentMutation(selectedPost?.id as number)
-
-  const addComment = (newComment: CommentPayload) => {
-    addCommentMutate(newComment)
-    commentDialogHandlers.handleAddDialog()
-  }
 
   // 핸들러 함수들
   const handlePostDetail = async (post: Post) => {
@@ -160,7 +131,6 @@ const PostsManagerWidget = () => {
               openPostDetail={handlePostDetail}
               setSelectedPost={setSelectedPost}
               setShowEditDialog={dialogHandlers.handleEditDialog}
-              deletePost={(id) => deletePost(id)}
             />
           )}
 
@@ -184,29 +154,28 @@ const PostsManagerWidget = () => {
       {showAddDialog && (
         <PostAddDialog isShow={showAddDialog} handleDialog={dialogHandlers.handleAddDialog} addPost={addPost} />
       )}
-      {showEditDialog && (
+      {showEditDialog && selectedPost && (
         <PostUpdateDialog
           isShow={showEditDialog}
           handleDialog={dialogHandlers.handleEditDialog}
           selectedPost={selectedPost}
           setSelectedPost={setSelectedPost}
-          updatePost={() => selectedPost && updatePost(selectedPost)}
         />
       )}
-      {showAddCommentDialog && (
+      {showAddCommentDialog && selectedPost && (
         <CommentAddDialog
           isShow={showAddCommentDialog}
+          selectedPostId={selectedPost.id}
           handleDialog={commentDialogHandlers.handleAddDialog}
-          addComment={(newComment: CommentPayload) => addComment(newComment)}
         />
       )}
-      {showEditCommentDialog && (
+      {showEditCommentDialog && selectedComment && (
         <CommentUpdateDialog
           isShow={showEditCommentDialog}
           handleDialog={commentDialogHandlers.handleEditDialog}
           selectedComment={selectedComment}
+          selectedPostId={selectedPost?.id as number}
           setSelectedComment={setSelectedComment}
-          updateComment={() => selectedComment && updateCommentMutate(selectedComment)}
         />
       )}
       {selectedUserId && (

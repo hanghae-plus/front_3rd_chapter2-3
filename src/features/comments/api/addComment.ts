@@ -6,8 +6,11 @@ export const addCommentMutation = (selectedPostId: number) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (comment: CommentPayload) => addComment(comment),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", selectedPostId] })
+    onSuccess: (newComment) => {
+      queryClient.setQueryData(["comments", selectedPostId], (oldComments: any[]) => {
+        if (!oldComments) return [newComment]
+        return [...oldComments, newComment]
+      })
     },
   })
 }

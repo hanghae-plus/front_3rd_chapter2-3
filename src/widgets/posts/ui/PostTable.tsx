@@ -3,6 +3,7 @@ import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow }
 import { Post } from "../../../entities/posts/model/types"
 import { User } from "../../../entities/user/model/types"
 import highlightText from "../../../shared/ui/highlightText"
+import { deletePostMutation } from "../../../features/posts/api"
 
 interface TableProps {
   posts: Post[]
@@ -14,7 +15,6 @@ interface TableProps {
   openPostDetail: (item: Post) => void
   setSelectedPost: (item: Post) => void
   setShowEditDialog: (show: boolean) => void
-  deletePost: (id: number) => void
 }
 
 const PostTable = ({
@@ -27,8 +27,9 @@ const PostTable = ({
   openUserModal,
   setSelectedPost,
   setShowEditDialog,
-  deletePost,
 }: TableProps) => {
+  const { mutate: deletePostMutate } = deletePostMutation()
+
   return (
     <Table>
       <TableHeader>
@@ -100,7 +101,7 @@ const PostTable = ({
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(item.id)}>
+                <Button variant="ghost" size="sm" onClick={() => deletePostMutate(item.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>

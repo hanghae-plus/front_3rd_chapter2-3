@@ -1,21 +1,22 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 import { Post } from "../../../entities/posts/model/types"
+import { updatePostMutation } from "../api"
 
 interface PostUpdateDialogProps {
   isShow: boolean
   handleDialog: () => void
-  selectedPost: Post | null
+  selectedPost: Post
   setSelectedPost: (post: Post) => void
-  updatePost: () => void
 }
 
-export const PostUpdateDialog = ({
-  isShow,
-  handleDialog,
-  selectedPost,
-  setSelectedPost,
-  updatePost,
-}: PostUpdateDialogProps) => {
+export const PostUpdateDialog = ({ isShow, handleDialog, selectedPost, setSelectedPost }: PostUpdateDialogProps) => {
+  const { mutate: updatePostMutate } = updatePostMutation()
+
+  const updatePost = () => {
+    updatePostMutate(selectedPost)
+    handleDialog()
+  }
+
   return (
     <Dialog open={isShow} onOpenChange={handleDialog}>
       <DialogContent>
