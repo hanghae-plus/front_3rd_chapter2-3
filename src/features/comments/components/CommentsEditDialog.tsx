@@ -1,7 +1,5 @@
-import React from "react"
-
 import { Comments, CommentsState } from "../../../entities/comments/model/Comments"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, Textarea, Button } from "../../../shared/ui/"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui/"
 import { useUpdateComment } from "../api/commentsFeaturesApi"
 import useComment from "../hooks/useComments"
 

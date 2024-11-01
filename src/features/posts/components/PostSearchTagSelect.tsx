@@ -1,5 +1,3 @@
-// PostSearchTagSelect.tsx
-
 import { useEffect } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import usePost from "../hooks/usePost"
