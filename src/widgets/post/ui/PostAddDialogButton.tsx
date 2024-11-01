@@ -20,12 +20,17 @@ const DEFAULT_NEW_POST = {
 
 export const PostAddDialogButton = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
-
   const [newPost, setNewPost] = useState<NewPost>(DEFAULT_NEW_POST)
+
+  const handleOpenDialog = () => setShowAddDialog(true)
+  const handleCloseDialog = () => {
+    setShowAddDialog(false)
+    setNewPost(DEFAULT_NEW_POST)
+  }
 
   return (
     <>
-      <Button onClick={() => setShowAddDialog(true)}>
+      <Button onClick={handleOpenDialog}>
         <Plus className="w-4 h-4 mr-2" />
         게시물 추가
       </Button>
@@ -59,13 +64,7 @@ export const PostAddDialogButton = () => {
               }
             />
 
-            <PostAddButton
-              newPost={newPost}
-              onAddSuccess={() => {
-                setShowAddDialog(false)
-                setNewPost(DEFAULT_NEW_POST)
-              }}
-            />
+            <PostAddButton newPost={newPost} onAddSuccess={handleCloseDialog} />
           </div>
         </DialogContent>
       </Dialog>
