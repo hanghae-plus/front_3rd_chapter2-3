@@ -1,11 +1,10 @@
-import { Edit2, Plus } from "lucide-react"
+import { Edit2 } from "lucide-react"
 import { useState } from "react"
 import { useCommentsQuery } from "../../../entities/comment/api/useCommentsQuery"
 import { Comment, NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
-  CommentAddButton,
   CommentDeleteButton,
   CommentLikeButton,
   CommentUpdateButton,
@@ -19,6 +18,7 @@ import {
   Textarea,
   TextHighlighter,
 } from "../../../shared/ui"
+import { CommentAddDialogButton } from "./CommentAddDialogButton"
 
 type Props = {
   postId: Post["id"]
@@ -38,24 +38,20 @@ export const Comments = ({ postId }: Props) => {
     userId: 1,
   })
 
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
 
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
-        <Button
-          size="sm"
-          onClick={() => {
-            setNewComment((prev) => ({ ...prev, postId }))
-            setShowAddCommentDialog(true)
-          }}
-        >
-          <Plus className="w-3 h-3 mr-1" />
-          댓글 추가
-        </Button>
+
+        <CommentAddDialogButton
+          postId={postId}
+          newComment={newComment}
+          setNewComment={setNewComment}
+        />
       </div>
+
       <div className="space-y-1">
         {comments.map((comment) => (
           <div
@@ -88,34 +84,6 @@ export const Comments = ({ postId }: Props) => {
           </div>
         ))}
       </div>
-
-      {/* 댓글 추가 대화상자 */}
-      <Dialog
-        open={showAddCommentDialog}
-        onOpenChange={setShowAddCommentDialog}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) =>
-                setNewComment({ ...newComment, body: e.target.value })
-              }
-            />
-            <CommentAddButton
-              newComment={newComment}
-              onAddSuccess={() => {
-                setShowAddCommentDialog(false)
-                setNewComment({ body: "", postId: null, userId: 1 })
-              }}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* 댓글 수정 대화상자 */}
       <Dialog
