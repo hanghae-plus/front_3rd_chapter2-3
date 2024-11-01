@@ -3,8 +3,8 @@ import { useState } from "react";
 import { updateState } from "@/shared/model";
 import { PostType } from "@/entities/post/model/post-type";
 import { postListState } from "@/entities/post/model/post-state";
-import { useMutationAddPost } from "@/entities/post/api";
 import { NewPostType } from "./type";
+import { useMutationAddPost } from "../api/use-mutation-add-post";
 
 const initaialNewPost = { title: "", body: "", userId: 1 };
 

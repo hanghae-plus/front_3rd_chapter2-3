@@ -1,4 +1,4 @@
-import { useQueryUserInfo } from "../api/fetch-user-info";
+import { useQueryUserInfo } from "@/features/user/api/fetch-user-info";
 import { UserType } from "./user-type";
 
 export const useUserInfo = (user: UserType) => {

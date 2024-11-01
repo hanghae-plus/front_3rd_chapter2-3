@@ -1,6 +1,7 @@
-import { useQueryGetComment } from "./../api/use-query-get-comment";
 import { useEffect, useState } from "react";
+
 import { CommentType } from "./comment-type";
+import { useQueryGetComment } from "@/features/comment/api/use-query-get-comment";
 
 export const useComment = (id: number) => {
   const [commentList, setCommentList] = useState<CommentType[]>([]);

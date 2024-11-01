@@ -1,5 +1,5 @@
-import { useMutationDeletePost } from "@/entities/post/api/use-mutation-delete-post";
 import { postListState } from "@/entities/post/model/post-state";
+import { useMutationDeletePost } from "../api/use-mutation-delete-post";
 
 export const useDeletePost = (postId: number) => {
   const mutation = useMutationDeletePost(postId);

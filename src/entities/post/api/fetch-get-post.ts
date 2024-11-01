@@ -1,10 +1,6 @@
-import { useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-
 import apiRequest from "@/shared/api";
-import { userListState } from "@/entities/user/model/user-state";
 import { UserType } from "@/entities/user/model/user-type";
-import { PostListTotal, PostType } from "../model/post-type";
+import { PostType } from "../model/post-type";
 
 const getBaseURL = (queryParams: { [key: string]: string }) => {
   if (queryParams.keyword !== undefined && queryParams.keyword !== "") {
@@ -16,7 +12,7 @@ const getBaseURL = (queryParams: { [key: string]: string }) => {
   return "/api/posts";
 };
 
-const fetchPostList = async (userList: UserType[], searchParams: URLSearchParams) => {
+export const fetchPostList = async (userList: UserType[], searchParams: URLSearchParams) => {
   const searchQuery = Object.fromEntries([...searchParams.entries()]);
   const baseURL = getBaseURL(searchQuery);
   const queryString =
@@ -42,14 +38,4 @@ const postListWithUser = (postList: PostType[], userList: UserType[]) => {
       username: "",
     },
   }));
-};
-
-export const useQueryGetPost = () => {
-  const { userList } = userListState();
-  const [searchParams] = useSearchParams();
-  return useQuery<PostListTotal>({
-    queryKey: ["search-post", { ...searchParams }],
-    queryFn: () => fetchPostList(userList, searchParams),
-    enabled: userList.length > 0,
-  });
 };

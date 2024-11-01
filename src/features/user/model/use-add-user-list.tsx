@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import { useQueryUserList } from "@/entities/user/api/fetch-user-list";
 import { userListState } from "@/entities/user/model/user-state";
+import { useQueryUserList } from "../api/fetch-user-list";
 
 export function useAddNewUser() {
   const { setNewUserList } = userListState();

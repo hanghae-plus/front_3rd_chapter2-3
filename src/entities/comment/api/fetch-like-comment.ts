@@ -1,5 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
-
 import apiRequest from "@/shared/api";
 import { CommentType } from "@/entities/comment/model/comment-type";
 
@@ -7,7 +5,7 @@ const getCommentLike = (commentList: CommentType[], commentId: number) => {
   return commentList.find(comment => comment.id === commentId)?.likes ?? 0;
 };
 
-const fetchLikeComment = async (
+export const fetchLikeComment = async (
   commentList: CommentType[],
   commentId: number,
 ): Promise<CommentType> => {
@@ -19,8 +17,4 @@ const fetchLikeComment = async (
     console.error(error);
     throw error;
   }
-};
-
-export const useMutationLikeComment = (commentList: CommentType[], commentId: number) => {
-  return useMutation({ mutationFn: () => fetchLikeComment(commentList, commentId) });
 };

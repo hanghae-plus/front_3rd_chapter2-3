@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import { PostWithAuthorType } from "@/entities/post/model/post-type";
-import { useMutationUpdatepost } from "@/entities/post/api/use-mutation-update-post";
 import { postListState } from "@/entities/post/model/post-state";
+import { useMutationUpdatepost } from "../api/use-mutation-update-post";
 
 export const useUpdatePost = (post: PostWithAuthorType) => {
   const [newPost, setNewPost] = useState<PostWithAuthorType>(post);

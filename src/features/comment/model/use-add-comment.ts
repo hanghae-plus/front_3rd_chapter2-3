@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { CommentType } from "@/entities/comment/model/comment-type";
-import { useMutationAddComment } from "@/entities/comment/api/use-mutation-add-comment";
+import { useMutationAddComment } from "../api/use-mutation-add-comment";
 
 export const useAddComment = (id: number) => {
   const [newComment, setNewComment] = useState({ body: "", postId: id || 0, userId: 1 });

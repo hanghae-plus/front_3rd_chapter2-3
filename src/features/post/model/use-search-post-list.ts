@@ -1,5 +1,5 @@
-import { useQueryGetPost } from "@/entities/post/api";
 import { postListState } from "@/entities/post/model/post-state";
+import { useQueryGetPost } from "../api/use-query-get-post";
 
 export function useSearchPostList() {
   const { setNewPostList, setTotal } = postListState();
