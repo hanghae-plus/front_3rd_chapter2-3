@@ -13,6 +13,11 @@ const PostAddDialog = () => {
   function handleAddPost() {
     addPost(newPost, {
       onSuccess: (data: Post) => {
+        data = {
+          ...data,
+          reactions: { likes: 0, dislikes: 0 },
+          tags: [],
+        }
         setPosts((prev) => ({
           ...prev,
           posts: [data, ...prev.posts],
