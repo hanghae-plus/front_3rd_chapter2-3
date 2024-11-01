@@ -33,30 +33,28 @@ const PostSearchInput = () => {
   const { data: postsByTag, isLoading: isPostByTagLoading, isError: isPostByTagError } = useFetchPostsByTag(selectedTag)
   const { data: postSearch, isLoading: isPostSearchLoading, isError: isPostSearchError } = useFetchPosts(limit, skip)
 
-  useEffect(() => {
+  const fetchData = () => {
     setLoading(true)
+    const isTagSearch = selectedTag && selectedTag !== "all"
+    const isSearchReady = !isTagSearch
+      ? !isPostSearchLoading && !isPostSearchError && postSearch
+      : !isPostByTagLoading && !isPostByTagError && postsByTag
 
-    const fetchData = () => {
-      const isTagSearch = selectedTag && selectedTag !== "all"
-      const isSearchReady = !isTagSearch
-        ? !isPostSearchLoading && !isPostSearchError && postSearch
-        : !isPostByTagLoading && !isPostByTagError && postsByTag
+    if (isSearchReady) {
+      const postsData = isTagSearch ? postsByTag?.postsByTagData : postSearch?.postsSearchData
+      const usersData = isTagSearch ? postsByTag?.usersByTagData : postSearch?.usersSearchData
 
-      if (isSearchReady) {
-        const postsData = isTagSearch ? postsByTag?.postsByTagData : postSearch?.postsSearchData
-        const usersData = isTagSearch ? postsByTag?.usersByTagData : postSearch?.usersSearchData
-
-        if (postsData && usersData) {
-          const postsWithUsers = postsToUsers(postsData, usersData.users)
-          setPosts(postsWithUsers)
-          setTotal(postsData.total)
-          updateURL()
-        }
+      if (postsData && usersData) {
+        const postsWithUsers = postsToUsers(postsData, usersData.users)
+        setPosts(postsWithUsers)
+        setTotal(postsData.total)
+        updateURL()
       }
+      setLoading(false)
     }
-
+  }
+  useEffect(() => {
     fetchData()
-    setLoading(false)
   }, [
     isPostByTagLoading,
     isPostByTagError,

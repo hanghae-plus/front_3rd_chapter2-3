@@ -24,7 +24,7 @@ const PostTable = () => {
     setPosts,
   } = usePost()
 
-  const { setShowUserModal, setSelectedUser } = useUser()
+  const { showUserModal, setSelectedUser } = useUser()
 
   const { setComments } = useComment()
   const [postAuthor, setPostAuthor] = useState<Author>({ id: 0, image: "", username: "", fullName: "" })
@@ -50,15 +50,14 @@ const PostTable = () => {
   useEffect(() => {
     if (userModalInfo && !isModalLoading && !modalError) {
       setSelectedUser(userModalInfo)
-      setShowUserModal(true)
     }
-  }, [userModalInfo, isModalLoading, modalError])
+  }, [userModalInfo, isModalLoading, modalError, showUserModal])
 
   const { data: comments, error: postDeatilError, isLoading: isPostDetailLoading } = useFetchComments(postDetail.id)
   useEffect(() => {
-    if (comments && !isPostDetailLoading && !postDeatilError) {
-      setShowPostDetailDialog(true)
+    if (!comments?.message && comments && !isPostDetailLoading && !postDeatilError) {
       if (postDetail) {
+        setShowPostDetailDialog(true)
         setSelectedPost(postDetail)
         setComments((prev) => ({ ...prev, [postDetail.id]: comments.comments }))
       }
