@@ -9,8 +9,6 @@ interface PostDetailDialogProps {
   handleDialog: () => void
   selectedPost: Post | null
   searchQuery: string
-  likeComment: (commentId: number) => void
-  deleteComment: (commentId: number) => void
   setSelectedComment: (comment: Comment) => void
   setShowEditCommentDialog: (show: boolean) => void
   handleAddComment: () => void
@@ -21,8 +19,6 @@ export const PostDetailDialog = ({
   handleDialog,
   selectedPost,
   searchQuery,
-  likeComment,
-  deleteComment,
   setSelectedComment,
   setShowEditCommentDialog,
   handleAddComment,
@@ -39,8 +35,6 @@ export const PostDetailDialog = ({
             <CommentsListView
               postId={selectedPost.id}
               searchQuery={searchQuery}
-              likeComment={likeComment}
-              deleteComment={deleteComment}
               setSelectedComment={setSelectedComment}
               setShowEditCommentDialog={setShowEditCommentDialog}
               handleAddComment={handleAddComment}

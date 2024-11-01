@@ -13,7 +13,6 @@ import { CommentAddDialog } from "../../../features/comments/ui/CommentAddDialog
 import { CommentUpdateDialog } from "../../../features/comments/ui/CommentUpdateDialog"
 import { PostDetailDialog } from "./PostDetailDialog"
 import { UserDialog } from "../../../entities/user/ui/UserDialog"
-import { deleteCommentMutation, likeCommentMutation } from "../../../features/comments/api"
 import { usePostDialogs } from "../../../features/posts/model/usePostDialogs"
 import { useCommentDialogs } from "../../../features/comments/model/useCommentDialogs"
 import { useUserDialogs } from "../../../features/users/model/useUserDialogs"

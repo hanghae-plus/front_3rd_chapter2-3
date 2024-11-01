@@ -6,7 +6,6 @@ import { addPostMutation } from "../api"
 interface PostAddDialogProps {
   isShow: boolean
   handleDialog: () => void
-
 }
 
 export const PostAddDialog = ({ isShow, handleDialog }: PostAddDialogProps) => {
@@ -43,7 +42,7 @@ export const PostAddDialog = ({ isShow, handleDialog }: PostAddDialogProps) => {
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={() => addPost(newPost)}>게시물 추가</Button>
+          <Button onClick={() => addPost()}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>
