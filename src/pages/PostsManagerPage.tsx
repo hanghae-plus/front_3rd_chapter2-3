@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
 
 import Card from "../shared/ui/Card"
 import Button from "../shared/ui/Button"
@@ -23,12 +22,10 @@ import useSelectedPostModal from "../features/post/api/useSelectedPostModal"
 import PostManagerHeader from "../features/post/ui/PostManagerHeader"
 import { useFetchTags } from "../features/post/api/useFetchTags"
 import AddPostDialog from "../features/post/ui/AddPostDialog"
+import { usePostStore } from "../entities/post/model/postStore"
+import useSyncQueryParams from "../features/post/api/useSyncQueryParams"
 
 const PostsManager = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
-
   const {
     posts,
     loading,
@@ -46,30 +43,28 @@ const PostsManager = () => {
   const { tags } = useFetchTags()
 
   // 상태 관리
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+  const {
+    skip,
+    limit,
+    searchQuery,
+    sortBy,
+    sortOrder,
+    selectedTag,
+    setSkip,
+    setLimit,
+    setSearchQuery,
+    setSortBy,
+    setSortOrder,
+    setSelectedTag,
+  } = usePostStore()
+  useSyncQueryParams()
+
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-
-  // URL 업데이트 함수
-  const updateURL = () => {
-    const params = new URLSearchParams()
-    if (skip) params.set("skip", skip.toString())
-    if (limit) params.set("limit", limit.toString())
-    if (searchQuery) params.set("search", searchQuery)
-    if (sortBy) params.set("sortBy", sortBy)
-    if (sortOrder) params.set("sortOrder", sortOrder)
-    if (selectedTag) params.set("tag", selectedTag)
-    navigate(`?${params.toString()}`)
-  }
 
   // 게시물 가져오기
   const handleFetchPosts = () => {
@@ -183,18 +178,7 @@ const PostsManager = () => {
     } else {
       handleFetchPosts()
     }
-    updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
@@ -229,7 +213,6 @@ const PostsManager = () => {
                       }`}
                       onClick={() => {
                         setSelectedTag(tag)
-                        updateURL()
                       }}
                     >
                       {tag}
@@ -352,7 +335,6 @@ const PostsManager = () => {
               onValueChange={(value) => {
                 setSelectedTag(value)
                 handleFetchPostsByTag(value)
-                updateURL()
               }}
             >
               <Select.SelectTrigger className="w-[180px]">
@@ -426,78 +408,86 @@ const PostsManager = () => {
       )}
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog.Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <Dialog.DialogContent>
-          <Dialog.DialogHeader>
-            <Dialog.DialogTitle>게시물 수정</Dialog.DialogTitle>
-          </Dialog.DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={selectedPost?.title || ""}
-              onChange={(e) => selectedPost && handleSetSelectedPost({ ...selectedPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={15}
-              placeholder="내용"
-              value={selectedPost?.body || ""}
-              onChange={(e) => selectedPost && handleSetSelectedPost({ ...selectedPost, body: e.target.value })}
-            />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
-          </div>
-        </Dialog.DialogContent>
-      </Dialog.Dialog>
+      {showEditDialog && (
+        <Dialog.Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <Dialog.DialogContent>
+            <Dialog.DialogHeader>
+              <Dialog.DialogTitle>게시물 수정</Dialog.DialogTitle>
+            </Dialog.DialogHeader>
+            <div className="space-y-4">
+              <Input
+                placeholder="제목"
+                value={selectedPost?.title || ""}
+                onChange={(e) => selectedPost && handleSetSelectedPost({ ...selectedPost, title: e.target.value })}
+              />
+              <Textarea
+                rows={15}
+                placeholder="내용"
+                value={selectedPost?.body || ""}
+                onChange={(e) => selectedPost && handleSetSelectedPost({ ...selectedPost, body: e.target.value })}
+              />
+              <Button onClick={updatePost}>게시물 업데이트</Button>
+            </div>
+          </Dialog.DialogContent>
+        </Dialog.Dialog>
+      )}
 
       {/* 댓글 추가 대화상자 */}
-      <Dialog.Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <Dialog.DialogContent>
-          <Dialog.DialogHeader>
-            <Dialog.DialogTitle>새 댓글 추가</Dialog.DialogTitle>
-          </Dialog.DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-            />
-            <Button onClick={addComment}>댓글 추가</Button>
-          </div>
-        </Dialog.DialogContent>
-      </Dialog.Dialog>
+      {showAddCommentDialog && (
+        <Dialog.Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
+          <Dialog.DialogContent>
+            <Dialog.DialogHeader>
+              <Dialog.DialogTitle>새 댓글 추가</Dialog.DialogTitle>
+            </Dialog.DialogHeader>
+            <div className="space-y-4">
+              <Textarea
+                placeholder="댓글 내용"
+                value={newComment.body}
+                onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
+              />
+              <Button onClick={addComment}>댓글 추가</Button>
+            </div>
+          </Dialog.DialogContent>
+        </Dialog.Dialog>
+      )}
 
       {/* 댓글 수정 대화상자 */}
-      <Dialog.Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <Dialog.DialogContent>
-          <Dialog.DialogHeader>
-            <Dialog.DialogTitle>댓글 수정</Dialog.DialogTitle>
-          </Dialog.DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
-            />
-            <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
-          </div>
-        </Dialog.DialogContent>
-      </Dialog.Dialog>
+      {selectedComment && showEditCommentDialog && (
+        <Dialog.Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
+          <Dialog.DialogContent>
+            <Dialog.DialogHeader>
+              <Dialog.DialogTitle>댓글 수정</Dialog.DialogTitle>
+            </Dialog.DialogHeader>
+            <div className="space-y-4">
+              <Textarea
+                placeholder="댓글 내용"
+                value={selectedComment?.body || ""}
+                onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
+              />
+              <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
+            </div>
+          </Dialog.DialogContent>
+        </Dialog.Dialog>
+      )}
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog.Dialog open={showPostModal} onOpenChange={handleClosePostModal}>
-        <Dialog.DialogContent className="max-w-3xl">
-          <Dialog.DialogHeader>
-            <Dialog.DialogTitle>
-              <HighlightText text={selectedPost?.title} highlight={searchQuery} />
-            </Dialog.DialogTitle>
-          </Dialog.DialogHeader>
-          <div className="space-y-4">
-            <p>
-              <HighlightText text={selectedPost?.body} highlight={searchQuery} />
-            </p>
-            {renderComments(selectedPost?.id)}
-          </div>
-        </Dialog.DialogContent>
-      </Dialog.Dialog>
+      {selectedPost && showPostModal && (
+        <Dialog.Dialog open={showPostModal} onOpenChange={handleClosePostModal}>
+          <Dialog.DialogContent className="max-w-3xl">
+            <Dialog.DialogHeader>
+              <Dialog.DialogTitle>
+                <HighlightText text={selectedPost?.title} highlight={searchQuery} />
+              </Dialog.DialogTitle>
+            </Dialog.DialogHeader>
+            <div className="space-y-4">
+              <p>
+                <HighlightText text={selectedPost?.body} highlight={searchQuery} />
+              </p>
+              {renderComments(selectedPost?.id)}
+            </div>
+          </Dialog.DialogContent>
+        </Dialog.Dialog>
+      )}
 
       {/* 사용자 모달 */}
       <UserModal
