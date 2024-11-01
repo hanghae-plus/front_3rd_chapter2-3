@@ -12,6 +12,9 @@ const useFetchComments = (postId: number) => {
   return useQuery({
     queryKey: ["comments", postId],
     queryFn: () => fetchComments(postId),
+    staleTime: 0,
+    gcTime: 600000,
+    enabled: true,
   })
 }
 

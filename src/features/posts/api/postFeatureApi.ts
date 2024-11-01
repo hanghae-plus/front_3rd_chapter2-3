@@ -2,7 +2,6 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import {
   fetchPosts,
   fetchTags,
-  fetchSearchPosts,
   addPost,
   updatePost,
   deletePost,
@@ -15,6 +14,9 @@ const useFetchPosts = (limit: number, skip: number) => {
   return useQuery({
     queryKey: ["posts", limit, skip],
     queryFn: () => fetchPosts(limit, skip),
+    staleTime: 0,
+    gcTime: 600000,
+    enabled: true,
   })
 }
 
@@ -22,6 +24,9 @@ const useFetchSearchQueryPosts = (searchQuery: string) => {
   return useQuery({
     queryKey: ["searchQueryPosts", searchQuery],
     queryFn: () => fetchSearchQueryPosts(searchQuery),
+    staleTime: 0,
+    gcTime: 600000,
+    enabled: true,
   })
 }
 
@@ -29,6 +34,9 @@ const useFetchTags = () => {
   return useQuery({
     queryKey: ["tags"],
     queryFn: () => fetchTags(),
+    staleTime: 0,
+    gcTime: 600000,
+    enabled: true,
   })
 }
 
@@ -36,13 +44,9 @@ const useFetchPostsByTag = (tag: string) => {
   return useQuery({
     queryKey: ["tags", tag],
     queryFn: () => fetchPostsByTag(tag),
-  })
-}
-
-const useFetchSearchPosts = () => {
-  return useQuery({
-    queryKey: ["searchPosts"],
-    queryFn: () => fetchSearchPosts(),
+    staleTime: 0,
+    gcTime: 600000,
+    enabled: true,
   })
 }
 
@@ -69,7 +73,6 @@ export {
   useFetchSearchQueryPosts,
   useFetchTags,
   useFetchPostsByTag,
-  useFetchSearchPosts,
   useAddPost,
   useUpdatePost,
   useDeletePost,
