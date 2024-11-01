@@ -31,8 +31,48 @@ const PostsManager = () => {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
 
+  type Post = {
+    id: number
+    title: string
+    body: string
+    tags: string[]
+    reactions: {
+      likes: number
+      dislikes: number
+    }
+    views: number
+    userId: number
+  }
+
+  type User = {
+    id: number
+    username: string
+    image: string
+  }
+
+  type PostWithUser = Post & {
+    author: {
+      id: number
+      username: string
+      image: string
+    }
+  }
+  type PostsResponse = {
+    posts: Post[]
+    total: number
+    skip: number
+    limit: number
+  }
+
+  // type UsersResponse = {
+  //   users: User[]
+  //   total: number
+  //   skip: number
+  //   limit: number
+  // }
+
   // 상태 관리
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<PostWithUser[]>([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
@@ -70,8 +110,8 @@ const PostsManager = () => {
   // 게시물 가져오기
   const fetchPosts = () => {
     setLoading(true)
-    let postsData
-    let usersData
+    let postsData: PostsResponse
+    let usersData: User[] = []
 
     fetch(`/api/posts?limit=${limit}&skip=${skip}`)
       .then((response) => response.json())
@@ -82,10 +122,11 @@ const PostsManager = () => {
       .then((response) => response.json())
       .then((users) => {
         usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
+        const postsWithUsers: PostWithUser[] = postsData.posts.map((post: Post) => ({
           ...post,
-          author: usersData.find((user) => user.id === post.userId),
+          author: usersData.find((user) => user.id === post.userId) || { id: 0, username: "Unknown", image: "" },
         }))
+
         setPosts(postsWithUsers)
         setTotal(postsData.total)
       })
@@ -127,7 +168,7 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
+  const fetchPostsByTag = async (tag: string) => {
     if (!tag || tag === "all") {
       fetchPosts()
       return
@@ -141,9 +182,13 @@ const PostsManager = () => {
       const postsData = await postsResponse.json()
       const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post) => ({
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.users.find((user: User) => user.id === post.userId) || {
+          id: 0,
+          username: "Unknown",
+          image: "",
+        },
       }))
 
       setPosts(postsWithUsers)
