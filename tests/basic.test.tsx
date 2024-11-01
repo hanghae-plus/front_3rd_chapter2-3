@@ -8,6 +8,7 @@ import PostsManager from "../src/pages/PostsManagerPage"
 import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -15,9 +16,12 @@ const server = setupServer(
     return HttpResponse.json(TEST_POSTS)
   }),
 
-  http.get("/api/posts/search?q=His%20mother%20had%20always%20taught%20him", () => {
-    return HttpResponse.json(TEST_SEARCH_POST)
-  }),
+  http.get(
+    "/api/posts/search?q=His%20mother%20had%20always%20taught%20him",
+    () => {
+      return HttpResponse.json(TEST_SEARCH_POST)
+    },
+  ),
 
   http.get("/api/users", () => {
     return HttpResponse.json(TEST_USERS)
@@ -45,10 +49,13 @@ afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
+  const queryClient = new QueryClient()
   return render(
-    <MemoryRouter>
-      <PostsManager />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <PostsManager />
+      </MemoryRouter>
+    </QueryClientProvider>,
   )
 }
 
