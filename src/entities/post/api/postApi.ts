@@ -5,6 +5,7 @@ import {
   FetchPostsResponse,
   NewPost,
   Post,
+  PostDTO,
   Tag,
 } from "../model/types"
 
@@ -75,16 +76,7 @@ export const postApi = {
   /** 게시물 추가 */
   addPost: async (newPost: NewPost) => {
     try {
-      /**
-       * TODO: Post 타입이 아님
-       {
-            "id": number;
-            "title": string;
-            "body": string;
-            "userId": number;
-        }
-       */
-      const response = await safeFetch.post<Post>("/api/posts/add", newPost)
+      const response = await safeFetch.post<PostDTO>("/api/posts/add", newPost)
 
       return response
     } catch (error) {
@@ -96,7 +88,7 @@ export const postApi = {
   /** 게시물 업데이트 */
   updatePost: async (selectedPost: Post) => {
     try {
-      const response = await safeFetch.put<Post>(
+      const response = await safeFetch.put<PostDTO>(
         `/api/posts/${selectedPost.id}`,
         selectedPost,
       )
@@ -109,7 +101,7 @@ export const postApi = {
 
   deletePost: async (id: number) => {
     try {
-      const response = await safeFetch.delete<Post>(`/api/posts/${id}`)
+      const response = await safeFetch.delete<PostDTO>(`/api/posts/${id}`)
       return response
     } catch (error) {
       console.error("게시물 삭제 오류:", error)

@@ -1,5 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { SortType } from "../../../shared/model/types"
+import { useAttachAuthorToPost } from "../model/attachAuthorToPost"
 import {
   FetchPostsPayload,
   FetchPostsResponse,
@@ -17,11 +18,7 @@ export type usePostsQueryProps = FetchPostsPayload &
 export const usePostsQuery = (payload: usePostsQueryProps) => {
   const { limit, skip, search, selectedTag } = payload
 
-  // 글쓴이 정보를 가져오는 함수
-  const fetchAuthors = async () => {
-    const authorsData = await postApi.fetchAuthors()
-    return authorsData.users
-  }
+  const { attachAuthor, isLoading: isLoadingAuthors } = useAttachAuthorToPost()
 
   // 게시물 데이터를 가져오는 함수 (태그와 검색 쿼리에 따라 처리)
   const fetchPostsData = async (): Promise<FetchPostsResponse> => {
@@ -38,22 +35,16 @@ export const usePostsQuery = (payload: usePostsQueryProps) => {
 
   // 게시물과 글쓴이 정보를 함께 가져오는 함수
   const fetchPostsWithAuthors = async (): Promise<PostsResponse> => {
-    const [authors, postsData] = await Promise.all([
-      fetchAuthors(),
-      fetchPostsData(),
-    ])
-
-    const postsWithAuthors = postsData.posts.map((post) => ({
-      ...post,
-      author: authors.find((user) => user.id === post.userId),
-    }))
+    const postsData = await fetchPostsData()
+    const postsWithAuthors = postsData.posts.map((post) => attachAuthor(post))
 
     return { posts: postsWithAuthors, total: postsData.total }
   }
 
-  const { data, ...query } = useQuery({
+  const { data, isLoading, ...query } = useQuery({
     queryKey: postQueryKeys.list(payload),
     queryFn: () => fetchPostsWithAuthors(),
+    enabled: !isLoadingAuthors,
     placeholderData: keepPreviousData,
   })
 
@@ -62,6 +53,7 @@ export const usePostsQuery = (payload: usePostsQueryProps) => {
       posts: data?.posts ?? [],
       total: data?.total ?? 0,
     },
+    isLoading: isLoading || isLoadingAuthors,
     ...query,
   }
 }

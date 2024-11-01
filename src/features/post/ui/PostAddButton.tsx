@@ -1,11 +1,10 @@
-import { MutateOptions } from "@tanstack/react-query"
-import { NewPost, Post } from "../../../entities/post/model/types"
+import { NewPost } from "../../../entities/post/model/types"
 import { Button } from "../../../shared/ui"
 import { useAddPostMutation } from "../api/useAddPostMutation"
 
 type Props = {
   newPost: NewPost
-  onAddSuccess?: MutateOptions<Post, Error, NewPost, unknown>["onSuccess"]
+  onAddSuccess?: VoidFunction
 }
 
 export const PostAddButton = ({ newPost, onAddSuccess: onSuccess }: Props) => {

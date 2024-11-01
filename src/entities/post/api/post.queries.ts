@@ -8,4 +8,6 @@ export const postQueryKeys = {
     [...postQueryKeys.lists(), payload] as const,
 
   tags: () => [...postQueryKeys.all(), "tags"] as const,
+
+  authors: () => [...postQueryKeys.all(), "authors"] as const,
 } as const
