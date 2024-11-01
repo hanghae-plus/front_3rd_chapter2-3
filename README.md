@@ -72,3 +72,16 @@ TanstackQuery를 이용하여 코드를 개선하기
 - [ ] 캐싱과 리프레시 전략이 올바르게 구현되었는가?
 
 ```
+
+
+```
+    tanstack cache
+    staleTime: 1000* 60 // 1분동안 캐시 사용
+    staleTime: Infinity // 캐시된 데이터 우선 사용
+
+    cacheTime: 0  // 네트워크 항상 우선
+
+    refetchInterval: 1000 * 60  // 1분마다 데이터 새로고침
+
+    enabled: isFilterActive // enabled true인 경우에만 데이터 요청
+```

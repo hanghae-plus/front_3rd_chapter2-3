@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { http, HttpResponse } from "msw"
@@ -15,9 +16,12 @@ const server = setupServer(
     return HttpResponse.json(TEST_POSTS)
   }),
 
-  http.get("/api/posts/search?q=His%20mother%20had%20always%20taught%20him", () => {
-    return HttpResponse.json(TEST_SEARCH_POST)
-  }),
+  http.get(
+    "/api/posts/search?q=His%20mother%20had%20always%20taught%20him",
+    () => {
+      return HttpResponse.json(TEST_SEARCH_POST)
+    },
+  ),
 
   http.get("/api/users", () => {
     return HttpResponse.json(TEST_USERS)
@@ -45,10 +49,13 @@ afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
+  const queryClient = new QueryClient()
   return render(
-    <MemoryRouter>
-      <PostsManager />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <PostsManager />
+      </MemoryRouter>
+    </QueryClientProvider>,
   )
 }
 
@@ -73,8 +80,12 @@ describe("PostsManager", () => {
     await user.keyboard("{Enter}")
 
     await waitFor(() => {
-      expect(screen.getByText("His mother had always taught him")).toBeInTheDocument()
-      expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument()
+      expect(
+        screen.getByText("His mother had always taught him"),
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText("He was an expert but not in a discipline"),
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -128,7 +139,7 @@ describe("PostsManager", () => {
   })
 
   // 다른 테스트 케이스들. 참고용으로 작성된 것이며, 실제로는 작성하지 않았습니다.
-  it("태그 필터링이 올바르게 작동해야 합니다")
+  it("태그 필터링이 올바르게 작동해야 합니다", async () => {})
   it("정렬 기능이 올바르게 작동해야 합니다")
   it("페이지네이션이 올바르게 작동해야 합니다")
   it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다")
@@ -142,5 +153,15 @@ describe("PostsManager", () => {
   it("검색 결과에서 하이라이트 기능이 올바르게 작동해야 합니다")
   it("URL 파라미터 변경에 따라 컴포넌트 상태가 올바르게 업데이트되어야 합니다")
   it("에러 상황에서 적절한 에러 메시지를 표시해야 합니다")
-  it("로딩 상태일 때 로딩 인디케이터를 표시해야 합니다")
+  it("로딩 상태일 때 로딩 인디케이터를 표시해야 합니다", async () => {
+    renderPostsManager()
+
+    // 로딩 인디케이터 확인
+    expect(screen.getByText(/로딩 중.../i)).toBeInTheDocument()
+
+    // 로딩이 끝난 후 로딩 텍스트가 사라졌는지 확인
+    await waitFor(() => {
+      expect(screen.queryByText(/로딩 중.../i)).not.toBeInTheDocument()
+    })
+  })
 })
