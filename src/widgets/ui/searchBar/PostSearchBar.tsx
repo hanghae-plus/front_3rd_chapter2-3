@@ -10,7 +10,7 @@ const PostSearchBar = () => {
         <div className="flex-1">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            {/* 게시물 검색 버튼 */}
+            {/* 게시물 검색 input */}
             <PostSearchInput />
           </div>
         </div>

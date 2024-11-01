@@ -18,7 +18,6 @@ const PostDetailDialog = () => {
         </DialogHeader>
         <div className="space-y-4">
           <p>
-            {" "}
             <HighlightText text={selectedPost?.body} highlight={searchQuery} />
           </p>
           {selectedPost.id && <CommentsSection postId={selectedPost?.id} />}
