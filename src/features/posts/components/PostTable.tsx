@@ -1,15 +1,16 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
-import { deletePost } from "../../../entities/posts/api/postEntitiesApi"
 import { Author, Post } from "../../../entities/posts/model/Post"
 import { Users } from "../../../entities/users/model/User"
+import { Button } from "../../../shared/ui"
 import HighlightText from "../../../shared/ui/HighlightText"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/Table"
 import { useFetchComments } from "../../comments/api/commentsFeaturesApi"
+import useComment from "../../comments/hooks/useComments"
 import { useFetchUserModalInfo } from "../../users/api/userFeaturesApi"
 import useUser from "../../users/hooks/useUser"
+import { useDeletePost } from "../api/postFeatureApi"
 import usePost from "../hooks/usePost"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/Table"
-import { Button } from "../../../shared/ui"
 
 const PostTable = () => {
   const {
@@ -20,10 +21,12 @@ const PostTable = () => {
     setSelectedPost,
     setShowEditDialog,
     setShowPostDetailDialog,
+    setPosts,
   } = usePost()
 
   const { setShowUserModal, setSelectedUser } = useUser()
 
+  const { setComments } = useComment()
   const [postAuthor, setPostAuthor] = useState<Author>({ id: 0, image: "", username: "", fullName: "" })
   const [postDetail, setPostDetail] = useState<Post>({
     body: "",
@@ -52,13 +55,15 @@ const PostTable = () => {
   }, [userModalInfo, isModalLoading, modalError])
 
   const { data: comments, error: postDeatilError, isLoading: isPostDetailLoading } = useFetchComments(postDetail.id)
-
   useEffect(() => {
     if (comments && !isPostDetailLoading && !postDeatilError) {
-      setSelectedPost(postDetail)
       setShowPostDetailDialog(true)
+      if (postDetail) {
+        setSelectedPost(postDetail)
+        setComments((prev) => ({ ...prev, [postDetail.id]: comments.comments }))
+      }
     }
-  }, [comments, isPostDetailLoading, postDeatilError])
+  }, [comments, isPostDetailLoading, postDeatilError, postDetail])
 
   function openPostDetail(post: Post) {
     setPostDetail(post)
@@ -72,7 +77,20 @@ const PostTable = () => {
     setShowEditDialog(true)
   }
 
-  console.log("posts", posts)
+  const { mutate: deletePost } = useDeletePost()
+  function handleDeletePost(id: number) {
+    deletePost(id, {
+      onSuccess: () => {
+        setPosts({
+          ...posts,
+          posts: posts.posts.filter((post) => post.id !== id),
+        })
+      },
+      onError: (error) => {
+        console.error("Failed to like comment:", error)
+      },
+    })
+  }
   return (
     <Table>
       <TableHeader>
@@ -143,7 +161,7 @@ const PostTable = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>

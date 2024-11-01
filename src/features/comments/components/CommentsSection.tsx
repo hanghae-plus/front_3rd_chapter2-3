@@ -22,15 +22,16 @@ const CommentsSection = ({ postId }: CommentsSectionProps) => {
 
   function handleLikeComment(commentId: number, postId: number) {
     const comment = comments[postId]?.find((c) => c.id === commentId)
+
     const updateLikes = comment ? comment.likes + 1 : 0
 
     likeComment(
       { id: commentId, updateLikes },
       {
-        onSuccess: (data: Comments) => {
+        onSuccess: () => {
           setComments((prev) => ({
             ...prev,
-            [postId]: prev[postId].map((c) => (c.id === data.id ? data : c)),
+            [postId]: prev[postId].map((c) => (c.id === commentId ? { ...c, likes: updateLikes } : c)),
           }))
         },
         onError: (error) => {
@@ -61,6 +62,14 @@ const CommentsSection = ({ postId }: CommentsSectionProps) => {
     setShowEditCommentDialog(true)
   }
 
+  function handleShowAddCommentDialog() {
+    setNewComment((prev) => ({ ...prev, postId }))
+    setShowAddCommentDialog(true)
+    setNewComment((prev) => ({
+      ...prev,
+      body: "",
+    }))
+  }
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
@@ -69,8 +78,7 @@ const CommentsSection = ({ postId }: CommentsSectionProps) => {
           size="sm"
           onClick={() => {
             if (postId) {
-              setNewComment((prev) => ({ ...prev, postId }))
-              setShowAddCommentDialog(true)
+              handleShowAddCommentDialog()
             }
           }}
         >

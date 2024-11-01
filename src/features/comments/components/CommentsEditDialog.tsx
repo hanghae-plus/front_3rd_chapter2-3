@@ -37,7 +37,7 @@ const CommentsEditDialog = () => {
     updateComment(selectedComment, {
       onSuccess: (data: Comments) => {
         setComments((prev: CommentsState | null) => {
-          const currentState = prev || {} // prev가 null인 경우 빈 객체로 초기화
+          const currentState = prev || {}
           const commentsForPost = currentState[data.postId] || []
 
           return {
