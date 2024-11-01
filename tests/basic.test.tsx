@@ -80,12 +80,8 @@ describe("PostsManager", () => {
     await user.keyboard("{Enter}")
 
     await waitFor(() => {
-      expect(
-        screen.getByText("His mother had always taught him"),
-      ).toBeInTheDocument()
-      expect(
-        screen.queryByText("He was an expert but not in a discipline"),
-      ).not.toBeInTheDocument()
+      expect(screen.getByText("His mother had always taught him")).toBeInTheDocument()
+      expect(screen.queryByText("He was an expert but not in a discipline")).not.toBeInTheDocument()
     })
   })
 
@@ -139,7 +135,7 @@ describe("PostsManager", () => {
   })
 
   // 다른 테스트 케이스들. 참고용으로 작성된 것이며, 실제로는 작성하지 않았습니다.
-  it("태그 필터링이 올바르게 작동해야 합니다", async () => {})
+  it("태그 필터링이 올바르게 작동해야 합니다")
   it("정렬 기능이 올바르게 작동해야 합니다")
   it("페이지네이션이 올바르게 작동해야 합니다")
   it("게시물 상세 보기 대화상자가 올바르게 열리고 내용을 표시해야 합니다")

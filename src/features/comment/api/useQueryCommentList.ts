@@ -14,5 +14,5 @@ export const useQueryCommentList = (postId: number) => {
   if (isLoading)
     return { data: null, comments: null, isLoading: true, error }
 
-  return { data, comments: data?.comments, isLoading: false, error: null }
+  return { data, comments: data.comments, isLoading: false, error: null }
 } 
