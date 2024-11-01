@@ -1,6 +1,6 @@
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp } from "lucide-react"
 import { useState } from "react"
-import { UpdateQueryParam } from "../../../entities/post"
+import { UpdatePostQueryParam } from "../../../entities/post"
 import { Author, Post } from "../../../entities/post/model/types"
 import { UserDTO } from "../../../entities/user/model/types"
 import { PostDeleteButton } from "../../../features/post"
@@ -23,7 +23,7 @@ type Props = {
 
   searchQuery: string
   selectedTag: string
-  updateQueryParam: UpdateQueryParam
+  updateQueryParam: UpdatePostQueryParam
 }
 
 export const PostTable = ({

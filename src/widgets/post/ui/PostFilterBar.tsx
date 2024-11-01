@@ -1,5 +1,5 @@
 import { Search } from "lucide-react"
-import { UpdateQueryParam } from "../../../entities/post"
+import { UpdatePostQueryParam } from "../../../entities/post"
 import { usePostTagsQuery } from "../../../entities/post/api/usePostTagsQuery"
 import { SortOrder, SortType } from "../../../shared/model/types"
 import {
@@ -14,7 +14,7 @@ import {
 type Props = SortType & {
   searchQuery: string
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
-  updateQueryParam: UpdateQueryParam
+  updateQueryParam: UpdatePostQueryParam
 
   selectedTag: string
 }

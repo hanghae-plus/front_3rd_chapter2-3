@@ -1,4 +1,4 @@
-import { UpdateQueryParam } from "../../entities/post"
+import { UpdatePostQueryParam } from "../../entities/post"
 import { PaginationType } from "../../shared/model/types"
 import {
   Button,
@@ -11,7 +11,7 @@ import {
 
 type Props = PaginationType & {
   total: number
-  updateQueryParam: UpdateQueryParam
+  updateQueryParam: UpdatePostQueryParam
 }
 
 export const Pagination = ({ limit, skip, total, updateQueryParam }: Props) => {

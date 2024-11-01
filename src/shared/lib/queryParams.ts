@@ -6,6 +6,9 @@ type StringifiedQueryParams<T> = {
   [P in keyof T]: string
 }
 
+/**
+ * URL의 쿼리 매개변수를 가져오는 함수
+ */
 export const getQueryParameters = <T extends QueryParams>(initialValue?: T) => {
   const queryParams = new URLSearchParams(location.search)
   const params: QueryParams = initialValue ?? {}
@@ -17,6 +20,9 @@ export const getQueryParameters = <T extends QueryParams>(initialValue?: T) => {
   return params as StringifiedQueryParams<T>
 }
 
+/**
+ * 쿼리 매개변수를 업데이트하는 훅
+ */
 export const useUpdateQueryParameter = <T extends QueryParams>() => {
   const location = useLocation()
   const navigate = useNavigate()

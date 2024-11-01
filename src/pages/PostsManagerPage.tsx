@@ -7,7 +7,7 @@ import { Pagination } from "../widgets/ui/Pagination"
 const PostsManager = () => {
   const {
     queryParams: { limit, search, skip, sortBy, sortOrder, tag: selectedTag },
-    updateQueryParam,
+    updateQueryParam: updateQueryParam,
   } = usePostQueryParams()
 
   const [searchQuery, setSearchQuery] = useState(search)
