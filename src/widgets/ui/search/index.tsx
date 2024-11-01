@@ -1,10 +1,10 @@
 import { useEffect } from "react"
-import PostAddButton from "../../../features/posts/components/PostAddButton"
-import PostTable from "../../../features/posts/components/PostTable"
+import PostAddButton from "../../../features/posts/components/PostAddButton/PostAddButton"
+import PostTable from "../table"
 import PostPagination from "../pagination"
 import PostSearchBar from "../searchBar"
 import { CardContent, CardHeader, CardTitle } from "../../../shared/ui/Card"
-import usePost from "../../../features/posts/hooks/usePost"
+import usePost from "../../../shared/hooks/usePost"
 
 const Search = () => {
   const { loading, updateURL } = usePost()

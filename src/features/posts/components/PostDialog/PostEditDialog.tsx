@@ -1,10 +1,10 @@
-import { Post } from "../../../entities/posts/model/Post"
-import { Button } from "../../../shared/ui/Button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/Dialog"
-import { Input } from "../../../shared/ui/Input"
-import { Textarea } from "../../../shared/ui/TextArea"
-import { useUpdatePost } from "../api/postFeatureApi"
-import usePost from "../hooks/usePost"
+import { Post } from "../../../../entities/posts/model/Post"
+import { Button } from "../../../../shared/ui/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../../shared/ui/Dialog"
+import { Input } from "../../../../shared/ui/Input"
+import { Textarea } from "../../../../shared/ui/TextArea"
+import { useUpdatePost } from "../../api/postFeatureApi"
+import usePost from "../../../../shared/hooks/usePost"
 
 const PostEditDialog = () => {
   const { showEditDialog, setShowEditDialog, selectedPost, setSelectedPost, setPosts } = usePost()

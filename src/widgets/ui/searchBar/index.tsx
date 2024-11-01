@@ -1,7 +1,7 @@
 import { Search } from "lucide-react"
-import PostSearchInput from "../../../features/posts/components/PostSearchInput"
-import PostSearchTagSelect from "../../../features/posts/components/PostSearchTagSelect"
-import PostSearchSortSelect from "../../../features/posts/components/PostSearchSortSelect"
+import PostSearchInput from "../../../features/posts/components/PostSearch/PostSearchInput"
+import PostSearchTagSelect from "../../../features/posts/components/PostSearch/PostSearchTagSelect"
+import PostSearchSortSelect from "../../../features/posts/components/PostSearch/PostSearchSortSelect"
 
 const PostSearchBar = () => {
   return (

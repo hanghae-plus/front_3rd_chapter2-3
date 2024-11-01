@@ -1,5 +1,5 @@
-import PostPaginationButton from "../../../features/posts/components/PostPaginationButton"
-import PostPaginationSelectLimit from "../../../features/posts/components/PostPaginationSelectLimit"
+import PostPaginationButton from "../../../features/posts/components/postPagination/PostPaginationButton"
+import PostPaginationSelectLimit from "../../../features/posts/components/postPagination/PostPaginationSelectLimit"
 
 const PostPagination = () => {
   return (

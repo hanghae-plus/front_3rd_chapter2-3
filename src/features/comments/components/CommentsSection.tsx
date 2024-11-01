@@ -2,7 +2,7 @@ import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { Comments } from "../../../entities/comments/model/Comments"
 import { Button } from "../../../shared/ui"
 import { useDeleteComment, useLikeComment } from "../api/commentsFeaturesApi"
-import useComment from "../hooks/useComments"
+import useComment from "../../../shared/hooks/useComment"
 import CommentUserInfo from "../../../entities/comments/ui/CommentUserInfo"
 
 interface CommentsSectionProps {

@@ -1,7 +1,7 @@
 import { Comments, CommentsState } from "../../../entities/comments/model/Comments"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui/"
 import { useUpdateComment } from "../api/commentsFeaturesApi"
-import useComment from "../hooks/useComments"
+import useComment from "../../../shared/hooks/useComment"
 
 // 댓글 수정 대화상자 */
 const CommentsEditDialog = () => {

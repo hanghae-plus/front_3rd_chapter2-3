@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react"
-import { Button } from "../../../shared/ui"
-import usePost from "../hooks/usePost"
+import { Button } from "../../../../shared/ui"
+import usePost from "../../../../shared/hooks/usePost"
 
 const PostAddButton = () => {
   const { setShowAddDialog } = usePost()

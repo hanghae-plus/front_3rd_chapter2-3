@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { selectedUserAtom, showUserModalAtom } from "../model/userAtoms"
+import { selectedUserAtom, showUserModalAtom } from "../../features/users/model/userAtoms"
 
 const useUser = () => {
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)

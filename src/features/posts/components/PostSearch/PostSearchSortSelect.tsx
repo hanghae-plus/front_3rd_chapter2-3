@@ -1,5 +1,5 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import usePost from "../hooks/usePost"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../shared/ui"
+import usePost from "../../../../shared/hooks/usePost"
 
 const PostSearchSortSelect = () => {
   const { sortBy, setSortBy, sortOrder, setSortOrder } = usePost()

@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "../../../shared/ui/"
 import { useAddComment } from "../api/commentsFeaturesApi"
-import useComment from "../hooks/useComments"
+import useComment from "../../../shared/hooks/useComment"
 
 //댓글 추가 대화상자
 const CommentsAddDialog = () => {

@@ -1,5 +1,5 @@
 import CommentsSection from "../../../features/comments/components/CommentsSection"
-import usePost from "../../../features/posts/hooks/usePost"
+import usePost from "../../../shared/hooks/usePost"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui/"
 import HighlightText from "../../../shared/ui/HighlightText"
 

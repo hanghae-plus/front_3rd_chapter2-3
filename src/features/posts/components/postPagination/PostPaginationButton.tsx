@@ -1,5 +1,5 @@
-import { Button } from "../../../shared/ui/"
-import usePost from "../hooks/usePost"
+import { Button } from "../../../../shared/ui"
+import usePost from "../../../../shared/hooks/usePost"
 
 const PostPaginationButton = () => {
   const { skip, limit, total, setSkip } = usePost()

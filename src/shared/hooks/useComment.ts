@@ -5,7 +5,7 @@ import {
   newCommentAtom,
   showAddCommentDialogAtom,
   showEditCommentDialogAtom,
-} from "../model/commentsAtoms"
+} from "../../features/comments/model/commentsAtoms"
 const useComment = () => {
   const [comments, setComments] = useAtom(commentsAtom)
   const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)

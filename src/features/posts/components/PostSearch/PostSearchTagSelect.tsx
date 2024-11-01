@@ -1,7 +1,7 @@
 import { useEffect } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
-import usePost from "../hooks/usePost"
-import { useFetchTags } from "../api/postFeatureApi"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../shared/ui"
+import usePost from "../../../../shared/hooks/usePost"
+import { useFetchTags } from "../../api/postFeatureApi"
 
 const PostSearchTagSelect = () => {
   const { selectedTag, setSelectedTag, tags, setTags } = usePost()

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import UserModalDiallogContent from "../../../entities/users/ui/UserModalDialogContent"
-import useUser from "../hooks/useUser"
+import useUser from "../../../shared/hooks/useUser"
 import { Dialog } from "../../../shared/ui"
 
 const UserModalDialog = () => {

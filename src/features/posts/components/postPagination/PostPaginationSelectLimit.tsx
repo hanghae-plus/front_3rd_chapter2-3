@@ -1,5 +1,5 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui/"
-import usePost from "../hooks/usePost"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../shared/ui"
+import usePost from "../../../../shared/hooks/usePost"
 
 const PostPaginationSelectLimit = () => {
   const { limit, setLimit } = usePost()

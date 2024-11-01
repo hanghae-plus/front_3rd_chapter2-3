@@ -1,8 +1,8 @@
 import PostDetailDialog from "../../../entities/posts/ui/PostDetailDialog"
 import CommentsAddDialog from "../../../features/comments/components/CommentsAddDialog"
 import CommentsEditDialog from "../../../features/comments/components/CommentsEditDialog"
-import PostAddDialog from "../../../features/posts/components/PostAddDialog"
-import PostEditDialog from "../../../features/posts/components/PostEditDialog"
+import PostAddDialog from "../../../features/posts/components/PostDialog/PostAddDialog"
+import PostEditDialog from "../../../features/posts/components/PostDialog/PostEditDialog"
 import UserModalDialog from "../../../features/users/components/UserModalDialog"
 
 const Modal = () => {

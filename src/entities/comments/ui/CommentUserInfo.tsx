@@ -1,4 +1,4 @@
-import usePost from "../../../features/posts/hooks/usePost"
+import usePost from "../../../shared/hooks/usePost"
 import HighlightText from "../../../shared/ui/HighlightText"
 import { Comments } from "../model/Comments"
 

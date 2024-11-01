@@ -1,7 +1,7 @@
-import { Post } from "../../../entities/posts/model/Post"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui/"
-import { useAddPost } from "../api/postFeatureApi"
-import usePost from "../hooks/usePost"
+import { Post } from "../../../../entities/posts/model/Post"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../../shared/ui"
+import { useAddPost } from "../../api/postFeatureApi"
+import usePost from "../../../../shared/hooks/usePost"
 
 const PostAddDialog = () => {
   const { showAddDialog, setShowAddDialog, newPost, setNewPost, setPosts } = usePost()

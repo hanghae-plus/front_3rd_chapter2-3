@@ -16,7 +16,7 @@ import {
   sortOrderAtom,
   tagsAtom,
   totalAtom,
-} from "../model/postAtoms"
+} from "../../features/posts/model/postAtoms"
 const usePost = () => {
   const [posts, setPosts] = useAtom(postsAtom)
   const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
