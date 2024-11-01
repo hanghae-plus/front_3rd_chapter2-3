@@ -13,7 +13,7 @@ import HighlightText from "../shared/ui/HighlightText"
 import { postApi } from "../entities/post/api/postApi"
 import { userApi } from "../entities/user/api/userApi"
 import { User } from "../entities/user/model/types"
-import { Post, Tag } from "../entities/post/model/types"
+import { Post } from "../entities/post/model/types"
 import { Comment } from "../entities/comment/model/types"
 import useFetchPosts from "../features/post/api/useFetchPosts"
 import useManageComments from "../features/comment/api/useFetchComments"
@@ -21,6 +21,7 @@ import useSelectedUserModal from "../features/user/api/useSelectedUserModal"
 import UserModal from "../features/user/ui/UserModal"
 import useSelectedPostModal from "../features/post/api/useSelectedPostModal"
 import PostManagerHeader from "../features/post/ui/PostManagerHeader"
+import { useFetchTags } from "../features/post/api/useFetchTags"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -41,6 +42,7 @@ const PostsManager = () => {
   const { comments, fetchComments, createComment, updateComment, deleteComment, likeComment } = useManageComments()
   const { selectedUser, handleSetSelectedUser, showUserModal, handleCloseUserModal } = useSelectedUserModal()
   const { selectedPost, handleSetSelectedPost, showPostModal, handleClosePostModal } = useSelectedPostModal()
+  const { tags } = useFetchTags()
 
   // 상태 관리
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -51,7 +53,6 @@ const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
-  const [tags, setTags] = useState<Tag[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
@@ -73,16 +74,6 @@ const PostsManager = () => {
   // 게시물 가져오기
   const handleFetchPosts = () => {
     fetchPosts({ limit, skip })
-  }
-
-  // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const data = await postApi.fetchTags()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
   }
 
   // 게시물 검색
@@ -186,10 +177,6 @@ const PostsManager = () => {
       console.error("사용자 정보 가져오기 오류:", error)
     }
   }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
 
   useEffect(() => {
     if (selectedTag) {
