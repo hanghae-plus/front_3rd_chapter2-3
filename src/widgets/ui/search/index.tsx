@@ -13,7 +13,6 @@ const Search = () => {
   useEffect(() => {
     updateURL()
   }, [location.search])
-
   return (
     <>
       <CardHeader>
@@ -27,7 +26,7 @@ const Search = () => {
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
           <PostSearchBar />
-          {/* 게시물 테이블 renderPostTable()은 사용되는 컴포넌트에서 useEffect안에 추가 예정*/}
+          {/* 로딩 완료 시 게시물 테이블 렌더링*/}
           {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
 
           {/* 페이지네이션 */}
