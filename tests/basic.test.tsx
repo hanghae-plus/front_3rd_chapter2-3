@@ -68,7 +68,7 @@ describe("PostsManager", () => {
     })
 
     // 검색 기능 테스트
-    const searchInput = screen.getByPlaceholderText(/게시물 검색.../i)
+    const searchInput = screen.getByPlaceholderText(/게시물 검색/i)
     await user.type(searchInput, "His mother had always taught him")
     await user.keyboard("{Enter}")
 

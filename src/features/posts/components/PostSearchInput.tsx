@@ -98,7 +98,7 @@ const PostSearchInput = () => {
 
   return (
     <Input
-      placeholder="Search posts..."
+      placeholder="게시물 검색"
       className="pl-8"
       value={searchQuery}
       onChange={(e) => handleChangeSearchQuery(e.target.value)}
