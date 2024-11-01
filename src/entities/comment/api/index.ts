@@ -7,11 +7,11 @@ export const addCommentApi = async (newComment: NewComment) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newComment),
     })
-    const data: NewComment = await response.json()
+    const data: Comment = await response.json()
 
     return data
   } catch (error) {
-    console.error("댓글 추가 오류:", error)
+    throw new Error(`댓글 추가 오류: ${error}`)
   }
 }
 
@@ -22,7 +22,7 @@ export const fetchCommentsApi = async (postId: number) => {
 
     return data
   } catch (error) {
-    console.error("댓글 가져오기 오류:", error)
+    throw new Error(`댓글 가져오기 오류: ${error}`)
   }
 }
 
@@ -37,7 +37,7 @@ export const updateCommentApi = async (selectedComment: Comment) => {
 
     return data
   } catch (error) {
-    console.error("댓글 업데이트 오류:", error)
+    throw new Error(`댓글 업데이트 오류: ${error}`)
   }
 }
 
@@ -50,7 +50,7 @@ export const deleteCommentApi = async (id: number) => {
 
     return data
   } catch (error) {
-    console.error("댓글 삭제 오류:", error)
+    throw new Error(`댓글 삭제 오류: ${error}`)
   }
 }
 
@@ -65,6 +65,6 @@ export const likeCommentApi = async ({ id, likes }: { id: number; likes: number 
 
     return data
   } catch (error) {
-    console.error("댓글 좋아요 오류:", error)
+    throw new Error(`댓글 좋아요 오류: ${error}`)
   }
 }

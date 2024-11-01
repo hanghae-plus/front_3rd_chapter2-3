@@ -1,3 +1,5 @@
+import { User } from "../../user/model/types.ts"
+
 export interface NewPost {
   title: string
   body: string
@@ -15,6 +17,7 @@ export interface Post {
   }
   views: number
   userId: number
+  author?: User
 }
 
 export interface PostDto {

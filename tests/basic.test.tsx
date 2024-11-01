@@ -4,10 +4,12 @@ import userEvent from "@testing-library/user-event"
 import { http, HttpResponse } from "msw"
 import { setupServer } from "msw/node"
 import { MemoryRouter } from "react-router-dom"
-import PostsManager from "../src/pages/PostsManagerPage"
 import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import PostsManagerPage from "../src/pages/PostsManagerPage"
+import { Provider } from "jotai"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -44,11 +46,18 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
+
+const queryClient = new QueryClient()
+
 const renderPostsManager = () => {
   return render(
-    <MemoryRouter>
-      <PostsManager />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <Provider>
+        <MemoryRouter>
+          <PostsManagerPage />
+        </MemoryRouter>
+      </Provider>
+    </QueryClientProvider>,
   )
 }
 

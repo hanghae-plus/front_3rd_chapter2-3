@@ -7,7 +7,7 @@ export const fetchPostsApi = async (limit: number, skip: number) => {
 
     return data
   } catch (error) {
-    console.error("게시물 가져오기 오류:", error)
+    throw new Error(`게시물 가져오기 오류: ${error}`)
   }
 }
 
@@ -22,7 +22,7 @@ export const updatePostApi = async (selectedPost: Post) => {
 
     return data
   } catch (error) {
-    console.error("게시물 업데이트 오류:", error)
+    throw new Error(`게시물 업데이트 오류: ${error}`)
   }
 }
 
@@ -37,7 +37,7 @@ export const addPostApi = async (newPost: NewPost) => {
 
     return data
   } catch (error) {
-    console.error("게시물 추가 오류:", error)
+    throw new Error(`게시물 추가 오류: ${error}`)
   }
 }
 
@@ -47,11 +47,11 @@ export const deletePostApi = async (id: number) => {
       method: "DELETE",
     })
 
-    const data: PostDto = await response.json()
+    const data: Post = await response.json()
 
     return data
   } catch (error) {
-    console.error("게시물 삭제 오류:", error)
+    throw new Error(`게시물 삭제 오류: ${error}`)
   }
 }
 
@@ -62,7 +62,7 @@ export const fetchPostsByTagApi = async (tag: string) => {
 
     return data
   } catch (error) {
-    console.log(`태그별 게시물 가져오기 오류: ${error}`)
+    throw new Error(`태그별 게시물 가져오기 오류: ${error}`)
   }
 }
 
@@ -74,5 +74,6 @@ export const searchPostsApi = async (searchQuery: string) => {
     return data
   } catch (error) {
     console.error("게시물 검색 오류:", error)
+    throw new Error(`게시물 검색 오류: ${error}`)
   }
 }

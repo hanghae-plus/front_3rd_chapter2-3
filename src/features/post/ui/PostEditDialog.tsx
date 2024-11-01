@@ -13,6 +13,8 @@ export default function PostEditDialog() {
     setShowEditDialog(false)
   }
 
+  if (!selectedPost) return
+
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
       <DialogContent>

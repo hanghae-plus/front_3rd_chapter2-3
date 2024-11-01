@@ -22,7 +22,7 @@ export const useDeletePostMutation = () => {
 
   return useMutation({
     mutationFn: deletePostApi,
-    onSuccess: (deletedPost) => {
+    onSuccess: (deletedPost: Post) => {
       queryClient.setQueriesData<PostDto>({ queryKey: ["posts"] }, (prevData) => {
         if (!prevData) return
         return deletePost(prevData, deletedPost.id)

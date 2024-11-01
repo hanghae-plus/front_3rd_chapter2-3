@@ -40,9 +40,11 @@ export default function PostItem({ post }: Props) {
       queryFn: () => fetchUserDetailApi(user.id),
     })
 
-    setSelectedUser(userDetailData)
+    userDetailData && setSelectedUser(userDetailData)
     setShowUserModal(true)
   }
+
+  if (!post) return
 
   return (
     <TableRow>
@@ -72,7 +74,10 @@ export default function PostItem({ post }: Props) {
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+        <div
+          className="flex items-center space-x-2 cursor-pointer"
+          onClick={() => post.author && openUserModal(post.author)}
+        >
           <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
           <span>{post.author?.username}</span>
         </div>

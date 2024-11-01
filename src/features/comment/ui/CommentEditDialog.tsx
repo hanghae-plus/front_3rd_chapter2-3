@@ -13,6 +13,8 @@ export default function CommentEditDialog() {
     }
   }
 
+  if (!selectedComment) return
+
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
       <DialogContent>

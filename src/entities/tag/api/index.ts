@@ -7,6 +7,6 @@ export const fetchTagsApi = async () => {
 
     return data
   } catch (error) {
-    console.error("태그 가져오기 오류:", error)
+    throw new Error(`태그 가져오기 오류: ${error}`)
   }
 }
