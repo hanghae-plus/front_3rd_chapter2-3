@@ -1,24 +1,15 @@
-import { Edit2 } from "lucide-react"
 import { useState } from "react"
 import { useCommentsQuery } from "../../../entities/comment/api/useCommentsQuery"
-import { Comment, NewComment } from "../../../entities/comment/model/types"
+import { NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
   CommentDeleteButton,
   CommentLikeButton,
-  CommentUpdateButton,
 } from "../../../features/comment"
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  Textarea,
-  TextHighlighter,
-} from "../../../shared/ui"
+import { TextHighlighter } from "../../../shared/ui"
 import { CommentAddDialogButton } from "./CommentAddDialogButton"
+import { CommentEditDialogButton } from "./CommentEditDialogButton"
 
 type Props = {
   postId: Post["id"]
@@ -31,14 +22,11 @@ export const Comments = ({ postId }: Props) => {
 
   const { data: comments = [] } = useCommentsQuery(postId)
 
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
     body: "",
     postId: null,
     userId: 1,
   })
-
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
 
   return (
     <div className="mt-2">
@@ -68,54 +56,12 @@ export const Comments = ({ postId }: Props) => {
             </div>
             <div className="flex items-center space-x-1">
               <CommentLikeButton comment={comment} />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedComment(comment)
-                  setShowEditCommentDialog(true)
-                }}
-              >
-                <Edit2 className="w-3 h-3" />
-              </Button>
-
+              <CommentEditDialogButton comment={comment} />
               <CommentDeleteButton commentId={comment.id} />
             </div>
           </div>
         ))}
       </div>
-
-      {/* 댓글 수정 대화상자 */}
-      <Dialog
-        open={showEditCommentDialog}
-        onOpenChange={setShowEditCommentDialog}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) => {
-                if (selectedComment) {
-                  setSelectedComment({
-                    ...selectedComment,
-                    body: e.target.value,
-                  })
-                }
-              }}
-            />
-            <CommentUpdateButton
-              selectedComment={selectedComment}
-              onUpdateSuccess={() => {
-                setShowEditCommentDialog(false)
-              }}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }
