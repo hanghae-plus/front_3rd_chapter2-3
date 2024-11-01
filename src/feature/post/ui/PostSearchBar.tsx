@@ -10,12 +10,6 @@ export const PostSearchBar = () => {
   const { sortBy, sortOrder, setSortOrder, setSortBy, setSearchQuery, setPosts, setTotal, setLoading } = usePost();
   const { queryParams, setQueryParams } = useQueryParams();
 
-  useEffect(() => {
-    setSortBy(queryParams.sortBy);
-    setSortOrder(queryParams.sortOrder);
-    setSearchQuery(queryParams.searchQuery);
-  }, [queryParams, setSortBy, setSortOrder, setSearchQuery]);
-
   const { data: postsData, isLoading: postDataLoading } = useGetPosts(queryParams.limit, queryParams.skip);
   const { data: searchData } = useGetSearchPosts(queryParams.searchQuery);
 
@@ -41,6 +35,12 @@ export const PostSearchBar = () => {
       setTotal(searchData.total);
     }
   }, [searchData, queryParams.searchQuery, setPosts, setTotal]);
+
+  useEffect(() => {
+    setSortBy(queryParams.sortBy);
+    setSortOrder(queryParams.sortOrder);
+    setSearchQuery(queryParams.searchQuery);
+  }, [queryParams, setSortBy, setSortOrder, setSearchQuery]);
 
   const handleEnterKeyPress = () => {
     if (keyword) {

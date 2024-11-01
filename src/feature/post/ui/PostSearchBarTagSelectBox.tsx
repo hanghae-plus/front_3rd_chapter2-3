@@ -1,8 +1,8 @@
+import { useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui";
 import { useGetPostByTag, useGetTags, usePost, useQueryParams } from "../model";
 import { Post } from "../../../entities/post/model/types.ts";
 import { User } from "../../../entities/user/model/types.ts";
-import { useEffect } from "react";
 
 export const PostSearchBarTagSelectBox = () => {
   const { selectedTag, tags, setSelectedTag, setPosts, setTotal, setTags } = usePost();

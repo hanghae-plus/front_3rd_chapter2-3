@@ -1,12 +1,12 @@
+import { useEffect, useState } from "react";
+import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { Button, HighlightText, TableCell, TableRow } from "../../../shared/ui";
 import { useComment, useGetComment } from "../../comment/model";
-import { useEffect, useState } from "react";
 import { Post } from "../../../entities/post/model/types.ts";
 import { User } from "../../../entities/user/model/types.ts";
 import { getUserInfo } from "../../../entities/user/api";
 import { useDeletePost, usePost, useQueryParams } from "../model";
 import { useUser } from "../../user/model";
-import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 
 interface PostTableContentProps {
   post: Post;
