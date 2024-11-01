@@ -22,7 +22,6 @@ export const UpdateCommentModal: React.FC = () => {
     ...commentFormValue.form,
   })
 
-  /** 기존 댓글 textarea 세팅 */
   useEffect(() => {
     updateCommentForm({
       postId: selectedComment.id,
@@ -30,7 +29,6 @@ export const UpdateCommentModal: React.FC = () => {
     })
   }, [selectedComment])
 
-  /**팝업닫기 */
   const submitComment = useCallback(() => {
     updateComment({ ...selectedComment, ...commentForm } as Comment)
     closeModal("editComment")
