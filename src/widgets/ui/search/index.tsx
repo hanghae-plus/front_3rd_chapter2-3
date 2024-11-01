@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import PostAddButton from "../../../features/posts/components/PostAddButton"
 import PostTable from "../../../features/posts/components/PostTable"
-import PostPagination from "../pagination/PostPagination"
-import PostSearchBar from "../searchBar/PostSearchBar"
+import PostPagination from "../pagination"
+import PostSearchBar from "../searchBar"
 import { CardContent, CardHeader, CardTitle } from "../../../shared/ui/Card"
 import usePost from "../../../features/posts/hooks/usePost"
 
