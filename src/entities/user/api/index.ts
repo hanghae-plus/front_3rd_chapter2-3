@@ -1,4 +1,4 @@
-import { User, UserDetail, UserDTO } from "../model/types.ts"
+import { UserDetail, UserDTO } from "../model/types.ts"
 
 export const fetchUsersApi = async () => {
   try {

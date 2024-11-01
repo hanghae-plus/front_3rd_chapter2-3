@@ -8,10 +8,9 @@ import { useDeleteCommentMutation, useLikeCommentMutation } from "../api/mutatio
 
 interface Props {
   comment: Comment
-  postId: number
 }
 
-export default function CommentItem({ comment, postId }: Props) {
+export default function CommentItem({ comment }: Props) {
   const { mutate: deleteComment } = useDeleteCommentMutation()
   const { mutate: likeComment } = useLikeCommentMutation()
   const { searchQuery } = usePostParams()

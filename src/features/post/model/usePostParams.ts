@@ -31,7 +31,7 @@ export const usePostParams = () => {
     setSortBy(params.get("sortBy") || "")
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
-  }, [location.search])
+  }, [location.search, setSkip, setLimit, setSearchQuery, setSortBy, setSortOrder, setSelectedTag])
 
   const updateURL = () => {
     const params = new URLSearchParams()

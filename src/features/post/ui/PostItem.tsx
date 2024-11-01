@@ -40,7 +40,10 @@ export default function PostItem({ post }: Props) {
       queryFn: () => fetchUserDetailApi(user.id),
     })
 
-    userDetailData && setSelectedUser(userDetailData)
+    if (userDetailData) {
+      setSelectedUser(userDetailData)
+    }
+
     setShowUserModal(true)
   }
 
