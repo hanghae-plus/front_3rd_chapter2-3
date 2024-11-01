@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useUsersQuery } from "../../../user/api";
+import { useUsersQuery } from "../../../user/model/hook/useQuery";
 import { useDeletePostMutation, usePostsQuery } from "./useQuery";
 import { useSearchFilterStore } from "../../../search/model/store/useSearchFilterStore";
 import { usePostsStore } from "../../store/usePostsStore";
@@ -19,6 +19,7 @@ export function usePosts() {
   useEffect(() => {
     setTotal(total);
   }, [total]);
+
   return {
     posts: posts.map((post) => ({ ...post, author: users.find((user) => user.id === post.userId) })),
     isPostsLoading: isLoading,

@@ -22,8 +22,7 @@ export function EditPostDialog() {
     if (!updatePost) {
       return;
     }
-    const res = await editPost(updatePost);
-    console.log(res);
+    await editPost(updatePost);
 
     setSelectedPost(updatePost);
     setShowEditPostDialog(false);
