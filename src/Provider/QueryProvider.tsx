@@ -9,7 +9,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function QueryProvider({ children }: Props) {
+export function QueryProvider({ children }: Props) {
   const queryCache = new QueryCache({});
 
   const mutationCache = new MutationCache({});

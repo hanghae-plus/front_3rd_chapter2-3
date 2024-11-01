@@ -35,9 +35,9 @@ export function useAddPostMutation() {
   });
 }
 
-export function useUpdatePostQuery() {
+export function useEditPostMutation() {
   return useMutation({
-    mutationFn: (post: Post) => postApis.updatePost(post),
+    mutationFn: (post: Post) => postApis.editPost(post),
   });
 }
 

@@ -23,7 +23,7 @@ export const postApis = {
     return await response.json();
   },
 
-  updatePost: async (post: Post) => {
+  editPost: async (post: Post) => {
     const response = await fetch(`/api/posts/${post.id}`, {
       headers: { "Content-Type": "application/json" },
       method: "PUT",

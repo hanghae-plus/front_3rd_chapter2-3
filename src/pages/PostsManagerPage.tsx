@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
-import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
+import { Edit, Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui";
 import { PostsTable } from "../widgets/post";
@@ -7,6 +7,7 @@ import Pagination from "../features/post/ui/Pagination";
 import { SearchBar } from "../widgets/search";
 import PostHeader from "../features/post/ui/PostHeader";
 import AddPostDialog from "../features/post/ui/AddPostDialog";
+import { EditPostDialog } from "../features/post/ui";
 
 const PostsManager = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const PostsManager = () => {
   };
 
   // 게시물 업데이트
-  const updatePost = async () => {
+  const editPost = async () => {
     try {
       const response = await fetch(`/api/posts/${selectedPost.id}`, {
         method: "PUT",
@@ -75,7 +76,7 @@ const PostsManager = () => {
       });
       const data = await response.json();
       setPosts(posts.map((post) => (post.id === data.id ? data : post)));
-      setShowEditDialog(false);
+      setShowEditPostDialog(false);
     } catch (error) {
       console.error("게시물 업데이트 오류:", error);
     }
@@ -258,37 +259,10 @@ const PostsManager = () => {
       </CardContent>
 
       <AddPostDialog />
-      {/* 게시물 추가 대화상자 */}
-      {/* <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-            />
-            <Button onClick={addPost}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <EditPostDialog />
 
       {/* 게시물 수정 대화상자 */}
-      {/* <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+      {/* <Dialog open={showEditDialog} onOpenChange={setShowEditPostDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>게시물 수정</DialogTitle>
@@ -305,7 +279,7 @@ const PostsManager = () => {
               value={selectedPost?.body || ""}
               onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={editPost}>게시물 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog> */}
