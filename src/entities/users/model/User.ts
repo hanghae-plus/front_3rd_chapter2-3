@@ -74,4 +74,5 @@ export interface SelectedUser {
   bank: Bank
   company: Company
   crypto: Crypto
+  message?: string
 }
