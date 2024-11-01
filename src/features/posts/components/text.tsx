@@ -12,7 +12,6 @@ const PostSearchInput = () => {
     selectedTag,
     limit,
     skip,
-    selectedPost,
     setLoading,
     setPosts,
     setTotal,
@@ -25,7 +24,7 @@ const PostSearchInput = () => {
   const { postsByTagData, usersByTagData } = postsByTag || { postsByTagData: [], usersByTagData: [] }
 
   const { data: postSearch, isLoading: isPostSearchLoading, isError: isPostSearchError } = useFetchPosts(limit, skip)
-  //const { postsSearchData, usersSearchData } = postSearch || { postsSearchData: [], usersSearchData: [] }
+  const { postsSearchData, usersSearchData } = postSearch || { postsSearchData: [], usersSearchData: [] }
 
   const [search, setSearch] = useState(false)
   function postsToUsers(postsData: Posts, users: Users[]): Posts {
@@ -49,7 +48,6 @@ const PostSearchInput = () => {
       if (selectedTag) {
         if (!isPostByTagLoading && !isPostByTagError && postsByTagData && usersByTagData) {
           const postsWithUsers = postsToUsers(postsByTagData, usersByTagData.users)
-          console.log("postsByTagData", postsByTagData)
           setPosts(postsWithUsers)
           setTotal(postsByTagData.total)
           updateURL()
@@ -57,7 +55,6 @@ const PostSearchInput = () => {
       } else {
         if (!isPostSearchLoading && !isPostSearchError && postsSearchData && usersSearchData) {
           const postsWithUsers = postsToUsers(postsSearchData, usersSearchData.users)
-          console.log("postsSearchData", postsSearchData)
           setPosts(postsWithUsers)
           setTotal(postsSearchData.total)
         }
