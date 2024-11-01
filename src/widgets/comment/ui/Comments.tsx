@@ -5,9 +5,9 @@ import { Comment, NewComment } from "../../../entities/comment/model/types"
 import { usePostQueryParams } from "../../../entities/post"
 import { Post } from "../../../entities/post/model/types"
 import {
+  CommentAddButton,
   CommentLikeButton,
   CommentUpdateButton,
-  useAddCommentMutation,
   useDeleteComment,
 } from "../../../features/comment"
 import {
@@ -40,18 +40,8 @@ export const Comments = ({ postId }: Props) => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
 
   const { data: comments = [] } = useCommentsQuery(postId)
-  const { mutate: addCommentMutate } = useAddCommentMutation()
 
   const { mutate: deleteComment } = useDeleteComment()
-
-  const addComment = () => {
-    addCommentMutate(newComment, {
-      onSuccess: () => {
-        setShowAddCommentDialog(false)
-        setNewComment({ body: "", postId: null, userId: 1 })
-      },
-    })
-  }
 
   return (
     <div className="mt-2">
@@ -123,7 +113,13 @@ export const Comments = ({ postId }: Props) => {
                 setNewComment({ ...newComment, body: e.target.value })
               }
             />
-            <Button onClick={addComment}>댓글 추가</Button>
+            <CommentAddButton
+              newComment={newComment}
+              onAddSuccess={() => {
+                setShowAddCommentDialog(false)
+                setNewComment({ body: "", postId: null, userId: 1 })
+              }}
+            />
           </div>
         </DialogContent>
       </Dialog>
