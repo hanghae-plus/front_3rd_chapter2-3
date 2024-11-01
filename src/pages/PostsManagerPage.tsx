@@ -1,6 +1,6 @@
 import Post from "../widgets/ui"
 
-const PostPage = () => {
+const PostsManagerPage = () => {
   return (
     <div>
       <Post />
@@ -8,4 +8,4 @@ const PostPage = () => {
   )
 }
 
-export default PostPage
+export default PostsManagerPage
