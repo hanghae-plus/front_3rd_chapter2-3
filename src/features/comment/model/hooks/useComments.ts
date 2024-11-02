@@ -1,5 +1,5 @@
-import { useCommentMutations } from './mutations'
-import { useCommentsQuery } from './queries'
+import { useCommentMutations } from '@entities/comment/api'
+import { useCommentsQuery } from '@entities/comment/api'
 
 export function useComments(postId: number) {
   const { data, isLoading, error, isError } = useCommentsQuery(postId)

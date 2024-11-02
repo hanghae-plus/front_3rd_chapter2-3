@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { userStore } from '../stores'
-import { UsersQueryProps, useUsersQuery } from './queries'
+import { UsersQueryProps, useUsersQuery } from '@entities/user/api'
 import { User } from '@entities/user/model/user.types'
 import { useQueryClient } from '@tanstack/react-query'
-import { userApi } from '@entities/user/ui/api'
+import { userApi } from '@entities/user/api'
 
 export function useUsers({ limit = 0, select = 'username,image' }: UsersQueryProps) {
   const queryClient = useQueryClient()

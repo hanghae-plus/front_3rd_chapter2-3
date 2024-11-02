@@ -1,5 +1,5 @@
-import { usePostsQuery } from './queries'
-import { usePostMutations } from './mutations'
+import { usePostsQuery } from '@entities/post/api'
+import { usePostMutations } from '@entities/post/api'
 import { filterStore } from '../stores'
 
 export function usePosts() {
