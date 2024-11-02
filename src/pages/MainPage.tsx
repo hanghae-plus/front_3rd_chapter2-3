@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 import UserInfoDialog from "../entities/user/components/UserInfoDialog"
@@ -12,9 +12,10 @@ import Finder from "../features/search/components/Finder"
 import useSearchParams from "../features/search/libs/useSearchParams"
 import PostTable from "../features/post/components/PostTable"
 import { useModal } from "../shared/lib/modal"
+import { usePosts } from "../entities/post/api/get-post"
+import { useTaggedPosts } from "../entities/post/api/get-post-with-tag"
 
 const Main = () => {
-  const [total, setTotal] = useState(0)
   const [userId, setUserId] = useState<number>(0)
 
   const { isOpen, openModal, closeModal, manageModal } = useModal({
@@ -22,13 +23,19 @@ const Main = () => {
     USER: false,
   })
 
-  const {
-    searchParams: { sortBy, sortOrder, tag, skip, limit, search },
-    changeSeachParams,
-  } = useSearchParams()
+  const { searchParams, setSearchParams, changeSeachParams } = useSearchParams()
+  const { sortBy, sortOrder, tag, skip, limit, search } = searchParams
 
   // Post
+  const {
+    data: { total: postTotal },
+  } = usePosts({ limit: Number(limit), skip: Number(skip) })
   const { mutate: addPost } = useAddPost()
+
+  // Post(Tagged)
+  const {
+    data: { posts: taggedPosts },
+  } = useTaggedPosts(tag)
 
   // Search
   const { data: searchedPosts, mutate: searchPost } = useSearchPosts()
@@ -39,9 +46,6 @@ const Main = () => {
   // 게시물 검색
   const handleSearch = () => {
     searchPost(search, {
-      onSuccess: (data) => {
-        setTotal(data.total)
-      },
       onError: (error) => {
         console.error("게시물 검색 오류:", error)
       },
@@ -65,6 +69,10 @@ const Main = () => {
     setUserId(userId)
     openModal("USER")
   }
+
+  const total = useMemo(() => {
+    return search ? (searchedPosts?.total ?? 0) : !!tag && tag !== "all" ? taggedPosts.length : postTotal
+  }, [search, searchedPosts, postTotal, tag])
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -93,7 +101,12 @@ const Main = () => {
             onSortOrderChange={changeSeachParams("sortOrder")}
           />
           {/* 게시물 테이블 */}
-          <PostTable searchedPosts={searchedPosts} onOpenUserModal={openUserModal} />
+          <PostTable
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+            searchedPosts={searchedPosts}
+            onOpenUserModal={openUserModal}
+          />
 
           {/* 페이지네이션 */}
           <Pagination

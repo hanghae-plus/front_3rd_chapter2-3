@@ -1,3 +1,5 @@
+import { ApiWithPagination } from "../../../shared/model/types"
+
 export interface Address {
   address: string
   city: string
@@ -21,6 +23,10 @@ export interface User {
   phone?: string
   address?: Address
   company?: Company
+}
+
+export interface UsersResponse extends ApiWithPagination {
+  users: User[]
 }
 
 export interface GetUserParams {

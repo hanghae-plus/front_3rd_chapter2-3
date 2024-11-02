@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
-import { Post } from "../../../../entities/post/model/types"
+import { PostsResponse } from "../../../../entities/post/model/types"
 
-const searchPosts = async (query: string): Promise<{ posts: Post[] }> => {
+const searchPosts = async (query: string): Promise<PostsResponse> => {
   const response = await fetch(`/api/posts/search?q=${query}`)
   const data = await response.json()
 

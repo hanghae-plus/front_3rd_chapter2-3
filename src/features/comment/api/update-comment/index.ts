@@ -22,8 +22,6 @@ export const useUpdateComment = () => {
     onMutate: async (body) => {
       const { comment: newComment } = body
 
-      console.log(newComment)
-
       await queryClient.cancelQueries({ queryKey: ["comments", newComment.postId] })
 
       const previousComments = queryClient.getQueryData(["comments", newComment.postId]) as { comments: Comment[] }

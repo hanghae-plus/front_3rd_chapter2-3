@@ -1,3 +1,4 @@
+import { ApiWithPagination } from "../../../shared/model/types"
 import { Tag } from "../../tag/model"
 
 // Types
@@ -23,6 +24,10 @@ export interface Post {
 }
 
 // APIs
+
+export interface PostsResponse extends ApiWithPagination {
+  posts: Post[]
+}
 
 export interface GetPostsParams {
   limit: number

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { GetUserParams, User } from "../../model/types"
+import { GetUserParams, User, UsersResponse } from "../../model/types"
 
 export const getUser = async (id: number): Promise<User> => {
   const response = await fetch(`/api/users/${id}`)
@@ -8,7 +8,7 @@ export const getUser = async (id: number): Promise<User> => {
   return data
 }
 
-export const getUsers = async (): Promise<{ users: User[] }> => {
+export const getUsers = async (): Promise<UsersResponse> => {
   const response = await fetch("/api/users?limit=0&select=username,image")
   const data = await response.json()
 
@@ -30,6 +30,6 @@ export const useUsers = () => {
   return useQuery({
     queryKey: ["users"],
     queryFn: () => getUsers(),
-    initialData: { users: [] },
+    initialData: { users: [], limit: 0, skip: 0, total: 0 },
   })
 }

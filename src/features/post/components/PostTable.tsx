@@ -1,9 +1,9 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui"
 import { highlightText } from "../../../shared/lib/text"
 import PostTableAction from "./PostTableAction"
-import useSearchParams from "../../search/libs/useSearchParams"
+import useSearchParams, { SearchParams } from "../../search/libs/useSearchParams"
 import { usePosts } from "../../../entities/post/api/get-post"
-import { useMemo, useState } from "react"
+import { Dispatch, SetStateAction, useMemo, useState } from "react"
 import { Post } from "../../../entities/post/model/types"
 import PostDetailDialog from "./PostDetailDialog"
 import PostModifyDialog from "./PostModifyDialog"
@@ -16,11 +16,15 @@ import Loading from "../../../shared/ui/Loading"
 import { useModal } from "../../../shared/lib/modal"
 
 export interface PostTableProps {
+  searchParams: SearchParams
+  setSearchParams: Dispatch<SetStateAction<SearchParams>>
   searchedPosts: { posts: Post[] } | undefined
   onOpenUserModal: (userId: Post["userId"]) => void
 }
 
-const PostTable = ({ searchedPosts, onOpenUserModal }: PostTableProps) => {
+const PostTable = ({ searchParams, searchedPosts, setSearchParams, onOpenUserModal }: PostTableProps) => {
+  const { limit, skip, search, tag } = searchParams
+
   const [postId, setPostId] = useState<number>(0)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
 
@@ -28,11 +32,6 @@ const PostTable = ({ searchedPosts, onOpenUserModal }: PostTableProps) => {
     DETAIL: false,
     EDIT: false,
   })
-
-  const {
-    searchParams: { search, limit, skip, tag },
-    setSearchParams,
-  } = useSearchParams()
 
   // Post
   const {
